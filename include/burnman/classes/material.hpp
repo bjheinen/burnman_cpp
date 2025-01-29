@@ -4,6 +4,7 @@
 #ifndef BURNMAN_CLASSES_MATERIAL_HPP_INCLUDED
 #define BURNMAN_CLASSES_MATERIAL_HPP_INCLUDED
 
+#include <string>
 #include <optional>
 
 /**
@@ -568,6 +569,19 @@ class Material {
   mutable std::optional<double> molar_heat_capacity_v;
   mutable std::optional<double> molar_heat_capacity_p;
   mutable std::optional<double> isentropic_thermal_gradient;
+
+  // Private functions for throwing exceptions
+  /**
+   * @brief Helper function to throw NotImplementedError
+   *
+   * Use __func__ for method name
+   */
+  [[noreturn]] void throw_not_implemented_error(const std::string& method) const;
+  
+  /**
+   * @brief Helper function to get name of class (incl. derived)
+   */
+  std::string get_class_name() const;
 
 };
 
