@@ -15,7 +15,27 @@ std::string Material::get_class_name() const {
 
 
 void Material::reset() {
-    // TODO: Implement + call on init etc.
+  molar_internal_energy.reset();
+  molar_gibbs.reset();
+  molar_helmholtz.reset();
+  molar_mass.reset();
+  molar_volume.reset();
+  density.reset();
+  molar_entropy.reset();
+  molar_enthalpy.reset();
+  isothermal_bulk_modulus_reuss.reset();
+  isentropic_bulk_modulus_reuss.reset();
+  isothermal_compressibility_reuss.reset();
+  isentropic_compressibility_reuss.reset();
+  shear_modulus.reset();
+  p_wave_velocity.reset();
+  bulk_sound_velocity.reset();
+  shear_wave_velocity.reset();
+  grueneisen_parameter.reset();
+  thermal_expansivity.reset();
+  molar_heat_capacity_v.reset();
+  molar_heat_capacity_p.reset();
+  isentropic_thermal_gradient.reset();
 }
 
 // TODO: maybe factor out caching logic with function template?
