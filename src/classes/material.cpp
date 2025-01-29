@@ -40,11 +40,11 @@ void Material::reset() {
 // TODO: maybe factor out caching logic with function template?
 
 double Material::get_pressure() const {
-  // TODO
+  return *pressure;
 }
 
 double Material::get_temperature() const {
-  // TODO
+  return *temperature;
 }
 
 double Material::get_molar_internal_energy() const {
