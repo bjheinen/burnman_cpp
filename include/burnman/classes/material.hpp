@@ -25,6 +25,262 @@ class Material {
   // Virtual destructor may be needed for cleanup in derived classes
   virtual ~Material() = default;
 
+  /**
+   * @brief Retrieves the molar internal energy of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_internal_energy()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Internal energy in [J/mol].
+   */
+  double get_molar_internal_energy() const;
+
+  /**
+   * @brief Retrieves the molar Gibbs free energy of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_gibbs()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Gibbs free energy in [J/mol].
+   */
+  double get_molar_gibbs() const;
+
+  /**
+   * @brief Retrieves the molar Helmholtz free energy of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_helmholtz()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Helmholtz free energy in [J/mol].
+   */
+  double get_molar_helmholtz() const;
+
+  /**
+   * @brief Retrieves the molar mass of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_mass()` and caches the result.
+   *
+   * @note `Use Material::reset()` to clear cached values.
+   *
+   * @return Molar mass in [kg/mol].
+   */
+  double get_molar_mass() const;
+
+    /**
+   * @brief Retrieves the molar volume of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_volume()` and caches the result.
+   *
+   * @note `Use Material::reset()` to clear cached values.
+   *
+   * @return Molar volume in [m^3/mol].
+   */
+  double get_molar_volume() const;
+
+  /**
+   * @brief Retrieves the density of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_density()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Density in [kg/m^3].
+   */
+  double get_density() const;
+
+  /**
+   * @brief Retrieves the molar entropy of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_entropy()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Entropy in [J/K/mol].
+   */
+  double get_molar_entropy() const;
+
+  /**
+   * @brief Retrieves the molar enthalpy of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_enthalpy()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Enthalpy in [J/mol].
+   */
+  double get_molar_enthalpy() const;
+
+  /**
+   * @brief Retrieves the isothermal bulk modulus of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_isothermal_bulk_modulus_reuss()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Isothermal bulk modulus in [Pa].
+   */
+  double get_isothermal_bulk_modulus_reuss() const;
+
+  /**
+   * @brief Retrieves the isentropic bulk modulus of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_isentropic_bulk_modulus_reuss()`
+   * and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Isentropic bulk modulus in [Pa].
+   */
+  double get_isentropic_bulk_modulus_reuss() const;
+  
+  /**
+   * @brief Retrieves the isothermal compressibility of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_isothermal_compressibility_reuss()`
+   * and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Isothermal compressibility in [1/Pa].
+   */
+  double get_isothermal_compressibility_reuss() const;
+
+  /**
+   * @brief Retrieves the isentropic compressibility of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_isentropic_compressibility_reuss()`
+   * and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Adiabatic compressibility in [1/Pa].
+   */
+  double get_isentropic_compressibility_reuss() const;
+
+  /**
+   * @brief Retrieves the shear modulus of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_shear_modulus()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Shear modulus in [Pa].
+   */
+  double get_shear_modulus() const;
+
+  /**
+   * @brief Retrieves the P wave velocity of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_p_wave_velocity()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return P wave velocity in [m/s].
+   */
+  double get_p_wave_velocity() const;
+
+  /**
+   * @brief Retrieves the bulk sound velocity of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_bulk_sound_velocity()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Bulk sound velocity in [m/s].
+   */
+  double get_bulk_sound_velocity() const;
+
+  /**
+   * @brief Retrieves shear wave velocity the  of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_shear_wave_velocity()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Shear wave velocity in [m/s].
+   */
+  double get_shear_wave_velocity() const;
+
+  /**
+   * @brief Retrieves the grueneisen parameter of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_grueneisen_parameter()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Grueneisen parameter [unitless].
+   */
+  double get_grueneisen_parameter() const;
+
+  /**
+   * @brief Retrieves the thermal expansion coefficient of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_thermal_expansivity()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Thermal expansivity in [1/K].
+   */
+  double get_thermal_expansivity() const;
+
+  /**
+   * @brief Retrieves the molar heat capacity at constant volume of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_heat_capacity_v()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Isochoric heat capacity in [J/K/mol].
+   */
+  double get_molar_heat_capacity_v() const;
+
+  /**
+   * @brief Retrieves molar heat capacity at constant pressure of the mineral.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_heat_capacity_p()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return Isobaric heat capacity in [J/K/mol].
+   */
+  double get_molar_heat_capacity_p() const;
+
+  /**
+   * @brief Retrieves change in temperature with pressure at constant entropy.
+   *
+   * Uses a cached value if available, or calls
+   * `Material::compute_isentropic_thermal_gradient()` and caches the result.
+   *
+   * @note Use `Material::reset()` to clear cached values.
+   *
+   * @return dTdP at constant entropy in [Pa/K].
+   */
+  double get_isentropic_thermal_gradient() const;
+
+
  protected:
 
   // protected compute functions to override in derived classes
