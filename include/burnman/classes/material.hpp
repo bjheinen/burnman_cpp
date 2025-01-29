@@ -26,6 +26,15 @@ class Material {
   virtual ~Material() = default;
 
   /**
+   * @brief Clears the property cache
+   *
+   * Resets cached material properties to empty `std::optional` so that
+   * they are freshly computed on next query.
+   */
+  void reset();
+
+  // Public getter functions
+  /**
    * @brief Returns current pressure
    *
    * @note: Use Material::set_state() to set pressure
