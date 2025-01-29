@@ -26,6 +26,24 @@ class Material {
   virtual ~Material() = default;
 
   /**
+   * @brief Returns current pressure
+   *
+   * @note: Use Material::set_state() to set pressure
+   *
+   * @return Pressure in [Pa]
+   */
+  double get_pressure() const;
+
+  /**
+   * @brief Returns current temperature
+   * 
+   * @note: Use Material::set_state() to set temperature
+   *
+   * @return Temperature in [K]
+   */
+  double get_temperature() const;
+
+  /**
    * @brief Retrieves the molar internal energy of the mineral.
    *
    * Uses a cached value if available, or calls
