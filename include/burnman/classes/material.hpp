@@ -34,11 +34,19 @@ class Material {
    */
   void reset();
 
+  /**
+   * @brief Sets the material to given pressure and temperature
+   * 
+   * @param new_pressure The desired pressure in [Pa]
+   * @param new_temperature The desired temperature in [K]
+   */
+  void set_state(double new_pressure, double new_temperature);
+
   // Public getter functions
   /**
    * @brief Returns current pressure
    *
-   * @note: Use Material::set_state() to set pressure
+   * @note Use Material::set_state() to set pressure
    *
    * @return Pressure in [Pa]
    */
@@ -47,7 +55,7 @@ class Material {
   /**
    * @brief Returns current temperature
    * 
-   * @note: Use Material::set_state() to set temperature
+   * @note Use Material::set_state() to set temperature
    *
    * @return Temperature in [K]
    */

@@ -37,7 +37,12 @@ void Material::reset() {
   isentropic_thermal_gradient.reset();
 }
 
-// TODO: maybe factor out caching logic with function template?
+void Material::set_state(double new_pressure, double new_temperature) {
+  reset();
+  pressure = new_pressure;
+  temperature = new_temperature;
+
+}
 
 double Material::get_pressure() const {
   return *pressure;
@@ -46,6 +51,8 @@ double Material::get_pressure() const {
 double Material::get_temperature() const {
   return *temperature;
 }
+
+// TODO: maybe factor out caching logic with function template?
 
 double Material::get_molar_internal_energy() const {
   if (!molar_internal_energy.has_value()) {
