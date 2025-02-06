@@ -53,7 +53,6 @@ void Material::set_state(double new_pressure, double new_temperature) {
   reset();
   pressure = new_pressure;
   temperature = new_temperature;
-
 }
 
 double Material::get_pressure() const {

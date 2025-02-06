@@ -19,6 +19,17 @@
 
     The user needs to call set_method() (once in the beginning) and set_state()
     before querying the material with unroll() or
+
+  TODO
+  Funcs:
+    set_method
+    to_string
+    debug_print
+    print_minerals_of_current_state
+    set_state_with_volume
+    unroll
+    evaluate
+    evaluate_with_volumes
  */ 
 class Material {
 
