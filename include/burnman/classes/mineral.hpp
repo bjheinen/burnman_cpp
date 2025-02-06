@@ -7,6 +7,7 @@
 #include <string>
 #include <optional>
 #include "./material.hpp"
+#include "../util/eos.hpp"
 
 /**
  * Base class for materials.
@@ -77,6 +78,13 @@ class Mineral : public Material{
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
   double compute_isentropic_thermal_gradient() const override;
+
+ private:
+
+  Excesses property_modifier_excesses;
+
+  // implement prams object to know type
+  double compute_molar_volume_unmodified() const;
 
 };
 
