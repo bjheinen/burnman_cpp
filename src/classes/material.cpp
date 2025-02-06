@@ -37,6 +37,18 @@ void Material::reset() {
   isentropic_thermal_gradient.reset();
 }
 
+void Material::set_name(std::string new_name) {
+  name = new_name;
+}
+
+std::string Material::get_name() const {
+  if (name.has_value()) {
+    return *name;
+  } else {
+    return get_class_name();
+  }
+}
+
 void Material::set_state(double new_pressure, double new_temperature) {
   reset();
   pressure = new_pressure;

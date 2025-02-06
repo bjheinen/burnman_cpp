@@ -34,6 +34,14 @@ class Material {
    */
   void reset();
 
+  // Public setter functions
+  /**
+   * @brief Sets the human readable material name
+   * 
+   * @param new_name
+   */
+  void set_name(std::string new_name);
+
   /**
    * @brief Sets the material to given pressure and temperature
    * 
@@ -43,6 +51,13 @@ class Material {
   void set_state(double new_pressure, double new_temperature);
 
   // Public getter functions
+  /**
+   * @brief Gets the material name
+   * 
+   * @return The material name if set, else returns the class name
+   */
+  std::string get_name() const;
+
   /**
    * @brief Returns current pressure
    *
@@ -577,6 +592,8 @@ class Material {
   mutable std::optional<double> molar_heat_capacity_v;
   mutable std::optional<double> molar_heat_capacity_p;
   mutable std::optional<double> isentropic_thermal_gradient;
+  // name not cached and and not deleted by reset()
+  std::optional<std::string> name;
 
   // Private functions for throwing exceptions
   /**
