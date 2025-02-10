@@ -143,7 +143,7 @@ double Mineral::compute_grueneisen_parameter() const {
     std::fabs(property_modifier_excesses.dGdP) < eps &&
     std::fabs(property_modifier_excesses.d2GdT2) < eps
     ) {
-      return eos.method.grueneisen_parameter(
+      return eos_method.grueneisen_parameter(
         get_pressure(),
         get_temperature(),
         get_molar_volume(),
