@@ -52,6 +52,13 @@
  */ 
 class Mineral : public Material{
  public:
+
+  // Parameter object
+  MineralParams params;
+
+  // EOS Class for equation of state to use
+  EOS eos_method;
+
   // Override set_method etc.
 
  protected:
@@ -81,7 +88,7 @@ class Mineral : public Material{
   double compute_isentropic_thermal_gradient() const override;
 
  private:
-
+  // Excesses struct for property modifiers
   Excesses property_modifier_excesses;
 
 

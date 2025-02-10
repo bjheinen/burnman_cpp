@@ -2,6 +2,8 @@
   TODO: Copyright Notice!
 */
 #include <cmath>
+#include <limits>
+#include <stdexcept>
 #include "../../include/burnman/classes/mineral.hpp"
 
 // store _property_modifiers['etc'] under property_modifier_excesses.etc
@@ -37,7 +39,7 @@ double Mineral::compute_isothermal_bulk_modulus_reuss() const {
     params);
 
   return get_molar_volume()
-    / ((get_molar_volume_unmodified / K_T_orig)
+    / ((get_molar_volume_unmodified() / K_T_orig)
       - property_modifier_excesses.d2GdP2);
 }
 
@@ -99,7 +101,7 @@ double Mineral::compute_isentropic_bulk_modulus_reuss() const {
     return get_isothermal_bulk_modulus_reuss();
   } else {
     return
-      get_isothermal_bulk_modulus_reuss() * get_molar_heat_capacity_p
+      get_isothermal_bulk_modulus_reuss() * get_molar_heat_capacity_p()
       / get_molar_heat_capacity_v();
   }
 }
@@ -128,7 +130,30 @@ double Mineral::compute_shear_wave_velocity() const {
 }
 
 double Mineral::compute_grueneisen_parameter() const {
-  // TODO - get eps info?
+  constexpr double eps = std::numeric_limits<double>::epsilon();
+  if (std::fabs(get_molar_heat_capacity_v()) > eps) {
+    return
+      get_thermal_expansivity()
+      * get_isothermal_bulk_modulus_reuss()
+      * get_molar_volume()
+      / get_molar_heat_capacity_v();
+  } else if (
+    std::fabs(property_modifier_excesses.d2GdPdT) < eps &&
+    std::fabs(property_modifier_excesses.d2GdP2) < eps &&
+    std::fabs(property_modifier_excesses.dGdP) < eps &&
+    std::fabs(property_modifier_excesses.d2GdT2) < eps
+    ) {
+      return eos.method.grueneisen_parameter(
+        get_pressure(),
+        get_temperature(),
+        get_molar_volume(),
+        params);
+    } else {
+      throw std::logic_error(
+        "Error! You are trying to calculate the grueneisen parameter\n"
+        "at a temperature where the heat capacity is very low and\n"
+        "where you have defined Gibbs property modifiers.");
+    }
 }
 
 double Mineral::compute_molar_heat_capacity_v() const {
