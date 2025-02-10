@@ -7,6 +7,7 @@
 #include <string>
 #include <optional>
 #include "./material.hpp"
+#include "../eos/equation_of_state.hpp"
 #include "../util/eos.hpp"
 
 /**
@@ -57,7 +58,7 @@ class Mineral : public Material{
   MineralParams params;
 
   // EOS Class for equation of state to use
-  EOS eos_method;
+  EquationOfState eos_method;
 
   // Override set_method etc.
 
