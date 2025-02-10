@@ -223,23 +223,23 @@ double Material::get_isentropic_thermal_gradient() const {
 
 // Default compute function implementations (override in derived classes)
 double Material::compute_molar_internal_energy() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_gibbs() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_helmholtz() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_mass() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_volume() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_volume_unmodified() const {
@@ -247,65 +247,65 @@ double Material::compute_molar_volume_unmodified() const {
 }
 
 double Material::compute_density() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_entropy() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_enthalpy() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_isothermal_bulk_modulus_reuss() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_isentropic_bulk_modulus_reuss() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_isothermal_compressibility_reuss() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_isentropic_compressibility_reuss() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_shear_modulus() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_p_wave_velocity() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_bulk_sound_velocity() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_shear_wave_velocity() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_grueneisen_parameter() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_thermal_expansivity() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_heat_capacity_v() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_molar_heat_capacity_p() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_isentropic_thermal_gradient() const {
-    throw_not_implemented_error(__func__);
+  throw_not_implemented_error(__func__);
 }
