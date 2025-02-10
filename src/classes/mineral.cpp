@@ -18,6 +18,10 @@ double Mineral::compute_molar_gibbs() const {
     + property_modifier_excesses.G;
 }
 
+double Mineral::compute_molar_volume_unmodified() const {
+  return eos_method.volume(get_pressure(), get_temperature(), params);
+}
+
 double Mineral::compute_molar_volume() const {
   return get_molar_volume_unmodified() + property_modifier_excesses.dGdP;
 }
