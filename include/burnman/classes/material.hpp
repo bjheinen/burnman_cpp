@@ -135,7 +135,7 @@ class Material {
    */
   double get_molar_mass() const;
 
-    /**
+  /**
    * @brief Retrieves the molar volume of the mineral.
    *
    * Uses a cached value if available, or calls
@@ -146,6 +146,18 @@ class Material {
    * @return Molar volume in [m^3/mol].
    */
   double get_molar_volume() const;
+
+  /**
+   * @brief Retrieves the molar volume (unmodified) of the mineral.
+   * 
+   * Uses a cached value if available, or calls
+   * `Material::compute_molar_volume_unmodified()` and caches the result.
+   * 
+   * @note `Use Material::reset()` to clear cached values.
+   * 
+   * @return Molar volume in [m^3/mol].
+   */
+  double get_molar_volume_unmodified() const;
 
   /**
    * @brief Retrieves the density of the mineral.
@@ -390,7 +402,7 @@ class Material {
    */
   virtual double compute_molar_mass() const;
 
-    /**
+  /**
    * @brief Computes the molar volume of the mineral.
    *
    * @note Default implementation throws NotImplementedError.
@@ -400,6 +412,18 @@ class Material {
    * @throws NotImplementedError if default implementation called.
    */
   virtual double compute_molar_volume() const;
+
+  /**
+   * @brief Computes the molar volume of the mineral.
+   * 
+   * @note Default implementation throws NotImplementedError.
+   *       Derived classes should override method.
+   *       Used along with comput_molar_volume when excess modifiers needed.
+   * 
+   * @returns Molar volume in [m^3/mol].
+   * @throws NotImplementedError if default implementation called.
+   */
+  virtual double compute_molar_volume_unmodified() const;
 
   /**
    * @brief Computes the density of the mineral.
@@ -587,6 +611,7 @@ class Material {
   mutable std::optional<double> molar_helmholtz;
   mutable std::optional<double> molar_mass;
   mutable std::optional<double> molar_volume;
+  mutable std::optional<double> molar_volume_unmodified;
   mutable std::optional<double> density;
   mutable std::optional<double> molar_entropy;
   mutable std::optional<double> molar_enthalpy;

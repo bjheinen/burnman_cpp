@@ -19,6 +19,7 @@ void Material::reset() {
   molar_helmholtz.reset();
   molar_mass.reset();
   molar_volume.reset();
+  molar_volume_unmodified.reset();
   density.reset();
   molar_entropy.reset();
   molar_enthalpy.reset();
@@ -98,6 +99,13 @@ double Material::get_molar_volume() const {
     molar_volume = compute_molar_volume();
   }
   return *molar_volume;
+}
+
+double Material::get_molar_volume_unmodified() const {
+  if (!molar_volume_unmodified.has_value()) {
+    molar_volume_unmodified = compute_molar_volume_unmodified();
+  }
+  return *molar_volume_unmodified;
 }
 
 double Material::get_density() const {
@@ -232,6 +240,10 @@ double Material::compute_molar_mass() const {
 
 double Material::compute_molar_volume() const {
     throw_not_implemented_error(__func__);
+}
+
+double Material::compute_molar_volume_unmodified() const {
+  throw_not_implemented_error(__func__);
 }
 
 double Material::compute_density() const {
