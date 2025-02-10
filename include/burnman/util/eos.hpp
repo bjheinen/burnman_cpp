@@ -5,6 +5,7 @@
 #define BURNMAN_UTIL_EOS_HPP_INCLUDED
 
 #include <string>
+#include <unordered_map>
 #include <optional>
 
 // Type alias for formula map
@@ -40,7 +41,7 @@ namespace ExcessParams {
   */
   struct LandauParams {
     double Tc_0, V_D, S_D;
-  }
+  };
 
   /**
   * Parameters for tricritical landau correction
@@ -48,7 +49,7 @@ namespace ExcessParams {
   */
   struct LandauSLB2022Params {
     double Tc_0, V_D, S_D;
-  }
+  };
 
   /**
   * Parameters for tricritical landau correction
@@ -56,7 +57,7 @@ namespace ExcessParams {
   */
   struct LandauHPParams {
     double T_0, P_0, Tc_0, V_D, S_D;
-  }
+  };
 
   /**
   * Parameters for Darken's quadratic correction
@@ -64,7 +65,7 @@ namespace ExcessParams {
   */
   struct LinearParams {
     double delta_V, delta_S, delta_E;
-  }
+  };
 
   /**
   * Parameters for Bragg-Williams type correction (order-disorder)
@@ -73,7 +74,7 @@ namespace ExcessParams {
   struct BraggWilliamsParams {
     int n, factor;
     double Wh, Wv, deltaH, deltaV;
-  }
+  };
 
   /**
   * Parameters for magnetic contribution correction
@@ -83,14 +84,14 @@ namespace ExcessParams {
     double structural_parameter;
     double curie_T_0, curie_T_p;
     double magnetic_moment_0, magnetic_moment_p;
-  }
+  };
 
   /**
   * Parameters excess contribution from Debye model
   */
   struct DebyeParams {
     double Cv_inf, Theta_0;
-  }
+  };
 
   /**
   * Parameters for excess contribution from
@@ -98,14 +99,14 @@ namespace ExcessParams {
   */
   struct DebyeDeltaParams {
     double S_inf, Theta_0;
-  }
+  };
 
   /**
   * Parameters excess contribution from Einstein model
   */
   struct EinsteinParams {
     double Cv_inf, Theta_0;
-  }
+  };
 
   /**
   * Parameters for excess contribution from
@@ -113,7 +114,7 @@ namespace ExcessParams {
   */
   struct EinsteinDeltaParams {
     double S_inf, Theta_0;
-  }
+  };
 } // End namespace ExcessParams
 
 
@@ -122,14 +123,14 @@ namespace ExcessParams {
  */
 struct CpParams {
   double a, b, c, d;
-}
+};
 
 /**
  * Parameters for CORK
  */
 struct CorkParams {
   double a_0, a_1, b, c_0, c_1, d_0, d_1;
-}
+};
 
 
 /**
@@ -204,6 +205,6 @@ struct MineralParams {
   std::optional<double> cork_T;
   std::optional<double> cork_P;
   std::optional<CorkParams> cork_params;
-}
+};
 
 #endif // BURNMAN_UTIL_EOS_HPP_INCLUDED
