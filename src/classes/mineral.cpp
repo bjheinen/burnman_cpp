@@ -1,51 +1,159 @@
 /*
   TODO: Copyright Notice!
 */
+#include <cmath>
 #include "../../include/burnman/classes/mineral.hpp"
 
 // store _property_modifiers['etc'] under property_modifier_excesses.etc
 
 // EOS properties - in P,T form
-
 double Mineral::compute_molar_gibbs() const {
-  // calls method.gibbs_free_energy()
-
-  get_pressure();
-  get_temperature();
-  
-
-  // adds ._property_modifiers['G']
-  property_modifier_excesses.G;
-}
-
-// should probably cache this as well...
-double Mineral::compute_molar_volume_unmodified() const{
-  return method.volume(get_pressure(), get_temperature(), params);
+  return eos_method.gibbs_free_energy(
+    get_pressure(),
+    get_temperature(),
+    get_molar_volume_unmodified(),
+    params)
+    + property_modifier_excesses.G;
 }
 
 double Mineral::compute_molar_volume() const {
-  return compute_molar_volume_unmodified() + property_modifier_excesses.dGdP;
+  return get_molar_volume_unmodified() + property_modifier_excesses.dGdP;
+}
+
+double Mineral::compute_molar_entropy() const {
+  return eos_method.entropy(
+    get_pressure(),
+    get_temperature(),
+    get_molar_volume_unmodified(),
+    params)
+    - property_modifier_excesses.dGdT;
+}
+
+double Mineral::compute_isothermal_bulk_modulus_reuss() const {
+  double K_T_orig = eos_method.isothermal_bulk_modulus_reuss(
+    get_pressure(),
+    get_temperature(),
+    get_molar_volume_unmodified(),
+    params);
+
+  return get_molar_volume()
+    / ((get_molar_volume_unmodified / K_T_orig)
+      - property_modifier_excesses.d2GdP2);
+}
+
+double Mineral::compute_molar_heat_capacity_p() const {
+  return eos_method.molar_heat_capacity_p(
+    get_pressure(),
+    get_temperature(),
+    get_molar_volume_unmodified(),
+    params)
+    - get_temperature() * property_modifier_excesses.d2GdT2;
+}
+
+double Mineral::compute_thermal_expansivity() const {
+  return (eos_method.thermal_expansivity(
+      get_pressure(),
+      get_temperature(),
+      get_molar_volume_unmodified(),
+      params)
+      + property_modifier_excesses.d2GdPdT)
+    / get_molar_volume();
+}
+
+double Mineral::compute_shear_modulus() const {
+  double G = eos_method.shear_modulus(
+    get_pressure(),
+    get_temperature(),
+    get_molar_volume_unmodified(),
+    params);
+  // TODO: Warning if G is 0 *(< machine eps)
+  return G;
+}
+
+// Mineral properties (non EOS)
+
+// TODO - formula
+//      - molar_mass (compute or just return from params?)
+
+double Mineral::compute_density() const {
+  return get_molar_mass() / get_molar_volume();
+}
+
+double Mineral::compute_molar_internal_energy() const {
+  return
+    get_molar_gibbs()
+    - get_pressure() * get_molar_volume()
+    + get_temperature() * get_molar_entropy();
+}
+
+double Mineral::compute_molar_helmholtz() const {
+  return get_molar_gibbs() - get_pressure() * get_molar_volume();
 }
 
 double Mineral::compute_molar_enthalpy() const {
-  return method.entropy(
-    get_pressure(),
-    get_temperature(),
-    compute_molar_volume_unmodified(),
-    params
-  ) - property_modifier_excesses.dGdT;
+  return get_molar_gibbs() + get_temperature() * get_molar_entropy();
+}
+
+double Mineral::compute_isentropic_bulk_modulus_reuss() const {
+  if (get_temperature() < 1.0e-10) {
+    return get_isothermal_bulk_modulus_reuss();
+  } else {
+    return
+      get_isothermal_bulk_modulus_reuss() * get_molar_heat_capacity_p
+      / get_molar_heat_capacity_v();
+  }
+}
+
+double Mineral::compute_isothermal_compressibility_reuss() const {
+  return 1.0 / get_isothermal_bulk_modulus_reuss();
+}
+
+double Mineral::compute_isentropic_compressibility_reuss() const {
+  return 1.0 / get_isentropic_bulk_modulus_reuss();
+}
+
+double Mineral::compute_p_wave_velocity() const {
+  return std::sqrt(
+    (get_isentropic_bulk_modulus_reuss() + 4.0 / 3.0 * get_shear_modulus())
+    / get_density()
+  );
+}
+
+double Mineral::compute_bulk_sound_velocity() const {
+  return std::sqrt(get_isentropic_bulk_modulus_reuss() / get_density());
+}
+
+double Mineral::compute_shear_wave_velocity() const {
+  return std::sqrt(get_shear_modulus() / get_density());
+}
+
+double Mineral::compute_grueneisen_parameter() const {
+  // TODO - get eps info?
+}
+
+double Mineral::compute_molar_heat_capacity_v() const {
+  double thermal_expansivity = get_thermal_expansivity();
+  return
+    get_molar_heat_capacity_p()
+    - get_molar_volume()
+    * get_temperature()
+    * thermal_expansivity * thermal_expansivity
+    * get_isothermal_bulk_modulus_reuss();
+}
+
+double Mineral::compute_isentropic_thermal_gradient() const {
+  return
+    (get_molar_volume() * get_temperature() * get_thermal_expansivity())
+    / get_molar_heat_capacity_p();
 }
 
 
-
-
-// TODO: 
+// TODO:
 //       implement set_method so know how to call EOS funcs
-//         should EOS be functional to reduce overheads??
-//       implement params as a struct
-//       implement property_modifiers as a struct (or with params?)
 
+// Mineral parameter properties - util/eos MineralParams
+// Property modifier params - util/eos ExcessParams::(Struct) --> use std::visit with overloaded functions to compute correct excess function
+// Property modifiers - util/eos Excesses - has overloaed += operator to add data when computing loop
 
-
-
-// Mineral parameter properties
+// Pass properties as value (unless string, vector, etc.)
+// Pass params as const reference

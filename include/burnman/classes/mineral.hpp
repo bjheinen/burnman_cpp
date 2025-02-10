@@ -62,6 +62,7 @@ class Mineral : public Material{
   double compute_molar_helmholtz() const override;
   double compute_molar_mass() const override;
   double compute_molar_volume() const override;
+  double compute_molar_volume_unmodified() const override;
   double compute_density() const override;
   double compute_molar_entropy() const override;
   double compute_molar_enthalpy() const override;
@@ -83,8 +84,6 @@ class Mineral : public Material{
 
   Excesses property_modifier_excesses;
 
-  // implement prams object to know type
-  double compute_molar_volume_unmodified() const;
 
 };
 
