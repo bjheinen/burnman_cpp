@@ -60,8 +60,11 @@ class EquationOfState {
    * TODO: documentation after implementation done
    *       function is not const
    *       MineralParams reference is not const (sometime need to set defaults)
+   *       return type bool/void? depends on throwing error inside/outside func
+   * @note Default implementation passes quietly
+   *       Derived classes should override method.
    */
-  virtual void validate_parameters(MineralParams& params) const;
+  virtual bool validate_parameters(MineralParams& params);
 
   // EOS relations
   /**

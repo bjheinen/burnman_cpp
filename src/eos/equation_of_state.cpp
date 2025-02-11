@@ -24,7 +24,9 @@ double EquationOfState::compute_density(
 
 // Default compute function implementations (override in derived classes)
 
-// TODO: validate_parameters
+bool EquationOfState::validate_parameters(MineralParams& params){
+  return 1; // Pass quietly as default
+}
 
 double EquationOfState::compute_volume(
   double pressure,
