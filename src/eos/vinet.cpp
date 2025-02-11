@@ -2,11 +2,56 @@
   TODO: Copyright Notice!
 */
 #include <cmath>
+#include <stdexcept>
 #include <gsl/gsl_roots.h>
 #include "../../include/burnman/eos/vinet.hpp"
 
+// TODO: might need to access params.x with *
+
 bool validate_parameters(MineralParams& params) {
-  ;
+
+  // TODO: check if we can just do if (!params.V_0)
+
+  // Check for required keys
+  if (!params.V_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: V_0");
+  }
+  if (!params.K_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: K_0");
+  }
+  if (!params.Kprime_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: Kprime_0");
+  }
+
+  if (!params.E_0.has_value()) {
+    params.E_0 = 0.0;
+  }
+  if (!params.P_0.has_value()) {
+    params.P_0 = 0.0;
+  }
+
+  // Set G to NaN unless user has set
+  if (!params.G_0.has_value()) {
+    params.G_0 = std::nan("");
+  }
+  if (!params.Gprime_0.has_value()) {
+    params.Gprime_0 = std::nan("");
+  }
+
+  // Check values are reasonable
+  // TODO: warnings?
+  if (params.V_0 < 1.0e-7 || params.V_0 > 1.0e-3) {
+    ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
+  }
+  if (params.K_0 < 1.0e9 || params.K_0 > 1.0e13) {
+    ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
+  }
+  if (params.Kprime_0 < -5.0 || params.Kprime_0 > 10.0) {
+    ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
+  }
+
+  return 1; // maybe make this void
+
 }
 
 // Compute P(V) - P as function to root find
