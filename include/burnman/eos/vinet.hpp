@@ -82,19 +82,7 @@ class Vinet : public EquationOfState{
     double volume,
     const MineralParams& params) const override;
 
-  double compute_helmholtz_free_energy(
-    double pressure,
-    double temperature,
-    double volume,
-    const MineralParams& params) const override;
-
   double compute_entropy(
-    double pressure,
-    double temperature,
-    double volume,
-    const MineralParams& params) const override;
-
-  double compute_enthalpy(
     double pressure,
     double temperature,
     double volume,

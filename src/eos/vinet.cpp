@@ -209,25 +209,3 @@ double Vinet::compute_entropy(
 ) const {
   return 0.0;
 }
-
-
-
-// Remove
-
-double Vinet::compute_helmholtz_free_energy(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
-) const {
-  throw_not_implemented_error(__func__);
-}
-
-double Vinet::compute_enthalpy(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
-) const {
-  throw_not_implemented_error(__func__);
-}
