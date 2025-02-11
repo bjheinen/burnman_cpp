@@ -40,7 +40,6 @@ class EquationOfState {
   // Virtual destructor for cleanup in derived classes
   virtual ~EquationOfState() = default;
 
-
   // Implemented EOS functions
   /**
    * @brief Computes the density of the mineral.

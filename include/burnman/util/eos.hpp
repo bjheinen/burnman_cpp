@@ -207,4 +207,21 @@ struct MineralParams {
   std::optional<CorkParams> cork_params;
 };
 
+/**
+ * Structs to hols parameters when making GSL function objects
+ */
+namespace ParamsGSL {
+  /**
+   * Struct for GSL Brent root finding
+   * Used for volume finding in EOS where only pressure needed
+   * as an additional argument:
+   *   bm, bm4, vinet, macaw, morse_potential, spock
+   */
+  struct SolverParams_P {
+  MineralParams& params;
+  double pressure;
+  };
+
+} // End namespace ParamGSL
+
 #endif // BURNMAN_UTIL_EOS_HPP_INCLUDED
