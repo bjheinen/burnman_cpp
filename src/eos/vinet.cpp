@@ -5,12 +5,14 @@
 #include <gsl/gsl_roots.h>
 #include "../../include/burnman/eos/vinet.hpp"
 
-// TODO: validate parameters...
+bool validate_parameters(MineralParams& params) {
+  ;
+}
 
 // Compute P(V) - P as function to root find
 double vinet_gsl_wrapper(double x, void* p) {
   // Prefer C++ cast over C-style
-  auto* vinet_params = static_cast<ParamsGSL::SolverParams_P*>(p);
+  auto* vinet_params = static_cast<ParamsGSL::SolverParams_P*>(p); // <const ParamsGSL::SolverParams_P*
   return compute_vinet(x / vinet_params->params.V_0, vinet_params->params)
     - vinet_params->pressure;
 }
@@ -21,7 +23,7 @@ double vinet_gsl_wrapper(double x, void* p) {
 
 double compute_vinet(
   double compression,
-  MineralParams& params
+  const MineralParams& params
 ) const {
   // Compute x^1/3 separately
   double eta = (3.0 / 2.0) * (params.Kprime_0 - 1.0);

@@ -22,8 +22,10 @@
 class Vinet : public EquationOfState{
  public:
 
-  // Specific EOS functions
+  // Helper functions
+  bool validate_parameters(MineralParams& params) override;
 
+  // Specific EOS functions
   double compute_volume(
     double pressure,
     double temperature,
@@ -94,8 +96,6 @@ class Vinet : public EquationOfState{
     double volume,
     const MineralParams& params) const override;
 
- protected:
-  ;
  private:
 
   /**
@@ -106,9 +106,7 @@ class Vinet : public EquationOfState{
    *
    * @return Pressure in [Pa].
    */
-  double compute_vinet(
-    double compression,
-    MineralParams& params) const;
+  double compute_vinet(double compression, const MineralParams& params) const;
 
   /**
    * @brief GSL function wrapper to compute P(V) - P
@@ -117,6 +115,7 @@ class Vinet : public EquationOfState{
    * @param p Generic pointer for parameter object
    * @see `ParamsGSL::SolverParams_P`
    */
-  double vinet_gsl_wrapper(double x, void* p);
+  double vinet_gsl_wrapper(double x, void* p); //const void* p) const; ?
+};
 
 #endif // BURNMAN_EOS_VINET_HPP_INCLUDED
