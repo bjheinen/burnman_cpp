@@ -56,10 +56,10 @@ bool validate_parameters(MineralParams& params) {
 }
 
 // Compute P(V) - P as function to root find
-double vinet_gsl_wrapper(double x, void* p) {
+double Vinet::vinet_gsl_wrapper(double x, void* p) {
   // Prefer C++ cast over C-style
   auto* vinet_params = static_cast<ParamsGSL::SolverParams_P*>(p); // <const ParamsGSL::SolverParams_P*
-  return compute_vinet(x / vinet_params->params.V_0, vinet_params->params)
+  return compute_vinet(x / *(vinet_params->params.V_0), vinet_params->params)
     - vinet_params->pressure;
 }
 // For lambda can do:
@@ -67,7 +67,7 @@ double vinet_gsl_wrapper(double x, void* p) {
 //   return compute_vinet(x / params.V_0, params) - pressure;
 // };
 
-double compute_vinet(
+double Vinet::compute_vinet(
   double compression,
   const MineralParams& params
 ) const {
