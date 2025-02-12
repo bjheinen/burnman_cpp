@@ -77,7 +77,14 @@ double Mineral::compute_shear_modulus() const {
 // Mineral properties (non EOS)
 
 // TODO - formula
-//      - molar_mass (compute or just return from params?)
+
+double Mineral::compute_molar_mass() const {
+  if (params.molar_mass) {
+    return *params.molar_mass;
+  } else {
+    throw std::invalid_argument("No molar mass parameter!");
+  }
+}
 
 double Mineral::compute_density() const {
   return get_molar_mass() / get_molar_volume();
