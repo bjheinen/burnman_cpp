@@ -3,6 +3,7 @@
 */
 #include <cmath>
 #include <stdexcept>
+#include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
 #include "../../include/burnman/eos/vinet.hpp"
 
@@ -129,7 +130,7 @@ double Vinet::compute_volume(
     } while (status == GSL_CONTINUE && iter < max_iter);
 
   // Get final root (can delet root getting above when tested)
-  double root = gsl_root_fsolver_root(s);
+  double root = gsl_root_fsolver_root(solver);
   // Clean up
   gsl_root_fsolver_free(solver);
 
