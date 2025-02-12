@@ -4,7 +4,7 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
-#include "burnman/classes/mineral.hpp"
+#include "burnman/core/mineral.hpp"
 
 // EOS properties - in P,T form
 double Mineral::compute_molar_gibbs() const {

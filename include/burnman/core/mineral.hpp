@@ -1,14 +1,14 @@
 /*
   TODO: Copyright Notice!
 */
-#ifndef BURNMAN_CLASSES_MINERAL_HPP_INCLUDED
-#define BURNMAN_CLASSES_MINERAL_HPP_INCLUDED
+#ifndef BURNMAN_CORE_MINERAL_HPP_INCLUDED
+#define BURNMAN_CORE_MINERAL_HPP_INCLUDED
 
 #include <string>
 #include <optional>
-#include "burnman/classes/material.hpp"
-#include "burnman/eos/equation_of_state.hpp"
-#include "burnman/util/eos.hpp"
+#include "burnman/core/material.hpp"
+#include "burnman/core/equation_of_state.hpp"
+#include "burnman/utils/eos.hpp"
 
 /**
  * Base class for materials.
@@ -96,4 +96,4 @@ class Mineral : public Material{
 };
 
 
-#endif // BURNMAN_CLASSES_MINERAL_HPP_INCLUDED
+#endif // BURNMAN_CORE_MINERAL_HPP_INCLUDED

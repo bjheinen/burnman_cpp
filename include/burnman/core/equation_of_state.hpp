@@ -1,11 +1,11 @@
 /*
   TODO: Copyright Notice!
 */
-#ifndef BURNMAN_EOS_EOSBASE_HPP_INCLUDED
-#define BURNMAN_EOS_EOSBASE_HPP_INCLUDED
+#ifndef BURNMAN_CORE_EQUATION_OF_STATE_HPP_INCLUDED
+#define BURNMAN_CORE_EQUATION_OF_STATE_HPP_INCLUDED
 
 #include <string>
-#include "burnman/util/eos.hpp"
+#include "burnman/utils/eos.hpp"
 
 /**
  * Base class for Equations of State.
@@ -360,7 +360,7 @@ class EquationOfState {
 
 };
 
-#endif // BURNMAN_EOS_EOSBASE_HPP_INCLUDED
+#endif // BURNMAN_CORE_EQUATION_OF_STATE_HPP_INCLUDED
 
 
 

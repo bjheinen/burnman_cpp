@@ -1,8 +1,8 @@
 /*
   TODO: Copyright Notice!
 */
-#ifndef BURNMAN_UTIL_EXCEPTIONS_HPP_INCLUDED
-#define BURNMAN_UTIL_EXCEPTIONS_HPP_INCLUDED
+#ifndef BURNMAN_UTILS_EXCEPTIONS_HPP_INCLUDED
+#define BURNMAN_UTILS_EXCEPTIONS_HPP_INCLUDED
 
 #include <stdexcept>
 #include <string>
@@ -21,4 +21,4 @@ class NotImplementedError : public std::logic_error {
     : std::logic_error("[" + class_name + "::" + func_name + "] " + message) {}
 };
 
-#endif  // BURNMAN_UTIL_EXCEPTIONS_HPP_INCLUDED
+#endif  // BURNMAN_UTILS_EXCEPTIONS_HPP_INCLUDED

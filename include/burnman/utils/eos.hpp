@@ -1,8 +1,8 @@
 /*
   TODO: Copyright Notice!
 */
-#ifndef BURNMAN_UTIL_EOS_HPP_INCLUDED
-#define BURNMAN_UTIL_EOS_HPP_INCLUDED
+#ifndef BURNMAN_UTILS_EOS_HPP_INCLUDED
+#define BURNMAN_UTILS_EOS_HPP_INCLUDED
 
 #include <string>
 #include <unordered_map>
@@ -225,4 +225,4 @@ namespace ParamsGSL {
 
 } // End namespace ParamGSL
 
-#endif // BURNMAN_UTIL_EOS_HPP_INCLUDED
+#endif // BURNMAN_UTILS_EOS_HPP_INCLUDED

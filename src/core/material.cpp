@@ -2,8 +2,8 @@
   TODO: Copyright Notice!
 */
 #include <typeinfo>
-#include "burnman/classes/material.hpp"
-#include "burnman/util/exceptions.hpp"
+#include "burnman/core/material.hpp"
+#include "burnman/utils/exceptions.hpp"
 
 [[noreturn]] void Material::throw_not_implemented_error(const std::string& method) const {
   throw NotImplementedError(get_class_name(), method);
