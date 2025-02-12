@@ -146,7 +146,7 @@ double Vinet::compute_pressure(
   double volume,
   const MineralParams& params
 ) const {
-  return compute_vinet(volume/(*params.V), params);
+  return compute_vinet(volume/(*params.V_0), params);
 }
 
 double Vinet::compute_isothermal_bulk_modulus_reuss(
