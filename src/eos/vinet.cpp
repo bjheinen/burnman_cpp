@@ -41,13 +41,13 @@ bool validate_parameters(MineralParams& params) {
 
   // Check values are reasonable
   // TODO: warnings?
-  if (params.V_0 < 1.0e-7 || params.V_0 > 1.0e-3) {
+  if ((*params.V_0) < 1.0e-7 || (*params.V_0) > 1.0e-3) {
     ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
   }
-  if (params.K_0 < 1.0e9 || params.K_0 > 1.0e13) {
+  if ((*params.K_0) < 1.0e9 || (*params.K_0) > 1.0e13) {
     ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
   }
-  if (params.Kprime_0 < -5.0 || params.Kprime_0 > 10.0) {
+  if ((*params.Kprime_0) < -5.0 || (*params.Kprime_0) > 10.0) {
     ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
   }
 
@@ -72,15 +72,15 @@ double compute_vinet(
   const MineralParams& params
 ) const {
   // Compute x^1/3 separately
-  double eta = (3.0 / 2.0) * (params.Kprime_0 - 1.0);
+  double eta = (3.0 / 2.0) * ((*params.Kprime_0) - 1.0);
   double x_cbrt = std::cbrt(compression);
   double mu = 1.0 - x_cbrt;
   return
-    3.0 * params.K_0
+    3.0 * (*params.K_0)
     * (1.0 / (x_cbrt * x_cbrt))
     * mu
     * std::exp(eta * mu)
-    + params.P_0;
+    + (*params.P_0);
 }
 
 double Vinet::compute_volume(
@@ -98,8 +98,8 @@ double Vinet::compute_volume(
   const gsl_root_fsolver_type* T = gsl_root_fsolver_brent;
   gsl_root_fsolver* solver = gsl_root_fsolver_alloc(T);
   // Set a, b limits
-  double x_lo = 0.1 * params.V_0;
-  double x_hi = 1.5 * params.V_0;
+  double x_lo = 0.1 * (*params.V_0);
+  double x_hi = 1.5 * (*params.V_0);
   // Set the GSL solver
   gsl_root_fsolver_set(solver, &vinet_functor, x_lo, x_hi);
   // Iterate the solver
@@ -146,7 +146,7 @@ double Vinet::compute_pressure(
   double volume,
   const MineralParams& params
 ) const {
-  return compute_vinet(volume/params.V, params);
+  return compute_vinet(volume/(*params.V), params);
 }
 
 double Vinet::compute_isothermal_bulk_modulus_reuss(
@@ -155,11 +155,11 @@ double Vinet::compute_isothermal_bulk_modulus_reuss(
   double volume,
   const MineralParams& params
 ) const {
-  double eta = (3.0/2.0) * (params.Kprime_0 - 1.0);
-  double x_cbrt = std::cbrt(volume / params.V_0);
+  double eta = (3.0/2.0) * ((*params.Kprime_0) - 1.0);
+  double x_cbrt = std::cbrt(volume / (*params.V_0));
   double mu = 1.0 - x_cbrt;
   return
-    (params.K_0 * (1.0 / (x_cbrt * x_cbrt)))
+    ((*params.K_0) * (1.0 / (x_cbrt * x_cbrt)))
     * (1 + ((eta * x_cbrt + 1.0) * mu))
     * std::exp(eta * mu);
 }
@@ -193,13 +193,13 @@ double Vinet::compute_molar_internal_energy(
   double volume,
   const MineralParams& params
 ) const {
-  double eta = (3.0/2.0) * (params.Kprime_0 - 1.0);
-  double x_cbrt = std::cbrt(volume / params.V_0);
+  double eta = (3.0/2.0) * ((*params.Kprime_0) - 1.0);
+  double x_cbrt = std::cbrt(volume / (*params.V_0));
   double mu = 1.0 - x_cbrt;
-  double intPdV = 9.0 * params.V_0 * params.K_0
+  double intPdV = 9.0 * (*params.V_0) * (*params.K_0)
     / (eta * eta)
     * ((1.0 - eta * mu) * std::exp(eta * mu) - 1.0);
-  return -intPdV + params.E_0;
+  return -intPdV + (*params.E_0);
 }
 
 // Meaningless parameters for isothermal EOS
