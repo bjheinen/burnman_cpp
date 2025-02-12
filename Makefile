@@ -27,7 +27,7 @@ CXXFLAGS := -Wall -Wextra -std=c++17
 CPPFLAGS := -MMD -MP $(INCLUDE_FLAGS)
 
 # Find source files
-SOURCES := $(wildcard $(SRC_DIR)/**/*.cpp)
+SOURCES := $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp)
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
 DEPENDS := $(OBJECTS:.o=.d)
 
