@@ -152,6 +152,7 @@ struct MineralParams {
   // Reference conditions
   std::optional<double> P_0;
   std::optional<double> T_0;
+  std::optional<double> E_0;
 
   // Reference volume
   std::optional<double> V_0;
