@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
-#include "../../include/burnman/eos/vinet.hpp"
+#include "burnman/eos/vinet.hpp"
 
 // TODO: might need to access params.x with *
 

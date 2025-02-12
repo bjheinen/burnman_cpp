@@ -5,7 +5,7 @@
 #define BURNMAN_EOS_EOSBASE_HPP_INCLUDED
 
 #include <string>
-#include "../util/eos.hpp"
+#include "burnman/util/eos.hpp"
 
 /**
  * Base class for Equations of State.

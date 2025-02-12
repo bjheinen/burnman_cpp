@@ -6,9 +6,9 @@
 
 #include <string>
 #include <optional>
-#include "./material.hpp"
-#include "../eos/equation_of_state.hpp"
-#include "../util/eos.hpp"
+#include "burnman/classes/material.hpp"
+#include "burnman/eos/equation_of_state.hpp"
+#include "burnman/util/eos.hpp"
 
 /**
  * Base class for materials.

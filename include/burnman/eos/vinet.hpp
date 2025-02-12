@@ -4,8 +4,8 @@
 #ifndef BURNMAN_EOS_VINET_HPP_INCLUDED
 #define BURNMAN_EOS_VINET_HPP_INCLUDED
 
-#include "./equation_of_state.hpp"
-#include "../util/eos.hpp"
+#include "burnman/eos/equation_of_state.hpp"
+#include "burnman/util/eos.hpp"
 
 
 /**

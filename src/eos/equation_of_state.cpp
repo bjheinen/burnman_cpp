@@ -2,8 +2,8 @@
   TODO: Copyright Notice!
 */
 #include <typeinfo>
-#include "../../include/burnman/eos/equation_of_state.hpp"
-#include "../../include/burnman/util/exceptions.hpp"
+#include "burnman/eos/equation_of_state.hpp"
+#include "burnman/util/exceptions.hpp"
 
 // Helper functions to throw errors
 [[noreturn]] void EquationOfState::throw_not_implemented_error(const std::string& method) const {
