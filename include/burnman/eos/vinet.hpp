@@ -106,7 +106,7 @@ class Vinet : public EquationOfState{
    *
    * @return Pressure in [Pa].
    */
-  double compute_vinet(double compression, const MineralParams& params) const;
+  static double compute_vinet(double compression, const MineralParams& params);
 
   /**
    * @brief GSL function wrapper to compute P(V) - P
@@ -115,7 +115,7 @@ class Vinet : public EquationOfState{
    * @param p Generic pointer for parameter object
    * @see `ParamsGSL::SolverParams_P`
    */
-  double vinet_gsl_wrapper(double x, void* p); //const void* p) const; ?
+  static double vinet_gsl_wrapper(double x, void* p);
 };
 
 #endif // BURNMAN_EOS_VINET_HPP_INCLUDED

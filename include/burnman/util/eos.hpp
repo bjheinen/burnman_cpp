@@ -219,7 +219,7 @@ namespace ParamsGSL {
    *   bm, bm4, vinet, macaw, morse_potential, spock
    */
   struct SolverParams_P {
-  MineralParams& params;
+  const MineralParams& params;
   double pressure;
   };
 

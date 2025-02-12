@@ -58,7 +58,7 @@ bool validate_parameters(MineralParams& params) {
 // Compute P(V) - P as function to root find
 double Vinet::vinet_gsl_wrapper(double x, void* p) {
   // Prefer C++ cast over C-style
-  auto* vinet_params = static_cast<ParamsGSL::SolverParams_P*>(p); // <const ParamsGSL::SolverParams_P*
+  auto* vinet_params = static_cast<const ParamsGSL::SolverParams_P*>(p); // <const ParamsGSL::SolverParams_P*
   return compute_vinet(x / *(vinet_params->params.V_0), vinet_params->params)
     - vinet_params->pressure;
 }
@@ -70,7 +70,7 @@ double Vinet::vinet_gsl_wrapper(double x, void* p) {
 double Vinet::compute_vinet(
   double compression,
   const MineralParams& params
-) const {
+) {
   // Compute x^1/3 separately
   double eta = (3.0 / 2.0) * ((*params.Kprime_0) - 1.0);
   double x_cbrt = std::cbrt(compression);
@@ -91,7 +91,7 @@ double Vinet::compute_volume(
   // Find root in [P(V) - P] to find V that fits P
   // Set up GSL function object and params
   gsl_function vinet_functor;
-  ParamsGSL::SolverParams_P vinet_params = {params, pressure};
+  ParamsGSL::SolverParams_P vinet_params{params, pressure};
   vinet_functor.function = &vinet_gsl_wrapper;
   vinet_functor.params = &vinet_params;
   // Define and allocate the solver
@@ -127,17 +127,17 @@ double Vinet::compute_volume(
               iter, x_lo, x_hi,
               root,
               x_hi - x_lo);
-    } while (status == GSL_CONTINUE && iter < max_iter);
+    } while (status == GSL_CONTINUE && iter < maxiter);
 
   // Get final root (can delet root getting above when tested)
-  double root = gsl_root_fsolver_root(solver);
+  root = gsl_root_fsolver_root(solver);
   // Clean up
   gsl_root_fsolver_free(solver);
 
   if (status == GSL_SUCCESS) {
       return root;
   } else {
-      ; // throw an error? "Error: Root-finding did not converge!"
+      return -1; // throw an error? "Error: Root-finding did not converge!"
   }
 }
 
