@@ -99,12 +99,14 @@ class BM3 : public EquationOfState{
   /**
    * @brief Evaluate the BM EOS pressure.
    *
-   * @param compression V/V_0. // TODO: might want to pass V_0/V
+   * @param inv_compression V_0/V.
    * @param params Mineral parameters object of type MineralParams
    *
    * @return Pressure in [Pa].
    */
-  static double compute_bm(double compression, const MineralParams& params);
+  static double compute_birch_murnaghan(
+    double inv_compression,
+    const MineralParams& params);
 
   /**
    * @brief GSL function wrapper to compute P(V) - P
