@@ -41,13 +41,13 @@ bool Vinet::validate_parameters(MineralParams& params) {
 
   // Check values are reasonable
   // TODO: warnings?
-  if ((*params.V_0) < 1.0e-7 || (*params.V_0) > 1.0e-3) {
+  if (*params.V_0 < 1.0e-7 || *params.V_0 > 1.0e-3) {
     ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
   }
-  if ((*params.K_0) < 1.0e9 || (*params.K_0) > 1.0e13) {
+  if (*params.K_0 < 1.0e9 || *params.K_0 > 1.0e13) {
     ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
   }
-  if ((*params.Kprime_0) < -5.0 || (*params.Kprime_0) > 10.0) {
+  if (*params.Kprime_0 < -5.0 || *params.Kprime_0 > 10.0) {
     ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
   }
 
