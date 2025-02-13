@@ -9,7 +9,7 @@
 
 // TODO: might need to access params.x with *
 
-bool validate_parameters(MineralParams& params) {
+bool Vinet::validate_parameters(MineralParams& params) {
 
   // TODO: check if we can just do if (!params.V_0)
 
