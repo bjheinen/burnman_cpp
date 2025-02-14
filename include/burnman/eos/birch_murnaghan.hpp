@@ -52,6 +52,11 @@ class BM3 : public EquationOfState{
     double volume,
     const MineralParams& params) const override;
 
+  /**
+   * @copydoc EquationOfState::compute_shear_modulus
+   *
+   * @note Third order expansion
+   */
   double compute_shear_modulus(
     double pressure,
     double temperature,
@@ -95,7 +100,6 @@ class BM3 : public EquationOfState{
     const MineralParams& params) const override;
 
  private:
-
   /**
    * @brief Evaluate the BM EOS pressure.
    *
@@ -117,6 +121,30 @@ class BM3 : public EquationOfState{
    */
   static double bm_gsl_wrapper(double x, void* p);
 
+};
+
+/**
+ * @class BM2
+ * @brief Birch-Murnaghan EOS with second order expansion for shear modulus.
+ *
+ * Derived from BM3.
+ * The EOS is third order in strain, and has no temperature dependence.
+ * Overrides compute_shear_modulus to use the second order expansion.
+ *
+ * @note All functions assume SI units for all properties.
+ */
+class BM2 : public BM3{
+ public:
+  /**
+   * @copydoc EquationOfState::compute_shear_modulus
+   *
+   * @note Second order expansion
+   */
+  double compute_shear_modulus(
+    double pressure,
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
 };
 
 #endif // BURNMAN_EOS_BIRCH_MURNAGHAN_HPP_INCLUDED

@@ -7,12 +7,9 @@
 #include <gsl/gsl_roots.h>
 #include "burnman/eos/vinet.hpp"
 
-// TODO: might need to access params.x with *
-
 bool Vinet::validate_parameters(MineralParams& params) {
 
   // TODO: check if we can just do if (!params.V_0)
-
   // Check for required keys
   if (!params.V_0.has_value()) {
     throw std::invalid_argument("params object missing parameter: V_0");
