@@ -5,5 +5,8 @@
 build/
 bin/
 
+# Dev testing
+dev-testing/
+
 # VS code configs
 .vscode/
