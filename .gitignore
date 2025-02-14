@@ -3,6 +3,7 @@
 
 # Build files
 build/
+bin/
 
 # VS code configs
 .vscode/
