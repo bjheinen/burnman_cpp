@@ -2,9 +2,6 @@
   TODO: Copyright Notice!
 */
 #include <cmath>
-//#include <stdexcept>
-//#include <gsl/gsl_errno.h>
-//#include <gsl/gsl_roots.h>
 #include <gsl/gsl_sf_debye.h>
 #include <gsl/gsl_integration.h>
 #include "burnman/eos/debye.hpp"
@@ -23,7 +20,7 @@ double Debye::debye_fn_quad(double x) {
   gsl_integration_qags(
     &integrand,
     0, x, // limits
-    1.49e-8, 1.49e-8, //eps from scipy
+    1.49e-8, 1.49e-8, //eps from scipy TODO: move to constants
     1000, // limit
     gsl_w, &result, &error);
   // error unused here
@@ -93,6 +90,7 @@ double Debye::compute_entropy(
     return 0.0;
   }
   double x = debye_temperature / temperature;
+  // S
   return napfu * constants::physics::gas_constant
     * (4.0 * debye_fn_cheb(x) - 3.0 * std::log1p(-std::exp(-x))
     );
@@ -116,6 +114,7 @@ double Debye::dmolar_heat_capacity_v_dT(
     debye_temperature,
     napfu)
     / (temperature * temperature);
+  // dCvdT
   return 3.0 * Cv_over_T
     + (Cv_over_T - 4.0 * E_over_Tsqr)
     * x / (1.0 - std::exp(-x));

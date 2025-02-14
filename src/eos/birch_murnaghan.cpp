@@ -6,6 +6,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
 #include "burnman/eos/birch_murnaghan.hpp"
+#include "burnman/utils/constants.hpp"
 
 bool BM3::validate_parameters(MineralParams& params) {
 
@@ -108,7 +109,7 @@ double BM3::compute_volume(
   int status;
   double root;
   double atol = 2.0e-12;
-  double rtol = 4.0 * std::numeric_limits<double>::epsilon();
+  double rtol = 4.0 * constants::precision::double_eps;
   do
     {
       iter++;

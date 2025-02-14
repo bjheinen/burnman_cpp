@@ -6,6 +6,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
 #include "burnman/eos/vinet.hpp"
+#include "burnman/utils/constants.hpp"
 
 bool Vinet::validate_parameters(MineralParams& params) {
 
@@ -104,8 +105,8 @@ double Vinet::compute_volume(
   int maxiter = 100;
   int status;
   double root;
-  double atol = 2.0e-12;
-  double rtol = 4.0 * std::numeric_limits<double>::epsilon();
+  double atol = 2.0e-12; // TODO move to constants
+  double rtol = 4.0 * constants::precision::double_eps;
   do
     {
       iter++;

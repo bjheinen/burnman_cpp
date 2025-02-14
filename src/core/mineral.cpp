@@ -2,9 +2,9 @@
   TODO: Copyright Notice!
 */
 #include <cmath>
-#include <limits>
 #include <stdexcept>
 #include "burnman/core/mineral.hpp"
+#include "burnman/utils/constants.hpp"
 
 // EOS properties - in P,T form
 double Mineral::compute_molar_gibbs() const {
@@ -139,7 +139,7 @@ double Mineral::compute_shear_wave_velocity() const {
 }
 
 double Mineral::compute_grueneisen_parameter() const {
-  constexpr double eps = std::numeric_limits<double>::epsilon();
+  constexpr double eps = constants::precision::double_eps;
   if (std::fabs(get_molar_heat_capacity_v()) > eps) {
     return
       get_thermal_expansivity()
