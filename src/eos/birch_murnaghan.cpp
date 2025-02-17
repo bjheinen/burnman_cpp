@@ -111,12 +111,10 @@ double BM3::compute_pressure(
   return compute_birch_murnaghan((*params.V_0)/volume, params);
 }
 
-double BM3::compute_isothermal_bulk_modulus_reuss(
-  double pressure [[maybe_unused]],
-  double temperature [[maybe_unused]],
+double BM3::compute_bm_bulk_modulus(
   double volume,
   const MineralParams& params
-) const {
+) {
   double x = (*params.V_0) / volume;
   double x_cbrt = std::cbrt(x);
   double f = 0.5 * ((x_cbrt*x_cbrt) - 1.0);
@@ -130,14 +128,22 @@ double BM3::compute_isothermal_bulk_modulus_reuss(
   return K;
 }
 
-double BM3::compute_isentropic_bulk_modulus_reuss(
-  double pressure,
-  double temperature,
+double BM3::compute_isothermal_bulk_modulus_reuss(
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
   double volume,
   const MineralParams& params
 ) const {
-  return compute_isothermal_bulk_modulus_reuss(
-    pressure, temperature, volume, params);
+  return compute_bm_bulk_modulus(volume, params);
+}
+
+double BM3::compute_isentropic_bulk_modulus_reuss(
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume,
+  const MineralParams& params
+) const {
+  return compute_bm_bulk_modulus(volume, params);
 }
 
 double BM3::compute_gibbs_free_energy(
@@ -166,13 +172,10 @@ double BM3::compute_molar_internal_energy(
   return *params.E_0 + intPdV;
 }
 
-// Second order (BM2)
-double BM2::compute_shear_modulus(
-  double pressure [[maybe_unused]],
-  double temperature [[maybe_unused]],
+double BM2::compute_second_order_shear_modulus(
   double volume,
   const MineralParams& params
-) const {
+) {
   double x = *params.V_0 / volume;
   double cbrt_x = std::cbrt(x);
   double x23 = cbrt_x * cbrt_x;
@@ -188,13 +191,10 @@ double BM2::compute_shear_modulus(
     return G;
 }
 
-// Third order (BM3)
-double BM3::compute_shear_modulus(
-  double pressure [[maybe_unused]],
-  double temperature [[maybe_unused]],
+double BM3::compute_third_order_shear_modulus(
   double volume,
   const MineralParams& params
-) const {
+) {
   double x = *params.V_0 / volume;
   double x_cbrt = std::cbrt(x);
   double f = 0.5 * ((x_cbrt*x_cbrt) - 1.0);
@@ -213,6 +213,26 @@ double BM3::compute_shear_modulus(
       * f * f
     );
   return G;
+}
+
+// Second order (BM2)
+double BM2::compute_shear_modulus(
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume,
+  const MineralParams& params
+) const {
+  return compute_second_order_shear_modulus(volume, params);
+}
+
+// Third order (BM3)
+double BM3::compute_shear_modulus(
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume,
+  const MineralParams& params
+) const {
+  return compute_third_order_shear_modulus(volume, params);
 }
 
 // Meaningless parameters for isothermal EOS

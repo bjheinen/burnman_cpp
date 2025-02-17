@@ -23,6 +23,43 @@ class BM3 : public EquationOfState{
   // Helper functions
   bool validate_parameters(MineralParams& params) override;
 
+  // Static functions (for public access outside class)
+  /**
+   * @brief Evaluate the BM EOS pressure.
+   *
+   * @param inv_compression V_0/V.
+   * @param params Mineral parameters object of type MineralParams
+   *
+   * @return Pressure in [Pa].
+   */
+  static double compute_birch_murnaghan(
+    double inv_compression,
+    const MineralParams& params);
+
+  /**
+   * @brief Evaluate the bulk modulus, K
+   *
+   * @param volume Volume to evaluate [cm^3].
+   * @param params MineralParams object.
+   *
+   * @return Bulk modulus in [Pa].
+   */
+  static double compute_bm_bulk_modulus(
+    double volume,
+    const MineralParams& params);
+
+  /**
+   * @brief Third order exapansion for shear modulus
+   *
+   * @param volume Volume to evaluate [cm^3].
+   * @param params MineralParams object.
+   *
+   * @return Shear modulus in [Pa].
+   */
+  static double compute_third_order_shear_modulus(
+    double volume,
+    const MineralParams& params);
+
   // Specific EOS functions
   double compute_volume(
     double pressure,
@@ -101,18 +138,6 @@ class BM3 : public EquationOfState{
 
  private:
   /**
-   * @brief Evaluate the BM EOS pressure.
-   *
-   * @param inv_compression V_0/V.
-   * @param params Mineral parameters object of type MineralParams
-   *
-   * @return Pressure in [Pa].
-   */
-  static double compute_birch_murnaghan(
-    double inv_compression,
-    const MineralParams& params);
-
-  /**
    * @brief GSL function wrapper to compute P(V) - P
    * 
    * @param x Volume to test (passed by solver)
@@ -135,6 +160,18 @@ class BM3 : public EquationOfState{
  */
 class BM2 : public BM3{
  public:
+  /**
+   * @brief Second order exapansion for shear modulus
+   *
+   * @param volume Volume to evaluate [cm^3].
+   * @param params MineralParams object.
+   *
+   * @return Shear modulus in [Pa].
+   */
+  static double compute_second_order_shear_modulus(
+    double volume,
+    const MineralParams& params);
+
   /**
    * @copydoc EquationOfState::compute_shear_modulus
    *
