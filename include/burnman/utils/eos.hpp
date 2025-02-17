@@ -12,29 +12,32 @@
 using FormulaMap = std::unordered_map<std::string, int>;
 
 /**
- * Sruct to hold excesses data for EOS modifiers
+ * @namespace excesses
+ * Used for calculating thermodynamic property modifiers
  */
-struct Excesses {
-    double G = 0.0;
-    double dGdT = 0.0;
-    double dGdP = 0.0;
-    double d2GdT2 = 0.0;
-    double d2GdP2 = 0.0;
-    double d2GdPdT = 0.0;
-    // Overloaded += operator to add Excesses
-    Excesses& operator+=(const Excesses& other) {
-        G += other.G;
-        dGdT += other.dGdT;
-        dGdP += other.dGdP;
-        d2GdT2 += other.d2GdT2;
-        d2GdP2 += other.d2GdP2;
-        d2GdPdT += other.d2GdPdT;
-        return *this;
-    }
-};
+namespace excesses {
+  /**
+  * Sruct to hold excesses data for EOS modifiers
+  */
+  struct Excesses {
+      double G = 0.0;
+      double dGdT = 0.0;
+      double dGdP = 0.0;
+      double d2GdT2 = 0.0;
+      double d2GdP2 = 0.0;
+      double d2GdPdT = 0.0;
+      // Overloaded += operator to add Excesses
+      Excesses& operator+=(const Excesses& other) {
+          G += other.G;
+          dGdT += other.dGdT;
+          dGdP += other.dGdP;
+          d2GdT2 += other.d2GdT2;
+          d2GdP2 += other.d2GdP2;
+          d2GdPdT += other.d2GdPdT;
+          return *this;
+      }
+  };
 
-
-namespace ExcessParams {
   /**
   * Parameters for tricritical landau correction
   * following Putnis (1992)
@@ -115,6 +118,22 @@ namespace ExcessParams {
   struct EinsteinDeltaParams {
     double S_inf, Theta_0;
   };
+
+  using ExcessParamVariant = std::variant<
+    LandauParams
+    LandauSLB2022Params
+    LandauHPParams
+    LinearParams
+    BraggWilliamsParams
+    MagneticChsParams
+    DebyeParams
+    DebyeDeltaParams
+    EinsteinParams
+    EinsteinDeltaParams
+  >;
+
+  using ExcessParamVector = std::vector<ExcessParamVariant>;
+
 } // End namespace ExcessParams
 
 

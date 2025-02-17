@@ -90,7 +90,7 @@ class Mineral : public Material{
 
  private:
   // Excesses struct for property modifiers
-  Excesses property_modifier_excesses;
+  excesses::Excesses property_modifier_excesses;
 
 
 };
