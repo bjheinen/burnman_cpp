@@ -16,7 +16,7 @@
  *
  * @note All functions assume SI units for all properties.
  */
-namespace Debye {
+namespace debye {
 
   /**
    @brief Integrand of third-order Debye function.

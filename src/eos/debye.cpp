@@ -7,11 +7,11 @@
 #include "burnman/eos/debye.hpp"
 #include "burnman/utils/constants.hpp"
 
-double Debye::debye_fn_integrand(double xi, void*) {
+double debye::debye_fn_integrand(double xi, void*) {
   return (xi * xi * xi) / (std::exp(xi) - 1.0);
 }
 
-double Debye::debye_fn_quad(double x) {
+double debye::debye_fn_quad(double x) {
   gsl_integration_workspace* gsl_w =
     gsl_integration_workspace_alloc(1000);
   double result, error;
@@ -35,11 +35,11 @@ double Debye::debye_fn_quad(double x) {
 // int status = gsl_sf_debye_3_e(x, &result);
 // for a string do: gsl_strerror(status);
 // result.val, result.err
-double Debye::debye_fn_cheb(double x) {
+double debye::debye_fn_cheb(double x) {
   return gsl_sf_debye_3(x);
 }
 
-double Debye::compute_thermal_energy(
+double debye::compute_thermal_energy(
   double temperature,
   double debye_temperature,
   int napfu) {
@@ -54,7 +54,7 @@ double Debye::compute_thermal_energy(
 }
 
 
-double Debye::compute_molar_heat_capacity_v(
+double debye::compute_molar_heat_capacity_v(
   double temperature,
   double debye_temperature,
   int napfu) {
@@ -68,7 +68,7 @@ double Debye::compute_molar_heat_capacity_v(
     * (4.0 * debye_fn_cheb(x) - 3.0 * x / (std::exp(x) - 1.0));
 }
 
-double Debye::compute_helmholtz_free_energy(
+double debye::compute_helmholtz_free_energy(
   double temperature,
   double debye_temperature,
   int napfu) {
@@ -82,7 +82,7 @@ double Debye::compute_helmholtz_free_energy(
     * (3.0 * std::log1p(-std::exp(-x)) - debye_fn_cheb(x));
 }
 
-double Debye::compute_entropy(
+double debye::compute_entropy(
   double temperature,
   double debye_temperature,
   int napfu) {
@@ -96,7 +96,7 @@ double Debye::compute_entropy(
     );
 }
 
-double Debye::dmolar_heat_capacity_v_dT(
+double debye::dmolar_heat_capacity_v_dT(
   double temperature,
   double debye_temperature,
   int napfu) {
