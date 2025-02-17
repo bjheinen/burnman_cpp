@@ -21,7 +21,7 @@ namespace Debye {
   /**
    @brief Integrand of third-order Debye function.
    */
-  static double debye_fn_integrand(double xi, void*);
+  double debye_fn_integrand(double xi, void*); // TODO - internal use only - maybe put in unnamed namespace in .cpp only
 
   /**
    * @brief Evaluates the Debye function using numerical integration.
