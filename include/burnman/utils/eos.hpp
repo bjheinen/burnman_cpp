@@ -153,6 +153,7 @@ struct MineralParams {
   std::optional<double> P_0;
   std::optional<double> T_0;
   std::optional<double> E_0;
+  std::optional<double> F_0;
 
   // Reference volume
   std::optional<double> V_0;
@@ -219,10 +220,20 @@ namespace ParamsGSL {
    *   bm, bm4, vinet, macaw, morse_potential, spock
    */
   struct SolverParams_P {
-  const MineralParams& params;
-  double pressure;
+    const MineralParams& params;
+    double pressure;
   };
-
+  /**
+   * Struct for GSL Brent root finding
+   * Used for volume finding in EOS where pressure and
+   * temperature needed as additional arguments:
+   *   mgd3
+   */
+  struct SolverParams_PT {
+    const MineralParams& params;
+    double pressure;
+    double temperature;
+  };
 } // End namespace ParamGSL
 
 #endif // BURNMAN_UTILS_EOS_HPP_INCLUDED
