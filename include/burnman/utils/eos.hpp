@@ -7,6 +7,8 @@
 #include <string>
 #include <unordered_map>
 #include <optional>
+#include <variant>
+#include <vector>
 
 // Type alias for formula map
 using FormulaMap = std::unordered_map<std::string, int>;
@@ -120,15 +122,15 @@ namespace excesses {
   };
 
   using ExcessParamVariant = std::variant<
-    LandauParams
-    LandauSLB2022Params
-    LandauHPParams
-    LinearParams
-    BraggWilliamsParams
-    MagneticChsParams
-    DebyeParams
-    DebyeDeltaParams
-    EinsteinParams
+    LandauParams,
+    LandauSLB2022Params,
+    LandauHPParams,
+    LinearParams,
+    BraggWilliamsParams,
+    MagneticChsParams,
+    DebyeParams,
+    DebyeDeltaParams,
+    EinsteinParams,
     EinsteinDeltaParams
   >;
 
