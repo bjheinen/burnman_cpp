@@ -4,11 +4,11 @@
 #ifndef BURNMAN_EOS_DEBYE_HPP_INCLUDED
 #define BURNMAN_EOS_DEBYE_HPP_INCLUDED
 
-#include "burnman/core/equation_of_state.hpp"
 #include "burnman/utils/eos.hpp"
 
 /**
  * TODO: Add to EOS module
+ * @namespace debye
  * @brief Functions for Debye model.
  *
  * Functions required for Debye model. Used with Mie-Grueneisen and
