@@ -106,7 +106,7 @@ namespace debye {
    *
    * @return dCvdT [J/K^2/mol].
    */
-  double dmolar_heat_capacity_v_dT(
+  double compute_dmolar_heat_capacity_v_dT(
     double temperature,
     double debye_temperature,
     int napfu);

@@ -96,7 +96,7 @@ double debye::compute_entropy(
     );
 }
 
-double debye::dmolar_heat_capacity_v_dT(
+double debye::compute_dmolar_heat_capacity_v_dT(
   double temperature,
   double debye_temperature,
   int napfu) {
