@@ -81,7 +81,7 @@ namespace excesses {
     double dGdT_disordered = -params.S_D;
     double dGdP_disordered = params.V_D;
     if (temperature < Tc) {
-      double Q2 = std::sqrt((Tc - temperature) / params.Tc_0);
+      Q2 = std::sqrt((Tc - temperature) / params.Tc_0);
       if (Q2 < 4.0) {
         G = params.S_D
           * ((temperature - Tc) * Q2 + params.Tc_0 * Q2 * Q2 * Q2 / 3.0)
@@ -119,7 +119,7 @@ namespace excesses {
       d2GdP2,
       d2GdPdT};
     // double Q = std::sqrt(Q2);
-    return landau_ex;    
+    return landau_ex;
   }
 
   Excesses compute_excesses(
@@ -153,10 +153,10 @@ namespace excesses {
     double Q6 = Q2 * Q2 * Q2;
     double Q_02 = Q_0 * Q_0;
     double Q_06 = Q_02 * Q_02 * Q_02;
-    G = params.Tc_0 * params.S_D
-      * (Q_02 - Q_06 / 3.0)
-      - temperature
-      * params.S_D * (Q_02 - Q2)
+    G = params.Tc_0
+      * params.S_D * (Q_02 - Q_06 / 3.0)
+      - params.S_D * (Tc * Q2 - params.Tc_0 * Q6 / 3.0)
+      - temperature * params.S_D * (Q_02 - Q2)
       + (pressure - params.P_0) * params.V_D * Q_02;
     dGdT = params.S_D * (Q2 - Q_02);
     dGdP = -params.V_D * (Q2 - Q_02);
@@ -216,7 +216,7 @@ namespace excesses {
     MagneticChsParams params);
 
   Excesses compute_excesses(
-    double pressure,
+    double pressure [[maybe_unused]],
     double temperature,
     DebyeParams params
   ) {
@@ -247,7 +247,7 @@ namespace excesses {
   }
 
   Excesses compute_excesses(
-    double pressure,
+    double pressure [[maybe_unused]],
     double temperature,
     DebyeDeltaParams params
   ) {
@@ -273,7 +273,7 @@ namespace excesses {
   }
 
   Excesses compute_excesses(
-    double pressure,
+    double pressure [[maybe_unused]],
     double temperature,
     EinsteinParams params
   ) {
@@ -305,7 +305,7 @@ namespace excesses {
   }
 
   Excesses compute_excesses(
-    double pressure,
+    double pressure [[maybe_unused]],
     double temperature,
     EinsteinDeltaParams params
   ) {
