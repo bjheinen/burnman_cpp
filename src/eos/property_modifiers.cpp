@@ -213,7 +213,92 @@ namespace excesses {
   Excesses compute_excesses(
     double pressure,
     double temperature,
-    MagneticChsParams params);
+    MagneticChsParams params
+  ) {
+    double p = params.structural_parameter;
+    double curie_T = params.curie_T_0 + pressure * params.curie_T_p;
+    double curie_T2 = curie_T * curie_T;
+    double tau = temperature / curie_T;
+    double dtaudT = 1.0 / curie_T;
+    double dtaudP = -(temperature * params.curie_T_p) / curie_T2;
+    double d2taudPdT = params.curie_T_p / curie_T2;
+    double d2taudP2 = 2.0 * temperature * params.curie_T_p * params.curie_T_p
+      / (curie_T * curie_T2);
+    double mu = params.magnetic_moment_0
+      + pressure * params.magnetic_moment_p;
+    double dmudP = params.magnetic_moment_p;
+    double A = (518.0 / 1125.0) + (11692.0 / 15975.0) * ((1.0 / p) - 1.0);
+    double f;
+    double dfdtau;
+    double d2fdtau2;
+    if (tau < 1.0) {
+      f = 1.0 - (1.0 / A)
+        * (79.0 / (140.0 * p * tau)
+          + (474.0 / 497.0)
+          + (1.0 / p - 1.0)
+          + (std::pow(tau, 3) / 6.0
+            + std::pow(tau, 9) / 135.0
+            + std::pow(tau, 15) / 600.0));
+      dfdtau = -(1.0 / A)
+        * (-79.0 / (140.0 * p * tau * tau)
+          + (474.0 / 497.0)
+          + (1.0 / p - 1.0)
+          * (tau * tau / 2.0 + std::pow(tau, 8)
+            / 15.0 + std::pow(tau, 14) / 40.0));
+
+      d2fdtau2 = -(1.0 / A)
+        * (2.0 * 79.0 / (140.0 * p * std::pow(tau, 3))
+          + (474.0 / 497.0)
+          * (1.0 / p - 1.0)
+          * (tau
+            + 8.0 * std::pow(tau, 7) / 15.0
+            + 14.0 * std::pow(tau, 13) / 4.0));
+    } else {
+      f = -(1.0 / A)
+        * (std::pow(tau, -5) / 10.0
+          + std::pow(tau, -15) / 315.0
+          + std::pow(tau, -25) / 1500);
+      dfdtau = (1.0 / A)
+        * (std::pow(tau, -6) / 2.0
+          + std::pow(tau, -16) / 21.0
+          + std::pow(tau, -26) / 60.0);
+      d2fdtau2 = -(1.0 / A)
+        * (6.0 * std::pow(tau, -7) / 2.0
+          + 16.0 * std::pow(tau, -17) / 21.0
+          + 26.0 * std::pow(tau, -27) / 60.0);
+    }
+    double dfdT = dfdtau * dtaudT;
+    double d2fdT2 = d2fdtau2 * dtaudT * dtaudT;
+    double dfdP = dfdtau * dtaudP;
+    double d2fdP2 = d2fdtau2 * dtaudP * dtaudP + dfdtau * d2taudP2;
+    double d2fdPdT = d2fdtau2 * dtaudT * dtaudP - dfdtau * d2taudPdT;
+    double log_mu_p1 = std::log1p(mu);
+    double G = constants::physics::gas_constant
+      * temperature * log_mu_p1 * f;
+    double dGdT = constants::physics::gas_constant * log_mu_p1
+      * (f + temperature * dfdT);
+    double d2GdT2 = constants::physics::gas_constant * log_mu_p1
+      * (2.0 * dfdT + temperature * d2fdT2);
+    double dGdP = constants::physics::gas_constant * temperature
+      * (f * dmudP / (mu + 1.0) + dfdP * log_mu_p1);
+    double val = dmudP / (mu + 1);
+    double d2GdP2 = constants::physics::gas_constant * temperature
+      * (-f * val * val + 2 * dfdP * val + d2fdP2 * log_mu_p1);
+    double d2GdPdT = dGdP / temperature
+      + (constants::physics::gas_constant
+        * temperature * log_mu_p1 * d2fdPdT
+        + constants::physics::gas_constant
+        * temperature * dmudP / (mu + 1.0) * dfdT);
+    Excesses magnetic_ex{
+      G,
+      dGdT,
+      dGdP,
+      d2GdT2,
+      d2GdP2,
+      d2GdPdT};
+    // No Q return
+    return magnetic_ex;
+  }
 
   Excesses compute_excesses(
     double pressure [[maybe_unused]],
