@@ -8,7 +8,7 @@
 #include "burnman/utils/constants.hpp"
 
 double debye::debye_fn_integrand(double xi, void*) {
-  return (xi * xi * xi) / (std::exp(xi) - 1.0);
+  return (xi * xi * xi) / std::expm1(xi);
 }
 
 double debye::debye_fn_quad(double x) {
@@ -65,7 +65,7 @@ double debye::compute_molar_heat_capacity_v(
   // C_v
   return 3.0 * napfu
     * constants::physics::gas_constant
-    * (4.0 * debye_fn_cheb(x) - 3.0 * x / (std::exp(x) - 1.0));
+    * (4.0 * debye_fn_cheb(x) - 3.0 * x / std::expm1(x));
 }
 
 double debye::compute_helmholtz_free_energy(
