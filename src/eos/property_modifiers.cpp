@@ -4,6 +4,7 @@
 #include <cmath>
 #include "burnman/eos/property_modifiers.hpp"
 #include "burnman/eos/debye.hpp"
+#include "burnman/eos/einstein.hpp"
 #include "burnman/utils/constants.hpp"
 
 namespace excesses {
