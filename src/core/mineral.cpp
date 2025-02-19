@@ -4,7 +4,32 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/core/mineral.hpp"
+#include "burnman/eos/property_modifiers.hpp"
 #include "burnman/utils/constants.hpp"
+
+void Mineral::set_state(
+  double new_pressure,
+  double new_temperature
+) {
+  // Set P,T using Material
+  Material::set_state(new_pressure, new_temperature);
+  // Compute property modifiers
+  compute_property_modifiers();
+}
+
+void Mineral::compute_property_modifiers() {
+  // Reset modifiers to zero
+  property_modifier_excesses = excesses::Excesses();
+  // Loop through param vector and call overloaded excess func
+  for (const auto& excess_param : property_modifier_params) {
+    std::visit([&](auto&& p) {
+        property_modifier_excesses += excesses::compute_excesses(
+          get_pressure(),
+          get_temperature(),
+          p);
+    }, excess_param);
+  }
+}
 
 // EOS properties - in P,T form
 double Mineral::compute_molar_gibbs() const {

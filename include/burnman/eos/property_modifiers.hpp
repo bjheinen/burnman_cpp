@@ -252,27 +252,3 @@ namespace excesses {
 } // End namespace excesses
 
 #endif // BURNMAN_EOS_PROPERTY_MODIFIERS_HPP_INCLUDED
-
-
-/*
-
-NOTE:
-
-type aliases:
-ExcessParamVariant: std::variant<LandauParams,...etc.>
-ExcessParamVector: std::vector<ExcessParamVariant,>
-
-All compute_excess functions return Excesses object
-+- is overloaded so can do
-
-excesses::Excesses property_modifier_excesses;
-ExcessParamVector param_vec;
-
-for (const auto& param_object : param_vec) {
-    std::visit([&](auto&& p) {
-        // p from variant now:
-        property_modifier_excesses += compute_excesses(P, T, p);
-    }, param_object);
-}
-
-*/

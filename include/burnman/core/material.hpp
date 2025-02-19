@@ -59,7 +59,7 @@ class Material {
    * @param new_pressure The desired pressure in [Pa]
    * @param new_temperature The desired temperature in [K]
    */
-  void set_state(double new_pressure, double new_temperature);
+  virtual void set_state(double new_pressure, double new_temperature);
 
   // Public getter functions
   /**

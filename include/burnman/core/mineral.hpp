@@ -61,8 +61,11 @@ class Mineral : public Material{
   EquationOfState eos_method;
 
   // Override set_method etc.
+  void set_state(double new_pressure, double new_temperature) override;
 
  protected:
+
+  void compute_property_modifiers();
 
   // Overridden compute functions
   double compute_molar_internal_energy() const override;
@@ -90,8 +93,9 @@ class Mineral : public Material{
 
  private:
   // Excesses struct for property modifiers
+  // Values initialise to 0
   excesses::Excesses property_modifier_excesses;
-
+  excesses::ExcessParamVector property_modifier_params;
 
 };
 
