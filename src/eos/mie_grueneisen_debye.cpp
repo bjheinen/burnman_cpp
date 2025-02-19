@@ -138,7 +138,6 @@ double MGD3::compute_volume(
   return volume_root;
 }
 
-
 double MGD3::compute_pressure(
   double temperature,
   double volume,
@@ -455,4 +454,3 @@ double MGD3::compute_thermal_bulk_modulus(
     return 0.0;
   }
 }
-
