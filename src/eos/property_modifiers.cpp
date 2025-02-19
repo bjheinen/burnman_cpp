@@ -5,7 +5,67 @@
 #include "burnman/eos/property_modifiers.hpp"
 #include "burnman/eos/debye.hpp"
 #include "burnman/eos/einstein.hpp"
+#include "burnman/optim/brent_solver.hpp"
 #include "burnman/utils/constants.hpp"
+
+// Anonymous namespace for BW helper functions
+namespace {
+  // Eq. A2-2
+  double flnarxn(int n, double Q, int f_0, int f_1) {
+    double log1mQ = std::log1p(-Q);
+    return n / (n + 1)
+      * (f_0 * (std::log(n) + log1mQ)
+        + f_1 * log1mQ
+        - f_0 * std::log1p(n * Q)
+        - f_1 * std::log(n + Q));
+  }
+
+  double reaction_bragg_williams_gsl_wrapper(double Q, void* p) {
+    // Cast pointer back to struct
+    auto* params = static_cast<const ParamsGSL::BWReactParams*>(p);
+    return params->delta_H
+      + constants::physics::gas_constant * params->temperature
+      * flnarxn(params->n, Q, params->f_0, params->f_1)
+      + (2.0 * Q - 1.0) * params->W;
+  }
+  
+  double order_gibbs(
+    double pressure, double temperature,
+    excesses::BraggWilliamsParams params,
+    int f_0, int f_1
+  ) {
+    double W = params.Wh + pressure * params.Wv;
+    double H_disord = params.deltaH + pressure * params.deltaV;
+
+    // Make params struct for brent solver
+    ParamsGSL::BWReactParams react_params{
+      H_disord, temperature, W,
+      params.n, f_0, f_1
+    };
+    // TODO: Check for non-converge in brent --> set Q=0 if error
+    double Q = brent::find_root(
+      &reaction_bragg_williams_gsl_wrapper,
+      react_params,
+      constants::precision::abs_tolerance,
+      1.0 - constants::precision::abs_tolerance
+    );
+    // Reuse some identities
+    double lognp1 = std::log1p(params.n);
+    double logQm1 = std::log1p(-Q);
+    double S = -constants::physics::gas_constant
+      * (f_0
+        * ((1 + params.n * Q) * (std::log1p(params.n*Q) - lognp1)
+          + params.n * (1.0 - Q) * (std::log(params.n) + logQm1 - lognp1))
+        + f_1
+        * (params.n * (1.0 - Q) * (logQm1 - lognp1)
+          + params.n * (params.n + Q) * (std::log(params.n + Q) - lognp1))
+      ) / (params.n + 1);
+
+    double G = (1.0 - Q) * H_disord + (1.0 - Q) * Q * W - temperature * S;
+    // Ignoring Q for now...
+    return G;
+  }
+}
 
 namespace excesses {
 
@@ -208,7 +268,81 @@ namespace excesses {
   Excesses compute_excesses(
     double pressure,
     double temperature,
-    BraggWilliamsParams params);
+    BraggWilliamsParams params
+  ) {
+
+    
+    int f_0;
+    int f_1;
+    if (params.factor > 0) {
+      f_0 = params.factor;
+      f_1 = params.factor;
+    } else {
+      f_0 = 1;
+      f_1 = -params.factor;
+    }
+
+    double dT = 0.1;
+    double dP = 1000.0;
+
+
+    //struct BraggWilliamsParams {
+    //int n, factor;
+    //double Wh, Wv, deltaH, deltaV;
+    
+    //double pressure, double temperature,
+    //excesses::BraggWilliamsParams params,
+    //int f_0, int f_1
+
+    double G = order_gibbs(pressure, temperature, params, f_0, f_1);
+    double GsubPsubT = order_gibbs(
+      pressure - dP,
+      temperature - dT,
+      params, f_0, f_1);
+    double GsubPaddT = order_gibbs(
+      pressure - dP,
+      temperature + dT,
+      params, f_0, f_1);
+    double GaddPsubT = order_gibbs(
+      pressure + dP,
+      temperature - dT,
+      params, f_0, f_1);
+    double GaddPaddT = order_gibbs(
+      pressure + dP,
+      temperature + dT,
+      params, f_0, f_1);
+    double GsubP = order_gibbs(
+      pressure - dP,
+      temperature,
+      params, f_0, f_1);
+    double GaddP = order_gibbs(
+      pressure + dP,
+      temperature,
+      params, f_0, f_1);
+    double GsubT = order_gibbs(
+      pressure,
+      temperature - dT,
+      params, f_0, f_1);
+    double GaddT = order_gibbs(
+      pressure,
+      temperature + dT,
+      params, f_0, f_1);
+    double dGdT = (GaddT - GsubT) / (2.0 * dT);
+    double dGdP = (GaddP - GsubP) / (2.0 * dP);
+    double d2GdT2 = (GaddT + GsubT - 2.0 * G) / (dT * dT);
+    double d2GdP2 = (GaddP + GsubP - 2.0 * G) / (dP * dP);
+    double d2GdPdT = (GaddPaddT - GsubPaddT - GaddPsubT + GsubPsubT)
+      / (4.0 * dT * dP);
+    Excesses bw_ex{
+      G,
+      dGdT,
+      dGdP,
+      d2GdT2,
+      d2GdP2,
+      d2GdPdT};
+    // No Q return
+    return bw_ex;
+  }
 
   Excesses compute_excesses(
     double pressure,

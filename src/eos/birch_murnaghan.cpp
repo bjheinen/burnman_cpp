@@ -4,7 +4,7 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/eos/birch_murnaghan.hpp"
-#include "burnman/optim/brent_volume_solver.hpp"
+#include "burnman/optim/brent_solver.hpp"
 #include "burnman/utils/constants.hpp"
 
 bool BM3::validate_parameters(MineralParams& params) {

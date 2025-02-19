@@ -6,7 +6,7 @@
 #include "burnman/eos/mie_grueneisen_debye.hpp"
 #include "burnman/eos/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
-#include "burnman/optim/brent_volume_solver.hpp"
+#include "burnman/optim/brent_solver.hpp"
 #include "burnman/utils/constants.hpp"
 
 bool MGD3::validate_parameters(MineralParams& params) {

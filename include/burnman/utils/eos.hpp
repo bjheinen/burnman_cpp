@@ -255,6 +255,17 @@ namespace ParamsGSL {
     double pressure;
     double temperature;
   };
+
+  /**
+   * Struct for GSL Brent root finding
+   * Used in Bragg Williams excess function to find
+   * Q in Gibbs calculation.
+   */
+  struct BWReactParams {
+    double delta_H, temperature, W;
+    int n, f_0, f_1;
+  };
+
 } // End namespace ParamGSL
 
 #endif // BURNMAN_UTILS_EOS_HPP_INCLUDED

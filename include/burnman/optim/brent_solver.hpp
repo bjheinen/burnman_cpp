@@ -1,8 +1,8 @@
 /*
   TODO: Copyright Notice!
 */
-#ifndef BURNMAN_OPTIM_BRENT_VOLUME_SOLVER_HPP_INCLUDED
-#define BURNMAN_OPTIM_BRENT_VOLUME_SOLVER_HPP_INCLUDED
+#ifndef BURNMAN_OPTIM_BRENT_SOLVER_HPP_INCLUDED
+#define BURNMAN_OPTIM_BRENT_SOLVER_HPP_INCLUDED
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
@@ -14,8 +14,8 @@ namespace brent {
     * @brief Finds root of function in region [x_lo,x_hi] via Brent's method.
     *
     * Uses GSL implementation of Brent's method to a find a root of function
-    * defined in a GSL function wrapper. Used here to find volume by
-    * minimising P(V,T,...) - P.
+    * defined in a GSL function wrapper. 
+    * The main use here to find volume by minimising P(V,T,...) - P
     *
     * @param gsl_wrapper Pointer to a GSL function wrapper.
     * @param bm_params Parameter object for the GSL functor.
@@ -81,4 +81,4 @@ namespace brent {
     }
   }
 }
-#endif // BURNMAN_OPTIM_BRENT_VOLUME_SOLVER_HPP_INCLUDED
+#endif // BURNMAN_OPTIM_BRENT_SOLVER_HPP_INCLUDED

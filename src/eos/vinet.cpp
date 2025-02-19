@@ -4,7 +4,7 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/eos/vinet.hpp"
-#include "burnman/optim/brent_volume_solver.hpp"
+#include "burnman/optim/brent_solver.hpp"
 #include "burnman/utils/constants.hpp"
 
 bool Vinet::validate_parameters(MineralParams& params) {
