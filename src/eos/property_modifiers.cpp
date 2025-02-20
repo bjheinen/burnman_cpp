@@ -270,8 +270,6 @@ namespace excesses {
     double temperature,
     BraggWilliamsParams params
   ) {
-
-    
     int f_0;
     int f_1;
     if (params.factor > 0) {
@@ -281,19 +279,8 @@ namespace excesses {
       f_0 = 1;
       f_1 = -params.factor;
     }
-
     double dT = 0.1;
     double dP = 1000.0;
-
-
-    //struct BraggWilliamsParams {
-    //int n, factor;
-    //double Wh, Wv, deltaH, deltaV;
-    
-    //double pressure, double temperature,
-    //excesses::BraggWilliamsParams params,
-    //int f_0, int f_1
-
     double G = order_gibbs(pressure, temperature, params, f_0, f_1);
     double GsubPsubT = order_gibbs(
       pressure - dP,
