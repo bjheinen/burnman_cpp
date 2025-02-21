@@ -6,48 +6,35 @@
 
 #include <string>
 #include <optional>
+#include <memory>
 #include "burnman/core/material.hpp"
 #include "burnman/core/equation_of_state.hpp"
 #include "burnman/utils/eos.hpp"
 
+
+
 /**
- * Base class for materials.
-
-  TODO
-  Python doc:
-
-    This is the base class for all minerals. States of the mineral
-    can only be queried after setting the pressure and temperature
-    using set_state(). The method for computing properties of
-    the material is set using set_method(). This is done during
-    initialisation if the param 'equation_of_state' has been defined.
-    The method can be overridden later by the user.
-
-    This class is available as ``burnman.Mineral``.
-
-    If deriving from this class, set the properties in self.params
-    to the desired values. For more complicated materials you
-    can overwrite set_state(), change the params and then call
-    set_state() from this class.
-
-    All the material parameters are expected to be in plain SI units.  This
-    means that the elastic moduli should be in Pascals and NOT Gigapascals,
-    and the Debye temperature should be in K not C.  Additionally, the
-    reference volume should be in m^3/(mol molecule) and not in unit cell
-    volume and 'n' should be the number of atoms per molecule.  Frequently in
-    the literature the reference volume is given in Angstrom^3 per unit cell.
-    To convert this to m^3/(mol of molecule) you should multiply by 10^(-30) *
-    N_a / Z, where N_a is Avogadro's number and Z is the number of formula units per
-    unit cell. You can look up Z in many places, including www.mindat.org
-
+ * @class Mineral
+ * @brief Base class for all materials.
+ *
+ * States and properties of the mineral can only be queried after
+ * setting the P, T or V, T condition with set_state.
+ * Use `set_method` to set the EOS for computing properties.
+ * @see EOSType for predefined equations of state, or pass a pointer to a
+ * class derived from EquationOfState.
+ *
+ * All material parameters expected in SI units.
+ * Elastic moduli in Pa NOT GPa, Debye temperature etc. in K not C.
+ * Additionally, the reference volume should be in m^3/(mol molecule) and not
+ * the unit cell volume in Angstrom^3.
+ * To convert: V_uc * 1e-30 * N_a / Z, where N_a is Avogadro's number and Z is
+ * the number of formula units per unit cell.
   TODO
   Funcs:
     __init__(self, params=None, property_modifiers=None):
-    set_method
     to_string
     debug_print
     unroll
-    set_state
     _molar_volume_unmodified
     formula
  */ 
@@ -57,11 +44,13 @@ class Mineral : public Material{
   // Parameter object
   MineralParams params;
 
-  // EOS Class for equation of state to use
-  EquationOfState eos_method;
+  // Pointer to EOS Class to use
+  std::unique_ptr<EquationOfState> eos_method;
 
-  // Override set_method etc.
+  // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
+  void set_method(EOSType new_method) override;
+  void set_method(std::unique_ptr<EquationOfState> new_method) override;
 
  protected:
 

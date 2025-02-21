@@ -5,7 +5,22 @@
 #include <stdexcept>
 #include "burnman/core/mineral.hpp"
 #include "burnman/eos/property_modifiers.hpp"
+#include "burnman/utils/make_eos.hpp"
 #include "burnman/utils/constants.hpp"
+
+void Mineral::set_method(std::unique_ptr<EquationOfState> new_method) {
+  // Here new_method is a unique pointer to an EOS class
+  eos_method = std::move(new_method);
+  // Set the params.equation_of_state to Custom
+  params.equation_of_state = EOSType::Custom;
+}
+
+void Mineral::set_method(EOSType new_method) {
+  // Here the new_method is a predefined enum
+  eos_method = make_eos(new_method);
+  // Set the params.equation_of_state to new type
+  params.equation_of_state = new_method;
+}
 
 void Mineral::set_state(
   double new_pressure,
@@ -33,7 +48,7 @@ void Mineral::compute_property_modifiers() {
 
 // EOS properties - in P,T form
 double Mineral::compute_molar_gibbs() const {
-  return eos_method.compute_gibbs_free_energy(
+  return eos_method->compute_gibbs_free_energy(
     get_pressure(),
     get_temperature(),
     get_molar_volume_unmodified(),
@@ -42,7 +57,8 @@ double Mineral::compute_molar_gibbs() const {
 }
 
 double Mineral::compute_molar_volume_unmodified() const {
-  return eos_method.compute_volume(get_pressure(), get_temperature(), params);
+  return eos_method->compute_volume(
+    get_pressure(), get_temperature(), params);
 }
 
 double Mineral::compute_molar_volume() const {
@@ -50,7 +66,7 @@ double Mineral::compute_molar_volume() const {
 }
 
 double Mineral::compute_molar_entropy() const {
-  return eos_method.compute_entropy(
+  return eos_method->compute_entropy(
     get_pressure(),
     get_temperature(),
     get_molar_volume_unmodified(),
@@ -59,7 +75,7 @@ double Mineral::compute_molar_entropy() const {
 }
 
 double Mineral::compute_isothermal_bulk_modulus_reuss() const {
-  double K_T_orig = eos_method.compute_isothermal_bulk_modulus_reuss(
+  double K_T_orig = eos_method->compute_isothermal_bulk_modulus_reuss(
     get_pressure(),
     get_temperature(),
     get_molar_volume_unmodified(),
@@ -71,7 +87,7 @@ double Mineral::compute_isothermal_bulk_modulus_reuss() const {
 }
 
 double Mineral::compute_molar_heat_capacity_p() const {
-  return eos_method.compute_molar_heat_capacity_p(
+  return eos_method->compute_molar_heat_capacity_p(
     get_pressure(),
     get_temperature(),
     get_molar_volume_unmodified(),
@@ -80,7 +96,7 @@ double Mineral::compute_molar_heat_capacity_p() const {
 }
 
 double Mineral::compute_thermal_expansivity() const {
-  return (eos_method.compute_thermal_expansivity(
+  return (eos_method->compute_thermal_expansivity(
       get_pressure(),
       get_temperature(),
       get_molar_volume_unmodified(),
@@ -90,7 +106,7 @@ double Mineral::compute_thermal_expansivity() const {
 }
 
 double Mineral::compute_shear_modulus() const {
-  double G = eos_method.compute_shear_modulus(
+  double G = eos_method->compute_shear_modulus(
     get_pressure(),
     get_temperature(),
     get_molar_volume_unmodified(),
@@ -177,7 +193,7 @@ double Mineral::compute_grueneisen_parameter() const {
     std::fabs(property_modifier_excesses.dGdP) < eps &&
     std::fabs(property_modifier_excesses.d2GdT2) < eps
     ) {
-      return eos_method.compute_grueneisen_parameter(
+      return eos_method->compute_grueneisen_parameter(
         get_pressure(),
         get_temperature(),
         get_molar_volume(),
