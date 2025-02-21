@@ -224,7 +224,7 @@ class MGD3 : public EquationOfState{
 
 
 /**
- * @class BGD2
+ * @class MGD2
  * @brief MGD EOS with second order expansion of shear modulus.
  *
  * Derived from MGD3.
