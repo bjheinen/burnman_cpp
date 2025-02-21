@@ -6,23 +6,29 @@
 
 #include <string>
 #include <optional>
+#include <memory>
+#include "burnman/utils/eos.hpp"
+
+// Forward declaration to avoid include
+class EquationOfState;
 
 /**
- * Base class for materials.
-
-  TODO
-  Python doc:
-
-    Base class for all materials. The main functionality is unroll() which
-    returns a list of objects of type :class:`~burnman.Mineral` and their molar
-    fractions. This class is available as ``burnman.Material``.
-
-    The user needs to call set_method() (once in the beginning) and set_state()
-    before querying the material with unroll() or
-
+ * @class Material
+ * @brief Base class for all materials.
+ *
+ * Calculation method and material state must be set before querying
+ * material properties.
+ * EOS methods should be set with `Material::set_method`
+ * P-T-V conditions can be set with `Material::set_state` or
+ * `Material::set_state_with_volume`.
+ *
+ * Properties are cached by getter functions. Use `Material::reset` to
+ * manually reset the property cache.
+ *
+ * Computation of properties should be implemented in derived classes.
+ * The default implementations here will throw `NotImplementedError`.
   TODO
   Funcs:
-    set_method
     to_string
     debug_print
     print_minerals_of_current_state
@@ -52,6 +58,25 @@ class Material {
    * @param new_name
    */
   void set_name(std::string new_name);
+
+  /**
+   * @brief Sets the EOS method for the material.
+   *
+   * @param new_method EOSType enum corresponding to EOS.
+   * @throws NotImplementedError if default implementation called.
+   */
+  virtual void set_method(EOSType new_method);
+
+  /**
+   * @brief Sets the EOS method for the material.
+   *
+   * Overloaded function to allow custom EOS classes derived
+   * from EquationOfState to be set by the user.
+   *
+   * @param new_method std::unique_ptr to the EOS class.
+   * @throws NotImplementedError if default implementation called.
+   */
+  virtual void set_method(std::unique_ptr<EquationOfState> new_method);
 
   /**
    * @brief Sets the material to given pressure and temperature

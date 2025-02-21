@@ -50,6 +50,14 @@ std::string Material::get_name() const {
   }
 }
 
+void Material::set_method(EOSType new_method) {
+  throw_not_implemented_error(__func__);
+}
+
+void Material::set_method(std::unique_ptr<EquationOfState> new_method) {
+  throw_not_implemented_error(__func__);
+}
+
 void Material::set_state(double new_pressure, double new_temperature) {
   reset();
   pressure = new_pressure;
