@@ -35,7 +35,6 @@
     to_string
     debug_print
     unroll
-    _molar_volume_unmodified
     formula
  */ 
 class Mineral : public Material{
