@@ -138,6 +138,17 @@ namespace excesses {
 
 } // End namespace ExcessParams
 
+/**
+ * Enum used to define EOS Type
+ */
+enum class EOSType {
+  Custom, // Used when user passes custom EOSType
+  Vinet,
+  BM3,
+  BM2,
+  MGD2,
+  MGD3
+};
 
 /**
  * Four Cp parameters used in HP and CORK
@@ -153,7 +164,6 @@ struct CorkParams {
   double a_0, a_1, b, c_0, c_1, d_0, d_1;
 };
 
-
 /**
  * Struct to hold mineral EOS parameters
  */
@@ -166,7 +176,7 @@ struct MineralParams {
   // Mineral properties
   std::optional<std::string> name;
   std::optional<FormulaMap> formula;
-  std::optional<std::string> equation_of_state;
+  std::optional<EOSType> equation_of_state;
   std::optional<int> napfu;
   std::optional<double> molar_mass;
 
