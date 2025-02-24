@@ -53,7 +53,6 @@ double debye::compute_thermal_energy(
     * debye_fn_cheb(debye_temperature / temperature);
 }
 
-
 double debye::compute_molar_heat_capacity_v(
   double temperature,
   double debye_temperature,
