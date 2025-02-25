@@ -13,13 +13,29 @@ void Mineral::set_method(std::unique_ptr<EquationOfState> new_method) {
   eos_method = std::move(new_method);
   // Set the params.equation_of_state to Custom
   params.equation_of_state = EOSType::Custom;
+  // Clear material properties cache
+  reset();
+  // Validate parameters
+  eos_method->validate_parameters(params);
 }
 
 void Mineral::set_method(EOSType new_method) {
+  // Check if EOSType is Auto and update from params
+  if (new_method == EOSType::Auto) {
+    if (params.equation_of_state.has_value()) {
+      new_method = *params.equation_of_state;
+    } else {
+      throw std::invalid_argument("No EOS set in parameters!");
+    }
+  }
   // Here the new_method is a predefined enum
   eos_method = make_eos(new_method);
   // Set the params.equation_of_state to new type
   params.equation_of_state = new_method;
+  // Clear materials properties cache
+  reset();
+  // Validate parameters
+  eos_method->validate_parameters(params);
 }
 
 void Mineral::set_state(

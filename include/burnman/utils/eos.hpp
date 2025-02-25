@@ -142,6 +142,7 @@ namespace excesses {
  * Enum used to define EOS Type
  */
 enum class EOSType {
+  Auto, // Used to set EOS from params
   Custom, // Used when user passes custom EOSType
   Vinet,
   BM3,
