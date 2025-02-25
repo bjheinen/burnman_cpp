@@ -16,17 +16,44 @@
 using namespace Catch::Matchers;
 
 
-/*
--->params
-validate_parameters
 
-check 
-E_0, P_0 will be set to 0
-check
-G_0 Gprime_0 will be set to nan
-check
-warnings
-*/
+TEST_CASE("Test validate parameters", "[vinet][eos]") {
+  Vinet vinet;
+  SECTION("Missing V_0") {
+    MineralParams params;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    REQUIRE_THROWS(vinet.validate_parameters(params));
+  }
+  SECTION("Missing K_0") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.Kprime_0 = 3.8;
+    REQUIRE_THROWS(vinet.validate_parameters(params));
+  }
+  SECTION("Missing Kprime_0") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    REQUIRE_THROWS(vinet.validate_parameters(params));
+  }
+  SECTION("Optional Parameters") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    REQUIRE_FALSE(params.E_0.has_value());
+    REQUIRE_FALSE(params.P_0.has_value());
+    REQUIRE_FALSE(params.G_0.has_value());
+    REQUIRE_FALSE(params.Gprime_0.has_value());
+    vinet.validate_parameters(params);
+    REQUIRE(*params.E_0 == 0);
+    REQUIRE(*params.P_0 == 0);
+    REQUIRE(std::isnan(*params.G_0));
+    REQUIRE(std::isnan(*params.Gprime_0));
+  }
+  // TODO: Check warnings
+}
 
 TEST_CASE("Check reference volume", "[vinet][eos]") {
   // Set up test params
