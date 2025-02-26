@@ -1,3 +1,12 @@
+# Copyright (c) 2025 Benedict Heinen
+#
+# This file is part of burnman_cpp and is licensed under the
+# GNU General Public License v3.0 or later. See the LICENSE file
+# or <https://www.gnu.org/licenses/> for details.
+#
+# burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
+#
+# ------------------- END OF LICENSE SECTION -----------------
 # Target Executable (to make)
 TARGET_EXEC := burnman
 TEST_EXEC := run_tests
