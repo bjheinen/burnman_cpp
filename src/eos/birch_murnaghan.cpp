@@ -185,8 +185,8 @@ double BM2::compute_second_order_shear_modulus(
     * (
       1.0
       - 0.5
-      * (x23 - 1)
-      * (5.0 - 3.0 * (*params.G_0) * (*params.K_0) / (*params.G_0))
+      * (x23 - 1.0)
+      * (5.0 - 3.0 * (*params.Gprime_0) * (*params.K_0) / (*params.G_0))
     );
     return G;
 }
