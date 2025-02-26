@@ -72,6 +72,8 @@ TEST_CASE("Check reference volume", "[vinet][eos]") {
     WithinRel(0.0, tol_rel) || WithinAbs(0.0, tol_abs));
   CHECK_THAT(vinet.compute_gibbs_free_energy(P, T, V, params),
     WithinRel(P*V, tol_rel) || WithinAbs(P*V, tol_abs));
+  CHECK_THAT(vinet.compute_pressure(T, V, params),
+    WithinRel(*params.P_0, tol_rel) || WithinAbs(*params.P_0, tol_abs));
   CHECK_THAT(vinet.compute_volume(0.0, T, params),
     WithinRel(V, tol_rel) || WithinAbs(V, tol_abs));
 }
