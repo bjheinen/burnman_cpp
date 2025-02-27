@@ -223,4 +223,37 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
       WithinRel(*params.K_0, tol_rel) || WithinAbs(*params.K_0, tol_abs));
   }
 }
-  
+
+TEST_CASE("Shear modulus expansion", "[birch-murnaghan][eos]") {
+  // Set up test P, T, V
+  double P = 25.e9;
+  double T = 2000.0;
+  double V = 10.0e-6;
+  // Set up test params
+  MineralParams params;
+  params.V_0 = 11.24e-6;
+  params.K_0 = 161.0e9;
+  params.Kprime_0 = 3.8;
+  params.debye_0 = 773.0;
+  params.grueneisen_0 = 1.5;
+  params.q_0 = 1.5;
+  params.molar_mass = 0.0403;
+  params.napfu = 2;
+  MGD2 mgd2;
+  MGD3 mgd3;
+  // Validating should set G0/G' to nan
+  mgd3.validate_parameters(params);
+  REQUIRE_NOTHROW(mgd2.compute_shear_modulus(P, T, V, params));
+  REQUIRE_NOTHROW(mgd3.compute_shear_modulus(P, T, V, params));
+  CHECK(std::isnan(mgd2.compute_shear_modulus(P, T, V, params)));
+  CHECK(std::isnan(mgd3.compute_shear_modulus(P, T, V, params)));
+  // Set G0/G'0
+  params.G_0 = 131.0e9;
+  params.Gprime_0 = 2.1;
+  CHECK_FALSE(std::isnan(mgd3.compute_shear_modulus(P, T, V, params)));
+  // Ensure expansion order different
+  CHECK_FALSE(
+    mgd2.compute_shear_modulus(P, T, V, params) ==
+    mgd3.compute_shear_modulus(P, T, V, params)
+  );
+}
