@@ -176,7 +176,7 @@ double MGD3::compute_mgd_grueneisen_parameter(
 
 double MGD3::compute_isothermal_bulk_modulus_reuss(
   double pressure [[maybe_unused]],
-  double temperature [[maybe_unused]],
+  double temperature,
   double volume,
   const MineralParams& params
 ) const {
@@ -207,6 +207,7 @@ double MGD3::compute_isentropic_bulk_modulus_reuss(
     *params.V_0 / volume,
     params);
   return K_T * (1.0 + gamma * alpha * temperature);
+  // alpha is: gamma * C_v / K / volume (refactor?)
 }
 
 // Second order (MGD2)
@@ -316,8 +317,8 @@ double MGD3::compute_gibbs_free_energy(
 
 double MGD3::compute_entropy(
   double pressure [[maybe_unused]],
-  double temperature [[maybe_unused]],
-  double volume [[maybe_unused]],
+  double temperature,
+  double volume,
   const MineralParams& params [[maybe_unused]]
 ) const {
   double debye_temperature = compute_debye_temperature(
@@ -331,8 +332,8 @@ double MGD3::compute_entropy(
 }
 
 double MGD3::compute_molar_internal_energy(
-  double pressure [[maybe_unused]],
-  double temperature [[maybe_unused]],
+  double pressure,
+  double temperature,
   double volume,
   const MineralParams& params
 ) const {
