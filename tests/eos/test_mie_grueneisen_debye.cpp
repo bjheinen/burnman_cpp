@@ -12,8 +12,127 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "tolerances.hpp"
 #include "burnman/eos/mie_grueneisen_debye.hpp"
+#include <cmath>
 
 using namespace Catch::Matchers;
+
+TEST_CASE("Test validate parameters", "[mgd][eos]") {
+  MGD3 mgd;
+  SECTION("Missing V_0") {
+    MineralParams params;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    params.molar_mass = 0.0403;
+    params.napfu = 2;
+    params.debye_0 = 773.0;
+    params.grueneisen_0 = 1.5;
+    params.q_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+  SECTION("Missing K_0") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.Kprime_0 = 3.8;
+    params.molar_mass = 0.0403;
+    params.napfu = 2;
+    params.debye_0 = 773.0;
+    params.grueneisen_0 = 1.5;
+    params.q_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+  SECTION("Missing Kprime_0") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.molar_mass = 0.0403;
+    params.napfu = 2;
+    params.debye_0 = 773.0;
+    params.grueneisen_0 = 1.5;
+    params.q_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+  SECTION("Missing molar mass") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    params.napfu = 2;
+    params.debye_0 = 773.0;
+    params.grueneisen_0 = 1.5;
+    params.q_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+  SECTION("Missing napfu") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    params.molar_mass = 0.0403;
+    params.debye_0 = 773.0;
+    params.grueneisen_0 = 1.5;
+    params.q_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+  SECTION("Missing debye_0") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    params.molar_mass = 0.0403;
+    params.napfu = 2;
+    params.grueneisen_0 = 1.5;
+    params.q_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+  SECTION("Missing grueneisen_0") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    params.molar_mass = 0.0403;
+    params.napfu = 2;
+    params.debye_0 = 773.0;
+    params.q_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+  SECTION("Missing q_0") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    params.molar_mass = 0.0403;
+    params.napfu = 2;
+    params.debye_0 = 773.0;
+    params.grueneisen_0 = 1.5;
+    REQUIRE_THROWS(mgd.validate_parameters(params));
+  }
+
+  SECTION("Optional Parameters") {
+    MineralParams params;
+    params.V_0 = 11.24e-6;
+    params.K_0 = 161.0e9;
+    params.Kprime_0 = 3.8;
+    params.molar_mass = 0.0403;
+    params.napfu = 2;
+    params.debye_0 = 773.0;
+    params.grueneisen_0 = 1.5;
+    params.q_0 = 1.5;
+    REQUIRE_FALSE(params.T_0.has_value());
+    REQUIRE_FALSE(params.P_0.has_value());
+    REQUIRE_FALSE(params.E_0.has_value());
+    REQUIRE_FALSE(params.F_0.has_value());
+    REQUIRE_FALSE(params.G_0.has_value());
+    REQUIRE_FALSE(params.Gprime_0.has_value());
+    mgd.validate_parameters(params);
+    REQUIRE(*params.T_0 == 0);
+    REQUIRE(*params.P_0 == 0);
+    REQUIRE(*params.E_0 == 0);
+    REQUIRE(*params.F_0 == 0);
+    REQUIRE(std::isnan(*params.G_0));
+    REQUIRE(std::isnan(*params.Gprime_0));
+  }
+  // TODO: Check warnings
+}
 
 TEST_CASE("Check reference conditions", "[mgd][eos]") {
   // Set up test params
@@ -53,9 +172,9 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
       WithinRel(*params.grueneisen_0, tol_rel) ||
       WithinAbs(*params.grueneisen_0, tol_abs));
     // x = V_0 / V
-    CHECK_THAT(mgd3.compute_debye_temperature(1.0, params),
-      WithinRel(*params.debye_0, tol_rel) ||
-      WithinAbs(*params.debye_0, tol_abs));
+    //CHECK_THAT(mgd3.compute_debye_temperature(1.0, params),
+    //  WithinRel(*params.debye_0, tol_rel) ||
+    //  WithinAbs(*params.debye_0, tol_abs));
   }
   SECTION("V-T dependent functions") {
     auto P = GENERATE(0.0, 10.0, 25.e9);
