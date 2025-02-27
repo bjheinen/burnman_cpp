@@ -124,7 +124,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_FALSE(params.G_0.has_value());
     REQUIRE_FALSE(params.Gprime_0.has_value());
     mgd.validate_parameters(params);
-    REQUIRE(*params.T_0 == 0);
+    REQUIRE(*params.T_0 == 300.0);
     REQUIRE(*params.P_0 == 0);
     REQUIRE(*params.E_0 == 0);
     REQUIRE(*params.F_0 == 0);
