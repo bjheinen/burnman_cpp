@@ -453,8 +453,8 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
     // double x1 = 0.99, x2 = 0.80, x3 = 0.40;
     auto T = GENERATE(300.0, 800.0, 2500.0);
     auto x = GENERATE(0.99, 0.8, 0.4);
-    CAPTURE[T];
-    CAPTURE[x];
+    CAPTURE(T);
+    CAPTURE(x);
     double V = *params.V_0 * x;
     auto key = std::make_tuple(T, x);
     CHECK_THAT(mgd3.compute_pressure(
@@ -542,9 +542,9 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
     auto P = GENERATE(1.e9, 54.e9);
     auto T = GENERATE(800.0, 2500.0);
     auto x = GENERATE(0.99, 0.4);
-    CAPTURE[P];
-    CAPTURE[T];
-    CAPTURE[x];
+    CAPTURE(P);
+    CAPTURE(T);
+    CAPTURE(x);
     double V = *params.V_0 * x;
     auto key = std::make_tuple(P, T, x);
     //
