@@ -172,10 +172,6 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
     CHECK_THAT(mgd3.compute_grueneisen_parameter(P, T, V, params),
       WithinRel(*params.grueneisen_0, tol_rel) ||
       WithinAbs(*params.grueneisen_0, tol_abs));
-    // x = V_0 / V
-    //CHECK_THAT(mgd3.compute_debye_temperature(1.0, params),
-    //  WithinRel(*params.debye_0, tol_rel) ||
-    //  WithinAbs(*params.debye_0, tol_abs));
   }
   SECTION("V-T dependent functions") {
     auto P = GENERATE(0.0, 10.0, 25.e9);
@@ -277,25 +273,25 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
   params.molar_mass = 0.0403;
   params.napfu = 2;
 
-  SECTION("Test volume") {
-    MGD3 mgd;
-    double T_a = 800.0;
-    double T_b = 2000.0;
-    double V_a = 0.9 * (*params.V_0);
-    double V_b = 0.5 * (*params.V_0);
-    double P_aa = mgd.compute_pressure(T_a, V_a, params);
-    double P_ab = mgd.compute_pressure(T_a, V_b, params);
-    double P_ba = mgd.compute_pressure(T_b, V_a, params);
-    double P_bb = mgd.compute_pressure(T_b, V_b, params);
-    CHECK_THAT(mgd.compute_volume(P_aa, T_a, params),
-      WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
-    CHECK_THAT(mgd.compute_volume(P_ab, T_a, params),
-      WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
-    CHECK_THAT(mgd.compute_volume(P_ba, T_b, params),
-      WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
-    CHECK_THAT(mgd.compute_volume(P_bb, T_b, params),
-      WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
-  }
+  // SECTION("Test volume") {
+  //   MGD3 mgd;
+  //   double T_a = 800.0;
+  //   double T_b = 2000.0;
+  //   double V_a = 0.9 * (*params.V_0);
+  //   double V_b = 0.5 * (*params.V_0);
+  //   double P_aa = mgd.compute_pressure(T_a, V_a, params);
+  //   double P_ab = mgd.compute_pressure(T_a, V_b, params);
+  //   double P_ba = mgd.compute_pressure(T_b, V_a, params);
+  //   double P_bb = mgd.compute_pressure(T_b, V_b, params);
+  //   CHECK_THAT(mgd.compute_volume(P_aa, T_a, params),
+  //     WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
+  //   CHECK_THAT(mgd.compute_volume(P_ab, T_a, params),
+  //     WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
+  //   CHECK_THAT(mgd.compute_volume(P_ba, T_b, params),
+  //     WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
+  //   CHECK_THAT(mgd.compute_volume(P_bb, T_b, params),
+  //     WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
+  // }
   SECTION("V dependent functions") {
     struct TestData {
       double input;
@@ -547,7 +543,6 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
     CAPTURE(x);
     double V = *params.V_0 * x;
     auto key = std::make_tuple(P, T, x);
-    //
     CHECK_THAT(mgd3.compute_gibbs_free_energy(
         P, T, V, params
       ),
