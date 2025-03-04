@@ -34,7 +34,7 @@ namespace {
       * flnarxn(params->n, Q, params->f_0, params->f_1)
       + (2.0 * Q - 1.0) * params->W;
   }
-  
+
   double order_gibbs(
     double pressure, double temperature,
     excesses::BraggWilliamsParams params,

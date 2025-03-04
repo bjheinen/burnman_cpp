@@ -243,14 +243,3 @@ double Mineral::compute_isentropic_thermal_gradient() const {
     (get_molar_volume() * get_temperature() * get_thermal_expansivity())
     / get_molar_heat_capacity_p();
 }
-
-
-// TODO:
-//       implement set_method so know how to call EOS funcs
-
-// Mineral parameter properties - util/eos MineralParams
-// Property modifier params - util/eos ExcessParams::(Struct) --> use std::visit with overloaded functions to compute correct excess function
-// Property modifiers - util/eos Excesses - has overloaed += operator to add data when computing loop
-
-// Pass properties as value (unless string, vector, etc.)
-// Pass params as const reference
