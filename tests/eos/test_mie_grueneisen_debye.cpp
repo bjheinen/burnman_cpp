@@ -255,6 +255,42 @@ TEST_CASE("Shear modulus expansion", "[mgd][eos]") {
   );
 }
 
+TEST_CASE("Test MGD volume", "[mgd][eos]") {
+  // Set up test params
+  MineralParams params;
+  params.T_0 = 300.0;
+  params.P_0 = 0.0;
+  params.E_0 = 0.0;
+  params.F_0 = 0.0;
+  params.V_0 = 11.24e-6;
+  params.K_0 = 161.0e9;
+  params.Kprime_0 = 3.8;
+  params.G_0 = 131.0e9;
+  params.Gprime_0 = 2.1;
+  params.debye_0 = 773.0;
+  params.grueneisen_0 = 1.5;
+  params.q_0 = 1.4;
+  params.molar_mass = 0.0403;
+  params.napfu = 2;
+  MGD3 mgd;
+  double T_a = 800.0;
+  double T_b = 2000.0;
+  double V_a = 0.9 * (*params.V_0);
+  double V_b = 0.5 * (*params.V_0);
+  double P_aa = mgd.compute_pressure(T_a, V_a, params);
+  double P_ab = mgd.compute_pressure(T_a, V_b, params);
+  double P_ba = mgd.compute_pressure(T_b, V_a, params);
+  double P_bb = mgd.compute_pressure(T_b, V_b, params);
+  CHECK_THAT(mgd.compute_volume(P_aa, T_a, params),
+    WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
+  CHECK_THAT(mgd.compute_volume(P_ab, T_a, params),
+    WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
+  CHECK_THAT(mgd.compute_volume(P_ba, T_b, params),
+    WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
+  CHECK_THAT(mgd.compute_volume(P_bb, T_b, params),
+    WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
+}
+
 TEST_CASE("MGD python reference values", "[mgd][eos]") {
   // Set up test params
   MineralParams params;
@@ -273,25 +309,6 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
   params.molar_mass = 0.0403;
   params.napfu = 2;
 
-  SECTION("Test volume") {
-    MGD3 mgd;
-    double T_a = 800.0;
-    double T_b = 2000.0;
-    double V_a = 0.9 * (*params.V_0);
-    double V_b = 0.5 * (*params.V_0);
-    double P_aa = mgd.compute_pressure(T_a, V_a, params);
-    double P_ab = mgd.compute_pressure(T_a, V_b, params);
-    double P_ba = mgd.compute_pressure(T_b, V_a, params);
-    double P_bb = mgd.compute_pressure(T_b, V_b, params);
-    CHECK_THAT(mgd.compute_volume(P_aa, T_a, params),
-      WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
-    CHECK_THAT(mgd.compute_volume(P_ab, T_a, params),
-      WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
-    CHECK_THAT(mgd.compute_volume(P_ba, T_b, params),
-      WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
-    CHECK_THAT(mgd.compute_volume(P_bb, T_b, params),
-      WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
-  }
   SECTION("V dependent functions") {
     struct TestData {
       double input;
