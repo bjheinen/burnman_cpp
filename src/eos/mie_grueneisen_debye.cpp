@@ -422,9 +422,7 @@ double MGD3::compute_debye_temperature(
 ) {
   double gamma_diff = *params.grueneisen_0
     - compute_mgd_grueneisen_parameter(x,params);
-  return *params.debye_0
-    * std::exp(gamma_diff)
-    / *params.q_0;
+  return *params.debye_0 * std::exp(gamma_diff / *params.q_0);
 }
 
 double MGD3::compute_thermal_pressure(
