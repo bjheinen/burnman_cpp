@@ -133,7 +133,7 @@ double MGD3::compute_volume(
     pressure,
     temperature};
   // Set a, b limits
-  double x_lo = 0.01 * (*params.V_0);
+  double x_lo = 0.1 * (*params.V_0);
   double x_hi = 1.5 * (*params.V_0);
   double volume_root = brent::find_root(
     &mgd_gsl_wrapper,
