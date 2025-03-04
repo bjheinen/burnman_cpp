@@ -162,8 +162,8 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
     double V = *params.V_0;
     CHECK_THAT(mgd3.compute_pressure(T, V, params),
       WithinRel(*params.P_0, tol_rel) || WithinAbs(*params.P_0, tol_abs));
-    //CHECK_THAT(mgd3.compute_volume(P, T, params),
-    //  WithinRel(*params.V_0, tol_rel) || WithinAbs(*params.V_0, tol_abs));
+    CHECK_THAT(mgd3.compute_volume(P, T, params),
+      WithinRel(*params.V_0, tol_rel) || WithinAbs(*params.V_0, tol_abs));
   }
   SECTION("V dependent functions") {
     auto P = GENERATE(0.0, 10.0, 25.e9);
@@ -273,25 +273,25 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
   params.molar_mass = 0.0403;
   params.napfu = 2;
 
-  // SECTION("Test volume") {
-  //   MGD3 mgd;
-  //   double T_a = 800.0;
-  //   double T_b = 2000.0;
-  //   double V_a = 0.9 * (*params.V_0);
-  //   double V_b = 0.5 * (*params.V_0);
-  //   double P_aa = mgd.compute_pressure(T_a, V_a, params);
-  //   double P_ab = mgd.compute_pressure(T_a, V_b, params);
-  //   double P_ba = mgd.compute_pressure(T_b, V_a, params);
-  //   double P_bb = mgd.compute_pressure(T_b, V_b, params);
-  //   CHECK_THAT(mgd.compute_volume(P_aa, T_a, params),
-  //     WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
-  //   CHECK_THAT(mgd.compute_volume(P_ab, T_a, params),
-  //     WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
-  //   CHECK_THAT(mgd.compute_volume(P_ba, T_b, params),
-  //     WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
-  //   CHECK_THAT(mgd.compute_volume(P_bb, T_b, params),
-  //     WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
-  // }
+  SECTION("Test volume") {
+    MGD3 mgd;
+    double T_a = 800.0;
+    double T_b = 2000.0;
+    double V_a = 0.9 * (*params.V_0);
+    double V_b = 0.5 * (*params.V_0);
+    double P_aa = mgd.compute_pressure(T_a, V_a, params);
+    double P_ab = mgd.compute_pressure(T_a, V_b, params);
+    double P_ba = mgd.compute_pressure(T_b, V_a, params);
+    double P_bb = mgd.compute_pressure(T_b, V_b, params);
+    CHECK_THAT(mgd.compute_volume(P_aa, T_a, params),
+      WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
+    CHECK_THAT(mgd.compute_volume(P_ab, T_a, params),
+      WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
+    CHECK_THAT(mgd.compute_volume(P_ba, T_b, params),
+      WithinRel(V_a, tol_rel) || WithinAbs(V_a, tol_abs));
+    CHECK_THAT(mgd.compute_volume(P_bb, T_b, params),
+      WithinRel(V_b, tol_rel) || WithinAbs(V_b, tol_abs));
+  }
   SECTION("V dependent functions") {
     struct TestData {
       double input;
