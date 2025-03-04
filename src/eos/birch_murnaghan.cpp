@@ -97,8 +97,8 @@ double BM3::compute_volume(
   // Set up GSL params struct - to pass to objective function
   ParamsGSL::SolverParams_P bm_params{params, pressure};
   // Set a, b limits
-  double x_lo = 0.1 * (*params.V_0);
-  double x_hi = 1.5 * (*params.V_0);
+  double x_lo = 1.5 * (*params.V_0);
+  double x_hi = 0.1 * (*params.V_0);
   double volume_root = brent::find_root(
     &bm_gsl_wrapper,
     bm_params,
