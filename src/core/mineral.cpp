@@ -128,13 +128,15 @@ double Mineral::compute_molar_heat_capacity_p() const {
 }
 
 double Mineral::compute_thermal_expansivity() const {
-  return (eos_method->compute_thermal_expansivity(
+  return (
+    eos_method->compute_thermal_expansivity(
       get_pressure(),
       get_temperature(),
       get_molar_volume_unmodified(),
-      params)
-      + property_modifier_excesses.d2GdPdT)
-    / get_molar_volume();
+      params
+    ) * get_molar_volume_unmodified()
+    + property_modifier_excesses.d2GdPdT
+  ) / get_molar_volume();
 }
 
 double Mineral::compute_shear_modulus() const {
