@@ -11,10 +11,10 @@
 #include "burnman/eos/einstein.hpp"
 #include "burnman/utils/constants.hpp"
 
-double einstein::compute_thermal_energy(
+double einstein::compute_thermal_energy_impl(
   double temperature,
   double einstein_temperature,
-  int napfu) {
+  double napfu) {
   if (temperature <= constants::precision::double_eps) {
     return 0.0;
   }
@@ -27,10 +27,10 @@ double einstein::compute_thermal_energy(
     * einstein_temperature * exp_term;
 }
 
-double einstein::compute_molar_heat_capacity_v(
+double einstein::compute_molar_heat_capacity_v_impl(
   double temperature,
   double einstein_temperature,
-  int napfu) {
+  double napfu) {
   if (temperature < constants::precision::double_eps) {
     return 0.0;
   }
@@ -42,20 +42,21 @@ double einstein::compute_molar_heat_capacity_v(
     * (x * x * ex / (exm1 * exm1));
 }
 
-double einstein::compute_helmholtz_free_energy(
+double einstein::compute_helmholtz_free_energy_impl(
   double temperature,
   double einstein_temperature,
-  int napfu) {
-  double E = compute_thermal_energy(temperature, einstein_temperature, napfu);
-  double S = compute_entropy(temperature, einstein_temperature, napfu);
+  double napfu) {
+  double E = compute_thermal_energy_impl(
+    temperature, einstein_temperature, napfu);
+  double S = compute_entropy_impl(temperature, einstein_temperature, napfu);
   // F
   return E - temperature * S;
 }
 
-double einstein::compute_entropy(
+double einstein::compute_entropy_impl(
   double temperature,
   double einstein_temperature,
-  int napfu) {
+  double napfu) {
   if (temperature <= constants::precision::double_eps) {
     return 0.0;
   }
@@ -68,10 +69,10 @@ double einstein::compute_entropy(
     * (x / exm1) - (std::log(exm1) - x);
 }
 
-double einstein::compute_dmolar_heat_capacity_v_dT(
+double einstein::compute_dmolar_heat_capacity_v_dT_impl(
   double temperature,
   double einstein_temperature,
-  int napfu) {
+  double napfu) {
   if (temperature <= constants::precision::double_eps) {
     return 0.0;
   }
@@ -83,4 +84,114 @@ double einstein::compute_dmolar_heat_capacity_v_dT(
     * x * x * ex
     * ((x - 2.0) * ex + (x + 2.0))
     / (temperature * exm1 * exm1 * exm1);
+}
+
+double einstein::compute_thermal_energy(
+  double temperature,
+  double einstein_temperature,
+  int napfu) {
+  return compute_thermal_energy_impl(
+    temperature,
+    einstein_temperature,
+    static_cast<double>(napfu)
+  );
+}
+
+double einstein::compute_thermal_energy(
+  double temperature,
+  double einstein_temperature,
+  einstein::ExplicitDouble f) {
+  return compute_thermal_energy_impl(
+    temperature,
+    einstein_temperature,
+    f.value
+  );
+}
+
+double einstein::compute_molar_heat_capacity_v(
+  double temperature,
+  double einstein_temperature,
+  int napfu) {
+  return compute_molar_heat_capacity_v_impl(
+    temperature,
+    einstein_temperature,
+    static_cast<double>(napfu)
+  );
+}
+
+double einstein::compute_molar_heat_capacity_v(
+  double temperature,
+  double einstein_temperature,
+  einstein::ExplicitDouble f) {
+  return compute_molar_heat_capacity_v_impl(
+    temperature,
+    einstein_temperature,
+    f.value
+  );
+}
+
+double einstein::compute_helmholtz_free_energy(
+  double temperature,
+  double einstein_temperature,
+  int napfu) {
+  return compute_helmholtz_free_energy_impl(
+    temperature,
+    einstein_temperature,
+    static_cast<double>(napfu)
+  );
+}
+
+double einstein::compute_helmholtz_free_energy(
+  double temperature,
+  double einstein_temperature,
+  einstein::ExplicitDouble f) {
+  return compute_helmholtz_free_energy_impl(
+    temperature,
+    einstein_temperature,
+    f.value
+  );
+}
+
+double einstein::compute_entropy(
+  double temperature,
+  double einstein_temperature,
+  int napfu) {
+  return compute_entropy_impl(
+    temperature,
+    einstein_temperature,
+    static_cast<double>(napfu)
+  );
+}
+
+double einstein::compute_entropy(
+  double temperature,
+  double einstein_temperature,
+  einstein::ExplicitDouble f) {
+  return compute_entropy_impl(
+    temperature,
+    einstein_temperature,
+    f.value
+  );
+}
+
+double einstein::compute_dmolar_heat_capacity_v_dT(
+  double temperature,
+  double einstein_temperature,
+  int napfu) {
+  return compute_dmolar_heat_capacity_v_dT_impl(
+    temperature,
+    einstein_temperature,
+    static_cast<double>(napfu)
+  );
+}
+
+double einstein::compute_dmolar_heat_capacity_v_dT(
+  double temperature,
+  double einstein_temperature,
+  einstein::ExplicitDouble f) {
+  return compute_dmolar_heat_capacity_v_dT_impl(
+    temperature,
+    einstein_temperature,
+    f.value
+  );
 }
