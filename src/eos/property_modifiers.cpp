@@ -435,13 +435,13 @@ namespace excesses {
     double d2GdT2;
     double f = params.Cv_inf / 3.0 / constants::physics::gas_constant;
     double G = debye::compute_helmholtz_free_energy(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, debye::ExplicitDouble(f));
     double dGdT = -debye::compute_entropy(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, debye::ExplicitDouble(f));
     double dGdP = 0.0;
     if (temperature > constants::precision::double_eps) {
       d2GdT2 = -debye::compute_molar_heat_capacity_v(
-        temperature, params.Theta_0, f) / temperature;
+        temperature, params.Theta_0, debye::ExplicitDouble(f)) / temperature;
     } else {
       d2GdT2 = 0.0;
     }
@@ -465,12 +465,12 @@ namespace excesses {
   ) {
     double f = params.S_inf / 3.0 / constants::physics::gas_constant;
     double G = -debye::compute_thermal_energy(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, debye::ExplicitDouble(f));
     double dGdT = -debye::compute_molar_heat_capacity_v(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, debye::ExplicitDouble(f));
     double dGdP = 0.0;
     double d2GdT2 = -debye::compute_dmolar_heat_capacity_v_dT(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, debye::ExplicitDouble(f));
     double d2GdP2 = 0.0;
     double d2GdPdT = 0.0;
     Excesses debye_ex{
@@ -492,14 +492,15 @@ namespace excesses {
 
     double f = params.Cv_inf / 3.0 / constants::physics::gas_constant;
     double G = einstein::compute_helmholtz_free_energy(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, einstein::ExplicitDouble(f));
     double dGdT = -einstein::compute_entropy(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, einstein::ExplicitDouble(f));
     double dGdP = 0.0;
     double d2GdT2;
     if (temperature > constants::precision::double_eps) {
       d2GdT2 = -einstein::compute_molar_heat_capacity_v(
-        temperature, params.Theta_0, f) / temperature;
+        temperature, params.Theta_0, einstein::ExplicitDouble(f))
+      / temperature;
     } else {
       d2GdT2 = 0.0;
     }
@@ -523,12 +524,12 @@ namespace excesses {
   ) {
     double f = params.S_inf / 3.0 / constants::physics::gas_constant;
     double G = -einstein::compute_thermal_energy(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, einstein::ExplicitDouble(f));
     double dGdT = -einstein::compute_molar_heat_capacity_v(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, einstein::ExplicitDouble(f));
     double dGdP = 0.0;
     double d2GdT2 = -einstein::compute_dmolar_heat_capacity_v_dT(
-      temperature, params.Theta_0, f);
+      temperature, params.Theta_0, einstein::ExplicitDouble(f));
     double d2GdP2 = 0.0;
     double d2GdPdT = 0.0;
     Excesses einstein_ex{
