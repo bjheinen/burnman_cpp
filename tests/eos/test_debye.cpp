@@ -99,10 +99,10 @@ TEST_CASE("Debye napfu constant", "[debye][eos]") {
 TEST_CASE("Debye functions python reference values", "[debye][eos]") {
   double T_a = 2000.0;
   double debye_a = 543.0;
-  double n_a = 2;
+  int n_a = 2;
   double T_b = 300.0;
   double debye_b = 773.0;
-  double n_b = 1;
+  int n_b = 1;
   SECTION("compute_thermal_energy") {
     double ref_a = 89982.76111222361;
     double ref_b = 2561.5489877441814;
