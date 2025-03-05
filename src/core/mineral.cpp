@@ -14,6 +14,16 @@
 #include "burnman/utils/make_eos.hpp"
 #include "burnman/utils/constants.hpp"
 
+void Mineral::set_property_modifier_params(
+  excesses::ExcessParamVector excess_params
+) {
+  property_modifier_params = excess_params;
+}
+
+excesses::Excesses Mineral::get_property_modifiers() const {
+  return property_modifier_excesses;
+}
+
 void Mineral::set_method(std::unique_ptr<EquationOfState> new_method) {
   // Here new_method is a unique pointer to an EOS class
   eos_method = std::move(new_method);
