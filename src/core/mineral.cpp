@@ -239,12 +239,12 @@ double Mineral::compute_grueneisen_parameter() const {
 }
 
 double Mineral::compute_molar_heat_capacity_v() const {
-  double thermal_expansivity = get_thermal_expansivity();
+  double alpha = get_thermal_expansivity();
   return
     get_molar_heat_capacity_p()
     - get_molar_volume()
     * get_temperature()
-    * thermal_expansivity * thermal_expansivity
+    * alpha * alpha
     * get_isothermal_bulk_modulus_reuss();
 }
 
