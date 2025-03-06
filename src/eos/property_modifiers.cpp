@@ -48,13 +48,23 @@ namespace {
       H_disord, temperature, W,
       params.n, f_0, f_1
     };
-    // TODO: Check for non-converge in brent --> set Q=0 if error
-    double Q = brent::find_root(
-      &reaction_bragg_williams_gsl_wrapper,
-      react_params,
-      constants::precision::abs_tolerance,
-      1.0 - constants::precision::abs_tolerance
-    );
+    // Check for non-converge in brent --> set Q=0 if error
+    // Check the interval for a sign change!
+    double f_lo = reaction_bragg_williams_gsl_wrapper(
+      constants::precision::abs_tolerance, (void*)&react_params);
+    double f_hi = reaction_bragg_williams_gsl_wrapper(
+      1.0 - constants::precision::abs_tolerance, (void*)&react_params);
+    double Q;
+    if (f_lo * f_hi < 0) {
+      Q = brent::find_root(
+        &reaction_bragg_williams_gsl_wrapper,
+        react_params,
+        constants::precision::abs_tolerance,
+        1.0 - constants::precision::abs_tolerance
+      );
+    } else {
+      Q = 0.0;
+    }
     // Reuse some identities
     double lognp1 = std::log1p(params.n);
     double logQm1 = std::log1p(-Q);
