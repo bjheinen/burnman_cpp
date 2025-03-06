@@ -17,7 +17,7 @@
 // Anonymous namespace for BW helper functions
 namespace {
   // Eq. A2-2
-  double flnarxn(int n, double Q, int f_0, int f_1) {
+  double flnarxn(int n, double Q, double f_0, double f_1) {
     double log1mQ = std::log1p(-Q);
     return n / (n + 1)
       * (f_0 * (std::log(n) + log1mQ)
@@ -38,7 +38,7 @@ namespace {
   double order_gibbs(
     double pressure, double temperature,
     excesses::BraggWilliamsParams params,
-    int f_0, int f_1
+    double f_0, double f_1
   ) {
     double W = params.Wh + pressure * params.Wv;
     double H_disord = params.deltaH + pressure * params.deltaV;
@@ -276,8 +276,8 @@ namespace excesses {
     double temperature,
     BraggWilliamsParams params
   ) {
-    int f_0;
-    int f_1;
+    double f_0;
+    double f_1;
     if (params.factor > 0) {
       f_0 = params.factor;
       f_1 = params.factor;

@@ -83,8 +83,8 @@ namespace excesses {
   * following Holland & Powell (1987)
   */
   struct BraggWilliamsParams {
-    int n, factor;
-    double Wh, Wv, deltaH, deltaV;
+    int n;
+    double factor, Wh, Wv, deltaH, deltaV;
   };
 
   /**
