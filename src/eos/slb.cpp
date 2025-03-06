@@ -66,7 +66,24 @@ double SLB3::compute_isentropic_bulk_modulus_reuss(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double K_T = compute_isothermal_bulk_modulus_reuss(
+    pressure,
+    temperature,
+    volume,
+    params
+  );
+  double alpha = compute_thermal_expansivity(
+    pressure,
+    temperature,
+    volume,
+    params
+  );
+  double gamma = compute_grueneisen_parameter(
+    pressure,
+    temperature
+    volume,
+    params);
+  return K_T * (1.0 + gamma * alpha * temperature);
 }
 
 // Second order (SLB2)
