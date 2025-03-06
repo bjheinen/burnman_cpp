@@ -362,14 +362,14 @@ namespace excesses {
       f = 1.0 - (1.0 / A)
         * (79.0 / (140.0 * p * tau)
           + (474.0 / 497.0)
-          + (1.0 / p - 1.0)
-          + (std::pow(tau, 3) / 6.0
+          * (1.0 / p - 1.0)
+          * (std::pow(tau, 3) / 6.0
             + std::pow(tau, 9) / 135.0
             + std::pow(tau, 15) / 600.0));
       dfdtau = -(1.0 / A)
         * (-79.0 / (140.0 * p * tau * tau)
           + (474.0 / 497.0)
-          + (1.0 / p - 1.0)
+          * (1.0 / p - 1.0)
           * (tau * tau / 2.0 + std::pow(tau, 8)
             / 15.0 + std::pow(tau, 14) / 40.0));
 
@@ -379,12 +379,12 @@ namespace excesses {
           * (1.0 / p - 1.0)
           * (tau
             + 8.0 * std::pow(tau, 7) / 15.0
-            + 14.0 * std::pow(tau, 13) / 4.0));
+            + 14.0 * std::pow(tau, 13) / 40.0));
     } else {
       f = -(1.0 / A)
         * (std::pow(tau, -5) / 10.0
           + std::pow(tau, -15) / 315.0
-          + std::pow(tau, -25) / 1500);
+          + std::pow(tau, -25) / 1500.0);
       dfdtau = (1.0 / A)
         * (std::pow(tau, -6) / 2.0
           + std::pow(tau, -16) / 21.0
