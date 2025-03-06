@@ -104,7 +104,25 @@ double SLB3::compute_molar_heat_capacity_p(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double C_v = compute_molar_heat_capacity_v(
+    pressure,
+    temperature,
+    volume,
+    params
+  );
+  double gamma = compute_grueneisen_parameter(
+    pressure,
+    temperature,
+    volume,
+    params
+  );
+  double alpha = compute_thermal_expansivity(
+    pressure,
+    temperature,
+    volume,
+    params
+  );
+  return C_v * (1.0 + gamma * alpha * temperature);
 }
 
 double SLB3::compute_thermal_expansivity(
