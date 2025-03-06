@@ -93,7 +93,6 @@ TEST_CASE("Set state", "[mineral][core]") {
     excesses::LandauSLB2022Params {800.0, 1.0e-8, 5.0},
     excesses::LandauHPParams{298.15, 1.0e-5, 800.0, 1.0e-7, 5.0},
     excesses::LinearParams{1.0e-7, 5.0, 1200.0},
-    // TODO: check type BraggWilliamsParams.factor
     excesses::BraggWilliamsParams{1, 0.8, 1000.0, 1.0e-7, 1000.0, 1.0e-7},
     excesses::MagneticChsParams{0.4, 800.0, 1.0e-8, 2.2, 1.0e-10},
     excesses::DebyeParams{1.0, 1200.0},
