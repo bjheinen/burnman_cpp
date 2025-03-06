@@ -178,5 +178,21 @@ double compute_isotropic_eta_s(
   double x,
   const MineralParams& params
 ) {
-  ;
+  double gamma_0 = *params.grueneisen_0;
+  double x_cbrt = std::cbrt(x);
+  double x_23 = x_cbrt * x_cbrt;
+  double f = 0.5 * (x_23 - 1.0);
+  // Eq. 47
+  double a2_s = -2.0 * gamma_0 - 2.0 * (params.eta_s_0);
+  double a1_ii = 6.0 * gamma_0;
+  double a2_iikk = -12.0 * gamma_0
+    + 36.0 * gamma_0 * gamma_0
+    - 18.0 * (*params.q_0) * gamma_0;
+  // Eq. 41
+  double nu_o_nu0_sq = 1.0 + a1_ii * f + 0.5 * a2_iikk * f * f;
+  double two_f_plus1 = 2.0 * f + 1.0;
+  constexpr double ONE_SIXTH = 1.0 / 6.0;
+  double gr = ONE_SIXTH / nu_o_nu0_sq * two_f_plus1 * (a1_ii + a2_iikk * f);
+  // Eq. 46 (type in Stixrude 2005)
+  return -gr - (0.5 * (1.0 / nu_o_nu0_sq) * two_f_plus1 * two_f_plus1 * a2_s);
 }
