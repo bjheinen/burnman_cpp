@@ -172,7 +172,14 @@ double SLB3::compute_entropy(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double debye_temperature = compute_debye_temperature(
+    *params.V_0 / volume,
+    params
+  );
+  return debye::compute_entropy(
+    temperature,
+    debye_temperature,
+    *params.napfu);
 }
 
 double SLB3::compute_molar_internal_energy(
