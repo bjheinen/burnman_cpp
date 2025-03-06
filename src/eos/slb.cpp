@@ -112,7 +112,14 @@ double SLB3::compute_molar_heat_capacity_v(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double debye_temperature = compute_debye_temperature(
+    *params.V_0 / volume,
+    params
+  );
+  return debye::compute_molar_heat_capacity_v(
+    temperature,
+    debye_temperature,
+    *params.napfu);
 }
 
 double SLB3::compute_molar_heat_capacity_p(
@@ -148,7 +155,6 @@ double SLB3::compute_thermal_expansivity(
   double volume,
   const MineralParams& params
 ) const {
-
   double debye_temperature = compute_debye_temperature(
     *params.V_0 / volume,
     params
