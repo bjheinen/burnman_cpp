@@ -158,7 +158,18 @@ double SLB3::compute_enthalpy(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  return compute_helmholtz_free_energy(
+    pressure,
+    temperature,
+    volume,
+    params)
+  + temperature
+  * compute_entropy(
+    pressure,
+    temperature,
+    volume,
+    params)
+  + pressure * volume;
 }
 
 double SLB3::compute_debye_temperature(
