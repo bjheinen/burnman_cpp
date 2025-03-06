@@ -8,6 +8,7 @@
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
 #include <cmath>
+#include <stdexcept>
 #include "burnman/eos/slb.hpp"
 #include "burnman/eos/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
@@ -164,14 +165,57 @@ double SLB3::compute_debye_temperature(
   double x,
   const MineralParams& params
 ) {
-  ;
+  double gamma_0 = *params.grueneisen_0;
+  double x_cbrt = std::cbrt(x);
+  double x_23 = x_cbrt * x_cbrt;
+  double f = 0.5 * (x_23 - 1.0);
+
+  // Eq. 47
+  double a1_ii = 6.0 * gamma_0;
+  double a2_iikk = -12.0 * gamma_0
+    + 36.0 * gamma_0 * gamma_0
+    - 18.0 * (*params.q_0) * gamma_0;
+  // Eq. 41
+  double nu_o_nu0_sq = 1.0 + a1_ii * f + 0.5 * a2_iikk * f * f;
+  if (nu_o_nu0_sq < 0.0) {
+    throw std::logic_error("Volume outside valid range of SLB EoS!");
+  }
+  return *params.debye_0 * std::sqrt(nu_o_nu0_sq);
 }
 
 double compute_volume_dependent_q(
   double x,
   const MineralParams& params
 ) {
-  ;
+  double gamma_0 = *params.grueneisen_0;
+  double x_cbrt = std::cbrt(x);
+  double x_23 = x_cbrt * x_cbrt;
+  double f = 0.5 * (x_23 - 1.0);
+  // Eq. 47
+  double a1_ii = 6.0 * gamma_0;
+  double a2_iikk = -12.0 * gamma_0
+    + 36.0 * gamma_0 * gamma_0
+    - 18.0 * (*params.q_0) * gamma_0;
+  // Eq. 41
+  double nu_o_nu0_sq = 1.0 + a1_ii * f + 0.5 * a2_iikk * f * f;
+  double two_f_plus1 = 2.0 * f + 1.0;
+  constexpr double ONE_SIXTH = 1.0 / 6.0;
+  double constexpr ONE_NINTH = 1.0 / 9.0;
+  double gr = ONE_SIXTH / nu_o_nu0_sq * two_f_plus1 * (a1_ii + a2_iikk * f);
+  double q;
+  if (std::abs(gamma_0) < 1.0e-10) {
+    q = ONE_NINTH * (18.0 * gr - 6.0);
+  } else {
+    q = ONE_NINTH * (
+      18.0 * gr
+      - 6.0
+      - 0.5 / nu_o_nu0_sq
+      * two_f_plus1 * two_f_plus1
+      * a2_iikk
+      / gr
+    );
+  }
+  return q;
 }
 
 double compute_isotropic_eta_s(
