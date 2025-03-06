@@ -280,7 +280,8 @@ namespace ParamsGSL {
    */
   struct BWReactParams {
     double delta_H, temperature, W;
-    int n, f_0, f_1;
+    int n;
+    double f_0, f_1;
   };
 
 } // End namespace ParamGSL
