@@ -122,7 +122,13 @@ double SLB3::compute_gibbs_free_energy(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  return compute_helmholtz_free_energy(
+    pressure,
+    temperature,
+    volume,
+    params
+  )
+  + pressure * volume;
 }
 
 double SLB3::compute_entropy(
