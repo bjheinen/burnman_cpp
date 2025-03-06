@@ -148,7 +148,24 @@ double SLB3::compute_thermal_expansivity(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+
+  double debye_temperature = compute_debye_temperature(
+    *params.V_0 / volume,
+    params
+  );
+  double C_v = debye::compute_molar_heat_capacity_v(
+    temperature,
+    debye_temperature,
+    *params.napfu
+  );
+  double gamma_slb = compute_slb_grueneisen_parameter(V_0 / volume, params);
+  double K_T = compute_isothermal_bulk_modulus_reuss(
+    pressure,
+    temperature,
+    volume,
+    params
+  );
+  return gamma_slb * C_v / volume / K_T;
 }
 
 double SLB3::compute_gibbs_free_energy(
