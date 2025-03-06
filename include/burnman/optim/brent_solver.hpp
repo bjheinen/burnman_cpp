@@ -65,14 +65,13 @@ namespace brent {
         status = gsl_root_test_interval(x_lo, x_hi,
                                         atol, rtol);
         // Leaving in print from GSL example to debug
-        // TODO: remove prints when working/tests set up.
-        if (status == GSL_SUCCESS)
-          printf ("Converged:\n");
-
-        printf ("%5d [%.7f, %.7f] %.7f %.7f\n",
-                iter, x_lo, x_hi,
-                root,
-                x_hi - x_lo);
+        // Debug print statements
+        //if (status == GSL_SUCCESS)
+        //  printf ("Converged:\n");
+        //printf ("%5d [%.7f, %.7f] %.7f %.7f\n",
+        //        iter, x_lo, x_hi,
+        //        root,
+        //        x_hi - x_lo);
       } while (status == GSL_CONTINUE && iter < maxiter);
 
     // Get final root (can delet root getting above when tested)
