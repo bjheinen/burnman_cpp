@@ -19,7 +19,7 @@ namespace {
   // Eq. A2-2
   double flnarxn(int n, double Q, double f_0, double f_1) {
     double log1mQ = std::log1p(-Q);
-    return n / (n + 1)
+    return static_cast<double>(n) / (n + 1)
       * (f_0 * (std::log(n) + log1mQ)
         + f_1 * log1mQ
         - f_0 * std::log1p(n * Q)
