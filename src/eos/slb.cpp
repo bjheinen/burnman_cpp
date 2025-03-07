@@ -90,7 +90,22 @@ double SLB3::compute_isothermal_bulk_modulus_reuss(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double x = *params.V_0 / volume;
+  double debye_temperature = compute_debye_temperature(x, params);
+  double gamma = compute_slb_grueneisen_parameter(x, params);
+  double q = compute_volume_dependent_q(x, params);
+  double E_th = debye::compute_thermal_energy(
+    temperature, debye_temperature, *params.napfu);
+  double E_th_ref = debye::compute_thermal_energy(
+    *params.T_0, debye_temperature, *params.napfu);
+  double C_v = debye::compute_molar_heat_capacity_v(
+    temperature, debye_temperature, *params.napfu);
+  double C_v_ref = debye::compute_molar_heat_capacity_v(
+    *params.T_0, debye_temperature, *params.napfu);
+  return BM3::compute_bm_bulk_modulus(volume, params)
+    + (gamma + 1.0 - q) * (gamma / volume) * (E_th - E_th_ref)
+    - (gamma * gamma / volume)
+      * (C_v * temperature - C_v_ref * (*params.T_0));
 }
 
 double SLB3::compute_isentropic_bulk_modulus_reuss(
