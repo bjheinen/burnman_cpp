@@ -10,6 +10,7 @@
 #ifndef BURNMAN_EOS_SLB_HPP_INCLUDED
 #define BURNMAN_EOS_SLB_HPP_INCLUDED
 
+#include <utility>
 #include "burnman/core/equation_of_state.hpp"
 #include "burnman/utils/eos.hpp"
 
@@ -126,6 +127,15 @@ class SLB3 : public EquationOfState{
    double compute_shear_modulus_delta(
     double temperatue,
     double volume,
+    const MineralParams& params) const;
+
+  /**
+   * @brief Helper function to retrieve electronic params
+   *        for SLB3Conductive.
+   *
+   * @return {bel_0, gel}
+   */
+  virtual std::pair<double, double> get_b_g_el(
     const MineralParams& params) const;
 
  private:
@@ -248,6 +258,17 @@ class SLB3Conductive : public SLB3{
   //  compute_helmholtz_free_energy
   //  compute_grueneisen_parameter
   //  validate_parameters
+
+ protected:
+
+   /**
+   * @brief Helper function to retrieve electronic params
+   *        for SLB3Conductive.
+   *
+   * @return {bel_0, gel}
+   */
+  std::pair<double, double> get_b_g_el(
+    const MineralParams& params) const override;
 
 };
 

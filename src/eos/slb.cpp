@@ -19,12 +19,40 @@ bool SLB3::validate_parameters(MineralParams& params) {
   ;// TODO
 }
 
+std::pair<double, double> SLB3::get_b_g_el(
+  const MineralParams& params [[maybe_unused]]
+) const {
+  return {0.0, 1.0};
+}
+
+std::pair<double, double> SLB3Conductive::get_b_g_el(
+  const MineralParams& params
+) const {
+  return {*params.bel_0, *params.gel};
+}
+
 double SLB3::compute_volume(
   double pressure,
   double temperature,
   const MineralParams& params
 ) const {
-  ;
+
+  double gamma_0 = *params.grueneisen_0;
+  double V_lo = *params.V_0 * 0.01;
+  // Eq. 47
+  double a1_ii = 6.0 * gamma_0;
+  double a2_iikk = -12.0 * gamma_0
+    + 36.0 * gamma_0 * gamma_0
+    - 18.0 * (*params.q_0) * gamma_0;
+  double b_iikk = 9.0 * (*params.K_0); // Eq.28
+  double b_iikkmm = 27.0 * (*params.K_0) * (*params.Kprime_0 - 4.0); // Eq.29
+  auto [bel_0, gel] = get_b_g_el(params);
+
+  // TODO Bracketing
+
+
+
+
 }
 
 double SLB3::compute_pressure(

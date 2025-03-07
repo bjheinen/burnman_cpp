@@ -223,6 +223,10 @@ struct MineralParams {
   std::optional<double> a; // DKS free param
   std::optional<double> eta_s_0; // for shear strain derivative of grueneisen parameter (SLB, DKS)
 
+  // Electronic parameters (SLB Conductive)
+  std::optional<double> bel_0;
+  std::optional<double> gel;
+
   // Order of expansion (DKS)
   std::optional<int> order_theta;
   std::optional<int> order_f;
