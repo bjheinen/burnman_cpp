@@ -290,7 +290,7 @@ double SLB3::compute_debye_temperature(
   return *params.debye_0 * std::sqrt(nu_o_nu0_sq);
 }
 
-double compute_volume_dependent_q(
+double SLB3::compute_volume_dependent_q(
   double x,
   const MineralParams& params
 ) {
@@ -325,7 +325,7 @@ double compute_volume_dependent_q(
   return q;
 }
 
-double compute_isotropic_eta_s(
+double SLB3::compute_isotropic_eta_s(
   double x,
   const MineralParams& params
 ) {
