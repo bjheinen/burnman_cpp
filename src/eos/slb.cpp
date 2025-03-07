@@ -32,7 +32,25 @@ double SLB3::compute_pressure(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double x = *params.V_0 / volume;
+  double debye_temperature = compute_debye_temperature(x, params);
+  double gamma = compute_slb_grueneisen_parameter(x, params);
+  double E_th = debye::compute_thermal_energy(
+    temperature, debye_temperature, *params.napfu);
+  double E_th_ref = debye::compute_thermal_energy(
+    *params.T_0, debye_temperature, *params.napfu);
+  double b_iikk = 9.0 * (*params.K_0); // Eq.28
+  double b_iikkmm = 27.0 * (*params.K_0) * (*params.Kprime_0 - 4.0); // Eq.29
+  double x_cbrt = std::cbrt(x);
+  double x_23 = x_cbrt * x_cbrt;
+  double f = 0.5 * (x_23 - 1.0); // Eq.24
+  double two_f_plus1 = 2.0 * f + 1;
+  double two_f_plus1_52 = std::sqrt(two_f_plus1) * two_f_plus1 * two_f_plus1;
+  constexpr double ONE_THIRD = 1.0 / 3.0;
+  // Eq. 21
+  return ONE_THIRD * two_f_plus1_52
+    * ((b_iikk * f) + (0.5 * b_iikkmm * f * f))
+    + gamma * (E_th - E_th_ref) / volume;
 }
 
 double SLB3::compute_grueneisen_parameter(
