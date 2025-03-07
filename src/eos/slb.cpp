@@ -293,7 +293,24 @@ double SLB3::compute_helmholtz_free_energy(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double x = *params.V_0 / volume;
+  double x_cbrt = std::cbrt(x);
+  double x_23 = x_cbrt * x_cbrt;
+  double f = 0.5 * (x_23 - 1.0);
+  double f2 = f * f;
+  double debye_temperature = compute_debye_temperature(x, params);
+  double b_iikk = 9.0 * (*params.K_0); // Eq.28
+  double b_iikkmm = 27.0 * (*params.K_0) * (*params.Kprime_0 - 4.0); // Eq.29
+  double F_quasiharmonic =
+    debye::compute_helmholtz_free_energy(
+        temperature, debye_temperature, *params.napfu)
+    - debye::compute_helmholtz_free_energy(
+        *params.T_0, debye_temperature, *params.napfu);
+  constexpr double ONE_SIXTH = 1.0 / 6.0;
+  return *params.F_0
+    + 0.5 * b_iikk * f2 * (*params.V_0)
+    + ONE_SIXTH * (*params.V_0) * b_iikkmm * f2 * f
+    + F_quasiharmonic;
 }
 
 double SLB3::compute_enthalpy(
