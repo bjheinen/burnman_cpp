@@ -131,6 +131,20 @@ class MGD3 : public EquationOfState{
  private:
 
   /**
+   * @brief Helper function for shear modulus calculation
+   *
+   * @param temperatue Temp in [K].
+   * @param volume Vol in [m^3].
+   * @param params Mineral parameters object.
+   *
+   * @return delta_G portion of G
+   */
+   double compute_shear_modulus_delta(
+    double temperatue,
+    double volume,
+    const MineralParams& params) const;
+
+  /**
    * @brief Computes the volume dependent Grueneisen parameter.
    *
    * @param x V_0/V.

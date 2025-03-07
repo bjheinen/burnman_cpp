@@ -86,6 +86,21 @@ double SLB3::compute_isentropic_bulk_modulus_reuss(
   return K_T * (1.0 + gamma * alpha * temperature);
 }
 
+double SLB3::compute_shear_modulus_delta(
+  double temperatue,
+  double volume,
+  const MineralParams& params
+) const {
+  double x = *params.V_0 / volume;
+  double debye_temperature = compute_debye_temperature(x, params);
+  double eta_s = compute_isotropic_eta_s(x, params);
+  double E_th = debye::compute_thermal_energy(
+    temperature, debye_temperature, *params.napfu);
+  double E_th_ref = debye::compute_thermal_energy(
+    *params.T_0, debye_temperature, *params.napfu);
+  return eta_s * (E_th - E_th_ref) / volume;
+}
+
 // Second order (SLB2)
 double SLB2::compute_shear_modulus(
   double pressure,
@@ -93,7 +108,8 @@ double SLB2::compute_shear_modulus(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  return BM3::compute_second_order_shear_modulus(volume, params)
+    - compute_shear_modulus_delta(temperatue, volume, params);
 }
 
 // Third order (SLB3)
@@ -103,7 +119,8 @@ double SLB3::compute_shear_modulus(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  return BM3::compute_third_order_shear_modulus(volume, params)
+    - compute_shear_modulus_delta(temperatue, volume, params);
 }
 
 double SLB3::compute_molar_heat_capacity_v(
@@ -155,16 +172,14 @@ double SLB3::compute_thermal_expansivity(
   double volume,
   const MineralParams& params
 ) const {
-  double debye_temperature = compute_debye_temperature(
-    *params.V_0 / volume,
-    params
-  );
+  double x = *params.V_0 / volume;
+  double debye_temperature = compute_debye_temperature(x, params);
   double C_v = debye::compute_molar_heat_capacity_v(
     temperature,
     debye_temperature,
     *params.napfu
   );
-  double gamma_slb = compute_slb_grueneisen_parameter(V_0 / volume, params);
+  double gamma_slb = compute_slb_grueneisen_parameter(x, params);
   double K_T = compute_isothermal_bulk_modulus_reuss(
     pressure,
     temperature,
