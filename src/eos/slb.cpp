@@ -41,14 +41,29 @@ double SLB3::compute_grueneisen_parameter(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  // Simple alias to slb_g so SLB3Conductive can easily override
+  double x = *params.V_0 / volume;
+  return compute_slb_grueneisen_parameter(x, params);
 }
 
 double SLB3::compute_slb_grueneisen_parameter(
   double x,
   const MineralParams& params
 ) {
-  ;
+  // TODO:: Factor out Eq. 47 etc. to re-use (eta, q, etc.)
+  double gamma_0 = *params.grueneisen_0;
+  double x_cbrt = std::cbrt(x);
+  double x_23 = x_cbrt * x_cbrt;
+  double f = 0.5 * (x_23 - 1.0);
+  // Eq. 47
+  double a1_ii = 6.0 * gamma_0;
+  double a2_iikk = -12.0 * gamma_0
+    + 36.0 * gamma_0 * gamma_0
+    - 18.0 * (*params.q_0) * gamma_0;
+  // Eq. 41
+  double nu_o_nu0_sq = 1.0 + a1_ii * f + 0.5 * a2_iikk * f * f;
+  constexpr double ONE_SIXTH = 1.0 / 6.0;
+  return ONE_SIXTH / nu_o_nu0_sq * (2.0 * f + 1.0) * (a1_ii + a2_iikk * f);
 }
 
 double SLB3::compute_isothermal_bulk_modulus_reuss(
@@ -276,7 +291,6 @@ double SLB3::compute_debye_temperature(
   double x_cbrt = std::cbrt(x);
   double x_23 = x_cbrt * x_cbrt;
   double f = 0.5 * (x_23 - 1.0);
-
   // Eq. 47
   double a1_ii = 6.0 * gamma_0;
   double a2_iikk = -12.0 * gamma_0
