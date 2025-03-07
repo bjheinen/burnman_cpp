@@ -80,14 +80,14 @@ double SLB3::compute_isentropic_bulk_modulus_reuss(
   );
   double gamma = compute_grueneisen_parameter(
     pressure,
-    temperature
+    temperature,
     volume,
     params);
   return K_T * (1.0 + gamma * alpha * temperature);
 }
 
 double SLB3::compute_shear_modulus_delta(
-  double temperatue,
+  double temperature,
   double volume,
   const MineralParams& params
 ) const {
@@ -108,8 +108,8 @@ double SLB2::compute_shear_modulus(
   double volume,
   const MineralParams& params
 ) const {
-  return BM3::compute_second_order_shear_modulus(volume, params)
-    - compute_shear_modulus_delta(temperatue, volume, params);
+  return BM2::compute_second_order_shear_modulus(volume, params)
+    - compute_shear_modulus_delta(temperature, volume, params);
 }
 
 // Third order (SLB3)
@@ -120,7 +120,7 @@ double SLB3::compute_shear_modulus(
   const MineralParams& params
 ) const {
   return BM3::compute_third_order_shear_modulus(volume, params)
-    - compute_shear_modulus_delta(temperatue, volume, params);
+    - compute_shear_modulus_delta(temperature, volume, params);
 }
 
 double SLB3::compute_molar_heat_capacity_v(
@@ -334,7 +334,7 @@ double compute_isotropic_eta_s(
   double x_23 = x_cbrt * x_cbrt;
   double f = 0.5 * (x_23 - 1.0);
   // Eq. 47
-  double a2_s = -2.0 * gamma_0 - 2.0 * (params.eta_s_0);
+  double a2_s = -2.0 * gamma_0 - 2.0 * (*params.eta_s_0);
   double a1_ii = 6.0 * gamma_0;
   double a2_iikk = -12.0 * gamma_0
     + 36.0 * gamma_0 * gamma_0

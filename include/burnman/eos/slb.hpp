@@ -23,7 +23,7 @@
  *
  * @note All functions assume SI units for all properties.
  */
-class MGD3 : public EquationOfState{
+class SLB3 : public EquationOfState{
  public:
 
   // Helper functions
@@ -115,22 +115,6 @@ class MGD3 : public EquationOfState{
  protected:
 
   /**
-   * @brief Thermal correction to shear modulus
-   *
-   * @param temperature Temperature to evaluate [K].
-   * @param volume Volume to evaluate [m^3].
-   * @param params Mineral parameters object of type MineralParams.
-   *
-   * @return G_thermal [Pa].
-   */
-  double compute_thermal_shear_modulus(
-    double temperature,
-    double volume,
-    const MineralParams& params) const;
-
- private:
-
-  /**
    * @brief Helper function for shear modulus calculation
    *
    * @param temperatue Temp in [K].
@@ -143,6 +127,8 @@ class MGD3 : public EquationOfState{
     double temperatue,
     double volume,
     const MineralParams& params) const;
+
+ private:
 
   /**
    * @brief Computes the volume dependent Grueneisen parameter.
@@ -224,7 +210,7 @@ class MGD3 : public EquationOfState{
  *
  * @note All functions assume SI units for all properties.
  */
-class MGD2 : public MGD3{
+class SLB2 : public SLB3{
  public:
   /**
    * @copydoc EquationOfState::compute_shear_modulus
@@ -249,7 +235,7 @@ class MGD2 : public MGD3{
  *
  * @note All functions assume SI units for all properties.
  */
-class MGD2 : public MGD3{
+class SLB3Conductive : public SLB3{
  public:
 
   // Functions to override:
