@@ -51,9 +51,9 @@ namespace {
     // Check for non-converge in brent --> set Q=0 if error
     // Check the interval for a sign change!
     double f_lo = reaction_bragg_williams_gsl_wrapper(
-      constants::precision::abs_tolerance, (void*)&react_params);
+      constants::precision::abs_tolerance, &react_params);
     double f_hi = reaction_bragg_williams_gsl_wrapper(
-      1.0 - constants::precision::abs_tolerance, (void*)&react_params);
+      1.0 - constants::precision::abs_tolerance, &react_params);
     double Q;
     if (f_lo * f_hi < 0) {
       Q = brent::find_root(
