@@ -276,7 +276,20 @@ namespace ParamsGSL {
     double pressure;
     double temperature;
   };
-
+  /**
+   * Struct for GSL root finding
+   * Used for volume finding in EOS where
+   * P, T needed along with SLB specific params.
+   *  SLB2, SLB3, etc.
+   */
+  struct SolverParams_SLB {
+    const MineralParams& params;
+    double pressure;
+    double temperature;
+    double a1_ii, a2_iikk;
+    double b_iikk, b_iikkmm;
+    double bel_0, gel;
+  };
   /**
    * Struct for GSL Brent root finding
    * Used in Bragg Williams excess function to find

@@ -15,8 +15,49 @@
 #include "burnman/optim/brent_solver.hpp"
 #include "burnman/utils/constants.hpp"
 
+#include <iostream>
+
 bool SLB3::validate_parameters(MineralParams& params) {
   ;// TODO
+}
+
+double SLB3::slb_gsl_wrapper(double x, void* p) {
+  auto* slb_params = static_cast<const ParamsGSL::SolverParams_SLB*>(p);
+  double compr = *slb_params->params.V_0 / x;
+  double x_cbrt = std::cbrt(compr);
+  double x_23 = x_cbrt * x_cbrt;
+  double f = 0.5 * (x_23 - 1.0);
+  // Eq. 41
+  double nu_o_nu0_sq = 1.0 + slb_params->a1_ii * f
+    + 0.5 * slb_params->a2_iikk * f * f;
+  double debye_T = *slb_params->params.debye_0 * std::sqrt(nu_o_nu0_sq);
+  double E_th = debye::compute_thermal_energy(
+    slb_params->temperature, debye_T, *slb_params->params.napfu);
+  double E_th_ref = debye::compute_thermal_energy(
+    *slb_params->params.T_0, debye_T, *slb_params->params.napfu);
+  double two_f_plus1 = 2.0 * f + 1.0;
+  double two_f_plus1_52 = std::sqrt(two_f_plus1) * two_f_plus1 * two_f_plus1;
+  constexpr double ONE_SIXTH = 1.0 / 6.0;
+  double constexpr ONE_THIRD = 1.0 / 3.0;
+  double gamma = ONE_SIXTH / nu_o_nu0_sq * two_f_plus1
+    * (slb_params->a1_ii + slb_params->a2_iikk * f);
+  double P_el;
+  // Don't bother if bel_0 = 0 (!0 only for SLB3Conductive)
+  if (slb_params->bel_0 != 0) {
+    P_el =
+      0.5 * slb_params->gel * slb_params->bel_0
+      * std::pow(x / *slb_params->params.V_0, slb_params->gel)
+      * (slb_params->temperature * slb_params->temperature
+        - *slb_params->params.T_0 * *slb_params->params.T_0)
+      / x;
+  } else {
+    P_el = 0.0;
+  }
+  return ONE_THIRD * two_f_plus1_52
+    * ((slb_params->b_iikk * f) + (0.5 * slb_params->b_iikkmm * f * f))
+    + gamma * (E_th - E_th_ref) / x
+    + P_el
+    - slb_params->pressure;
 }
 
 std::pair<double, double> SLB3::get_b_g_el(
@@ -38,7 +79,6 @@ double SLB3::compute_volume(
 ) const {
 
   double gamma_0 = *params.grueneisen_0;
-  double V_lo = *params.V_0 * 0.01;
   // Eq. 47
   double a1_ii = 6.0 * gamma_0;
   double a2_iikk = -12.0 * gamma_0
@@ -50,9 +90,48 @@ double SLB3::compute_volume(
 
   // TODO Bracketing
 
+  // Make params struct for solver
+  ParamsGSL::SolverParams_SLB slb_params{
+    params,
+    pressure, temperature,
+    a1_ii, a2_iikk,
+    b_iikk, b_iikkmm,
+    bel_0, gel
+  };
 
+  // Set initial volume bracket [V_lo, V_hi]
+  double V_lo = 0.6 * (*params.V_0);
+  double V_hi = *params.V_0;
+  // Check / adjust bracketing interval
+  // Note: modifies V_lo & V_hi internally
+  bool valid_bracket = brent::bracket_root(
+    &slb_gsl_wrapper,
+    slb_params,
+    V_lo,
+    V_hi,
+    0.01 * (*params.V_0)
+  );
 
+  // If we can't find a bracket
+  if (!valid_bracket) {
+    // At high temperature, naive bracketing may try a volume guess
+    // that exceeds the point at which the bulk modulus goes negative
+    // at that temperature. In this case, we try a more nuanced
+    // approach by first finding the volume at which the bulk modulus
+    // goes negative, and then either (a) raising an exception if the
+    // desired pressure is less than the pressure at that volume,
+    // or (b) using that pressure to create a better bracket for brentq.
+    ;
+    // TODO!
+  }
 
+  double volume_root = brent::find_root(
+    &slb_gsl_wrapper,
+    slb_params,
+    V_lo,
+    V_hi
+  );
+  return volume_root;
 }
 
 double SLB3::compute_pressure(
