@@ -12,7 +12,7 @@
 #include "burnman/eos/slb.hpp"
 #include "burnman/eos/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
-#include "burnman/optim/brent_solver.hpp"
+#include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
 
 #include <iostream>
@@ -104,7 +104,7 @@ double SLB3::compute_volume(
   double V_hi = *params.V_0;
   // Check / adjust bracketing interval
   // Note: modifies V_lo & V_hi internally
-  bool valid_bracket = brent::bracket_root(
+  bool valid_bracket = roots::bracket_root(
     &slb_gsl_wrapper,
     slb_params,
     V_lo,
@@ -125,7 +125,7 @@ double SLB3::compute_volume(
     // TODO!
   }
 
-  double volume_root = brent::find_root(
+  double volume_root = roots::brent(
     &slb_gsl_wrapper,
     slb_params,
     V_lo,

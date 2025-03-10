@@ -11,7 +11,7 @@
 #include "burnman/eos/property_modifiers.hpp"
 #include "burnman/eos/debye.hpp"
 #include "burnman/eos/einstein.hpp"
-#include "burnman/optim/brent_solver.hpp"
+#include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
 
 // Anonymous namespace for BW helper functions
@@ -56,7 +56,7 @@ namespace {
       1.0 - constants::precision::abs_tolerance, &react_params);
     double Q;
     if (f_lo * f_hi < 0) {
-      Q = brent::find_root(
+      Q = roots::brent(
         &reaction_bragg_williams_gsl_wrapper,
         react_params,
         constants::precision::abs_tolerance,

@@ -7,8 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#ifndef BURNMAN_OPTIM_BRENT_SOLVER_HPP_INCLUDED
-#define BURNMAN_OPTIM_BRENT_SOLVER_HPP_INCLUDED
+#ifndef BURNMAN_OPTIM_ROOTS_HPP_INCLUDED
+#define BURNMAN_OPTIM_ROOTS_HPP_INCLUDED
 
 #include <cassert>
 #include <gsl/gsl_errno.h>
@@ -16,9 +16,7 @@
 #include "burnman/utils/eos.hpp"
 #include "burnman/utils/constants.hpp"
 
-#include <iostream>
-
-namespace brent {
+namespace roots {
   /**
     * @brief Finds root of function in region [x_lo,x_hi] via Brent's method.
     *
@@ -34,7 +32,7 @@ namespace brent {
     * @return root x at f(x) = 0
     */
   template <typename SolverParamsType>
-  double find_root(
+  double brent(
     double (*gsl_wrapper)(double, void*),
     SolverParamsType gsl_wrapper_params,
     double x_lo,
@@ -142,4 +140,4 @@ namespace brent {
     return (f_lo * f_hi < 0);
   }
 }
-#endif // BURNMAN_OPTIM_BRENT_SOLVER_HPP_INCLUDED
+#endif // BURNMAN_OPTIM_ROOTS_HPP_INCLUDED

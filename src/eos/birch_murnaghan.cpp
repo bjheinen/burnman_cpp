@@ -10,7 +10,7 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/eos/birch_murnaghan.hpp"
-#include "burnman/optim/brent_solver.hpp"
+#include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
 
 bool BM3::validate_parameters(MineralParams& params) {
@@ -99,7 +99,7 @@ double BM3::compute_volume(
   // Set a, b limits
   double x_lo = 0.1 * (*params.V_0);
   double x_hi = 1.5 * (*params.V_0);
-  double volume_root = brent::find_root(
+  double volume_root = roots::brent(
     &bm_gsl_wrapper,
     bm_params,
     x_lo,

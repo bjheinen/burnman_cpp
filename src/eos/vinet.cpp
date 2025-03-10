@@ -10,7 +10,7 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/eos/vinet.hpp"
-#include "burnman/optim/brent_solver.hpp"
+#include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
 
 bool Vinet::validate_parameters(MineralParams& params) {
@@ -97,7 +97,7 @@ double Vinet::compute_volume(
   // Set a, b limits
   double x_lo = 0.1 * (*params.V_0);
   double x_hi = 1.5 * (*params.V_0);
-  double volume_root = brent::find_root(
+  double volume_root = roots::brent(
     &vinet_gsl_wrapper,
     vinet_params,
     x_lo,

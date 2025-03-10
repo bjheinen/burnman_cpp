@@ -12,7 +12,7 @@
 #include "burnman/eos/mie_grueneisen_debye.hpp"
 #include "burnman/eos/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
-#include "burnman/optim/brent_solver.hpp"
+#include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
 
 bool MGD3::validate_parameters(MineralParams& params) {
@@ -135,7 +135,7 @@ double MGD3::compute_volume(
   // Set a, b limits
   double x_lo = 0.1 * (*params.V_0);
   double x_hi = 1.5 * (*params.V_0);
-  double volume_root = brent::find_root(
+  double volume_root = roots::brent(
     &mgd_gsl_wrapper,
     mgd_params,
     x_lo,
