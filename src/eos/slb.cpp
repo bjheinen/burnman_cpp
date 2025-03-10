@@ -18,7 +18,95 @@
 #include <iostream>
 
 bool SLB3::validate_parameters(MineralParams& params) {
-  ;// TODO
+  // Check for required keys
+  if (!params.V_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: V_0");
+  }
+  if (!params.K_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: K_0");
+  }
+  if (!params.Kprime_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: Kprime_0");
+  }
+  if (!params.molar_mass.has_value()) {
+    throw std::invalid_argument("params object missing parameter: molar_mass");
+  }
+  if (!params.napfu.has_value()) {
+    throw std::invalid_argument("params object missing parameter: napfu");
+  }
+  if (!params.debye_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: debye_0");
+  }
+  if (!params.grueneisen_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: grueneisen_0");
+  }
+  if (!params.q_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: q_0");
+  }
+
+  // Set defaults for missing values
+  if (!params.T_0.has_value()) {
+    params.T_0 = 300.0;
+  }
+  if (!params.P_0.has_value()) {
+    params.P_0 = 0.0;
+  }
+  if (!params.E_0.has_value()) {
+    params.E_0 = 0.0;
+  }
+  if (!params.F_0.has_value()) {
+    params.F_0 = std::nan("");
+  }
+  // Set G to NaN unless user has set
+  if (!params.G_0.has_value()) {
+    params.G_0 = std::nan("");
+  }
+  if (!params.Gprime_0.has_value()) {
+    params.Gprime_0 = std::nan("");
+  }
+  if (!params.eta_s_0.has_value()) {
+    params.eta_s_0 = std::nan("");
+  }
+
+  // Check values are reasonable
+  // TODO: warnings?
+  if (*params.P_0 < 0.0) {
+    ; // warnings.warn("Unusual value for P_0", stacklevel=2)
+  }
+  if (*params.V_0 < 1.0e-7 || *params.V_0 > 1.0e-3) {
+    ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
+  }
+  if (*params.K_0 < 1.0e9 || *params.K_0 > 1.0e13) {
+    ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
+  }
+  if (*params.Kprime_0 < 0.0 || *params.Kprime_0 > 20.0) {
+    ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
+  }
+  if (*params.G_0 < 0.0 || *params.G_0 > 1.0e13) {
+    ; // warnings.warn("Unusual value for G_0", stacklevel=2)
+  }
+  if (*params.Gprime_0 < -5.0 || *params.Gprime_0 > 10.0) {
+    ; // warnings.warn("Unusual value for Gprime_0", stacklevel=2)
+  }
+  if (*params.T_0 < 0.0) {
+    ; // warnings.warn("Unusual value for T_0", stacklevel=2)
+  }
+  if (*params.molar_mass < 0.001 || *params.molar_mass > 1.0) {
+    ; //warning warnings.warn("Unusual value for molar_mass", stacklevel=2)
+  }
+  if (*params.napfu < 1 || *params.napfu > 1000) {
+    ; // warning warnings.warn("Unusual value for napfu", stacklevel=2)
+  }
+  if (*params.debye_0 < 1.0 || *params.debye_0 > 10000.0) {
+    ; // warning warnings.warn("Unusual value for debye_0", stacklevel=2)
+  }
+  if (*params.grueneisen_0 < -1.0 || *params.G_0 > 10.0) {
+    ; // warnings.warn("Unusual value for grueneisen_0", stacklevel=2)
+  }
+  if (*params.q_0 < -20.0 || *params.q_0 > 10.0) {
+    ; // warnings.warn("Unusual value for q_0", stacklevel=2)
+  }
+  return 1;
 }
 
 double SLB3::slb_gsl_wrapper(double x, void* p) {
