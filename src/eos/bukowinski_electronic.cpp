@@ -51,7 +51,6 @@ double bukowinski::compute_KT_over_V(
 }
 
 double bukowinski::compute_CV_over_T(
-  double temperature,
   double volume,
   const MineralParams& params
 ) {

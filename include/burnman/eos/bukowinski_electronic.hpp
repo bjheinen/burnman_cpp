@@ -88,7 +88,6 @@ namespace bukowinski {
    * @return dS/dT
    */
   double compute_CV_over_T(
-    double temperature,
     double volume,
     const MineralParams& params);
 

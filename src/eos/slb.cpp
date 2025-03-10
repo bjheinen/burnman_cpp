@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include "burnman/eos/slb.hpp"
 #include "burnman/eos/debye.hpp"
+#include "burnman/eos/bukowinski_electronic.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
 #include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
@@ -605,4 +606,47 @@ double SLB3::compute_isotropic_eta_s(
   double gr = ONE_SIXTH / nu_o_nu0_sq * two_f_plus1 * (a1_ii + a2_iikk * f);
   // Eq. 46 (type in Stixrude 2005)
   return -gr - (0.5 * (1.0 / nu_o_nu0_sq) * two_f_plus1 * two_f_plus1 * a2_s);
+}
+
+
+// Overrides for SLB3Conductive
+
+double SLB3Conductive::compute_pressure(
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+  return SLB3::compute_pressure(temperature, volume, params)
+    + bukowinski::compute_pressure_el(temperature, volume, params);
+}
+
+double SLB3Conductive::compute_isothermal_bulk_modulus_reuss(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+  return SLB3::compute_isothermal_bulk_modulus_reuss(
+      pressure, temperature, volume, params)
+    + bukowinski::compute_KT_over_V(temperature, volume, params);
+}
+
+double SLB3Conductive::compute_molar_heat_capacity_v(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+  return SLB3::compute_molar_heat_capacity_v(
+      pressure, temperature, volume, params)
+    + temperature * bukowinski::compute_CV_over_T(volume, params);
+}
+
+double SLB3Conductive::compute_thermal_expansivity(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+  ;
 }

@@ -248,16 +248,48 @@ class SLB2 : public SLB3{
 class SLB3Conductive : public SLB3{
  public:
 
-  // Functions to override:
-  //  compute_volume
-  //  compute_pressure
-  //  compute_isothermal_bulk_modulus_reuss
-  //  compute_molar_heat_capacity_v
-  //  compute_thermal_expansivity
-  //  compute_entropy
-  //  compute_helmholtz_free_energy
-  //  compute_grueneisen_parameter
-  //  validate_parameters
+  bool validate_parameters(MineralParams& params) override;
+
+  double compute_pressure(
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
+
+  double compute_isothermal_bulk_modulus_reuss(
+    double pressure,
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
+
+  double compute_molar_heat_capacity_v(
+    double pressure,
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
+
+  double compute_thermal_expansivity(
+    double pressure,
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
+
+  double compute_entropy(
+    double pressure,
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
+
+  double compute_helmholtz_free_energy(
+    double pressure,
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
+
+  double compute_grueneisen_parameter(
+    double pressure,
+    double temperature,
+    double volume,
+    const MineralParams& params) const override;
 
  protected:
 
