@@ -20,7 +20,7 @@
  * The EOS is third order in strain, and has no temperature dependence.
  * Uses third order expansion also for shear modulus. To fit shear modulus
  * to second order expansion @see BM2
- * 
+ *
  * @note All functions assume SI units for all properties.
  */
 class BM3 : public EquationOfState{
@@ -145,7 +145,7 @@ class BM3 : public EquationOfState{
  private:
   /**
    * @brief GSL function wrapper to compute P(V) - P
-   * 
+   *
    * @param x Volume to test (passed by solver)
    * @param p Generic pointer for parameter object
    * @see `ParamsGSL::SolverParams_P`
