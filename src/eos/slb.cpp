@@ -16,8 +16,6 @@
 #include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
 
-#include <iostream>
-
 bool SLB3::validate_parameters(MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
@@ -608,9 +606,7 @@ double SLB3::compute_isotropic_eta_s(
   return -gr - (0.5 * (1.0 / nu_o_nu0_sq) * two_f_plus1 * two_f_plus1 * a2_s);
 }
 
-
 // Overrides for SLB3Conductive
-
 double SLB3Conductive::compute_pressure(
   double temperature,
   double volume,
@@ -628,7 +624,7 @@ double SLB3Conductive::compute_isothermal_bulk_modulus_reuss(
 ) const {
   return SLB3::compute_isothermal_bulk_modulus_reuss(
       pressure, temperature, volume, params)
-    + bukowinski::compute_KT_over_V(temperature, volume, params);
+    + volume * bukowinski::compute_KT_over_V(temperature, volume, params);
 }
 
 double SLB3Conductive::compute_molar_heat_capacity_v(
@@ -648,5 +644,58 @@ double SLB3Conductive::compute_thermal_expansivity(
   double volume,
   const MineralParams& params
 ) const {
-  ;
+  double K_T = compute_isothermal_bulk_modulus_reuss(
+    pressure, temperature, volume, params);
+  return SLB3::compute_thermal_expansivity(
+      pressure, temperature, volume, params)
+    + (bukowinski::compute_alpha_KT(temperature, volume, params) / K_T);
+}
+
+double SLB3Conductive::compute_entropy(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+  return SLB3::compute_entropy(pressure, temperature, volume, params)
+    + bukowinski::compute_entropy_el(temperature, volume, params);
+}
+
+double SLB3Conductive::compute_helmholtz_free_energy(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+  return SLB3::compute_helmholtz_free_energy(
+      pressure, temperature, volume, params)
+    + bukowinski::compute_helmholtz_el(temperature, volume, params);
+}
+
+double SLB3Conductive::compute_grueneisen_parameter(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+  temperature = (temperature < 1.0e-6) ? 1.0e-6 : temperature;
+  double K_T = compute_isothermal_bulk_modulus_reuss(
+    pressure, temperature, volume, params);
+  double alpha = compute_thermal_expansivity(
+    pressure, temperature, volume, params);
+  double C_v = compute_molar_heat_capacity_v(
+    pressure, temperature, volume, params);
+  return alpha * K_T * volume / C_v;
+}
+
+bool SLB3Conductive::validate_parameters(MineralParams& params) {
+  // Check for extrarequired keys
+  if (!params.bel_0.has_value()) {
+    throw std::invalid_argument("params object missing parameter: bel_0");
+  }
+  if (!params.gel.has_value()) {
+    throw std::invalid_argument("params object missing parameter: gel");
+  }
+  // Call base validate
+  return SLB3::validate_parameters(params);
 }
