@@ -17,6 +17,7 @@
 #include "burnman/eos/vinet.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
 #include "burnman/eos/mie_grueneisen_debye.hpp"
+#include "burnman/eos/slb.hpp"
 
 /**
  * @brief Makes a pointer to a predefined EOS class
@@ -35,6 +36,12 @@ std::unique_ptr<EquationOfState> make_eos(EOSType eos_type) {
       return std::make_unique<MGD2>();
     case EOSType::MGD3:
       return std::make_unique<MGD3>();
+    case EOSType::SLB2:
+      return std::make_unique<SLB2>();
+    case EOSType::SLB3:
+      return std::make_unique<SLB3>();
+    case EOSType::SLB3Conductive:
+      return std::make_unique<SLB3Conductive>();
     default:
       throw std::invalid_argument("Unknown EOS type!");
   }

@@ -154,7 +154,10 @@ enum class EOSType {
   BM3,
   BM2,
   MGD2,
-  MGD3
+  MGD3,
+  SLB2,
+  SLB3,
+  SLB3Conductive
 };
 
 /**
