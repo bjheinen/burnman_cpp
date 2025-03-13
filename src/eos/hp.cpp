@@ -114,7 +114,17 @@ double HP_TMT::compute_thermal_expansivity(
   double volume,
   const MineralParams& params
 ) const {
+  auto [a, b, c] = MT::compute_tait_constants(params);
+  double Pth = compute_relative_thermal_pressure(temperature, params);
+  double P_diff = pressure - Pth - *params.P_0;
+  double C_V0 = einstein::compute_molar_heat_capacity_v(
+    *params.T_0, *params.T_einstein, *params.napfu);
+  double C_V = einstein::compute_molar_heat_capacity_v(
+    temperature, *params.T_einstein, params.napfu);
 
+  double bPdiff_plus_one = 1.0 + b * P_diff;
+  return *params.a_0 * (C_V / C_V0)
+    / (bPdiff_plus_one * (a + (1.0 - a) * std::pow(bPdiff_plus_one, c)));
 }
 
 double HP_TMT::compute_gibbs_free_energy(
