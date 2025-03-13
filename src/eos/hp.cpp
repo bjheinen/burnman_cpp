@@ -11,6 +11,141 @@
 #include "burnman/eos/hp.hpp"
 #include "burnman/eos/einstein.hpp"
 
+bool HP_TMT::validate_parameters(MineralParams& params) {
+  
+}
+
+double HP_TMT::compute_volume(
+  double pressure,
+  double temperature,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_pressure(
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_grueneisen_parameter(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_isothermal_bulk_modulus_reuss(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_isentropic_bulk_modulus_reuss(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_shear_modulus(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_molar_heat_capacity_v(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_molar_heat_capacity_p(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_thermal_expansivity(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_gibbs_free_energy(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_entropy(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_helmholtz_free_energy(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_enthalpy(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_molar_heat_capacity_p_einstein(
+  double pressure,
+  double temperature,
+  double volume,
+  const MineralParams& params
+) const {
+
+}
+
+double HP_TMT::compute_molar_heat_capacity_pref(
+  double temperature,
+  const MineralParams& params
+) const {
+
+}
+
 double HP_TMT::compute_intCpdT(
   double temperature,
   const MineralParams& params
