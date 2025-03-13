@@ -121,7 +121,6 @@ double HP_TMT::compute_thermal_expansivity(
     *params.T_0, *params.T_einstein, *params.napfu);
   double C_V = einstein::compute_molar_heat_capacity_v(
     temperature, *params.T_einstein, *params.napfu);
-
   double bPdiff_plus_one = 1.0 + b * P_diff;
   return *params.a_0 * (C_V / C_V0)
     / (bPdiff_plus_one * (a + (1.0 - a) * std::pow(bPdiff_plus_one, c)));
@@ -169,14 +168,24 @@ double HP_TMT::compute_molar_heat_capacity_p_einstein(
   double volume,
   const MineralParams& params
 ) const {
-
+  double alpha = compute_thermal_expansivity(
+    pressure, temperature, volume, params);
+  double gamma = compute_grueneisen_parameter(
+    pressure, temperature, volume, params);
+  double C_v = compute_molar_heat_capacity_v(
+    pressure, temperature, volume, params);
+  return C_v * (1.0 + gamma * alpha * temperature);
 }
 
 double HP_TMT::compute_molar_heat_capacity_pref(
   double temperature,
   const MineralParams& params
 ) const {
-
+  CpParams cp_params = *params.Cp;
+  return cp_params.a
+    + cp_params.b * temperature
+    + cp_params.c / (temperature * temperature)
+    + cp_params.d / std::sqrt(temperature);
 }
 
 double HP_TMT::compute_intCpdT(
