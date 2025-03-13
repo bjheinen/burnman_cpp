@@ -97,7 +97,7 @@ double MT::compute_modified_tait_bulk_modulus(
 }
 
 double MT::compute_modified_tait_volume(
-  double volume,
+  double pressure,
   const MineralParams& params
 ) {
   auto [a, b, c] = compute_tait_constants(params);

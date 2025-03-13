@@ -9,10 +9,11 @@
  */
 #include <cmath>
 #include "burnman/eos/hp.hpp"
+#include "burnman/eos/modified_tait.hpp"
 #include "burnman/eos/einstein.hpp"
 
 bool HP_TMT::validate_parameters(MineralParams& params) {
-  
+
 }
 
 double HP_TMT::compute_volume(
@@ -20,7 +21,8 @@ double HP_TMT::compute_volume(
   double temperature,
   const MineralParams& params
 ) const {
-
+  double Pth = compute_relative_thermal_pressure(temperature, params);
+  return MT::compute_modified_tait_volume(pressure - Pth, params);
 }
 
 double HP_TMT::compute_pressure(
