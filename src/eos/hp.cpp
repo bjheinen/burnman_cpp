@@ -47,7 +47,7 @@ double HP_TMT::compute_grueneisen_parameter(
     pressure, temperature, volume, params);
   double C_v = compute_molar_heat_capacity_v(
     pressure, temperature, volume, params);
-  return alpha * K_T * volume / C_V;
+  return alpha * K_T * volume / C_v;
 }
 
 double HP_TMT::compute_isothermal_bulk_modulus_reuss(
@@ -90,7 +90,13 @@ double HP_TMT::compute_molar_heat_capacity_v(
   double volume,
   const MineralParams& params
 ) const {
-
+  double C_p = compute_molar_heat_capacity_p(
+    pressure, temperature, volume, params);
+  double alpha = compute_thermal_expansivity(
+    pressure, temperature, volume, params);
+  double K_T = compute_isothermal_bulk_modulus_reuss(
+    pressure, temperature, volume, params);
+  return C_p - volume * temperature * alpha * alpha * K_T;
 }
 
 double HP_TMT::compute_molar_heat_capacity_p(
