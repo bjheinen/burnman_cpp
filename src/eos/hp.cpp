@@ -45,7 +45,7 @@ double HP_TMT::compute_grueneisen_parameter(
     pressure, temperature, volume, params);
   double K_T = compute_isothermal_bulk_modulus_reuss(
     pressure, temperature, volume, params);
-  double C_V = compute_molar_heat_capacity_v(
+  double C_v = compute_molar_heat_capacity_v(
     pressure, temperature, volume, params);
   return alpha * K_T * volume / C_V;
 }
@@ -56,7 +56,8 @@ double HP_TMT::compute_isothermal_bulk_modulus_reuss(
   double volume,
   const MineralParams& params
 ) const {
-
+  double Pth = compute_relative_thermal_pressure(temperature, params);
+  return MT::compute_modified_tait_bulk_modulus(pressure - Pth, params);
 }
 
 double HP_TMT::compute_isentropic_bulk_modulus_reuss(
@@ -65,7 +66,13 @@ double HP_TMT::compute_isentropic_bulk_modulus_reuss(
   double volume,
   const MineralParams& params
 ) const {
-
+  double K_T = compute_isothermal_bulk_modulus_reuss(
+    pressure, temperature, volume, params);
+  double C_p = compute_molar_heat_capacity_p(
+    pressure, temperature, volume, params);
+  double C_v = compute_molar_heat_capacity_v(
+    pressure, temperature, volume, params);
+  return K_T * C_p / C_v;
 }
 
 double HP_TMT::compute_shear_modulus(
@@ -74,7 +81,7 @@ double HP_TMT::compute_shear_modulus(
   double volume,
   const MineralParams& params
 ) const {
-
+  return 0.0;
 }
 
 double HP_TMT::compute_molar_heat_capacity_v(
