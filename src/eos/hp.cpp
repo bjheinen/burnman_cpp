@@ -120,7 +120,7 @@ double HP_TMT::compute_thermal_expansivity(
   double C_V0 = einstein::compute_molar_heat_capacity_v(
     *params.T_0, *params.T_einstein, *params.napfu);
   double C_V = einstein::compute_molar_heat_capacity_v(
-    temperature, *params.T_einstein, params.napfu);
+    temperature, *params.T_einstein, *params.napfu);
 
   double bPdiff_plus_one = 1.0 + b * P_diff;
   return *params.a_0 * (C_V / C_V0)
