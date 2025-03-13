@@ -30,7 +30,9 @@ double HP_TMT::compute_pressure(
   double volume,
   const MineralParams& params
 ) const {
-
+  double Pth = compute_relative_thermal_pressure(temperature, params);
+  return MT::compute_modified_tait_pressure(volume / *params.V_0, params)
+    + Pth;
 }
 
 double HP_TMT::compute_grueneisen_parameter(
