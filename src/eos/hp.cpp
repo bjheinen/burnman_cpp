@@ -159,7 +159,11 @@ double HP_TMT::compute_enthalpy(
   double volume,
   const MineralParams& params
 ) const {
-
+  double G = compute_gibbs_free_energy(
+    pressure, temperature, volume, params);
+  double S = compute_entropy(
+    pressure, temperature, volume, params);
+  return G + temperature * S;
 }
 
 double HP_TMT::compute_molar_heat_capacity_p_einstein(
