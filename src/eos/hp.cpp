@@ -150,7 +150,10 @@ double HP_TMT::compute_helmholtz_free_energy(
   double volume,
   const MineralParams& params
 ) const {
-
+  // TODO: check if call to compute_volume needed instead
+  return compute_gibbs_free_energy(
+      pressure, temperature, volume, params)
+    - pressure * volume;
 }
 
 double HP_TMT::compute_enthalpy(
