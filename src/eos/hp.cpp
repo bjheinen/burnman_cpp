@@ -141,7 +141,22 @@ double HP_TMT::compute_entropy(
   double volume,
   const MineralParams& params
 ) const {
-
+  // S(P_0, T) = S_0 + int Cp/T dT
+  // S(P, T) = S(P_0, T) + dintVdP/dT
+  auto [a, b, c] = MT::compute_tait_constants(params);
+  double Pth = compute_relative_thermal_pressure(temperature, params);
+  // C_V0(T) / C_V0(T_ref)
+  double CT_over_CTref = einstein::compute_molar_heat_capacity_v(
+      temperature, *params.T_einstein, *params.napfu)
+    / einstein::compute_molar_heat_capacity_v(
+      *params.T_0, *params.T_einstein, *params.napfu);
+  double dintVdPdT = (*params.V_0) * (*params.a_0) * (*params.K_0) * a
+    * CT_over_CTref
+    * (std::pow((1.0 + b * (pressure - *params.P_0 - Pth)), -c)
+      - std::pow((1.0 - b * Pth), -c));
+  return *params.S_0
+    + compute_intCpoverTdT(temperature, params)
+    + dintVdPdT;
 }
 
 double HP_TMT::compute_helmholtz_free_energy(
