@@ -31,6 +31,22 @@ class SolutionModel {
 
 #endif // BURNMAN_CORE_SOLUTION_MODEL_HPP_INCLUDED
 
+// TODO: update needed functions
+// TODO: check vector/array types
+
+/*
+
+What data loaded in / set (interaction parameters, alphas etc., endmembers list)
+What data calculated and what type
+All calculations --> what needed (pointwise, matrix, etc.)
+
+Start with: base class, ideal, asymmetric
+
+*/
+
+
+
+
 /*
 // Derived classes
 --> TODO: AsymmetricRegularSolution
