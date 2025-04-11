@@ -8,6 +8,7 @@
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
 #include <cmath>
+#include <stdexcept>
 #include "burnman/eos/hp.hpp"
 #include "burnman/eos/modified_tait.hpp"
 #include "burnman/eos/einstein.hpp"
@@ -120,6 +121,7 @@ double HP_TMT::compute_pressure(
   double volume,
   const MineralParams& params
 ) const {
+  // TODO: Check requires V/V0
   double Pth = compute_relative_thermal_pressure(temperature, params);
   return MT::compute_modified_tait_pressure(volume / *params.V_0, params)
     + Pth;
@@ -214,7 +216,7 @@ double HP_TMT::compute_molar_heat_capacity_p(
   double x = *params.T_einstein / temperature;
   double dCv_einstdT = - (Cv_einst
     * (1.0 - 2.0 / x + 2.0 / (std::exp(x) - 1.0))
-    * x / T);
+    * x / temperature);
   double dSdT1 = -dintVdPdT * dCv_einstdT / Cv_einst;
   double dSdT = dSdT0 + dSdT1;
   return compute_molar_heat_capacity_pref(temperature, params)
@@ -247,8 +249,8 @@ double HP_TMT::compute_gibbs_free_energy(
 ) const {
   auto [a, b, c] = MT::compute_tait_constants(params);
   double Pth = compute_relative_thermal_pressure(temperature, params);
-  P_iso = pressure - Pth - *params.P_0;
-  P_diff = pressure - *params.P_0;
+  double P_iso = pressure - Pth - *params.P_0;
+  double P_diff = pressure - *params.P_0;
   double intVdP;
   if (pressure != *params.P_0) {
     intVdP = P_diff * (*params.V_0)
@@ -276,6 +278,7 @@ double HP_TMT::compute_entropy(
   // S(P, T) = S(P_0, T) + dintVdP/dT
   auto [a, b, c] = MT::compute_tait_constants(params);
   double Pth = compute_relative_thermal_pressure(temperature, params);
+  double P_iso = pressure - Pth - *params.P_0;
   // C_V0(T) / C_V0(T_ref)
   double CT_over_CTref = einstein::compute_molar_heat_capacity_v(
       temperature, *params.T_einstein, *params.napfu)
@@ -283,7 +286,7 @@ double HP_TMT::compute_entropy(
       *params.T_0, *params.T_einstein, *params.napfu);
   double dintVdPdT = (*params.V_0) * (*params.a_0) * (*params.K_0) * a
     * CT_over_CTref
-    * (std::pow((1.0 + b * (pressure - *params.P_0 - Pth)), -c)
+    * (std::pow((1.0 + b * P_iso), -c)
       - std::pow((1.0 - b * Pth), -c));
   return *params.S_0
     + compute_intCpoverTdT(temperature, params)
@@ -297,6 +300,8 @@ double HP_TMT::compute_helmholtz_free_energy(
   const MineralParams& params
 ) const {
   // TODO: check if call to compute_volume needed instead
+  // TODO: these are unused, dead code?
+  //       --> calculated via Mineral instead.
   return compute_gibbs_free_energy(
       pressure, temperature, volume, params)
     - pressure * volume;
