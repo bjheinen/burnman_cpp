@@ -1,0 +1,149 @@
+/*
+ * Copyright (c) 2025 Benedict Heinen
+ *
+ * This file is part of burnman_cpp and is licensed under the
+ * GNU General Public License v3.0 or later. See the LICENSE file
+ * or <https://www.gnu.org/licenses/> for details.
+ *
+ * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
+ */
+#include <algorithm> // For std::count
+#include <regex>
+#include <stdexcept>
+
+#include "burnman/core/solution_model.hpp"
+#include "burnman/utils/constants.hpp"
+#include "burnman/utils/string_utils.hpp"
+
+void SolutionModel::process_solution_chemistry() {
+
+
+  // Set class n_endmembers and n_sites
+  n_endmembers = formulas.size();
+  n_sites = std::count(formulas[0].begin(), formulas[0].end(), '[');
+
+  // Check that number of sites is constant
+  for (const std::string& f : formulas) {
+    if (std::count(f.begin(), f.end(), '[') != n_sites) {
+      throw std::runtime_error("All formulae must have the same number of distinct sites.");
+    }
+  }
+
+  // Store multiplicities
+  formula_multiplicities.resize(n_endmembers, n_sites);
+  // Resize other data containers
+  solution_formulae.resize(n_endmembers);
+  sites.resize(n_sites);
+  list_occupancies.resize(n_endmembers);
+  for (int i = 0; i < n_endmembers; ++i) {
+    list_occupancies[i].resize(n_sites);
+  }
+
+  // TODO: move these to more senible place, maybe factor our into utils
+  // Regex strings for splits
+  std::regex site_split_regex("\\[");
+  std::regex occ_split_regex("\\]");
+  std::regex species_split_regex("[A-Z][^A-Z]*");
+  std::regex species_frac_split_regex("([0-9][^A-Z]*)");
+
+  // Loop over endmembers
+  for (int i_mbr = 0; i_mbr < n_endmembers; ++i_mbr) {
+    // Split formula into sites - 'Mg]3', 'Al]2', 'etc.'
+    std::sregex_token_iterator it_sites(
+      formulas[i_mbr].begin(), formulas[i_mbr].end(),
+      site_split_regex, -1);
+    // Discard string before first [ by ++it first
+    std::vector<std::string> site_formulas(++it_sites, {});
+    // Loop over sites in formula
+    for (int i_site = 0; i_site < n_sites; ++i_site) {
+      // Split on ] to get site occupancy and multiplicity
+      std::sregex_token_iterator it_occ(
+        site_formulas[i_site].begin(), site_formulas[i_site].end(),
+        occ_split_regex, -1);
+      // To check if match exists before dereferencing,
+      // do if (it != std::sregex_token_iterator())
+      std::string site_occ = *it_occ++;
+      std::string site_mult_str = *it_occ;
+      // site multiplicity may have rest of formula, so split
+      site_mult_str = utils::extract_numeric_prefix(site_mult_str);
+      double site_mult = site_mult_str.empty() ? 1.0 : utils::stod(site_mult_str);
+
+      // Store multiplicity
+      formula_multiplicities(i_mbr, i_site) = site_mult;
+
+      // Split occupancy into species
+      std::vector<std::string> species;
+      std::sregex_iterator it_species(site_occ.begin(), site_occ.end(), species_split_regex);
+      for (std::sregex_iterator i = it_species; i != std::sregex_iterator(); ++i) {
+        species.push_back(i->str());
+      }
+
+      // Loop over species on site
+      for (const std::string& sp : species) {
+
+        // "Mg" --> "Mg"; "Mg1/2" --> ["Mg", "1/2"]
+        std::sregex_token_iterator it_frac(
+          sp.begin(), sp.end(),
+          species_frac_split_regex, {-1, 1}
+        );
+        std::vector<std::string> species_split(it_frac, {});
+        // Get species name and proportion (name = Mg, prop = 0.5 etc.)
+        std::string species_name = species_split[0];
+        double proportion_species_on_site;
+        if (species_split.size() == 1) {
+          proportion_species_on_site = 1.0;
+        } else {
+          proportion_species_on_site = utils::stod(species_split[1]);
+        }
+
+        solution_formulae[i_mbr][species_name] += site_mult * proportion_species_on_site;
+
+
+        // Add to sites[i_site] if not present
+        auto& site_species = sites[i_site];
+        auto species_pos = std::find(site_species.begin(), site_species.end(), species_name);
+        int i_el;
+        if (species_pos == site_species.end()) {
+          // Use current size as index of next entry
+          i_el = site_species.size();
+          site_species.push_back(species_name);
+          ++n_occupancies;
+          // Append 0 to list_occupancies for already parsed endmembers
+          // when found new species
+          for (int k = 0; k <= i_mbr; ++k) {
+            list_occupancies[k][i_site].push_back(0.0);
+          }
+        } else {
+          i_el = std::distance(site_species.begin(), species_pos);
+        }
+        // Store species occupancy
+        list_occupancies[i_mbr][i_site][i_el] = proportion_species_on_site;
+      }
+    }
+
+  }
+
+}
+  // Do site occupancies and multiplicities totals
+
+  // Loop over endmembers again
+    // total occ/mult
+
+  // Loop over sites
+    // Do species totals and site names
+
+  // Save/Make solution_model attributes
+  
+// example
+//'[Mg]3[Mg1/2Si1/2]2Si3O12'
+
+//sites:
+//['Mg]3', 'Mg1/2Si1/2]2Si3O12']
+
+//For second site:
+//occupancy: 'Mg1/2Si1/2'
+//multi: '2Si3O12' --> 2
+
+//occ: split to: ['Mg1/2', 'Si1/2']
+//Then get name of species, and proportion of species on site
+
