@@ -26,7 +26,7 @@ INCLUDE_DIR_TEST := $(TEST_DIR)/include
 # For GSL, etc. (Change if non-standard)
 # Only defined here so they can be changed
 # both should be on the system path anyway
-EXTRA_INCLUDE := /usr/local/include
+EXTRA_INCLUDE := /usr/local/include /usr/include/eigen3
 EXTRA_LIB := /usr/local/lib
 LDFLAGS_COMMON := -lgsl -lgslcblas -lm
 LDFLAGS_TEST := -lCatch2Main -lCatch2
@@ -43,7 +43,7 @@ CPPFLAGS := -MMD -MP $(INCLUDE_FLAGS_COMMON)
 # Build type specific flags
 DEBUG_FLAGS = -g -Og
 RELEASE_FLAGS = -O3 -DNDEBUG
-TEST_FLAGS = -g -O1 -fno-omit-frame-pointer #-fsanitize=address,undefined
+TEST_FLAGS = -g -O1 -fno-omit-frame-pointer -fsanitize=address,undefined
 
 # Select Mode (default: release)
 BUILD_MODE ?= release
@@ -52,6 +52,7 @@ ifeq ($(BUILD_MODE), debug)
   BUILD_SUFFIX = _debug
 else ifeq ($(BUILD_MODE), test)
   CXXFLAGS += $(TEST_FLAGS)
+  LDFLAGS_COMMON += -fsanitize=address,undefined
   BUILD_SUFFIX = _test
 else
   CXXFLAGS += $(RELEASE_FLAGS)
