@@ -1,0 +1,65 @@
+/*
+ * Copyright (c) 2025 Benedict Heinen
+ *
+ * This file is part of burnman_cpp and is licensed under the
+ * GNU General Public License v3.0 or later. See the LICENSE file
+ * or <https://www.gnu.org/licenses/> for details.
+ *
+ * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
+ */
+#ifndef BURNMAN_UTILS_STRING_UTILS_INCLUDED
+#define BURNMAN_UTILS_STRING_UTILS_INCLUDED
+
+#include <string>
+#include <regex>
+#include <stdexcept>
+
+namespace utils {
+
+  /**
+   * @brief Extracts any leading number from a string.
+   *
+   * Gets numeric prefix
+   *   (e.g.,"2SiO2" --> 2, "0.45SiO2" --> "0.45",
+   *   "1/2Fe2O3" --> "1/2", "" or "Al2O3" --> "")
+   * Works with e-2 but not E-2!
+   *
+   * @param s The string.
+   * @return Prefix string (empty string if no prefix)
+   */
+  std::string extract_numeric_prefix(const std::string& s) {
+    std::regex element_re("[A-Z][^A-Z]*");
+    std::sregex_token_iterator it(s.begin(), s.end(), element_re, -1);
+    std::sregex_token_iterator end;
+    return (it != end) ? std::string(*it) : "";
+  }
+
+  /**
+   * @brief Extended std::stod that works for fractions.
+   *
+   * e.g. "3" --> 3, "1e-2" --> 0.01, "1/2" --> 0.5
+   *
+   * @param s The string to convert.
+   * @return Numerical value
+   */
+  double stod(const std::string& s) {
+    auto slash_pos = s.find('/');
+    // If no fraction, just use std::stod
+    if (slash_pos == std::string::npos) {
+      return std::stod(s);
+    }
+    // Else, split on position of / and use std::pos on both
+    std::string numerator_str = s.substr(0, slash_pos);
+    std::string denominator_str = s.substr(slash_pos + 1);
+    double numerator = std::stod(numerator_str);
+    double denominator = std::stod(denominator_str);
+    if (denominator == 0.0) {
+      throw std::invalid_argument("Division by zero in: " + s);
+    }
+    return numerator / denominator;
+  }
+
+} // namespace utils
+
+
+#endif // BURNMAN_UTILS_STRING_UTILS_INCLUDED
