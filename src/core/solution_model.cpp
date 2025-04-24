@@ -142,32 +142,44 @@ void SolutionModel::process_solution_chemistry() {
         }
         // Store species occupancy
         list_occupancies[i_mbr][i_site][i_el] = proportion_species_on_site;
-      }
-    }
+      } // Species loop
 
-  }
+      // Could add here looping over species not on site to add to solution_formulae map
+      // Solution formulae currently unused so ignoring for now
 
-}
-  // Do site occupancies and multiplicities totals
+    } // Site loop
+
+  } // Endmember loop
+
+  // Resize occupancy/multiplicity arrays
+  endmember_occupancies.resize(n_endmembers, n_occupancies);
+  site_multiplicities.resize(n_endmembers, n_occupancies);
 
   // Loop over endmembers again
-    // total occ/mult
+  for (int i_mbr = 0; i_mbr < n_endmembers; ++i_mbr) {
+    int n_species = 0;
+    for (int i_site = 0; i_site < n_sites; ++i_site) {
+      for (size_t i_el = 0; i_el < list_occupancies[i_mbr][i_site].size(); ++i_el) {
+        endmember_occupancies(i_mbr, n_species) = list_occupancies[i_mbr][i_site][i_el];
+        site_multiplicities(i_mbr, n_species) = formula_multiplicities(i_mbr, i_site);
+        ++n_species;
+      }
+    }
+  } // Endmember loop
 
-  // Loop over sites
-    // Do species totals and site names
+  // Element-wise multiply for n_occ
+  endmember_noccupancies = endmember_occupancies * site_multiplicities;
 
-  // Save/Make solution_model attributes
-  
-// example
-//'[Mg]3[Mg1/2Si1/2]2Si3O12'
+  // Get site names
+  site_names.clear();
+  for (int i_site = 0; i_site < n_sites; ++i_site) {
+    // Grab uppercase letter from index (works to 26!)
+    char site_id = 'A' + i_site;
+    for (const std::string& sp : sites[i_site]) {
+      site_names.push_back(sp + "_" + site_id);
+    }
+  }
 
-//sites:
-//['Mg]3', 'Mg1/2Si1/2]2Si3O12']
+  // Do parsed chemical formula etc. (general and empty)
 
-//For second site:
-//occupancy: 'Mg1/2Si1/2'
-//multi: '2Si3O12' --> 2
-
-//occ: split to: ['Mg1/2', 'Si1/2']
-//Then get name of species, and proportion of species on site
-
+}

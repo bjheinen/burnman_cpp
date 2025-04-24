@@ -49,6 +49,11 @@ class SolutionModel {
   Eigen::ArrayXXd endmember_n_occupancies;
   Eigen::ArrayXXd formula_multiplicities;
 
+
+  Eigen::ArrayXXd endmember_noccupancies;
+
+  std::vector<std::string> site_names;
+
  protected:
   ;
  private:
