@@ -10,6 +10,7 @@
 #include <algorithm> // For std::count
 #include <regex>
 #include <stdexcept>
+#include <iostream>
 
 #include "burnman/core/solution_model.hpp"
 #include "burnman/utils/constants.hpp"
@@ -34,9 +35,17 @@ void SolutionModel::process_solution_chemistry() {
   // Resize other data containers
   solution_formulae.resize(n_endmembers);
   sites.resize(n_sites);
+  // List occupancies is triple nested vector
+  // std::vector<std::vector<std::vector<double>>>
+  // Outer --> n_endmembers
+  // Inner --> n_site
+  // Innermost --> n_species (not known until parsed)
   list_occupancies.resize(n_endmembers);
   for (int i = 0; i < n_endmembers; ++i) {
     list_occupancies[i].resize(n_sites);
+    for (int j = 0; j < n_sites; ++j) {
+      list_occupancies[i][j].resize(0);
+    }
   }
 
   // TODO: move these to more senible place, maybe factor our into utils
@@ -96,8 +105,8 @@ void SolutionModel::process_solution_chemistry() {
           proportion_species_on_site = utils::stod(species_split[1]);
         }
 
+        // TODO: When species spread across sites?
         solution_formulae[i_mbr][species_name] += site_mult * proportion_species_on_site;
-
 
         // Add to sites[i_site] if not present
         auto& site_species = sites[i_site];
@@ -111,10 +120,24 @@ void SolutionModel::process_solution_chemistry() {
           // Append 0 to list_occupancies for already parsed endmembers
           // when found new species
           for (int k = 0; k <= i_mbr; ++k) {
-            list_occupancies[k][i_site].push_back(0.0);
+            // Check and resize outer if needed
+            auto& occupancies = list_occupancies[k];
+            if (occupancies.size() <= i_site) {
+              occupancies.resize(i_site + 1);
+            }
+            // Check and resize inner if needed
+            auto& site_occupancy = occupancies[i_site];
+            if (site_occupancy.size() <= i_el) {
+              site_occupancy.resize(i_el + 1, 0.0);
+            }
           }
         } else {
           i_el = std::distance(site_species.begin(), species_pos);
+          // Check and resize inner if needed
+          auto& site_occupancy = list_occupancies[i_mbr][i_site];
+          if (site_occupancy.size() <= i_el) {
+            site_occupancy.resize(i_el + 1, 0.0);
+          }
         }
         // Store species occupancy
         list_occupancies[i_mbr][i_site][i_el] = proportion_species_on_site;
