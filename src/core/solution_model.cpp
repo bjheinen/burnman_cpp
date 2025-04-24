@@ -72,7 +72,8 @@ void SolutionModel::process_solution_chemistry() {
       // To check if match exists before dereferencing,
       // do if (it != std::sregex_token_iterator())
       std::string site_occ = *it_occ++;
-      std::string site_mult_str = *it_occ;
+      std::string site_mult_str = (it_occ != std::sregex_token_iterator()) ? it_occ->str() : "";
+
       // site multiplicity may have rest of formula, so split
       site_mult_str = utils::extract_numeric_prefix(site_mult_str);
       double site_mult = site_mult_str.empty() ? 1.0 : utils::stod(site_mult_str);
