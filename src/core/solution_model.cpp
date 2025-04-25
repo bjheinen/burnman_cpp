@@ -50,8 +50,8 @@ void SolutionModel::process_solution_chemistry() {
 
   // TODO: move these to more senible place, maybe factor our into utils
   // Regex strings for splits
-  std::regex site_split_regex("\\[");
-  std::regex occ_split_regex("\\]");
+  std::regex site_split_regex(R"(\[)");
+  std::regex occ_split_regex(R"(\])");
   std::regex species_split_regex("[A-Z][^A-Z]*");
   std::regex species_frac_split_regex("([0-9][^A-Z]*)");
 
@@ -181,5 +181,34 @@ void SolutionModel::process_solution_chemistry() {
   }
 
   // Do parsed chemical formula etc. (general and empty)
+  // Replace [sites] with [] on one formula for empty formula
+  std::string empty_formula;
+  std::string general_formula;
+  std::regex_replace(formulas[0], std::regex(R"(\[.*?\])"), "[]");
+  // Split empty formula on [, then re-join with site species for general
+  std::regex split_brackets(R"(\[)");
+  std::sregex_token_iterator it_empty_split(
+    empty_formula.begin(),
+    empty_formula.end(),
+    split_brackets, -1);
+  std::vector<std::string> split_empty(++it_empty_split, {});
+  general_formula = split_empty[0];
+  for (int i = 0; i < n_sites; ++i) {
+    general_formula += "[" + utils::join(sites[i], ",") + split_empty[i + 1];
+  }
+
+  // solution_model attributes to check:
+  /*
+    site_names
+    solution_formulae
+    n_sites
+    sites
+    site_multiplicities
+    n_occupancies
+    endmember_occupancies
+    endmember_noccupancies
+    empty_formula
+    general_formula
+  */
 
 }
