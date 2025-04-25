@@ -59,7 +59,28 @@ namespace utils {
     return numerator / denominator;
   }
 
-} // namespace utils
+  /**
+   * @brief Join vector of strings (a la Python .join())
+   *
+   * @param string_list std::vector of string elements
+   * @param delimiter optional delimiter to join strings
+   *
+   * @return Concatenated string
+   */
+  std::string join(
+    const std::vector<std::string>& string_list,
+    const std::string& delimiter = ""
+  ) {
+    std::string result;
+    for (size_t i = 0; i < string_list.size(); ++i) {
+      result += string_list[i];
+      if (i + 1 < string_list.size()) {
+        result += delimiter;
+      }
+    }
+    return result;
+  }
 
+} // namespace utils
 
 #endif // BURNMAN_UTILS_STRING_UTILS_INCLUDED
