@@ -10,7 +10,6 @@
 #include <algorithm> // For std::count
 #include <regex>
 #include <stdexcept>
-#include <iostream>
 
 #include "burnman/core/solution_model.hpp"
 #include "burnman/utils/constants.hpp"
@@ -184,14 +183,18 @@ void SolutionModel::process_solution_chemistry() {
   // Replace [sites] with [] on one formula for empty formula
   std::string empty_formula;
   std::string general_formula;
-  std::regex_replace(formulas[0], std::regex(R"(\[.*?\])"), "[]");
+  empty_formula = std::regex_replace(formulas[0], std::regex(R"(\[.*?\])"), "[]");
   // Split empty formula on [, then re-join with site species for general
   std::regex split_brackets(R"(\[)");
   std::sregex_token_iterator it_empty_split(
     empty_formula.begin(),
     empty_formula.end(),
     split_brackets, -1);
-  std::vector<std::string> split_empty(++it_empty_split, {});
+  std::sregex_token_iterator end;
+  std::vector<std::string> split_empty(it_empty_split, end);
+  // Cut first element here if needed to stop overflow from pre-increment
+  if (!split_empty.empty() && split_empty[0].empty())
+    split_empty.erase(split_empty.begin());
   general_formula = split_empty[0];
   for (int i = 0; i < n_sites; ++i) {
     general_formula += "[" + utils::join(sites[i], ",") + split_empty[i + 1];
