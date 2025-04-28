@@ -24,35 +24,29 @@ class SolutionModel {
 
  public:
 
-  virtual ~SolutionModel() = default;
-  void process_solution_chemistry();
-
-  // TODO:
-  //  Re-order
-  //  Check members and move to protected/private if possible...
-  //  Consider size_t for n_endmembers etc.
-  // Solution formulae -- vector with entry for each endmember
-  std::vector<std::map<std::string, double>> solution_formulae;
-  // Sites, list of lists with site possible atoms
-  std::vector<std::vector<std::string>> sites;
-  // Nested vector of occupancies for parsing
-  std::vector<std::vector<std::vector<double>>> list_occupancies;
-  int n_occupancies = 0;
-  int n_endmembers;
+  // Pointers to endmember Mineral objects
   // endmembers --> vector of pointers to Mineral classes
-  std::vector<std::string> formulas;
-  // std::string empty_formula;
-  // std::string general_formula;
+  // Counts
+  int n_endmembers;
   int n_sites;
+  int n_occupancies;
+  // Site multiplicity and occupancy matrices
   Eigen::ArrayXXd site_multiplicities;
   Eigen::ArrayXXd endmember_occupancies;
   Eigen::ArrayXXd endmember_n_occupancies;
-  Eigen::ArrayXXd formula_multiplicities;
+  // Chemical formula/site information and strings
+  std::vector<std::string> formulas; // Endmember formulas
+  std::string empty_formula; // Formula stripped of site info
+  std::string general_formula; // Combined solution formula
+  std::vector<std::map<std::string, double>> solution_formulae; // Map of site chem for each em.
+  std::vector<std::string> site_names; // Generic site names
+  std::vector<std::vector<std::string>> sites; // Species on equivalent sites
+  // TODO:
+  //  Check members and move to protected/private if possible...
+  //  Consider size_t for n_endmembers etc.
 
-
-  Eigen::ArrayXXd endmember_noccupancies;
-
-  std::vector<std::string> site_names;
+  virtual ~SolutionModel() = default;
+  void process_solution_chemistry();
 
  protected:
   ;

@@ -17,6 +17,8 @@
 
 void SolutionModel::process_solution_chemistry() {
 
+  // Reset n_occupancies count to zero
+  n_occupancies = 0;
 
   // Set class n_endmembers and n_sites
   n_endmembers = formulas.size();
@@ -28,6 +30,10 @@ void SolutionModel::process_solution_chemistry() {
       throw std::runtime_error("All formulae must have the same number of distinct sites.");
     }
   }
+
+  // Make intermediate occ/mult data containers for parsing
+  Eigen::ArrayXXd formula_multiplicities;
+  std::vector<std::vector<std::vector<double>>> list_occupancies;
 
   // Store multiplicities
   formula_multiplicities.resize(n_endmembers, n_sites);
@@ -47,7 +53,7 @@ void SolutionModel::process_solution_chemistry() {
     }
   }
 
-  // TODO: move these to more senible place, maybe factor our into utils
+  // TODO: move these to more senible place, maybe factor out into string_utils
   // Regex strings for splits
   std::regex site_split_regex(R"(\[)");
   std::regex occ_split_regex(R"(\])");
@@ -142,12 +148,9 @@ void SolutionModel::process_solution_chemistry() {
         // Store species occupancy
         list_occupancies[i_mbr][i_site][i_el] = proportion_species_on_site;
       } // Species loop
-
       // Could add here looping over species not on site to add to solution_formulae map
       // Solution formulae currently unused so ignoring for now
-
     } // Site loop
-
   } // Endmember loop
 
   // Resize occupancy/multiplicity arrays
@@ -167,7 +170,7 @@ void SolutionModel::process_solution_chemistry() {
   } // Endmember loop
 
   // Element-wise multiply for n_occ
-  endmember_noccupancies = endmember_occupancies * site_multiplicities;
+  endmember_n_occupancies = endmember_occupancies * site_multiplicities;
 
   // Get site names
   site_names.clear();
@@ -181,8 +184,6 @@ void SolutionModel::process_solution_chemistry() {
 
   // Do parsed chemical formula etc. (general and empty)
   // Replace [sites] with [] on one formula for empty formula
-  std::string empty_formula;
-  std::string general_formula;
   empty_formula = std::regex_replace(formulas[0], std::regex(R"(\[.*?\])"), "[]");
   // Split empty formula on [, then re-join with site species for general
   std::regex split_brackets(R"(\[)");
@@ -199,19 +200,5 @@ void SolutionModel::process_solution_chemistry() {
   for (int i = 0; i < n_sites; ++i) {
     general_formula += "[" + utils::join(sites[i], ",") + split_empty[i + 1];
   }
-
-  // solution_model attributes to check:
-  /*
-    site_names
-    solution_formulae
-    n_sites
-    sites
-    site_multiplicities
-    n_occupancies
-    endmember_occupancies
-    endmember_noccupancies
-    empty_formula
-    general_formula
-  */
 
 }
