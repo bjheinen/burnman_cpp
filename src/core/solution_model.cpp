@@ -202,3 +202,59 @@ void SolutionModel::process_solution_chemistry() {
   }
 
 }
+
+double SolutionModel::compute_excess_gibbs_free_energy(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return (
+    molar_fractions
+    * compute_excess_partial_gibbs_free_energies(pressure, temperature, molar_fractions)
+  ).sum();
+}
+
+double SolutionModel::compute_excess_volume(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return (
+    molar_fractions
+    * compute_excess_partial_volumes(pressure, temperature, molar_fractions)
+  ).sum();
+}
+
+double SolutionModel::compute_excess_entropy(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return (
+    molar_fractions
+    * compute_excess_partial_entropies(pressure, temperature, molar_fractions)
+  ).sum();
+}
+
+double SolutionModel::compute_excess_enthalpy(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return compute_excess_gibbs_free_energy(
+      pressure, temperature, molar_fractions)
+    + temperature * compute_excess_entropy(
+      pressure, temperature, molar_fractions);
+}
+
+double SolutionModel::compute_Cp_excess() const {
+  return 0.0;
+}
+
+double SolutionModel::compute_alphaV_excess() const {
+  return 0.0;
+}
+
+double SolutionModel::compute_VoverKT_excess() const {
+  return 0.0;
+}
