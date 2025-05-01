@@ -258,3 +258,70 @@ double SolutionModel::compute_alphaV_excess() const {
 double SolutionModel::compute_VoverKT_excess() const {
   return 0.0;
 }
+
+// Public function overrides for IdealSolution
+Eigen::ArrayXd IdealSolution::compute_excess_partial_gibbs_free_energies(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return compute_ideal_excess_partial_gibbs(temperature, molar_fractions);
+}
+
+Eigen::ArrayXd IdealSolution::compute_excess_partial_entropies(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return compute_ideal_excess_partial_entropies(molar_fractions);
+}
+
+Eigen::ArrayXd IdealSolution::compute_excess_partial_volumes(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return Eigen::ArrayXd::Zero(n_endmembers);
+}
+
+Eigen::MatrixXd IdealSolution::compute_gibbs_hessian(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return -temperature * compute_ideal_entropy_hessian(molar_fractions);
+}
+
+Eigen::MatrixXd IdealSolution::compute_entropy_hessian(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return compute_ideal_entropy_hessian(molar_fractions);
+}
+
+Eigen::MatrixXd IdealSolution::compute_volume_hessian(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return Eigen::MatrixXd::Zero(n_endmembers, n_endmembers);
+}
+
+Eigen::ArrayXd IdealSolution::compute_activities(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return compute_ideal_activities(molar_fractions);
+}
+
+Eigen::ArrayXd IdealSolution::compute_activity_coefficients(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return Eigen::ArrayXd::Ones(n_endmembers);
+}
+
+// Private functions for IdealSolution
