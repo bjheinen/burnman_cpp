@@ -254,15 +254,12 @@ class SolutionModel {
   ;
 };
 
-// IdealSolution
-//add to init --> calculate_endmember_configurational_entropies
-
 /**
  * @class IdealSolution
  * @brief Ideal solution model.
  *
  * Derived from SolutionModel.
- * Calculated the excess gibbs free energy and etropy due to configurational entropy.
+ * Calculates the excess gibbs free energy and etropy due to configurational entropy.
  * Excess internal energy and volume are equal to zero.
  *
  * The multiplicity of each type of site in the structure is allowed to change
@@ -271,7 +268,86 @@ class SolutionModel {
  *
  */
 class IdealSolution : public SolutionModel{
+
  public:
+
+  // Init - process_solution_chemistry
+  //      - calc endmember_configurational_entropy
+
+  // Public functions overriden from base class
+  Eigen::ArrayXd compute_excess_partial_gibbs_free_energies(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_excess_partial_entropies(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_excess_partial_volumes(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_activities(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_activity_coefficients(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::MatrixXd compute_gibbs_hessian(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::MatrixXd compute_entropy_hessian(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::MatrixXd compute_volume_hessian(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+ protected:
+
+ private:
+
+  // Public or protected member variable?
+  Eigen::ArrayXd endmember_configurational_entropies;
+  Eigen::ArrayXd compute_endmember_configurational_entropies() const;
+
+  // This is unused in python?
+  double compute_configurational_entropy(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::ArrayXd compute_ideal_excess_partial_gibbs(
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::ArrayXd compute_ideal_excess_partial_entropies(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::ArrayXd compute_ideal_activities(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::ArrayXd compute_log_ideal_activities(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::MatrixXd compute_log_ideal_activity_derivatives(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::MatrixXd compute_ideal_entropy_hessian(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  // Want to make and cache, ones, eyeones, eye
+  // Not really used --> would make protected and create in setup
 
 };
 
