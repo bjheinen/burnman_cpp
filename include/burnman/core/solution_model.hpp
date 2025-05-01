@@ -13,19 +13,24 @@
 #include <string>
 #include <map>
 #include <Eigen/Dense>
+#include "burnman/core/mineral.hpp"
 
 /**
- * Base class for solution models.
-
-  TODO
-  
- */ 
+ * @class SolutionModel
+ * @brief Base class for solution models.
+ *
+ * Specific solution models should derive from this class and implement
+ * all declared functions. Solution models are used by the Solution class.
+ */
 class SolutionModel {
 
  public:
 
-  // Pointers to endmember Mineral objects
-  // endmembers --> vector of pointers to Mineral classes
+  // Using Mineral objects for now - must be instance not derived class!
+  // For derived classes we need unique_ptr instead.
+  std::vector<Mineral> endmembers;
+  /// use endmembers.emplace_back( ) to add
+
   // Counts
   int n_endmembers;
   int n_sites;
