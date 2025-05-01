@@ -15,6 +15,8 @@
 #include <Eigen/Dense>
 #include "burnman/core/mineral.hpp"
 
+// TODO: rename IdealSolution -> IdealSolutionModel etc.?
+
 /**
  * @class SolutionModel
  * @brief Base class for solution models.
@@ -349,6 +351,101 @@ class IdealSolution : public SolutionModel{
   // Want to make and cache, ones, eyeones, eye
   // Not really used --> would make protected and create in setup
 
+};
+
+/**
+ * @class AsymmetricRegularSolution
+ * @brief Asymmetric regular solution model.
+ *
+ * Derived from IdealSolution.
+ * Implements the asymmetric regular solution model desribed in Holland &
+ * Powell, 2003.
+ *
+ * The excess non-configurational Gibbs energy is given by the expression:
+ * \f[
+ * \mathcal{G}_{\textrm{excess}} = \alpha^T p (\phi^T W \phi)
+ * \f]
+ * \f$\alpha\f$ is a vector of van Laar parameters governing asymmetry in the
+ * excess properties, i.e.:
+ * \f[
+ * \phi_i = \frac{\alpha_i p_i}{\sum_{k=1}^{n} \alpha_k p_k}, \quad
+ * W_{ij} = \frac{2 w_{ij}}{\alpha_i + \alpha_j} \quad \text{for } i < j
+ * \f]
+ *
+ * See `SymmetricRegularSolution' for the special case where all alpha = 1.
+ */
+class AsymmetricRegularSolution : public IdealSolution{
+
+ public:
+
+  // Setup in __init__!
+
+  Eigen::ArrayXd compute_excess_partial_gibbs_free_energies(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_excess_partial_entropies(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_excess_partial_volumes(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_activities(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::ArrayXd compute_activity_coefficients(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::MatrixXd compute_gibbs_hessian(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::MatrixXd compute_entropy_hessian(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+  Eigen::MatrixXd compute_volume_hessian(
+    double pressure,
+    double temperature,
+    const Eigen::ArrayXd& molar_fractions) const override;
+
+ protected:
+
+ private:
+
+  Eigen::ArrayXd compute_phi(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::ArrayXd compute_non_ideal_interactions (
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::ArrayXd compute_non_ideal_excess_partial_gibbs (
+    const Eigen::ArrayXd& molar_fractions) const;
+
+};
+
+/**
+ * @class SymmetricRegularSolution
+ * @brief Convenience class for a symmetric regular solution model.
+ *
+ * This class is a special case of `AsymmetricRegularSolution' with all
+ * alphas set to 1.
+ *
+ */
+class SymmetricRegularSolution : public AsymmetricRegularSolution{
+  // Only change to setup, with alpha = 1,1,1,...
+  ;
 };
 
 #endif // BURNMAN_CORE_SOLUTION_MODEL_HPP_INCLUDED
