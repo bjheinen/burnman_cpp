@@ -51,6 +51,8 @@ namespace constants {
     constexpr double double_eps = std::numeric_limits<double>::epsilon();
     constexpr double rel_tolerance_eps = 4.0 * double_eps;
     constexpr double abs_tolerance = 1.0e-12;
+    constexpr double inverseish_eps = 1.0e-5;
+    constexpr double logish_eps = 1.0e-7;
   }
 }
 
