@@ -438,6 +438,8 @@ class AsymmetricRegularSolution : public IdealSolution{
     const Eigen::ArrayXd& molar_fractions) const;
 
   Eigen::ArrayXd compute_non_ideal_excess_partial_gibbs(
+    double pressure,
+    double temperature,
     const Eigen::ArrayXd& molar_fractions) const;
 
   Eigen::MatrixXd compute_non_ideal_hessian(

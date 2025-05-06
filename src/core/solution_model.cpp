@@ -326,7 +326,6 @@ Eigen::ArrayXd IdealSolution::compute_activity_coefficients(
 }
 
 // Private functions for IdealSolution
-
 Eigen::ArrayXd IdealSolution::compute_endmember_configurational_entropies() const {
   return -constants::physics::gas_constant
   * (endmember_n_occupancies
@@ -406,7 +405,8 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_gibbs_free_ener
 ) const {
   return IdealSolution::compute_excess_partial_gibbs_free_energies(
       pressure, temperature, molar_fractions)
-    + compute_non_ideal_excess_partial_gibbs(molar_fractions);
+    + compute_non_ideal_excess_partial_gibbs(
+      pressure, temperature, molar_fractions);
 }
 
 Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_entropies(
@@ -482,4 +482,50 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_activity_coefficients(
   return (compute_non_ideal_excess_partial_gibbs(molar_fractions)
       / (constants::physics::gas_constant * temperature)
     ).exp();
+}
+
+// Private compute functions for AsymmetricRegularSolution
+
+
+Eigen::ArrayXd AsymmetricRegularSolution::compute_phi(
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  Eigen::ArrayXd phi = alphas * molar_fractions;
+  return phi / phi.sum();
+}
+
+Eigen::ArrayXd AsymmetricRegularSolution::compute_non_ideal_interactions(
+  const Eigen::MatrixXd& W,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  Eigen::ArrayXd phi = compute_phi(molar_fractions);
+  Eigen::MatrixXd I = Eigen::MatrixXd::Identity(n_endmembers, n_endmembers);
+  Eigen::MatrixXd q = I.rowwise() - phi.matrix().transpose();
+  Eigen::ArrayXd W_int = -alphas * (q * W).cwiseProduct(q).rowwise().sum().array();
+  return W_int;
+}
+
+Eigen::ArrayXd AsymmetricRegularSolution::compute_non_ideal_excess_partial_gibbs(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  Eigen::ArrayXd E_int = compute_non_ideal_interactions(W_e, molar_fractions);
+  Eigen::ArrayXd S_int = compute_non_ideal_interactions(W_s, molar_fractions);
+  Eigen::ArrayXd V_int = compute_non_ideal_interactions(W_v, molar_fractions);
+  return E_int - temperature * S_int + pressure * V_int;
+}
+
+Eigen::MatrixXd AsymmetricRegularSolution::compute_non_ideal_hessian(
+  const Eigen::MatrixXd& interactions,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  // Maybe factor out - reused in non_ideal_interactions
+  Eigen::ArrayXd phi = compute_phi(molar_fractions);
+  Eigen::MatrixXd I = Eigen::MatrixXd::Identity(n_endmembers, n_endmembers);
+  Eigen::MatrixXd q = I.rowwise() - phi.matrix().transpose();
+  //
+  double sum_pa = molar_fractions.matrix().dot(alphas.matrix());
+  // TODO
+
 }
