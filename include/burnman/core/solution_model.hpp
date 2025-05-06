@@ -380,6 +380,12 @@ class AsymmetricRegularSolution : public IdealSolution{
 
   // Setup in __init__!
 
+  // Alphas (van Laar) and interaction parameters
+  Eigen::ArrayXd alphas;
+  Eigen::MatrixXd W_e; // energy interactions
+  Eigen::MatrixXd W_s; // entropy interactions
+  Eigen::MatrixXd W_v; // volume interactions
+
   Eigen::ArrayXd compute_excess_partial_gibbs_free_energies(
     double pressure,
     double temperature,
@@ -427,10 +433,15 @@ class AsymmetricRegularSolution : public IdealSolution{
   Eigen::ArrayXd compute_phi(
     const Eigen::ArrayXd& molar_fractions) const;
 
-  Eigen::ArrayXd compute_non_ideal_interactions (
+  Eigen::ArrayXd compute_non_ideal_interactions(
+    const Eigen::MatrixXd& W,
     const Eigen::ArrayXd& molar_fractions) const;
 
-  Eigen::ArrayXd compute_non_ideal_excess_partial_gibbs (
+  Eigen::ArrayXd compute_non_ideal_excess_partial_gibbs(
+    const Eigen::ArrayXd& molar_fractions) const;
+
+  Eigen::MatrixXd compute_non_ideal_hessian(
+    const Eigen::MatrixXd& interactions,
     const Eigen::ArrayXd& molar_fractions) const;
 
 };

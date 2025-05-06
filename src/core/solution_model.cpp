@@ -396,3 +396,90 @@ Eigen::MatrixXd IdealSolution::compute_ideal_entropy_hessian(
   return constants::physics::gas_constant
     * compute_log_ideal_activity_derivatives(molar_fractions);
 }
+
+
+// Public function overrides for AsymmetricRegularSolution
+Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_gibbs_free_energies(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return IdealSolution::compute_excess_partial_gibbs_free_energies(
+      pressure, temperature, molar_fractions)
+    + compute_non_ideal_excess_partial_gibbs(molar_fractions);
+}
+
+Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_entropies(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return IdealSolution::compute_excess_partial_entropies(
+      pressure, temperature, molar_fractions)
+    + compute_non_ideal_interactions(W_e, molar_fractions);
+}
+
+Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_volumes(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return IdealSolution::compute_excess_partial_volumes(
+      pressure, temperature, molar_fractions)
+    + compute_non_ideal_interactions(W_v, molar_fractions);
+}
+
+Eigen::MatrixXd AsymmetricRegularSolution::compute_gibbs_hessian(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  Eigen::MatrixXd interactions = W_e - temperature * W_s + pressure * W_v;
+  return IdealSolution::compute_gibbs_hessian(
+      pressure, temperature, molar_fractions)
+    + compute_non_ideal_hessian(interactions, molar_fractions);
+}
+
+Eigen::MatrixXd AsymmetricRegularSolution::compute_entropy_hessian(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return IdealSolution::compute_entropy_hessian(
+      pressure, temperature, molar_fractions)
+    + compute_non_ideal_hessian(W_s, molar_fractions);
+}
+
+Eigen::MatrixXd AsymmetricRegularSolution::compute_volume_hessian(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return IdealSolution::compute_volume_hessian(
+      pressure, temperature, molar_fractions)
+    + compute_non_ideal_hessian(W_v, molar_fractions);
+}
+
+Eigen::ArrayXd AsymmetricRegularSolution::compute_activities(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  return IdealSolution::compute_activities(
+      pressure, temperature, molar_fractions)
+    * compute_activity_coefficients(
+      pressure, temperature, molar_fractions);
+}
+
+Eigen::ArrayXd AsymmetricRegularSolution::compute_activity_coefficients(
+  double pressure,
+  double temperature,
+  const Eigen::ArrayXd& molar_fractions
+) const {
+  if (temperature < constants::precision::abs_tolerance) {
+    throw std::runtime_error("Activity coefficients undefined at 0 K.");
+  }
+  return (compute_non_ideal_excess_partial_gibbs(molar_fractions)
+      / (constants::physics::gas_constant * temperature)
+    ).exp();
+}
