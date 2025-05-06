@@ -27,7 +27,7 @@ namespace utils {
    * @param s The string.
    * @return Prefix string (empty string if no prefix)
    */
-  std::string extract_numeric_prefix(const std::string& s) {
+  inline std::string extract_numeric_prefix(const std::string& s) {
     std::regex element_re("[A-Z][^A-Z]*");
     std::sregex_token_iterator it(s.begin(), s.end(), element_re, -1);
     std::sregex_token_iterator end;
@@ -42,7 +42,7 @@ namespace utils {
    * @param s The string to convert.
    * @return Numerical value
    */
-  double stod(const std::string& s) {
+  inline double stod(const std::string& s) {
     auto slash_pos = s.find('/');
     // If no fraction, just use std::stod
     if (slash_pos == std::string::npos) {
@@ -67,7 +67,7 @@ namespace utils {
    *
    * @return Concatenated string
    */
-  std::string join(
+  inline std::string join(
     const std::vector<std::string>& string_list,
     const std::string& delimiter = ""
   ) {
