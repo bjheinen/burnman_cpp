@@ -479,9 +479,11 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_activity_coefficients(
   if (temperature < constants::precision::abs_tolerance) {
     throw std::runtime_error("Activity coefficients undefined at 0 K.");
   }
-  return (compute_non_ideal_excess_partial_gibbs(molar_fractions)
-      / (constants::physics::gas_constant * temperature)
-    ).exp();
+  return (
+    compute_non_ideal_excess_partial_gibbs(
+      pressure, temperature, molar_fractions)
+    / (constants::physics::gas_constant * temperature)
+  ).exp();
 }
 
 // Private compute functions for AsymmetricRegularSolution
@@ -526,6 +528,9 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_non_ideal_hessian(
   Eigen::MatrixXd q = I.rowwise() - phi.matrix().transpose();
   //
   double sum_pa = molar_fractions.matrix().dot(alphas.matrix());
-  // TODO
-
+  Eigen::MatrixXd alpha_outer_product = alphas.matrix() * (alphas/sum_pa).matrix().transpose();
+  Eigen::MatrixXd qWq_product = q * interactions * q.transpose();
+  Eigen::MatrixXd weighted_product = qWq_product.cwiseProduct(alpha_outer_product);
+  Eigen::MatrixXd hessian = weighted_product + weighted_product.transpose();
+  return hessian;
 }
