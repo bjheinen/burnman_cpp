@@ -12,6 +12,8 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <utility>
 #include <Eigen/Dense>
 #include "burnman/core/mineral.hpp"
 
@@ -27,6 +29,9 @@
 class SolutionModel {
 
  public:
+
+  using MineralFormulaPair = std::pair<Mineral, std::string>;
+  using PairedEndmemberList = std::vector<MineralFormulaPair>;
 
   // Using Mineral objects for now - must be instance not derived class!
   // For derived classes we need unique_ptr instead.
@@ -50,12 +55,14 @@ class SolutionModel {
   std::vector<std::vector<std::string>> sites; // Species on equivalent sites
   // TODO:
   //  Check members and move to protected/private if possible...
+  // const std::vector<Mineral>& minerals() const { return minerals; } ...etc.
   //  Consider size_t for n_endmembers etc.
+
+  // Constructor
+  SolutionModel(const PairedEndmemberList& endmember_list);
 
   virtual ~SolutionModel() = default;
   void process_solution_chemistry();
-
-  // TODO: Size of ArrayXd/MatrixXd in n_endmembers... can we pre-allocate?
 
   // Public functions always using base class implementation
   /**
@@ -273,8 +280,8 @@ class IdealSolution : public SolutionModel{
 
  public:
 
-  // Init - process_solution_chemistry
-  //      - calc endmember_configurational_entropy
+  // Extend constructor
+  IdealSolution(const SolutionModel::PairedEndmemberList& endmember_list);
 
   // Public functions overriden from base class
   Eigen::ArrayXd compute_excess_partial_gibbs_free_energies(
@@ -378,7 +385,12 @@ class AsymmetricRegularSolution : public IdealSolution{
 
  public:
 
-  // Setup in __init__!
+  AsymmetricRegularSolution(
+    const SolutionModel::PairedEndmemberList& endmember_list,
+    std::vector<double> alphas,
+    std::vector<std::vector<double>> energy_interaction,
+    std::vector<std::vector<double>> volume_interaction = {},
+    std::vector<std::vector<double>> entropy_interaction = {});
 
   // Alphas (van Laar) and interaction parameters
   Eigen::ArrayXd alphas;

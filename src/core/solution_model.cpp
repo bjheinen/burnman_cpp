@@ -15,14 +15,27 @@
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/string_utils.hpp"
 #include "burnman/utils/math_utils.hpp"
+#include "burnman/utils/matrix_utils.hpp"
+
+SolutionModel::SolutionModel(const PairedEndmemberList& endmember_list) {
+  n_endmembers = endmember_list.size();
+  endmembers.reserve(n_endmembers);
+  formulas.reserve(n_endmembers);
+  // Unpack and store endmembers/formulas separately
+  for (const auto& [mineral, formula] : endmember_list) {
+    endmembers.push_back(mineral);
+    formulas.push_back(formula);
+  }
+  // Process chemistry sets up site multiplicities/occupancies etc.
+  process_solution_chemistry();
+}
 
 void SolutionModel::process_solution_chemistry() {
 
   // Reset n_occupancies count to zero
   n_occupancies = 0;
 
-  // Set class n_endmembers and n_sites
-  n_endmembers = formulas.size();
+  // Set class n_sites
   n_sites = std::count(formulas[0].begin(), formulas[0].end(), '[');
 
   // Check that number of sites is constant
@@ -260,6 +273,13 @@ double SolutionModel::compute_VoverKT_excess() const {
   return 0.0;
 }
 
+// Constructor for IdealSolution
+IdealSolution::IdealSolution(const SolutionModel::PairedEndmemberList& endmember_list)
+  : SolutionModel(endmember_list) {
+  // Calculate configurational entropies also
+  endmember_configurational_entropies = compute_endmember_configurational_entropies();
+}
+
 // Public function overrides for IdealSolution
 Eigen::ArrayXd IdealSolution::compute_excess_partial_gibbs_free_energies(
   double pressure,
@@ -396,6 +416,40 @@ Eigen::MatrixXd IdealSolution::compute_ideal_entropy_hessian(
     * compute_log_ideal_activity_derivatives(molar_fractions);
 }
 
+// Constructor for AsymmetricRegularSolution
+AsymmetricRegularSolution::AsymmetricRegularSolution(
+  const SolutionModel::PairedEndmemberList& endmember_list,
+  std::vector<double> alphas_vector,
+  std::vector<std::vector<double>> energy_interaction,
+  std::vector<std::vector<double>> volume_interaction,
+  std::vector<std::vector<double>> entropy_interaction
+) : IdealSolution(endmember_list) {
+  // Map alphas to an Eigen::ArrayXd
+  Eigen::ArrayXd alphas = Eigen::Map<Eigen::ArrayXd>(
+    alphas_vector.data(), alphas_vector.size());
+
+  W_e = utils::populate_interaction_matrix(
+    utils::jagged2square(energy_interaction, n_endmembers),
+    alphas,
+    n_endmembers);
+
+  if (!volume_interaction.empty()) {
+    W_v = utils::populate_interaction_matrix(
+      utils::jagged2square(volume_interaction, n_endmembers),
+      alphas,
+      n_endmembers);
+  } else {
+    W_v = Eigen::MatrixXd::Zero(n_endmembers, n_endmembers);
+  }
+  if (!entropy_interaction.empty()) {
+    W_s = utils::populate_interaction_matrix(
+      utils::jagged2square(entropy_interaction, n_endmembers),
+      alphas,
+      n_endmembers);
+  } else {
+    W_s = Eigen::MatrixXd::Zero(n_endmembers, n_endmembers);
+  }
+}
 
 // Public function overrides for AsymmetricRegularSolution
 Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_gibbs_free_energies(
@@ -487,7 +541,6 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_activity_coefficients(
 }
 
 // Private compute functions for AsymmetricRegularSolution
-
 
 Eigen::ArrayXd AsymmetricRegularSolution::compute_phi(
   const Eigen::ArrayXd& molar_fractions
