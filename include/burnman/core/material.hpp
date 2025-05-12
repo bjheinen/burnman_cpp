@@ -79,10 +79,10 @@ class Material {
    * Overloaded function to allow custom EOS classes derived
    * from EquationOfState to be set by the user.
    *
-   * @param new_method std::unique_ptr to the EOS class.
+   * @param new_method std::shared_ptr to the EOS class.
    * @throws NotImplementedError if default implementation called.
    */
-  virtual void set_method(std::unique_ptr<EquationOfState> new_method);
+  virtual void set_method(std::shared_ptr<EquationOfState> new_method);
 
   /**
    * @brief Sets the material to given pressure and temperature

@@ -22,26 +22,26 @@
 /**
  * @brief Makes a pointer to a predefined EOS class
  * @param eos_type EOSType enum specifying equation of state
- * @return std::unique_ptr to an instance of the specific EOS
+ * @return std::shared_ptr to an instance of the specific EOS
  */
-std::unique_ptr<EquationOfState> make_eos(EOSType eos_type) {
+std::shared_ptr<EquationOfState> make_eos(EOSType eos_type) {
   switch (eos_type) {
     case EOSType::Vinet:
-      return std::make_unique<Vinet>();
+      return std::make_shared<Vinet>();
     case EOSType::BM2:
-      return std::make_unique<BM2>();
+      return std::make_shared<BM2>();
     case EOSType::BM3:
-      return std::make_unique<BM3>();
+      return std::make_shared<BM3>();
     case EOSType::MGD2:
-      return std::make_unique<MGD2>();
+      return std::make_shared<MGD2>();
     case EOSType::MGD3:
-      return std::make_unique<MGD3>();
+      return std::make_shared<MGD3>();
     case EOSType::SLB2:
-      return std::make_unique<SLB2>();
+      return std::make_shared<SLB2>();
     case EOSType::SLB3:
-      return std::make_unique<SLB3>();
+      return std::make_shared<SLB3>();
     case EOSType::SLB3Conductive:
-      return std::make_unique<SLB3Conductive>();
+      return std::make_shared<SLB3Conductive>();
     default:
       throw std::invalid_argument("Unknown EOS type!");
   }

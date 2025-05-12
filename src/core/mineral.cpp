@@ -24,8 +24,8 @@ excesses::Excesses Mineral::get_property_modifiers() const {
   return property_modifier_excesses;
 }
 
-void Mineral::set_method(std::unique_ptr<EquationOfState> new_method) {
-  // Here new_method is a unique pointer to an EOS class
+void Mineral::set_method(std::shared_ptr<EquationOfState> new_method) {
+  // Here new_method is a shared pointer to an EOS class
   eos_method = std::move(new_method);
   // Set the params.equation_of_state to Custom
   params.equation_of_state = EOSType::Custom;
