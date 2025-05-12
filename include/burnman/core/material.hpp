@@ -55,7 +55,7 @@ class Material {
    * Resets cached material properties to empty `std::optional` so that
    * they are freshly computed on next query.
    */
-  void reset();
+  virtual void reset();
 
   // Public setter functions
   /**
