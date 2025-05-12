@@ -449,7 +449,7 @@ class Material {
    * 
    * @note Default implementation throws NotImplementedError.
    *       Derived classes should override method.
-   *       Used along with comput_molar_volume when excess modifiers needed.
+   *       Used along with compute_molar_volume when excess modifiers needed.
    * 
    * @returns Molar volume in [m^3/mol].
    * @throws NotImplementedError if default implementation called.
