@@ -10,28 +10,32 @@
 #ifndef BURNMAN_CORE_SOLUTION_HPP_INCLUDED
 #define BURNMAN_CORE_SOLUTION_HPP_INCLUDED
 
+#include <optional>
+#include <memory>
 #include <Eigen/Dense>
 #include "burnman/core/material.hpp"
+#include "burnman/core/mineral.hpp"
+#include "burnman/core/solution_model.hpp"
 
 /**
  * @class Solution
  * @brief Base class for solid solutions.
- * 
+ *
  * Base class for all solutions. 
- * 
+ *
  * Site occupancies, endmember activities and the constant
  * pressure and temperature dependencies of the excess properties
  * require set_composition().
  * Solution states equire set_state().
- * 
+ *
  * Uses an instance of `SolutionModel' (or derived class) to calculate
  * interaction terms between endmembers.
- * 
+ *
  * All solution parameters and properties are in SI units.
  * e.g. Interaction parameters in J/mol, with T & P derivatives in J/K/mol
  * and m^3/mol.
- * 
- */ 
+ *
+ */
 class Solution : public Material {
 
  public:
@@ -40,6 +44,33 @@ class Solution : public Material {
 
   // Override of reset to include additional solution properties
   void reset() override;
+
+  // Utility functions
+  /**
+   * @brief Utility function to map endmember properties to Array.
+   *
+   * Usage:
+   *  map_endmembers_to_array(&Mineral::get_property);
+   *    where, get_property() is the function needed
+   *  alternatively, with a lambda function, e.g.
+   * map_endmembers_to_array([](const Mineral& m) {
+   *  return m.get_property() + 10.0;
+   * });
+   *
+   * @param func Pointer to public getter function in `Mineral'
+   * @return properties Array of endmember properties.
+   */
+  template <typename Func>
+  Eigen::ArrayXd map_endmembers_to_array(Func&& func) const {
+    const auto& em_ref = solution_model->endmembers;
+    Eigen::ArrayXd mapped_properties(solution_model->n_endmembers);
+    std::transform(
+      em_ref.begin(), em_ref.end(), mapped_properties.data(),
+      [&func](const auto& em) {
+        return (em.*func)();
+    });
+    return mapped_properties;
+  }
 
   // Public getters for extra Solution functions
   /**
@@ -372,6 +403,13 @@ class Solution : public Material {
   mutable std::optional<Eigen::MatrixXd> entropy_hessian;
   mutable std::optional<Eigen::MatrixXd> volume_hessian;
   // site_occupancies - Map?
+
+  // Molar fractions - not cached so not deleted by reset()
+  // If Solution is subclassed will need a public getter function
+  Eigen::ArrayXd molar_fractions;
+
+  // Shared pointer to solution model class
+  std::shared_ptr<SolutionModel> solution_model;
 
 };
 
