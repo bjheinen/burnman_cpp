@@ -150,8 +150,14 @@ double Mineral::compute_shear_modulus() const {
 }
 
 // Mineral properties (non EOS)
-
-// TODO - formula
+FormulaMap Mineral::get_formula() const {
+  if (params.formula.has_value()) {
+    return *params.formula;
+  } else {
+    // can't use get_class_name at the moment because it is private
+    throw std::invalid_argument("No Mineral formula set!");
+  }
+}
 
 double Mineral::compute_molar_mass() const {
   if (params.molar_mass) {

@@ -50,8 +50,11 @@ class Mineral : public Material{
   // Pointer to EOS Class to use
   std::shared_ptr<EquationOfState> eos_method;
 
+  // TODO: Doc
   void set_property_modifier_params(excesses::ExcessParamVector excess_params);
   excesses::Excesses get_property_modifiers() const;
+
+  FormulaMap get_formula() const;
 
   // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
