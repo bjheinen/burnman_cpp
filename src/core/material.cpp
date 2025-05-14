@@ -262,6 +262,7 @@ double Material::compute_molar_volume_unmodified() const {
   throw_not_implemented_error(__func__);
 }
 
+// TODO: Density implementation in base class (doubled in Mineral and Solution)
 double Material::compute_density() const {
   throw_not_implemented_error(__func__);
 }
@@ -282,6 +283,7 @@ double Material::compute_isentropic_bulk_modulus_reuss() const {
   throw_not_implemented_error(__func__);
 }
 
+// TODO: compressibility implementation in base class (doubled in Mineral and Solution)
 double Material::compute_isothermal_compressibility_reuss() const {
   throw_not_implemented_error(__func__);
 }
