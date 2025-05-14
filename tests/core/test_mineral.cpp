@@ -53,7 +53,7 @@ TEST_CASE("Set method", "[mineral][core]") {
     }
   };
   CustomEOS custom_eos;
-  REQUIRE_NOTHROW(test_mineral.set_method(std::make_unique<CustomEOS>()));
+  REQUIRE_NOTHROW(test_mineral.set_method(std::make_shared<CustomEOS>()));
   REQUIRE(test_mineral.params.equation_of_state == EOSType::Custom);
   REQUIRE(typeid(*test_mineral.eos_method) == typeid(CustomEOS));
   // TODO: loop through enum and check all EOS work?

@@ -50,7 +50,7 @@ TEST_CASE("Get/Set name", "[material][core]") {
 TEST_CASE("Ensure default errors", "[material][core]") {
   Material test_material;
   CHECK_THROWS_AS(test_material.set_method(EOSType::Auto), NotImplementedError);
-  CHECK_THROWS_AS(test_material.set_method(std::make_unique<EquationOfState>()), NotImplementedError);
+  CHECK_THROWS_AS(test_material.set_method(std::make_shared<EquationOfState>()), NotImplementedError);
   CHECK_THROWS_AS(test_material.get_molar_internal_energy(), NotImplementedError);
   CHECK_THROWS_AS(test_material.get_molar_gibbs(), NotImplementedError);
   CHECK_THROWS_AS(test_material.get_molar_helmholtz(), NotImplementedError);
