@@ -10,6 +10,7 @@
 #ifndef BURNMAN_UTILS_MATRIX_UTILS_INCLUDED
 #define BURNMAN_UTILS_MATRIX_UTILS_INCLUDED
 
+#include <algorithm>
 #include <vector>
 #include <Eigen/Dense>
 
@@ -61,7 +62,33 @@ namespace utils {
     weights.triangularView<Eigen::Lower>().setZero();
     // Element-wise product (only upper triangle is non-zero)
     Eigen::MatrixXd interaction_matrix = weights.cwiseProduct(interaction);
-    return interaction_matrix;    
+    return interaction_matrix;
+  }
+
+  /**
+   * @brief Retrieves indices of linearly independent rows
+   *
+   * Uses QR decomposition to get independent columns. A transpose
+   * is applied at the start so that independent rows are retrieved.
+   *
+   * @param mat Matrix
+   * @returns Sorted list of indices of linearly independent rows
+   */
+  std::vector<int> get_independent_row_indices(
+    const Eigen::MatrixXd& mat
+  ) {
+    // Transpose to get rows instead of cols
+    Eigen::MatrixXd A = mat.transpose();
+    // QR decomp with column pivoting
+    Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(A);
+    // Use rank as num independent cols
+    int rank = qr.rank();
+    // colsPermutation() retrieves P
+    // head(rank) takes needed block
+    Eigen::VectorXi indices_vector = qr.colsPermutation().indices().head(rank);
+    std::vector<int> indices(indices_vector.begin(), indices_vector.begin() + rank);
+    std::sort(indices.begin(), indices.end());
+    return indices;
   }
 
 }
