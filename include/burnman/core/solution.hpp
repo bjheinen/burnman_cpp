@@ -253,6 +253,18 @@ class Solution : public Material {
    */
   Eigen::MatrixXd get_volume_hessian() const;
 
+  // Public getter functions for stored solution properties
+  int get_n_reactions() const { return n_reactions; }
+  const Eigen::MatrixXd& get_stoichiometric_matrix() const { return stoichiometric_matrix; }
+  const Eigen::MatrixXd& get_compositional_basis() const { return compositional_basis; }
+  const Eigen::MatrixXd& get_compositional_null_basis() const { return compositional_null_basis; }
+  const Eigen::MatrixXd& get_reaction_basis() const { return reaction_basis; }
+  const std::vector<int>& get_independent_element_indices() const { return independent_element_indices }
+  const std::vector<int>& get_dependent_element_indices() const { return dependent_element_indices; }
+  const std::vector<std::string>& get_endmember_names() const { return endmember_names; }
+  const std::vector<std::string>& get_elements() const { return elements; }
+  const std::vector<FormulaMap>& get_endmember_formulae() const { return endmember_formulae; }
+
  protected:
 
   // Overrides of defaults from Material
@@ -384,7 +396,7 @@ class Solution : public Material {
   Eigen::MatrixXd compute_volume_hessian() const;
 
  private:
-
+  // Cached properties
   mutable std::optional<double> excess_gibbs;
   mutable std::optional<double> excess_volume;
   mutable std::optional<double> excess_entropy;
@@ -404,12 +416,96 @@ class Solution : public Material {
   mutable std::optional<Eigen::MatrixXd> volume_hessian;
   // site_occupancies - Map?
 
+  // Solution properties set on initialisation
+  Eigen::MatrixXd stoichiometric_matrix;
+  Eigen::MatrixXd compositional_basis;
+  Eigen::MatrixXd compositional_null_basis;
+  Eigen::MatrixXd reaction_basis;
+  int n_reactions;
+  std::vector<int> independent_element_indices;
+  std::vector<int> dependent_element_indices;
+  std::vector<std::string> endmember_names;
+  std::vector<std::string> elements;
+  std::vector<FormulaMap> endmember_formulae;
+
   // Molar fractions - not cached so not deleted by reset()
   // If Solution is subclassed will need a public getter function
   Eigen::ArrayXd molar_fractions;
 
   // Shared pointer to solution model class
   std::shared_ptr<SolutionModel> solution_model;
+
+  // Compute functions for intialised properties
+  /**
+   * @brief Stores human readable endmember names
+   */
+  void setup_endmember_names();
+
+  /**
+   * @brief Stores a vector of endmember formulae.
+   *
+   * Each formula is a FormulaMap, where
+   * FormulaMap = std::unordered_map<std::string, int>;
+   */
+  void setup_endmember_formulae();
+
+  /**
+   * @brief Stores vector of elementes sorted in IUPAC order.
+   */
+  void setup_elements();
+
+  /**
+   * @brief Initialises matrix detailing stoichiometry.
+   *
+   * Each element M[i,j] corresponds to to the number of
+   * atoms of element j in endmember i.
+   */
+  void setup_stoichiometric_matrix();
+
+  /**
+   * @brief Stores the independent set of element indices.
+   *
+   * If the amounts of these elements are known the amounts of other
+   * elements can be inferred by:
+   *   -compositional_null_basis[independent_element_indices].dot(element_amounts)
+   */
+  void setup_independent_element_indices();
+
+  /**
+   * @brief Stores the element indices not in the independent list.
+   */
+  void setup_dependent_element_indices();
+
+  /**
+   * @brief Stores the reaction basis matrix.
+   *
+   * Each element M[i,j] corresponds to the number of moles
+   * of endmember j involved in reaction i.
+   */
+  void setup_reaction_basis();
+
+  /**
+   * @bried Stores the number of possible reactions from reaction basis.
+   */
+  void setup_n_reactions();
+
+  /**
+   * @brief Stores the compositional basis matrix.
+   */
+  void setup_compositional_basis();
+
+  /**
+   * @brief Stores the compositional null basis.
+   *
+   * Stores the matrix where N[b] = 0 for all bulk compositions that
+   * can be produced with a linear sum of the endmembers in the solution.
+   */
+  void setup_compositional_null_basis();
+
+  /**
+   * @brief Helper function to setup stored solution properties.
+   */
+  void setup_solution_properties();
 
 };
 

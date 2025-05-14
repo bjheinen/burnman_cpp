@@ -338,3 +338,49 @@ double Solution::compute_molar_heat_capacity_p() const {
   Eigen::ArrayXd em_Cp = map_endmembers_to_array(&Mineral::get_molar_heat_capacity_p);
   return (em_Cp * molar_fractions).sum() + solution_model->compute_Cp_excess();
 }
+
+// Setup functions for solution properties stored on class initialisation
+
+void Solution::setup_endmember_names() {
+
+}
+
+void Solution::setup_endmember_formulae() {
+
+}
+
+void Solution::setup_elements() {
+
+}
+
+void Solution::setup_stoichiometric_matrix() {
+
+}
+
+void Solution::setup_independent_element_indices() {
+
+}
+
+void Solution::setup_dependent_element_indices() {
+
+}
+
+void Solution::setup_reaction_basis() {
+
+}
+
+void Solution::setup_n_reactions() {
+
+}
+
+void Solution::setup_compositional_basis() {
+
+}
+
+void Solution::setup_compositional_null_basis() {
+
+}
+
+void Solution::setup_solution_properties() {
+
+}
