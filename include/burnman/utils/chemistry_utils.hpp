@@ -25,13 +25,12 @@ namespace utils {
    * @param elements List of elements
    * @return ordered_elements.
    */
-  std::vector<std::string> sort_element_list_to_IUPAC_order(
-    const std::vector<std::string> elements
+  inline std::vector<std::string> sort_element_list_to_IUPAC_order(
+    const std::unordered_set<std::string>& unordered_elements
   ) {
-    std::unordered_set<std::string> unordered(elements.begin(), elements.end());
     std::vector<std::string> ordered_elements;
     for (const auto& element : constants::chemistry::IUPAC_element_order) {
-      if (unordered.count(element)) {
+      if (unordered_elements.count(element)) {
         ordered_elements.push_back(element);
       }
     }
