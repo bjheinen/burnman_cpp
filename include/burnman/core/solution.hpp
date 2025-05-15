@@ -14,6 +14,7 @@
 #include <iterator>
 #include <memory>
 #include <optional>
+#include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -87,12 +88,7 @@ class Solution : public Material {
    * @param func Pointer to public getter function in `Mineral'
    * @return vector of endmember properties (of type T)
    */
-  template <
-    typename Func,
-    typename T = std::decay_t<
-      decltype(std::declval<const Mineral&>().*std::declval<Func>())()
-    >
-  >
+  template <typename T, typename Func>
   std::vector<T> map_endmembers_to_vector(Func&& func) const {
     const auto& em_ref = solution_model->endmembers;
     std::vector<T> mapped_properties;
