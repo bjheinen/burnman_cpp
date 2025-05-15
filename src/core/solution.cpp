@@ -10,6 +10,7 @@
 #include <cmath>
 #include "burnman/core/solution.hpp"
 #include "burnman/utils/constants.hpp"
+#include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/core/averaging_schemes.hpp"
 
 void Solution::reset() {
@@ -341,19 +342,40 @@ double Solution::compute_molar_heat_capacity_p() const {
 // Setup functions for solution properties stored on class initialisation
 
 void Solution::setup_endmember_names() {
-
+  endmember_names = map_endmembers_to_vector<std::string>(&Mineral::get_name);
 }
 
 void Solution::setup_endmember_formulae() {
-
+  endmember_formulae = map_endmembers_to_vector<FormulaMap>(&Mineral::get_formula);
 }
 
 void Solution::setup_elements() {
-
+  // Grab set of all elements in formulae
+  std::unordered_set<std::string> all_elements;
+  for (const auto& embr : endmember_formulae) {
+    for (const auto& [element, n] : embr) {
+      all_elements.insert(element);
+    }
+  }
+  // Sort elements into IUPAC order
+  elements = utils::sort_element_list_to_IUPAC_order(all_elements);
 }
 
 void Solution::setup_stoichiometric_matrix() {
-
+  int n_elements = static_cast<int>(elements.size());
+  int n_endmembers = static_cast<int>(solution_model->n_endmembers);
+  stoichiometric_matrix.resize(n_endmembers, n_elements);
+  stoichiometric_matrix.setZero();
+  for (int i = 0; i < n_endmembers; ++i) {
+    const auto& formula = endmember_formulae[i];
+    for (int j = 0; j < n_elements; ++j) {
+      const std::string& element = elements[j];
+      auto it = formula.find(element);
+      if (it != formula.end()) {
+        stoichiometric_matrix(i, j) = it->second;
+      }
+    }
+  }
 }
 
 void Solution::setup_independent_element_indices() {
