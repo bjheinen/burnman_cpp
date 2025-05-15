@@ -37,7 +37,7 @@ namespace utils {
    * @param n size of square matrix.
    * @return Square matrix.
    */
-  Eigen::MatrixXd jagged2square(std::vector<std::vector<double>>& v, int n) {
+  inline Eigen::MatrixXd jagged2square(std::vector<std::vector<double>>& v, int n) {
     Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(n, n);
     for (int i = 0; i < v.size(); i++) {
       int col = n - 1;
@@ -50,7 +50,7 @@ namespace utils {
     mat.triangularView<Eigen::Lower>().setZero();
   }
 
-  Eigen::MatrixXd populate_interaction_matrix(
+  inline Eigen::MatrixXd populate_interaction_matrix(
     const Eigen::MatrixXd& interaction,
     const Eigen::ArrayXd& alphas,
     int n
@@ -74,7 +74,7 @@ namespace utils {
    * @param mat Matrix
    * @returns Sorted list of indices of linearly independent rows
    */
-  std::vector<int> get_independent_row_indices(
+  inline std::vector<int> get_independent_row_indices(
     const Eigen::MatrixXd& mat
   ) {
     // Transpose to get rows instead of cols

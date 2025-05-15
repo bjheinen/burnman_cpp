@@ -11,6 +11,7 @@
 #include "burnman/core/solution.hpp"
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/chemistry_utils.hpp"
+#include "burnman/utils/matrix_utils.hpp"
 #include "burnman/core/averaging_schemes.hpp"
 
 void Solution::reset() {
@@ -379,11 +380,21 @@ void Solution::setup_stoichiometric_matrix() {
 }
 
 void Solution::setup_independent_element_indices() {
-
+  independent_element_indices.clear();
+  independent_element_indices = utils::get_independent_row_indices(stoichiometric_matrix);
 }
 
 void Solution::setup_dependent_element_indices() {
-
+  dependent_element_indices.clear();
+  for (int i = 0; i < elements.size(); ++i) {
+    if (std::find(
+      independent_element_indices.begin(),
+      independent_element_indices.end(), i)
+        == independent_element_indices.end()
+    ) {
+      dependent_element_indices.push_back(i);
+    }
+  }
 }
 
 void Solution::setup_reaction_basis() {
