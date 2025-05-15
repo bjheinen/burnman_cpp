@@ -398,11 +398,17 @@ void Solution::setup_dependent_element_indices() {
 }
 
 void Solution::setup_reaction_basis() {
-
+  Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp(stoichiometric_matrix.transpose());
+  Eigen::MatrixXd nullspace = lu_decomp.kernel();
+  // Maybe consider threshold?
+  if (nullspace.cols() == 0) {
+    return Eigen::MatrixXd(0, solution_model->n_endmembers);
+  }
+  return nullspace.transpose();
 }
 
 void Solution::setup_n_reactions() {
-
+  n_reactions = reaction_basis.rows();
 }
 
 void Solution::setup_compositional_basis() {
