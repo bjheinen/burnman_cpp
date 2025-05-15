@@ -14,6 +14,7 @@
 #include "burnman/utils/string_utils.hpp"
 #include "burnman/utils/math_utils.hpp"
 #include "burnman/utils/matrix_utils.hpp"
+#include "burnman/utils/chemistry_utils.hpp"
 
 /**
  * @namespace utils
