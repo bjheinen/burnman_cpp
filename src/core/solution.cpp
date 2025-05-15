@@ -7,7 +7,6 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <algorithm>
 #include <cmath>
 #include "burnman/core/solution.hpp"
 #include "burnman/utils/constants.hpp"

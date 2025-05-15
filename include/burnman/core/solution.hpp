@@ -10,8 +10,13 @@
 #ifndef BURNMAN_CORE_SOLUTION_HPP_INCLUDED
 #define BURNMAN_CORE_SOLUTION_HPP_INCLUDED
 
-#include <optional>
+#include <algorithm>
+#include <iterator>
 #include <memory>
+#include <optional>
+#include <type_traits>
+#include <utility>
+#include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/material.hpp"
 #include "burnman/core/mineral.hpp"
@@ -47,7 +52,7 @@ class Solution : public Material {
 
   // Utility functions
   /**
-   * @brief Utility function to map endmember properties to Array.
+   * @brief Utility function to map endmember properties to Eigen::Array.
    *
    * Usage:
    *  map_endmembers_to_array(&Mineral::get_property);
@@ -56,6 +61,8 @@ class Solution : public Material {
    * map_endmembers_to_array([](const Mineral& m) {
    *  return m.get_property() + 10.0;
    * });
+   *
+   * @note Poperties expected as type double.
    *
    * @param func Pointer to public getter function in `Mineral'
    * @return properties Array of endmember properties.
@@ -69,6 +76,32 @@ class Solution : public Material {
       [&func](const auto& em) {
         return (em.*func)();
     });
+    return mapped_properties;
+  }
+
+  /**
+   * @brief Utility function to map endmember properties to std::vector.
+   *
+   * Usage: see `Solution::map_endmembers_to_array'.
+   *
+   * @param func Pointer to public getter function in `Mineral'
+   * @return vector of endmember properties (of type T)
+   */
+  template <
+    typename Func,
+    typename T = std::decay_t<
+      decltype(std::declval<const Mineral&>().*std::declval<Func>())()
+    >
+  >
+  std::vector<T> map_endmembers_to_vector(Func&& func) const {
+    const auto& em_ref = solution_model->endmembers;
+    std::vector<T> mapped_properties;
+    mapped_properties.reserve(solution_model->n_endmembers);
+    std::transform(
+      em_ref.begin(), em_ref.end(), std::back_inserter(mapped_properties),
+      [&func](const auto& em) {
+        return (em.*func)();
+      });
     return mapped_properties;
   }
 
@@ -259,7 +292,7 @@ class Solution : public Material {
   const Eigen::MatrixXd& get_compositional_basis() const { return compositional_basis; }
   const Eigen::MatrixXd& get_compositional_null_basis() const { return compositional_null_basis; }
   const Eigen::MatrixXd& get_reaction_basis() const { return reaction_basis; }
-  const std::vector<int>& get_independent_element_indices() const { return independent_element_indices }
+  const std::vector<int>& get_independent_element_indices() const { return independent_element_indices; }
   const std::vector<int>& get_dependent_element_indices() const { return dependent_element_indices; }
   const std::vector<std::string>& get_endmember_names() const { return endmember_names; }
   const std::vector<std::string>& get_elements() const { return elements; }
