@@ -402,9 +402,10 @@ void Solution::setup_reaction_basis() {
   Eigen::MatrixXd nullspace = lu_decomp.kernel();
   // Maybe consider threshold?
   if (nullspace.cols() == 0) {
-    return Eigen::MatrixXd(0, solution_model->n_endmembers);
+    reaction_basis = Eigen::MatrixXd(0, solution_model->n_endmembers);
+  } else {
+    reaction_basis = nullspace.transpose();
   }
-  return nullspace.transpose();
 }
 
 void Solution::setup_n_reactions() {
@@ -412,13 +413,34 @@ void Solution::setup_n_reactions() {
 }
 
 void Solution::setup_compositional_basis() {
-
+  compositional_basis =
+    utils::complete_basis(reaction_basis)
+      (Eigen::seq(n_reactions, Eigen::last), Eigen::all);
 }
 
 void Solution::setup_compositional_null_basis() {
-
+  Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp(stoichiometric_matrix);
+  Eigen::MatrixXd nullspace = lu_decomp.kernel();
+  // Maybe consider threshold?
+  // Check matrix
+  Eigen::MatrixXd M(nullspace.rows(), dependent_element_indices.size());
+  M = nullspace(Eigen::all, dependent_element_indices);
+  // assert(M.cols() == M.rows());
+  // assert(
+  //   M.isApprox(Eigen::MatrixXd::Identity(M.rows(), M.cols()),
+  //     constants::precision::abs_tolerance));
+  compositional_null_basis = nullspace;
 }
 
 void Solution::setup_solution_properties() {
-
+  setup_endmember_names();
+  setup_endmember_formulae();
+  setup_elements();
+  setup_stoichiometric_matrix();
+  setup_independent_element_indices();
+  setup_dependent_element_indices();
+  setup_reaction_basis();
+  setup_n_reactions();
+  setup_compositional_basis();
+  setup_compositional_null_basis();
 }
