@@ -91,6 +91,63 @@ namespace utils {
     return indices;
   }
 
+  // TODO: Make move to separate cpp files...
+  /**
+   * @brief Creates a full basis by filling remaining rows with
+   * selected rows of the identity matrix that have indices not in
+   * the column pivot list of the basis RREF.
+   *
+   * @param basis Partial basis
+   * @returns full_basis Complete basis.
+   */
+  inline Eigen::MatrixXd complete_basis(
+    const Eigen::MatrixXd& basis
+  ) {
+    int n = basis.rows();
+    int m = basis.cols();
+    if (m >= n) {
+      return basis;
+    }
+    // Flip basis
+    Eigen::MatrixXd basis_flipped = basis.rowwise().reverse();
+    // FullPivLU decomposition to get RREF
+    Eigen::FullPivLU<Eigen::MatrixXd> lu_basis(basis_flipped);
+    // Get the rank of the matrix
+    int rank = lu_basis.rank();
+    Eigen::MatrixXd U = lu_basis.matrixLU().triangularView<Eigen::Upper>();
+    // Get the indices of the pivot columns for each row -
+    // first non-zero element in each row.
+    std::vector<int> pivot_columns;
+    for (int i = 0; i < rank; ++i) {
+      for (int j = i; j < m; ++j) {
+        if (U(i, j) != 0) {
+          pivot_columns.push_back(m - 1 - j);
+          break;
+        }
+      }
+    }
+    // Get excluded indices
+    std::vector<bool> excluded(m, false);
+    for (int val : pivot_columns) {
+      if (val >= 0 && val < m)
+        excluded[val] = true;
+    }
+    // Get indices of identity matrix to use
+    std::vector<int> basis_indices;
+    basis_indices.reserve(m - pivot_columns.size());
+    for (int i = 0; i < m; ++i) {
+      if (!excluded[i])
+        basis_indices.push_back(i);
+    }
+    // Get identity matrix and concatenate with basis
+    Eigen::MatrixXd I = Eigen::MatrixXd::Identity(m, m);
+    Eigen::MatrixXd full_basis(n + basis_indices.size(), m);
+    full_basis <<
+      basis,
+      I(basis_indices, Eigen::all);
+    return full_basis;
+  }
+
 }
 
 #endif // BURNMAN_UTILS_MATRIX_UTILS_INCLUDED
