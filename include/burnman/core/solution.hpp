@@ -52,6 +52,7 @@ class Solution : public Material {
   void reset() override;
 
   // Utility functions
+  // TODO: std::invoke to deal with lambda functions?
   /**
    * @brief Utility function to map endmember properties to Eigen::Array.
    *
@@ -63,7 +64,7 @@ class Solution : public Material {
    *  return m.get_property() + 10.0;
    * });
    *
-   * @note Poperties expected as type double.
+   * @note Properties expected as type double.
    *
    * @param func Pointer to public getter function in `Mineral'
    * @return properties Array of endmember properties.
