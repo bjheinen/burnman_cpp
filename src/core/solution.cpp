@@ -286,7 +286,7 @@ double Solution::compute_isentropic_compressibility_reuss() const {
 
 double Solution::compute_shear_modulus() const {
   Eigen::ArrayXd em_shear_moduli = map_endmembers_to_array(&Mineral::get_shear_modulus);
-  return averaging::reuss_fn(molar_fractions, em_shear_moduli);
+  return Averaging::reuss_fn(molar_fractions, em_shear_moduli);
 }
 
 double Solution::compute_p_wave_velocity() const {
