@@ -11,7 +11,22 @@
 #include "burnman/core/composite.hpp"
 //#include "burnman/utils/constants.hpp"
 
-//Material property overrides
+void Composite::reset() {
+  // Reset caches Material properties
+  Material::reset();
+  // Reset cached Composite properties
+  volume_fractions.reset();
+}
+
+// Public getter functions with caching
+Eigen::ArrayXd Composite::get_volume_fractions() const {
+  if (!volume_fractions.has_value()) {
+    volume_fractions = compute_volume_fractions();
+  }
+  return *volume_fractions;
+}
+
+// Material property overrides
 double Composite::compute_molar_internal_energy() const {
  return (map_phases_to_array(&Material::get_molar_internal_energy)
    * molar_fractions).sum();
@@ -37,13 +52,10 @@ double Composite::compute_molar_volume() const {
     * molar_fractions).sum();
 }
 
-// TODO!
 double Composite::compute_density() const {
   Eigen::ArrayXd densities = map_phases_to_array(&Material::get_density);
-  Eigen::ArrayXd volumes = map_phases_to_array(&Material::get_molar_volume)
-    * molar_fractions;
-  // TODO: partial_volumes with cachine to avoid redunancy?
-  // TODO: averaging_scheme::average_density
+  Eigen::ArrayXd volumes = get_volume_fractions();
+  return averaging_scheme->average_density(volumes, densities);
 }
 
 double Composite::compute_molar_entropy() const {
@@ -56,24 +68,18 @@ double Composite::compute_molar_enthalpy() const {
     * molar_fractions).sum();
 }
 
-// TODO!
 double Composite::compute_isothermal_bulk_modulus_reuss() const {
-  // TODO: as above, partial volumes?
-  Eigen::ArrayXd V_frac = map_phases_to_array(&Material::get_molar_volume)
-    * molar_fractions;
+  Eigen::ArrayXd V_frac = get_volume_fractions();
   Eigen::ArrayXd K_ph = map_phases_to_array(&Material::get_isothermal_bulk_modulus_reuss);
   Eigen::ArrayXd G_ph = map_phases_to_array(&Material::get_shear_modulus);
-  // TODO: averaging_scheme!
+  return averaging_scheme->average_bulk_moduli(V_frac, K_ph, G_ph);
 }
 
-// TODO!
 double Composite::compute_isentropic_bulk_modulus_reuss() const {
-  // TODO: as above, partial volumes?
-  Eigen::ArrayXd V_frac = map_phases_to_array(&Material::get_molar_volume)
-    * molar_fractions;
+  Eigen::ArrayXd V_frac = get_volume_fractions();
   Eigen::ArrayXd K_ph = map_phases_to_array(&Material::get_isentropic_bulk_modulus_reuss);
   Eigen::ArrayXd G_ph = map_phases_to_array(&Material::get_shear_modulus);
-  // TODO: averaging_scheme!
+  return averaging_scheme->average_bulk_moduli(V_frac, K_ph, G_ph);
 }
 
 double Composite::compute_isothermal_compressibility_reuss() const {
@@ -84,14 +90,11 @@ double Composite::compute_isentropic_compressibility_reuss() const {
   return 1.0 / get_isentropic_bulk_modulus_reuss();
 }
 
-// TODO!
 double Composite::compute_shear_modulus() const {
-  // TODO: as above, partial volumes?
-  Eigen::ArrayXd V_frac = map_phases_to_array(&Material::get_molar_volume)
-    * molar_fractions;
+  Eigen::ArrayXd V_frac = get_volume_fractions();
   Eigen::ArrayXd K_ph = map_phases_to_array(&Material::get_isentropic_bulk_modulus_reuss);
   Eigen::ArrayXd G_ph = map_phases_to_array(&Material::get_shear_modulus);
-  // TODO: averaging_scheme!
+  return averaging_scheme->average_shear_moduli(V_frac, K_ph, G_ph);
 }
 
 // TODO: think about redunancy/replication with `Solution::compute_p_wave...'
@@ -122,23 +125,23 @@ double Composite::compute_grueneisen_parameter() const {
     / get_molar_heat_capacity_v();
 }
 
-// TODO!
 double Composite::compute_thermal_expansivity() const {
-  // TODO: again, partial vols
-  Eigen::ArrayXd volumes = map_phases_to_array(&Material::get_molar_volume)
-    * molar_fractions;
+  Eigen::ArrayXd volumes = get_volume_fractions();
   Eigen::ArrayXd alphas = map_phases_to_array(&Material::get_thermal_expansivity);
-  // TODO: Averaging!
+  return averaging_scheme->average_thermal_expansivity(volumes, alphas);
 }
 
-// TODO!
 double Composite::compute_molar_heat_capacity_v() const {
-  Eigen::ArrayXd C_v = map_phases_to_array(&Material::get_molar_heat_capacity_v);
-  // TODO: Averaging
+  Eigen::ArrayXd c_v = map_phases_to_array(&Material::get_molar_heat_capacity_v);
+  return averaging_scheme->average_heat_capacity_v(molar_fractions, c_v);
 }
 
-// TODO!
 double Composite::compute_molar_heat_capacity_p() const {
-  Eigen::ArrayXd C_p = map_phases_to_array(&Material::get_molar_heat_capacity_p);
-  // TODO:: Averaging
+  Eigen::ArrayXd c_p = map_phases_to_array(&Material::get_molar_heat_capacity_p);
+  return averaging_scheme->average_heat_capacity_p(molar_fractions, c_p);
+}
+
+// Composite properties
+Eigen::ArrayXd Composite::compute_volume_fractions() const {
+  return map_phases_to_array(&Material::get_molar_volume) * molar_fractions;
 }

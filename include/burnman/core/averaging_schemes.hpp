@@ -76,6 +76,7 @@ class Averaging {
     const Eigen::ArrayXd& volumes,
     const Eigen::ArrayXd& alphas) const;
 
+  // TODO: currently redunant as C_v and C_p identical
   /**
    * @brief Average C_v of a composite.
    *

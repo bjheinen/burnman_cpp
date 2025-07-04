@@ -15,6 +15,7 @@
 #include <optional>
 #include <Eigen/Dense>
 #include "burnman/core/material.hpp"
+#include "burnman/core/averaging_schemes.hpp"
 
 /**
  * @class Composite
@@ -35,6 +36,9 @@ class Composite : public Material {
  public:
 
   virtual ~Composite() = default;
+
+  // Override of reset to include additional solution properties
+  void reset() override;
 
   // Utility functions
   /**
@@ -67,6 +71,20 @@ class Composite : public Material {
     return mapped_properties;
   }
 
+  // Public getters for extra Composite functions
+  /**
+   * @brief Retrieves n_i * V_i.
+   *
+   * Uses a cached value if available, or calls
+   * `Composite::compute_volume_fractions()` and caches the result.
+   *
+   * @note Use `Composite::reset()` to clear cached values.
+   *
+   * @return Molar fractions * volumes of phases in composite.
+   */
+  Eigen::ArrayXd get_volume_fractions() const;
+
+
  protected:
 
   // Overrides of defaults from Material
@@ -91,10 +109,20 @@ class Composite : public Material {
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
 
+  // Additional Composite compute functions
+  Eigen::ArrayXd compute_volume_fractions() const;
+
  private:
+
+  // Cached properties
+  // 1D Eigen arrays (could be made Vectors)
+  mutable std::optional<Eigen::ArrayXd> volume_fractions;
 
   // Shared pointer to solution model class
   std::vector<std::shared_ptr<Material>> phases;
+
+  // Unique pointer to averaging scheme
+  std::unique_ptr<Averaging> averaging_scheme;
 
   // Molar fractions - define public getter if Composite subclassed.
   Eigen::ArrayXd molar_fractions;
