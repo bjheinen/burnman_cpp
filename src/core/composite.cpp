@@ -39,7 +39,7 @@ double Composite::compute_molar_volume() const {
 
 // TODO!
 double Composite::compute_density() const {
-  Eigen::ArrayXd densities = map_phases_to_array(Material::get_density);
+  Eigen::ArrayXd densities = map_phases_to_array(&Material::get_density);
   Eigen::ArrayXd volumes = map_phases_to_array(&Material::get_molar_volume)
     * molar_fractions;
   // TODO: partial_volumes with cachine to avoid redunancy?
@@ -133,12 +133,12 @@ double Composite::compute_thermal_expansivity() const {
 
 // TODO!
 double Composite::compute_molar_heat_capacity_v() const {
-  Eigen::ArrayXd C_v = map_phases_to_array(Material::get_molar_heat_capacity_v);
+  Eigen::ArrayXd C_v = map_phases_to_array(&Material::get_molar_heat_capacity_v);
   // TODO: Averaging
 }
 
 // TODO!
 double Composite::compute_molar_heat_capacity_p() const {
-  Eigen::ArrayXd C_p = map_phases_to_array(Material::get_molar_heat_capacity_p);
+  Eigen::ArrayXd C_p = map_phases_to_array(&Material::get_molar_heat_capacity_p);
   // TODO:: Averaging
 }
