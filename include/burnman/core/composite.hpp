@@ -20,14 +20,14 @@
 #include "burnman/core/averaging_schemes.hpp"
 
 /**
- * @class Composite
- * @brief Base class for a composite material.
+ * @class Assemblage
+ * @brief Base class for a composite material (assemblage).
  *
- * Base class for all composite materials.
+ * Base class for all assemblages.
  *
  * The static phases can be of any class derived from `Material', e.g.
- * Mineral, Solution, etc. As `Composite' is derived from `Material',
- * composite can be nested arbitrarily.
+ * Mineral, Solution, etc. As `Assemblage' is derived from `Material',
+ * Assemblage can be nested arbitrarily.
  *
  * The fractions of phases can be input as 'molar' or 'mass' and modified
  * using `set_fractions'.
@@ -35,11 +35,11 @@
  * See `CompositeMaterial' for stoichiometry specific properties.
  *
  */
-class Composite : public CompositeMaterial {
+class Assemblage : public CompositeMaterial {
 
  public:
 
-  virtual ~Composite() = default;
+  virtual ~Assemblage() = default;
 
   // Override of reset to include additional solution properties
   void reset() override;
@@ -75,16 +75,16 @@ class Composite : public CompositeMaterial {
     return mapped_properties;
   }
 
-  // Public getters for extra Composite functions
+  // Public getters for extra Assemblage functions
   /**
    * @brief Retrieves n_i * V_i.
    *
    * Uses a cached value if available, or calls
-   * `Composite::compute_volume_fractions()` and caches the result.
+   * `Assemblage::compute_volume_fractions()` and caches the result.
    *
-   * @note Use `Composite::reset()` to clear cached values.
+   * @note Use `Assemblage::reset()` to clear cached values.
    *
-   * @return Molar fractions * volumes of phases in composite.
+   * @return Molar fractions * volumes of phases in assemblage.
    */
   Eigen::ArrayXd get_volume_fractions() const;
 
@@ -122,7 +122,7 @@ class Composite : public CompositeMaterial {
   void setup_endmember_names() const override;
   void setup_endmember_formulae() const override;
 
-  // Additional Composite compute functions
+  // Additional Assemblage compute functions
   Eigen::ArrayXd compute_volume_fractions() const;
 
  private:
@@ -133,7 +133,7 @@ class Composite : public CompositeMaterial {
   // Unique pointer to averaging scheme
   std::unique_ptr<Averaging> averaging_scheme;
 
-  // Molar fractions - define public getter if Composite subclassed.
+  // Molar fractions - define public getter if Assemblage subclassed.
   Eigen::ArrayXd molar_fractions;
 
   // Cached properties (can be reset)
