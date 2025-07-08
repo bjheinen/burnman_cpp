@@ -85,14 +85,14 @@ Eigen::MatrixXd& CompositeMaterial::get_reaction_basis() const {
 
 std::vector<std::string>& CompositeMaterial::get_endmember_names() const {
   if (!endmember_names.has_value()) {
-    compute_endmember_names();
+    setup_endmember_names();
   }
   return *endmember_names;
 }
 
 std::vector<FormulaMap>& CompositeMaterial::get_endmember_formulae() const {
   if (!endmember_formulae.has_value()) {
-    compute_endmember_formulae();
+    setup_endmember_formulae();
   }
   return *endmember_formulae;
 }

@@ -120,8 +120,8 @@ class CompositeMaterial : public Material {
 
   virtual int compute_n_endmembers() const = 0;
   // Void functions should use protected setters!
-  virtual void compute_endmember_formulae() const = 0;
-  virtual void compute_endmember_names() const = 0;
+  virtual void setup_endmember_formulae() const = 0;
+  virtual void setup_endmember_names() const = 0;
 
   // Protected setters
   void set_endmember_names(std::vector<std::string> names) const;

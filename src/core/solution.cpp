@@ -346,11 +346,11 @@ int Solution::compute_n_endmembers() const {
   return solution_model->n_endmembers;
 }
 
-void Solution::compute_endmember_names() const {
+void Solution::setup_endmember_names() const {
   set_endmember_names(map_endmembers_to_vector<std::string>(&Mineral::get_name));
 }
 
-void Solution::compute_endmember_formulae() const {
+void Solution::setup_endmember_formulae() const {
   set_endmember_formulae(map_endmembers_to_vector<FormulaMap>(&Mineral::get_formula));
 }
 

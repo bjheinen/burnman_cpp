@@ -312,8 +312,8 @@ class Solution : public CompositeMaterial {
 
   // Overrides of pure virtual functions from CompositeMaterial
   int compute_n_endmembers() const override;
-  void compute_endmember_names() const override;
-  void compute_endmember_formulae() const override;
+  void setup_endmember_names() const override;
+  void setup_endmember_formulae() const override;
 
   // New functions
   /**
