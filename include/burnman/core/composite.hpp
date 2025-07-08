@@ -32,6 +32,8 @@
  * The fractions of phases can be input as 'molar' or 'mass' and modified
  * using `set_fractions'.
  *
+ * See `CompositeMaterial' for stoichiometry specific properties.
+ *
  */
 class Composite : public CompositeMaterial {
 
