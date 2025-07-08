@@ -340,97 +340,22 @@ double Solution::compute_molar_heat_capacity_p() const {
   return (em_Cp * molar_fractions).sum() + solution_model->compute_Cp_excess();
 }
 
-// Setup functions for solution properties stored on class initialisation
+// Setup functions for CompositeMaterial properties
 
-void Solution::setup_endmember_names() {
-  endmember_names = map_endmembers_to_vector<std::string>(&Mineral::get_name);
+int Solution::compute_n_endmembers() const {
+  return solution_model->n_endmembers;
 }
 
-void Solution::setup_endmember_formulae() {
-  endmember_formulae = map_endmembers_to_vector<FormulaMap>(&Mineral::get_formula);
+void Solution::compute_endmember_names() const {
+  set_endmember_names(map_endmembers_to_vector<std::string>(&Mineral::get_name));
 }
 
-void Solution::setup_elements() {
-  // Grab set of all elements in formulae
-  std::unordered_set<std::string> all_elements;
-  for (const auto& embr : endmember_formulae) {
-    for (const auto& [element, n] : embr) {
-      all_elements.insert(element);
-    }
-  }
-  // Sort elements into IUPAC order
-  elements = utils::sort_element_list_to_IUPAC_order(all_elements);
+void Solution::compute_endmember_formulae() const {
+  set_endmember_formulae(map_endmembers_to_vector<FormulaMap>(&Mineral::get_formula));
 }
 
-void Solution::setup_stoichiometric_matrix() {
-  int n_elements = static_cast<int>(elements.size());
-  int n_endmembers = static_cast<int>(solution_model->n_endmembers);
-  stoichiometric_matrix.resize(n_endmembers, n_elements);
-  stoichiometric_matrix.setZero();
-  for (int i = 0; i < n_endmembers; ++i) {
-    const auto& formula = endmember_formulae[i];
-    for (int j = 0; j < n_elements; ++j) {
-      const std::string& element = elements[j];
-      auto it = formula.find(element);
-      if (it != formula.end()) {
-        stoichiometric_matrix(i, j) = it->second;
-      }
-    }
-  }
-}
-
-void Solution::setup_independent_element_indices() {
-  independent_element_indices.clear();
-  independent_element_indices = utils::get_independent_row_indices(stoichiometric_matrix);
-}
-
-void Solution::setup_dependent_element_indices() {
-  dependent_element_indices.clear();
-  for (int i = 0; i < elements.size(); ++i) {
-    if (std::find(
-      independent_element_indices.begin(),
-      independent_element_indices.end(), i)
-        == independent_element_indices.end()
-    ) {
-      dependent_element_indices.push_back(i);
-    }
-  }
-}
-
-void Solution::setup_reaction_basis() {
-  Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp(stoichiometric_matrix.transpose());
-  Eigen::MatrixXd nullspace = lu_decomp.kernel();
-  // Maybe consider threshold?
-  if (nullspace.cols() == 0) {
-    reaction_basis = Eigen::MatrixXd(0, solution_model->n_endmembers);
-  } else {
-    reaction_basis = nullspace.transpose();
-  }
-}
-
-void Solution::setup_n_reactions() {
-  n_reactions = reaction_basis.rows();
-}
-
-void Solution::setup_compositional_basis() {
-  compositional_basis =
-    utils::complete_basis(reaction_basis)
-      (Eigen::seq(n_reactions, Eigen::last), Eigen::all);
-}
-
-void Solution::setup_compositional_null_basis() {
-  Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp(stoichiometric_matrix);
-  Eigen::MatrixXd nullspace = lu_decomp.kernel();
-  // Maybe consider threshold?
-  // Check matrix
-  Eigen::MatrixXd M(nullspace.rows(), dependent_element_indices.size());
-  M = nullspace(Eigen::all, dependent_element_indices);
-  // assert(M.cols() == M.rows());
-  // assert(
-  //   M.isApprox(Eigen::MatrixXd::Identity(M.rows(), M.cols()),
-  //     constants::precision::abs_tolerance));
-  compositional_null_basis = nullspace;
-}
+/*
+TODO: Move this to CompositeMaterial as a useful helper
 
 void Solution::setup_solution_properties() {
   setup_endmember_names();
@@ -444,3 +369,4 @@ void Solution::setup_solution_properties() {
   setup_compositional_basis();
   setup_compositional_null_basis();
 }
+*/
