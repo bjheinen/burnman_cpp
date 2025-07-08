@@ -237,7 +237,7 @@ void Composite::setup_endmember_properties() const {
       }
       // Add number of endmembers to list
       endmembers_per_phase->push_back(
-        static_cast<int>(sol->solution_model->n_endmembers));
+        static_cast<int>(sol->get_n_endmembers()));
     // If phase is a Mineral
     } else if (auto min = std::dynamic_pointer_cast<Mineral>(ph)) {
       // Store mineral properties

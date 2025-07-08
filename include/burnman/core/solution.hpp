@@ -283,6 +283,11 @@ class Solution : public Material {
    */
   Eigen::MatrixXd get_volume_hessian() const;
 
+  /**
+   * @brief Returns number of endmembers in solution
+   */
+  int get_n_endmembers() const { return solution_model->n_endmembers; };
+
   // Public getter functions for stored solution properties
   int get_n_reactions() const { return n_reactions; }
   const Eigen::MatrixXd& get_stoichiometric_matrix() const { return stoichiometric_matrix; }
