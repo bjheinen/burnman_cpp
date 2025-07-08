@@ -15,6 +15,8 @@
 #include <optional>
 #include <Eigen/Dense>
 #include "burnman/core/material.hpp"
+#include "burnman/core/mineral.hpp"
+#include "burnman/core/solution.hpp"
 #include "burnman/core/averaging_schemes.hpp"
 
 /**
@@ -84,6 +86,38 @@ class Composite : public Material {
    */
   Eigen::ArrayXd get_volume_fractions() const;
 
+  /**
+   * @brief Retrieves the number of different elements in the composite.
+   */
+  int get_n_elements() const;
+
+  /**
+   * @brief Retrieves the total number of endmembers in the composite.
+   */
+  int get_n_endmembers() const;
+
+  /**
+   * @brief Retrieves a list of the number of endmembers in each phase.
+   */
+  std::vector<int> get_endmembers_per_phase() const;
+
+  /**
+   * @brief Retrieves a list of different elements in the composite.
+   *
+   * Elements are sorted into IUPAC order.
+   */
+  std::vector<std::string> get_elements() const;
+
+  /**
+   * @brief Returns a list of readable endmember names
+   */
+  std::vector<std::string> get_endmember_names() const;
+
+  /**
+   * Retrieves chemical formulae of all endmembers in the composite.
+   */
+  std::vector<FormulaMap> get_endmember_formulae() const;
+
 
  protected:
 
@@ -114,10 +148,6 @@ class Composite : public Material {
 
  private:
 
-  // Cached properties
-  // 1D Eigen arrays (could be made Vectors)
-  mutable std::optional<Eigen::ArrayXd> volume_fractions;
-
   // Shared pointer to solution model class
   std::vector<std::shared_ptr<Material>> phases;
 
@@ -126,6 +156,22 @@ class Composite : public Material {
 
   // Molar fractions - define public getter if Composite subclassed.
   Eigen::ArrayXd molar_fractions;
+
+  // Cached properties (can be reset)
+  // 1D Eigen arrays (could be made Vectors)
+  mutable std::optional<Eigen::ArrayXd> volume_fractions;
+
+  // Stored (cached) properties not reset
+  mutable std::optional<int> n_elements;
+  mutable std::optional<int> n_endmembers;
+  mutable std::optional<std::vector<int>> endmembers_per_phase;
+  mutable std::optional<std::vector<std::string>> elements;
+  mutable std::optional<std::vector<std::string>> endmember_names;
+  mutable std::optional<std::vector<FormulaMap>> endmember_formulae;
+
+  // Compute / setup functions for Composite properties
+  void setup_endmember_properties() const;
+
 
 };
 
