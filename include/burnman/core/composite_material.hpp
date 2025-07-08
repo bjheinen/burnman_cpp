@@ -156,6 +156,21 @@ class CompositeMaterial : public Material {
   Eigen::MatrixXd compute_compositional_null_basis() const;
   Eigen::MatrixXd compute_reaction_basis() const;
 
+  // TODO: combined helpers to set all properties
+  // e.g. (from old Solution form)
+  // void Solution::setup_solution_properties() {
+  //   setup_endmember_names();
+  //   setup_endmember_formulae();
+  //   setup_elements();
+  //   setup_stoichiometric_matrix();
+  //   setup_independent_element_indices();
+  //   setup_dependent_element_indices();
+  //   setup_reaction_basis();
+  //   setup_n_reactions();
+  //   setup_compositional_basis();
+  //   setup_compositional_null_basis();
+  // }
+
 };
 
 #endif // BURNMAN_CORE_COMPOSITE_MATERIAL_HPP_INCLUDED

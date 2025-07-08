@@ -353,20 +353,3 @@ void Solution::setup_endmember_names() const {
 void Solution::setup_endmember_formulae() const {
   set_endmember_formulae(map_endmembers_to_vector<FormulaMap>(&Mineral::get_formula));
 }
-
-/*
-TODO: Move this to CompositeMaterial as a useful helper
-
-void Solution::setup_solution_properties() {
-  setup_endmember_names();
-  setup_endmember_formulae();
-  setup_elements();
-  setup_stoichiometric_matrix();
-  setup_independent_element_indices();
-  setup_dependent_element_indices();
-  setup_reaction_basis();
-  setup_n_reactions();
-  setup_compositional_basis();
-  setup_compositional_null_basis();
-}
-*/
