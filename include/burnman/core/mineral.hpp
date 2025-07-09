@@ -16,6 +16,7 @@
 #include "burnman/core/material.hpp"
 #include "burnman/core/equation_of_state.hpp"
 #include "burnman/utils/eos.hpp"
+#include "burnman/utils/types.hpp"
 
 /**
  * @class Mineral
@@ -33,13 +34,7 @@
  * the unit cell volume in Angstrom^3.
  * To convert: V_uc * 1e-30 * N_a / Z, where N_a is Avogadro's number and Z is
  * the number of formula units per unit cell.
-  TODO
-  Funcs:
-    __init__(self, params=None, property_modifiers=None):
-    to_string
-    debug_print
-    unroll
-    formula
+ *
  */ 
 class Mineral : public Material{
  public:

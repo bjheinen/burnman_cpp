@@ -7,10 +7,9 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-//#include <cmath>
 #include "burnman/core/assemblage.hpp"
+#include "burnman/core/mineral.hpp"
 #include "burnman/utils/utils.hpp"
-//#include "burnman/utils/constants.hpp"
 
 void Assemblage::reset() {
   // Reset caches Material properties

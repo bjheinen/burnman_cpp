@@ -15,6 +15,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/material.hpp"
+#include "burnman/utils/types.hpp"
 
 /**
  * @class CompositeMaterial
