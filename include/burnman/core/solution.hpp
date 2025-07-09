@@ -106,6 +106,11 @@ class Solution : public CompositeMaterial {
     return mapped_properties;
   }
 
+  // Override public methods
+  void set_state(double new_pressure, double new_temperature) override;
+  void set_method(EOSType new_method) override;
+  void set_method(std::shared_ptr<EquationOfState> new_method) override;
+
   // Public getters for extra Solution functions
   /**
    * @brief Retrieves molar excess gibbs free energy the of the solid solution.

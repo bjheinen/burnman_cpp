@@ -35,6 +35,36 @@ void Solution::reset() {
   volume_hessian.reset();
 }
 
+// Public setter overrides of Material
+void Solution::set_method(std::shared_ptr<EquationOfState> new_method) {
+  for (Mineral& embr : solution_model->endmembers) {
+    embr.set_method(new_method);
+  }
+  // Clear properties cache
+  reset();
+}
+
+void Solution::set_method(EOSType new_method) {
+  for (Mineral& embr : solution_model->endmembers) {
+    embr.set_method(new_method);
+  }
+  // Clear properties cache
+  reset();
+}
+
+void Solution::set_state(
+  double new_pressure,
+  double new_temperature
+) {
+  reset(); // TODO: check if reset needed here???
+  // Set P,T using Material
+  Material::set_state(new_pressure, new_temperature);
+  // Set state of each endmember
+  for (Mineral& embr : solution_model->endmembers) {
+    embr.set_state(new_pressure, new_temperature);
+  }
+}
+
 // Public getter functions with caching
 double Solution::get_excess_gibbs() const {
   if (!excess_gibbs.has_value()) {
