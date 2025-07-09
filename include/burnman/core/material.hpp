@@ -13,7 +13,7 @@
 #include <string>
 #include <optional>
 #include <memory>
-#include "burnman/utils/eos.hpp"
+#include "burnman/utils/types.hpp"
 
 // Forward declaration to avoid include
 class EquationOfState;
@@ -99,6 +99,13 @@ class Material {
    * @return The material name if set, else returns the class name
    */
   std::string get_name() const;
+
+  /**
+   * @brief Gets the chemical formula of the material.
+   *
+   * @return FormulaMap (std::unordered_map<std::string, int>)
+   */
+  const FormulaMap& get_formula() const;
 
   /**
    * @brief Returns current pressure
@@ -632,6 +639,15 @@ class Material {
    */
   virtual double compute_isentropic_thermal_gradient() const;
 
+  /**
+   * @brief Computes the chemical formula of the material.
+   *
+   * @note Default implementation throws NotImplementedError.
+   *       Derived classes should override method.
+   *
+   * @return Chemical formula as FormulaMap.
+   */
+  virtual FormulaMap compute_formula() const;
 
  private:
   // std::optional used for caching
@@ -659,6 +675,7 @@ class Material {
   mutable std::optional<double> molar_heat_capacity_v;
   mutable std::optional<double> molar_heat_capacity_p;
   mutable std::optional<double> isentropic_thermal_gradient;
+  mutable std::optional<FormulaMap> formula; // reset?
   // name not cached and and not deleted by reset()
   std::optional<std::string> name;
 

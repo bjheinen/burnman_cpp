@@ -56,6 +56,13 @@ std::string Material::get_name() const {
   }
 }
 
+const FormulaMap& Material::get_formula() const {
+  if (!formula.has_value()) {
+    formula = compute_formula();
+  }
+  return *formula;
+}
+
 void Material::set_method(EOSType new_method [[maybe_unused]]) {
   throw_not_implemented_error(__func__);
 }
@@ -325,5 +332,9 @@ double Material::compute_molar_heat_capacity_p() const {
 }
 
 double Material::compute_isentropic_thermal_gradient() const {
+  throw_not_implemented_error(__func__);
+}
+
+FormulaMap Material::compute_formula() const {
   throw_not_implemented_error(__func__);
 }
