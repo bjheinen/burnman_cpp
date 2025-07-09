@@ -11,13 +11,10 @@
 #define BURNMAN_UTILS_EOS_HPP_INCLUDED
 
 #include <string>
-#include <unordered_map>
 #include <optional>
 #include <variant>
 #include <vector>
-
-// Type alias for formula map
-using FormulaMap = std::unordered_map<std::string, int>;
+#include "burnman/utils/types.hpp"
 
 /**
  * @namespace excesses
