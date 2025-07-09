@@ -18,6 +18,36 @@ void Assemblage::reset() {
   volume_fractions.reset();
 }
 
+// Public setter overrides of Material
+void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
+  for (auto& ph : phases) {
+    ph->set_method(new_method);
+  }
+  // Clear properties cache
+  reset();
+}
+
+void Assemblage::set_method(EOSType new_method) {
+  for (auto& ph : phases) {
+    ph->set_method(new_method);
+  }
+  // Clear properties cache
+  reset();
+}
+
+void Assemblage::set_state(
+  double new_pressure,
+  double new_temperature
+) {
+  reset(); // TODO: check if reset needed here???
+  // Set P,T using Material
+  Material::set_state(new_pressure, new_temperature);
+  // Set state of each endmember
+  for (auto& ph : phases) {
+    ph->set_state(new_pressure, new_temperature);
+  }
+}
+
 // Public getter functions with caching
 Eigen::ArrayXd Assemblage::get_volume_fractions() const {
   if (!volume_fractions.has_value()) {
