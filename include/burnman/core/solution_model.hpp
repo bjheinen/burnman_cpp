@@ -469,50 +469,12 @@ class AsymmetricRegularSolution : public IdealSolution{
  *
  */
 class SymmetricRegularSolution : public AsymmetricRegularSolution{
-  // Only change to setup, with alpha = 1,1,1,...
-  ;
+ public:
+  SymmetricRegularSolution(
+    const SolutionModel::PairedEndmemberList& endmember_list,
+    std::vector<std::vector<double>> energy_interaction,
+    std::vector<std::vector<double>> volume_interaction = {},
+    std::vector<std::vector<double>> entropy_interaction = {});
 };
 
 #endif // BURNMAN_CORE_SOLUTION_MODEL_HPP_INCLUDED
-
-// empty_formula [string] --> abbreviated formula with empty [] for sites
-// general_formula --> formula with comma separated possible species
-// n_sites [int]
-// sites --> list of list of strings (check best way to implement, may ignore if unused)
-// site_names --> vector of strings
-// n_occupancies [int] --> sum of number of possible species
-//  e.g. [[A][B], [B][C1/2D1/2]] would = 5 (2 on 1, 3 on 2)
-// site_multiplicities [2D array] --> 1D for each endmember
-// endmember_occupancies [2D array] --> as above
-// endmember_noccupancies [2D array] --> number of atoms instead of fraction
-
-// TODO:
-//  Base class, ideal, asymmetric
-//  Public getters and protected compute functions
-//  Make virtual where needed to override in derived classes
-/*
-excess_gibbs_free_energy
-excess_partial_gibbs_free_energies
-excess_volume
-excess_partial_volumes
-excess_entropy
-excess_partial_entropies
-excess_enthalpy
-Cp_excess
-alphaV_excess
-VoverKT_excess
-// In derived
-activity_coefficients
-activities
-// Asymmetric
-Constructor logic
-phi
-non_ideal_interactions
-non_ideal_excess_partial_gibbs
-excess_partial_gibbs_free_energies --> override
-excess_partial_entropies --> override
-excess_partial_volumes --> override
-gibbs_hessian
-entorpy_hessian
-volume_hessian
-*/
