@@ -26,18 +26,19 @@ namespace utils {
    *     {60.53136e3, 0.0},
    *     {10.0e3}
    *   };
-   * jagged2mat(x) --> 
-   *   0, 0, 24740, 26000, 24300,
-   *   0, 0, 24740, 0, 0,
-   *   0, 0, 0, 60531.36, 0,
-   *   0, 0, 0, 0, 10000,
-   *   0, 0, 0, 0, 0;
+   *   int n = 5;
+   *   jagged2square(x, n) -->
+   *     0, 0, 24740, 26000, 24300,
+   *     0, 0, 24740, 0, 0,
+   *     0, 0, 0, 60531.36, 0,
+   *     0, 0, 0, 0, 10000,
+   *     0, 0, 0, 0, 0;
    * 
    * @param v jagged array to convert.
    * @param n size of square matrix.
    * @return Square matrix.
    */
-  inline Eigen::MatrixXd jagged2square(std::vector<std::vector<double>>& v, int n) {
+  inline Eigen::MatrixXd jagged2square(const std::vector<std::vector<double>>& v, int n) {
     Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(n, n);
     for (int i = 0; i < v.size(); i++) {
       int col = n - 1;
@@ -48,6 +49,7 @@ namespace utils {
     }
     // Ensure matrix is upper triangle only
     mat.triangularView<Eigen::Lower>().setZero();
+    return mat;
   }
 
   inline Eigen::MatrixXd populate_interaction_matrix(
