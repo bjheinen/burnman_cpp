@@ -14,6 +14,7 @@
 #include <unordered_set>
 #include <vector>
 #include "burnman/utils/constants.hpp"
+#include "burnman/utils/types.hpp"
 
 namespace utils {
 
@@ -35,6 +36,42 @@ namespace utils {
       }
     }
     return ordered_elements;
+  }
+
+  /** @brief Calculates (weighted) sum of chemical formulae.
+   *
+   * @param formulae Vector of chemical formulae with elements as FormulaMap.
+   * @param weights Optional weights - vector of equal length to formulae.
+   *
+   * @return Summed formula as FormulaMap.
+   */
+  inline FormulaMap sum_formulae(
+    const std::vector<FormulaMap>& formulae,
+    const Eigen::ArrayXd& weights
+  ) {
+    size_t n = formulae.size();
+    if (static_cast<size_t>(weights.size()) != n) {
+      throw std::invalid_argument(
+        "Weights length must be equal to number of formulae");
+    }
+    FormulaMap summed_formula;
+    for (size_t i = 0; i < n; ++i) {
+      summed_formula += formulae[i] * weights[i];
+    }
+    return summed_formula;
+  }
+
+  /**
+   * @copydoc sum_formulae(
+   *  const std::vector<FormulaMap>& formulae,
+   *  const Eigen::ArrayXd& weights)
+   * @overload
+   */
+  inline FormulaMap sum_formulae(
+    const std::vector<FormulaMap>& formulae
+  ) {
+    Eigen::ArrayXd ones = Eigen::ArrayXd::Ones(formulae.size());
+    return sum_formulae(formulae, ones);
   }
 
 }
