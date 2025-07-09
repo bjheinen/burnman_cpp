@@ -340,6 +340,10 @@ double Solution::compute_molar_heat_capacity_p() const {
   return (em_Cp * molar_fractions).sum() + solution_model->compute_Cp_excess();
 }
 
+FormulaMap Solution::compute_formula() const {
+  return utils::sum_formulae(get_endmember_formulae(), molar_fractions);
+}
+
 // Setup functions for CompositeMaterial properties
 
 int Solution::compute_n_endmembers() const {
