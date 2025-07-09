@@ -150,7 +150,7 @@ double Mineral::compute_shear_modulus() const {
 }
 
 // Mineral properties (non EOS)
-FormulaMap Mineral::get_formula() const {
+FormulaMap Mineral::compute_formula() const {
   if (params.formula.has_value()) {
     return *params.formula;
   } else {

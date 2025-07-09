@@ -49,8 +49,6 @@ class Mineral : public Material{
   void set_property_modifier_params(excesses::ExcessParamVector excess_params);
   excesses::Excesses get_property_modifiers() const;
 
-  FormulaMap get_formula() const;
-
   // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
   void set_method(EOSType new_method) override;
@@ -102,6 +100,7 @@ class Mineral : public Material{
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
   double compute_isentropic_thermal_gradient() const override;
+  FormulaMap compute_formula() const override;
 
  private:
   // Excesses struct for property modifiers
