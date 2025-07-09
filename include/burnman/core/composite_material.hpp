@@ -68,7 +68,7 @@ class CompositeMaterial : public Material {
    * @brief Vector of chemical formula of all endmembers in the material.
    *
    * Each formula is a FormulaMap, where
-   * FormulaMap = std::unordered_map<std::string, int>>;
+   * FormulaMap = std::unordered_map<std::string, double>>;
    */
   std::vector<FormulaMap>& get_endmember_formulae() const;
 

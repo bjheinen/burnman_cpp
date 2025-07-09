@@ -103,7 +103,7 @@ class Material {
   /**
    * @brief Gets the chemical formula of the material.
    *
-   * @return FormulaMap (std::unordered_map<std::string, int>)
+   * @return FormulaMap (std::unordered_map<std::string, double>)
    */
   const FormulaMap& get_formula() const;
 
