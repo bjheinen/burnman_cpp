@@ -142,22 +142,6 @@ namespace excesses {
 } // End namespace ExcessParams
 
 /**
- * Enum used to define EOS Type
- */
-enum class EOSType {
-  Auto, // Used to set EOS from params
-  Custom, // Used when user passes custom EOSType
-  Vinet,
-  BM3,
-  BM2,
-  MGD2,
-  MGD3,
-  SLB2,
-  SLB3,
-  SLB3Conductive
-};
-
-/**
  * Four Cp parameters used in HP and CORK
  */
 struct CpParams {
