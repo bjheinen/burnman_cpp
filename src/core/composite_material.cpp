@@ -185,7 +185,7 @@ Eigen::MatrixXd CompositeMaterial::compute_compositional_null_basis() const {
   // assert(
   //   M.isApprox(Eigen::MatrixXd::Identity(M.rows(), M.cols()),
   //     constants::precision::abs_tolerance));
-  compositional_null_basis = nullspace;
+  return nullspace;
 }
 
 Eigen::MatrixXd CompositeMaterial::compute_reaction_basis() const {
