@@ -148,6 +148,12 @@ double Assemblage::compute_molar_heat_capacity_p() const {
   return averaging_scheme->average_heat_capacity_p(molar_fractions, c_p);
 }
 
+FormulaMap Assemblage::compute_formula() const {
+  std::vector<FormulaMap> phase_formulae =
+    map_phases_to_vector<FormulaMap>(&Material::get_formula);
+  return utils::sum_formulae(phase_formulae, molar_fractions);
+}
+
 // Compute / setup functions for assemblage properties
 
 Eigen::ArrayXd Assemblage::compute_volume_fractions() const {

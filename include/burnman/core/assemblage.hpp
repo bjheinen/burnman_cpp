@@ -75,6 +75,26 @@ class Assemblage : public CompositeMaterial {
     return mapped_properties;
   }
 
+  /**
+   * @brief Utility function to map endmember properties to std::vector.
+   *
+   * Usage: see `Assemblage::map_endmembers_to_array'.
+   *
+   * @param func Pointer to public getter function in `Mineral'
+   * @return vector of endmember properties (of type T)
+   */
+  template <typename T, typename Func>
+  std::vector<T> map_phases_to_vector(Func&& func) const {
+    std::vector<T> mapped_properties;
+    mapped_properties.reserve(phases.size());
+    std::transform(
+      phases.begin(), phases.end(), std::back_inserter(mapped_properties),
+      [&func](const auto& phase) {
+        return ((*phase).*func)();
+      });
+    return mapped_properties;
+  }
+
   // Public getters for extra Assemblage functions
   /**
    * @brief Retrieves n_i * V_i.
@@ -116,6 +136,7 @@ class Assemblage : public CompositeMaterial {
   double compute_thermal_expansivity() const override;
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
+  FormulaMap compute_formula() const override;
 
   // Overrides of pure virtual functions from CompositeMaterial
   int compute_n_endmembers() const override;
