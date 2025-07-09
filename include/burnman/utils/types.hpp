@@ -13,8 +13,45 @@
 #include <string>
 #include <unordered_map>
 
-// Type alias for formula map
-using FormulaMap = std::unordered_map<std::string, int>;
+/**
+ * Custom type alias for chemical formulae.
+ */
+using FormulaMap = std::unordered_map<std::string, double>;
+
+// Overloaded operators to add and weight formulae
+inline FormulaMap operator+(const FormulaMap& a, const FormulaMap& b) {
+  FormulaMap result = a;
+  for (const auto& [elem, count] : b) {
+    result[elem] += count;
+  }
+  return result;
+}
+
+inline FormulaMap& operator+=(FormulaMap& a, const FormulaMap& b) {
+  for (const auto& [elem, count] : b) {
+    a[elem] += count;
+  }
+  return a;
+}
+
+inline FormulaMap operator*(const FormulaMap& a, double scalar) {
+  FormulaMap result;
+  for (const auto& [elem, count] : a) {
+    result[elem] = scalar * count;
+  }
+  return result;
+}
+
+inline FormulaMap operator*(double scalar, const FormulaMap& a) {
+  return a * scalar;
+}
+
+inline FormulaMap& operator*=(FormulaMap& a, double scalar) {
+  for (auto& [_, count] : a) {
+    count *= scalar;
+  }
+  return a;
+}
 
 /**
  * Enum used to define EOS Type
