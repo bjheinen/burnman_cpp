@@ -16,6 +16,7 @@
 #include <utility>
 #include <Eigen/Dense>
 #include "burnman/core/mineral.hpp"
+#include "burnman/utils/types.hpp"
 
 // TODO: rename IdealSolution -> IdealSolutionModel etc.?
 
@@ -29,9 +30,6 @@
 class SolutionModel {
 
  public:
-
-  using MineralFormulaPair = std::pair<Mineral, std::string>;
-  using PairedEndmemberList = std::vector<MineralFormulaPair>;
 
   // Using Mineral objects for now - must be instance not derived class!
   // For derived classes we need unique_ptr instead.
@@ -281,7 +279,7 @@ class IdealSolution : public SolutionModel{
  public:
 
   // Extend constructor
-  IdealSolution(const SolutionModel::PairedEndmemberList& endmember_list);
+  IdealSolution(const PairedEndmemberList& endmember_list);
 
   // Public functions overriden from base class
   Eigen::ArrayXd compute_excess_partial_gibbs_free_energies(
@@ -386,7 +384,7 @@ class AsymmetricRegularSolution : public IdealSolution{
  public:
 
   AsymmetricRegularSolution(
-    const SolutionModel::PairedEndmemberList& endmember_list,
+    const PairedEndmemberList& endmember_list,
     std::vector<double> alphas,
     std::vector<std::vector<double>> energy_interaction,
     std::vector<std::vector<double>> volume_interaction = {},
@@ -471,7 +469,7 @@ class AsymmetricRegularSolution : public IdealSolution{
 class SymmetricRegularSolution : public AsymmetricRegularSolution{
  public:
   SymmetricRegularSolution(
-    const SolutionModel::PairedEndmemberList& endmember_list,
+    const PairedEndmemberList& endmember_list,
     std::vector<std::vector<double>> energy_interaction,
     std::vector<std::vector<double>> volume_interaction = {},
     std::vector<std::vector<double>> entropy_interaction = {});

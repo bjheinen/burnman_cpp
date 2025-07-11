@@ -274,7 +274,7 @@ double SolutionModel::compute_VoverKT_excess() const {
 }
 
 // Constructor for IdealSolution
-IdealSolution::IdealSolution(const SolutionModel::PairedEndmemberList& endmember_list)
+IdealSolution::IdealSolution(const PairedEndmemberList& endmember_list)
   : SolutionModel(endmember_list) {
   // Calculate configurational entropies also
   endmember_configurational_entropies = compute_endmember_configurational_entropies();
@@ -418,7 +418,7 @@ Eigen::MatrixXd IdealSolution::compute_ideal_entropy_hessian(
 
 // Constructor for AsymmetricRegularSolution
 AsymmetricRegularSolution::AsymmetricRegularSolution(
-  const SolutionModel::PairedEndmemberList& endmember_list,
+  const PairedEndmemberList& endmember_list,
   std::vector<double> alphas_vector,
   std::vector<std::vector<double>> energy_interaction,
   std::vector<std::vector<double>> volume_interaction,
@@ -592,7 +592,7 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_non_ideal_hessian(
 
 // Constructor
 SymmetricRegularSolution::SymmetricRegularSolution(
-  const SolutionModel::PairedEndmemberList& endmember_list,
+  const PairedEndmemberList& endmember_list,
   std::vector<std::vector<double>> energy_interaction,
   std::vector<std::vector<double>> volume_interaction,
   std::vector<std::vector<double>> entropy_interaction)

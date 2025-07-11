@@ -12,6 +12,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 /**
  * Custom type alias for chemical formulae.
@@ -68,5 +69,12 @@ enum class EOSType {
   SLB3,
   SLB3Conductive
 };
+
+/**
+ * Type aliases for constructing solid solution models.
+ */
+class Mineral; // Forward declare
+using MineralFormulaPair = std::pair<Mineral, std::string>;
+using PairedEndmemberList = std::vector<MineralFormulaPair>;
 
 #endif // BURNMAN_UTILS_TYPES_HPP_INCLUDED
