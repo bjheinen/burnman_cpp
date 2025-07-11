@@ -15,7 +15,7 @@
 #include <string>
 #include <memory>
 
-TEST_CASE("Get/Set state", "[material][core]") {
+TEST_CASE("Get/Set state", "[core][material]") {
   double test_P = 24e9;
   double test_T = 2000.0;
   Material test_material;
@@ -29,7 +29,7 @@ TEST_CASE("Get/Set state", "[material][core]") {
   CHECK(test_material.get_temperature() == test_T);
 }
 
-TEST_CASE("Get/Set name", "[material][core]") {
+TEST_CASE("Get/Set name", "[core][material]") {
   Material test_material;
   std::string test_name = "Test Name";
   std::string new_test_name = "Another Name";
@@ -47,7 +47,7 @@ TEST_CASE("Get/Set name", "[material][core]") {
   CHECK(test_material.get_name() == new_test_name);
 }
 
-TEST_CASE("Ensure default errors", "[material][core]") {
+TEST_CASE("Ensure default errors", "[core][material]") {
   Material test_material;
   CHECK_THROWS_AS(test_material.set_method(EOSType::Auto), NotImplementedError);
   CHECK_THROWS_AS(test_material.set_method(std::make_shared<EquationOfState>()), NotImplementedError);
@@ -73,4 +73,5 @@ TEST_CASE("Ensure default errors", "[material][core]") {
   CHECK_THROWS_AS(test_material.get_molar_heat_capacity_v(), NotImplementedError);
   CHECK_THROWS_AS(test_material.get_molar_heat_capacity_p(), NotImplementedError);
   CHECK_THROWS_AS(test_material.get_isentropic_thermal_gradient(), NotImplementedError);
+  CHECK_THROWS_AS(test_material.get_formula(), NotImplementedError);
 }

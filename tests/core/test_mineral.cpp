@@ -15,11 +15,12 @@
 #include "burnman/eos/birch_murnaghan.hpp"
 #include "burnman/eos/mie_grueneisen_debye.hpp"
 #include "burnman/utils/eos.hpp"
+#include "burnman/utils/types.hpp"
 #include <memory>
 #include <typeinfo>
 using namespace Catch::Matchers;
 
-TEST_CASE("Set method", "[mineral][core]") {
+TEST_CASE("Set method", "[core][mineral]") {
   Mineral test_mineral;
   test_mineral.params.equation_of_state = EOSType::BM3;
   // Set method should call validate parameters
@@ -56,10 +57,9 @@ TEST_CASE("Set method", "[mineral][core]") {
   REQUIRE_NOTHROW(test_mineral.set_method(std::make_shared<CustomEOS>()));
   REQUIRE(test_mineral.params.equation_of_state == EOSType::Custom);
   REQUIRE(typeid(*test_mineral.eos_method) == typeid(CustomEOS));
-  // TODO: loop through enum and check all EOS work?
 }
 
-TEST_CASE("Set state", "[mineral][core]") {
+TEST_CASE("Set state", "[core][mineral]") {
   // Set-up mineral
   Mineral test_mineral;
   test_mineral.params.equation_of_state = EOSType::BM3;
@@ -122,13 +122,26 @@ TEST_CASE("Set state", "[mineral][core]") {
     !WithinAbs(zero_excess.d2GdPdT, tol_abs));
 }
 
-TEST_CASE("Check exceptions", "[mineral][core]") {
+TEST_CASE("Check exceptions", "[core][mineral]") {
   Mineral test_mineral;
   REQUIRE_THROWS(test_mineral.get_molar_mass());
   REQUIRE_THROWS(test_mineral.set_method(EOSType::Auto));
 }
 
-TEST_CASE("Check py reference values", "[mineral][core]") {
+TEST_CASE("Check formula", "[core][mineral]") {
+  Mineral test_mineral;
+  REQUIRE_THROWS(test_mineral.get_formula());
+  FormulaMap fm = {
+    {"Al", 2.0},
+    {"Si", 1.0},
+    {"O", 5.0}
+  };
+  test_mineral.params.formula = fm;
+  REQUIRE_NOTHROW(test_mineral.get_formula());
+  // TODO (C++20 has ==, but watch doubles -- impement == for FormulaMap)
+}
+
+TEST_CASE("Check py reference values", "[core][mineral]") {
   // Set-up mineral
   Mineral test_mineral;
   test_mineral.params.equation_of_state = EOSType::MGD3;
