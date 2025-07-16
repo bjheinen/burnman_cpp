@@ -56,6 +56,10 @@ std::string Material::get_name() const {
   }
 }
 
+bool Material::has_custom_name() const {
+  return name.has_value();
+}
+
 const FormulaMap& Material::get_formula() const {
   if (!formula.has_value()) {
     formula = compute_formula();

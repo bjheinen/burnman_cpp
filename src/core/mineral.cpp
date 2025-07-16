@@ -14,6 +14,17 @@
 #include "burnman/utils/make_eos.hpp"
 #include "burnman/utils/constants.hpp"
 
+std::string Mineral::get_name() const {
+  if (has_custom_name()) {
+    return Material::get_name();
+  } else if (params.name.has_value()) {
+    //set_name(*params.name); // Need to deal with constness to set...
+    return *params.name;
+  } else {
+    return Material::get_name();
+  }
+}
+
 void Mineral::set_property_modifier_params(
   excesses::ExcessParamVector excess_params
 ) {

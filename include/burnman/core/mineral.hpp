@@ -50,6 +50,7 @@ class Mineral : public Material{
   excesses::Excesses get_property_modifiers() const;
 
   // Override public methods
+  std::string get_name() const override;
   void set_state(double new_pressure, double new_temperature) override;
   void set_method(EOSType new_method) override;
   void set_method(std::shared_ptr<EquationOfState> new_method) override;

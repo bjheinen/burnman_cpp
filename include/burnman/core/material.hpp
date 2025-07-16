@@ -98,7 +98,7 @@ class Material {
    * 
    * @return The material name if set, else returns the class name
    */
-  std::string get_name() const;
+  virtual std::string get_name() const;
 
   /**
    * @brief Gets the chemical formula of the material.
@@ -648,6 +648,12 @@ class Material {
    * @return Chemical formula as FormulaMap.
    */
   virtual FormulaMap compute_formula() const;
+
+  // Utility functions
+  /**
+   * @brief Helper function to check if name set.
+   */
+  bool has_custom_name() const;
 
  private:
   // std::optional used for caching
