@@ -111,6 +111,24 @@ class Solution : public CompositeMaterial {
   void set_method(EOSType new_method) override;
   void set_method(std::shared_ptr<EquationOfState> new_method) override;
 
+  // Public setters for Solution
+  /**
+   * @brief Sets the solution model for the material.
+   *
+   * @param model Shared pointer to the solution model.
+   */
+  void set_solution_model(std::shared_ptr<SolutionModel> model);
+
+  /**
+   * @brief Sets the molar amounts of each endmember.
+   *
+   * @param composition_vector Molar fractions of endmembers.
+   * @throws RuntimeError if solution model not set.
+   * @throws RuntimeError if sum(composition_vector) != 1.
+   * @throws RuntimeError if length(composition_vector) != n_endmembers.
+   */
+  void set_composition(const Eigen::ArrayXd& composition_vector);
+
   // Public getters for extra Solution functions
   /**
    * @brief Retrieves molar excess gibbs free energy the of the solid solution.

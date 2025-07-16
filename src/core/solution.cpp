@@ -13,6 +13,7 @@
 #include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/utils/matrix_utils.hpp"
 #include "burnman/core/averaging_schemes.hpp"
+#include "burnman/utils/constants.hpp"
 
 void Solution::reset() {
   // Reset caches Material properties
@@ -33,6 +34,29 @@ void Solution::reset() {
   gibbs_hessian.reset();
   entropy_hessian.reset();
   volume_hessian.reset();
+}
+
+// Public setters
+void Solution::set_solution_model(std::shared_ptr<SolutionModel> model) {
+  // TODO: think about using clone semantics instead
+  solution_model = std::move(model);
+}
+
+void Solution::set_composition(const Eigen::ArrayXd& composition_vector) {
+  // Throw error if no solution model yet
+  if (!solution_model) {
+    throw std::runtime_error("Cannot set molar fractions: solution model not set!");
+  }
+  // Throw error if length not correct
+  if (composition_vector.size() != get_n_endmembers()) {
+    throw std::runtime_error(
+      "Composition vector length (" + std::to_string(composition_vector.size()) +
+      ") does not match number of endmembers (" + std::to_string(get_n_endmembers()) + ").");
+  }
+  if (std::abs(composition_vector.sum() - 1.0) > constants::precision::abs_tolerance) {
+    throw std::runtime_error("Sum of molar fractions not equal to 1.0!");
+  }
+  molar_fractions = composition_vector;
 }
 
 // Public setter overrides of Material
