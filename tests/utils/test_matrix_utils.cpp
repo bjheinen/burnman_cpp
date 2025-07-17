@@ -13,6 +13,8 @@
 #include "tolerances.hpp"
 #include "burnman/utils/matrix_utils.hpp"
 
+#include <iostream>
+
 TEST_CASE("jagged2square n=5", "[utils][matrix_utils]") {
   int n = 5;
   std::vector<std::vector<double>> v = {
@@ -74,3 +76,58 @@ TEST_CASE("jagged2square (empty input)") {
   REQUIRE(result.isZero());
   REQUIRE(result.isUpperTriangular());
 }
+
+TEST_CASE("populate_interaction_matrix; check shape", "[utils][matrix_utils]") {
+  int n = 3;
+  Eigen::ArrayXd alphas(n);
+  alphas << 1.0, 2.0, 3.0;
+  Eigen::MatrixXd interaction(n, n);
+  interaction << 1, 2, 3,
+                 4, 5, 6,
+                 7, 8, 9;
+  Eigen::MatrixXd result = utils::populate_interaction_matrix(interaction, alphas, n);
+  REQUIRE(result.rows() == n);
+  REQUIRE(result.cols() == n);
+  REQUIRE(result.isUpperTriangular());
+}
+
+TEST_CASE("populate_interaction_matrix; values", "[utils][matrix_utils]") {
+  int n = 5;
+  Eigen::MatrixXd interaction(n, n);
+  interaction <<
+    0, 0, 24740,    26000, 24300,
+    0, 0, 24740,        0,     0,
+    0, 0,     0, 60531.36,     0,
+    0, 0,     0,        0, 10000,
+    0, 0,     0,        0,     0;
+
+  SECTION("Symmetric ((alphas == 1).all())") {
+    Eigen::ArrayXd alphas(n);
+    alphas << 1.0, 1.0, 1.0, 1.0, 1.0;
+    Eigen::MatrixXd result = utils::populate_interaction_matrix(interaction, alphas, n);
+    REQUIRE((result.array() == interaction.array()).all());
+  }
+  SECTION("Asymmetric (!alphas == 1).all())") {
+    Eigen::ArrayXd alphas(n);
+    alphas << 1, 2, 3, 4, 5;
+    Eigen::MatrixXd expected(n, n);
+    expected <<
+      0, 0, 24740*0.5,          26000*0.4, 24300*(1.0/3.0),
+      0, 0, 24740*0.4,                  0,               0,
+      0, 0,         0, 60531.36*(2.0/7.0),               0,
+      0, 0,         0,                  0, 10000*(2.0/9.0),
+      0, 0,         0,                  0,               0;
+    Eigen::MatrixXd result = utils::populate_interaction_matrix(interaction, alphas, n);
+    REQUIRE(result.isApprox(expected, tol_rel));
+  }
+  SECTION("Zero in alphas") {
+    Eigen::ArrayXd alphas(n);
+    alphas << 0, 0, 1, 1, 1;
+    Eigen::MatrixXd result = utils::populate_interaction_matrix(interaction, alphas, n);
+    REQUIRE_FALSE(result.array().isFinite().all());
+    result(0, 1) = 0;
+    REQUIRE(result.array().isFinite().all());
+  }
+}
+
+// TODO: get_independent_row_indices, complete_basis
