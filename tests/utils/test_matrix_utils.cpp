@@ -13,8 +13,6 @@
 #include "tolerances.hpp"
 #include "burnman/utils/matrix_utils.hpp"
 
-#include <iostream>
-
 TEST_CASE("jagged2square n=5", "[utils][matrix_utils]") {
   int n = 5;
   std::vector<std::vector<double>> v = {
@@ -187,7 +185,6 @@ TEST_CASE("complete_basis", "[utils][matrix_utils]") {
        1, 0, 0,
        0, 1, 0;
     Eigen::MatrixXd result = utils::complete_basis(basis);
-    std::cout << result << std::endl;
     REQUIRE(result.rows() == 3);
     REQUIRE(result.cols() == 3);
     REQUIRE((result.array() == expected.array()).all());
