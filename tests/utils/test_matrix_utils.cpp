@@ -130,8 +130,6 @@ TEST_CASE("populate_interaction_matrix; values", "[utils][matrix_utils]") {
   }
 }
 
-// TODO: get_independent_row_indices, complete_basis
-
 TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
 
   SECTION("all independent rows") {
@@ -169,4 +167,56 @@ TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
     std::vector<int> result = utils::get_independent_row_indices(m);
     REQUIRE(result.empty());
   }
+}
+
+TEST_CASE("complete_basis", "[utils][matrix_utils]") {
+  SECTION("Basis already complete (square)") {
+    int n = 3;
+    Eigen::MatrixXd basis = Eigen::MatrixXd::Identity(n, n);
+    Eigen::MatrixXd result = utils::complete_basis(basis);
+    REQUIRE(result.rows() == n);
+    REQUIRE(result.cols() == n);
+    REQUIRE(result.isIdentity());
+  }
+  SECTION("One row basis") {
+    Eigen::MatrixXd basis(1, 3);
+    basis << -1, 0, 1;
+    Eigen::MatrixXd expected(3, 3);
+    expected <<
+      -1, 0, 1,
+       1, 0, 0,
+       0, 1, 0;
+    Eigen::MatrixXd result = utils::complete_basis(basis);
+    std::cout << result << std::endl;
+    REQUIRE(result.rows() == 3);
+    REQUIRE(result.cols() == 3);
+    REQUIRE((result.array() == expected.array()).all());
+    Eigen::FullPivLU<Eigen::MatrixXd> lu(result);
+    REQUIRE(lu.rank() == 3);
+  }
+  SECTION("two independent rows") {
+    Eigen::MatrixXd basis(2, 3);
+    basis <<
+      1, 2, 3,
+      0, 1, 4;
+    Eigen::MatrixXd expected(3, 3);
+    expected <<
+      1, 2, 3,
+      0, 1, 4,
+      1, 0, 0;
+    Eigen::MatrixXd result = utils::complete_basis(basis);
+    REQUIRE(result.rows() == 3);
+    REQUIRE(result.cols() == 3);
+    REQUIRE((result.array() == expected.array()).all());
+    Eigen::FullPivLU<Eigen::MatrixXd> lu(result);
+    REQUIRE(lu.rank() == 3);
+  }
+  SECTION("Zero basis (empty matrix)") {
+    Eigen::MatrixXd basis(0, 5);
+    Eigen::MatrixXd result = utils::complete_basis(basis);
+    REQUIRE(result.rows() == 5);
+    REQUIRE(result.cols() == 5);
+    REQUIRE(result.isIdentity());
+  }
+  // Only used from reaction_basis? What about square but not full rank.
 }
