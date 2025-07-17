@@ -70,7 +70,7 @@ TEST_CASE("jagged2square n=2", "[utils][matrix_utils]") {
   REQUIRE(result.isUpperTriangular());
 }
 
-TEST_CASE("jagged2square (empty input)") {
+TEST_CASE("jagged2square (empty input)", "[utils][matrix_utils]") {
   std::vector<std::vector<double>> v;
   Eigen::MatrixXd result = utils::jagged2square(v, 3);
   REQUIRE(result.isZero());
@@ -131,3 +131,42 @@ TEST_CASE("populate_interaction_matrix; values", "[utils][matrix_utils]") {
 }
 
 // TODO: get_independent_row_indices, complete_basis
+
+TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
+
+  SECTION("all independent rows") {
+    Eigen::MatrixXd m(3,5);
+    m <<
+      1, 0, 0, 1, 3,
+      0, 1, 0, 1, 3,
+      0, 0, 2, 0, 3;
+    std::vector<int> expected = {0, 1, 2};
+    std::vector<int> result = utils::get_independent_row_indices(m);
+    REQUIRE(result == expected);
+  }
+  SECTION("some independent rows") {
+    Eigen::MatrixXd m(4,4);
+    m <<
+      1, 0, 1, 3,
+      0, 1, 1, 3,
+      1, 0, 1, 3,
+      0, 1, 1, 3;
+    std::vector<int> expected = {0, 1};
+    std::vector<int> result = utils::get_independent_row_indices(m);
+    REQUIRE(result == expected);
+  }
+  SECTION("One independent row") {
+    Eigen::MatrixXd m(2, 3);
+    m <<
+      2, 1, 4,
+      2, 1, 4;
+    std::vector<int> expected = {0};
+    std::vector<int> result = utils::get_independent_row_indices(m);
+    REQUIRE(result == expected);
+  }
+  SECTION("No independent rows - zero matrix") {
+    Eigen::MatrixXd m = Eigen::MatrixXd::Zero(5, 5);
+    std::vector<int> result = utils::get_independent_row_indices(m);
+    REQUIRE(result.empty());
+  }
+}
