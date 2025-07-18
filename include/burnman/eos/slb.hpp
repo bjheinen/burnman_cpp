@@ -145,7 +145,7 @@ class SLB3 : public EquationOfState{
    *
    * @param x V_0/V.
    * @param params Mineral parameters object of type MineralParams
-   * 
+   *
    * @return Grueneisen parameter [unitless].
    */
   static double compute_slb_grueneisen_parameter(
@@ -198,7 +198,7 @@ class SLB3 : public EquationOfState{
 
   /**
    * @brief GSL function wrapper to compute P(V) - P
-   * 
+   *
    * @param x Volume to test (passed by solver)
    * @param p Generic pointer for parameter object
    * @see `ParamsGSL::SolverParams_SLB`
@@ -208,7 +208,6 @@ class SLB3 : public EquationOfState{
   // TODO: wrapper for K_T for GSL Brent also
 
 };
-
 
 /**
  * @class SLB2
@@ -304,8 +303,4 @@ class SLB3Conductive : public SLB3{
 
 };
 
-
 #endif // #define BURNMAN_EOS_SLB_HPP_INCLUDED
-
-
-
