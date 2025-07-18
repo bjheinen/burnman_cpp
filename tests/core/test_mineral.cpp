@@ -141,6 +141,14 @@ TEST_CASE("Check formula", "[core][mineral]") {
   // TODO (C++20 has ==, but watch doubles -- impement == for FormulaMap)
 }
 
+TEST_CASE("Check get/set name", "[core][mineral]") {
+  Mineral test_mineral;
+  std::string n = "My Mineral!";
+  REQUIRE_FALSE(test_mineral.get_name() == n);
+  test_mineral.params.name = n;
+  REQUIRE(test_mineral.get_name() == n);
+}
+
 TEST_CASE("Check py reference values", "[core][mineral]") {
   // Set-up mineral
   Mineral test_mineral;
