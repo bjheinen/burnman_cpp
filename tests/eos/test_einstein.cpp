@@ -16,7 +16,7 @@
 using namespace einstein;
 using namespace Catch::Matchers;
 
-TEST_CASE("Check zero returns in einstein model functions", "[eos],[einstein]") {
+TEST_CASE("Check zero returns in einstein model functions", "[eos][einstein]") {
   double theta_0 = 773.0;
   int napfu = 2;
   // Explicit return of 0
