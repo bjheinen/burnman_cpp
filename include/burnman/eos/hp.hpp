@@ -20,7 +20,7 @@
  *        modifed Tait EOS (see `MT`). Desribed in Holland & Powell, 2011.
  *
  * TODO: Note here on P0 & calculation of Cp --> problems at high T
- *       Note to @see modified HP class. 
+ *       Note to @see modified HP class.
  *
  * @note All functions assume SI units for all properties.
  */
@@ -112,15 +112,15 @@ class HP_TMT : public EquationOfState{
    * @brief C_p from C_v and Einstein model.
    *
    * Molar heat capacity at constant volume calculated using an
-   * Einstein model. 
+   * Einstein model.
    *
    * @note Only for comparison with internally self-consisten C_p.
-   * 
+   *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type MineralParams
-   * 
+   *
    * @return Heat capacity at constant pressure in [J/K/mol].
    */
   double compute_molar_heat_capacity_p_einstein(
@@ -137,11 +137,11 @@ class HP_TMT : public EquationOfState{
    * Cp = a + bT + cT^-2 + dT^-0.5 (Holland & Powell, 2011).
    *
    * @note In `HP_TMT' P_ref = P_0, for derived classes this may not be
-   *       the case. e.g. @see TODO `NAME' 
-   * 
+   *       the case. e.g. @see TODO `NAME'
+   *
    * @param temperature The temperature to evaluate [K].
    * @param params Mineral parameters object of type MineralParams
-   * 
+   *
    * @return Heat capacity at reference pressure in [J/K/mol].
    */
   double compute_molar_heat_capacity_pref(
@@ -150,10 +150,10 @@ class HP_TMT : public EquationOfState{
 
   /**
    * @brief Thermal addition to standard state enthalpy at ambient P.
-   * 
+   *
    * @param temperature Temperature to evaluate [K].
    * @param params Mineral parameters object.
-   * 
+   *
    * @return [J/mol].
    */
   virtual double compute_intCpdT(
@@ -162,10 +162,10 @@ class HP_TMT : public EquationOfState{
 
   /**
    * @brief Thermal addition to standard state entropy at ambient P.
-   * 
+   *
    * @param temperature Temperature to evaluate [K].
    * @param params Mineral parameters object.
-   * 
+   *
    * @return [J/K/mol].
    */
   virtual double compute_intCpoverTdT(
@@ -174,12 +174,12 @@ class HP_TMT : public EquationOfState{
 
   /**
    * @brief Relative thermal pressure as function of T - T_0.
-   * 
+   *
    * Eq. 12 - 1 in Holland & Powell, 2011.
-   * 
+   *
    * @param temperature Temperature to evaluate [K].
    * @param params Mineral parameters object.
-   * 
+   *
    * @return Relative thermal pressure [Pa].
    */
   double compute_relative_thermal_pressure(
@@ -190,10 +190,10 @@ class HP_TMT : public EquationOfState{
 
   /**
    * @brief Computes thermal pressure as a function of T.
-   * 
+   *
    * @param temperature [K].
    * @param params MineralParams object.
-   * 
+   *
    * @return Thermal pressure [Pa].
    */
   double compute_thermal_pressure(
