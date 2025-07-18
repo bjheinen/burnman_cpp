@@ -168,7 +168,7 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
   SECTION("V dependent functions") {
     auto P = GENERATE(0.0, 10.0, 25.e9);
     auto T = GENERATE(300.0, 2000.0);
-    double V = *params.V_0;    
+    double V = *params.V_0;
     CHECK_THAT(mgd3.compute_grueneisen_parameter(P, T, V, params),
       WithinRel(*params.grueneisen_0, tol_rel) ||
       WithinAbs(*params.grueneisen_0, tol_abs));
