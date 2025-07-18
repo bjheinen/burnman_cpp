@@ -107,7 +107,7 @@ namespace utils {
   ) {
     int n = basis.rows();
     int m = basis.cols();
-    if (m >= n) {
+    if (n >= m) {
       return basis;
     }
     // Flip basis
