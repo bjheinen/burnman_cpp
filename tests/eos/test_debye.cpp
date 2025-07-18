@@ -56,6 +56,35 @@ TEST_CASE("Debye function", "[debye][eos]") {
   }
 }
 
+TEST_CASE("ExplicitDouble overloads", "[eos][debye]") {
+  double theta_0 = 773.0;
+  double T = 1000.0;
+  int int_napfu = 2;
+  ExplicitDouble dbl_napfu = ExplicitDouble(2.0);
+  // Using int
+  double int_E = compute_thermal_energy(T, theta_0, int_napfu);
+  double int_C = compute_molar_heat_capacity_v(T, theta_0, int_napfu);
+  double int_F = compute_helmholtz_free_energy(T, theta_0, int_napfu);
+  double int_S = compute_entropy(T, theta_0, int_napfu);
+  double int_dCdT = compute_dmolar_heat_capacity_v_dT(T, theta_0, int_napfu);
+  // Using ExplicitDouble
+  double dbl_E = compute_thermal_energy(T, theta_0, dbl_napfu);
+  double dbl_C = compute_molar_heat_capacity_v(T, theta_0, dbl_napfu);
+  double dbl_F = compute_helmholtz_free_energy(T, theta_0, dbl_napfu);
+  double dbl_S = compute_entropy(T, theta_0, dbl_napfu);
+  double dbl_dCdT = compute_dmolar_heat_capacity_v_dT(T, theta_0, dbl_napfu);
+  CHECK_THAT(int_E,
+    WithinRel(dbl_E, tol_rel) || WithinAbs(dbl_E, tol_abs));
+  CHECK_THAT(int_C,
+    WithinRel(dbl_C, tol_rel) || WithinAbs(dbl_C, tol_abs));
+  CHECK_THAT(int_F,
+    WithinRel(dbl_F, tol_rel) || WithinAbs(dbl_F, tol_abs));
+  CHECK_THAT(int_S,
+    WithinRel(dbl_S, tol_rel) || WithinAbs(dbl_S, tol_abs));
+  CHECK_THAT(int_dCdT,
+    WithinRel(dbl_dCdT, tol_rel) || WithinAbs(dbl_dCdT, tol_abs));
+}
+
 TEST_CASE("Check zero returns in debye model functions", "[debye][eos]") {
   double debye_0 = 773.0;
   int napfu = 2;
