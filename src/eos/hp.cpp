@@ -302,6 +302,8 @@ double HP_TMT::compute_helmholtz_free_energy(
   // TODO: check if call to compute_volume needed instead
   // TODO: these are unused, dead code?
   //       --> calculated via Mineral instead.
+  // Python --> uses V calculated from P instead
+  // --> remove in latest version as everything done in Mineral....
   return compute_gibbs_free_energy(
       pressure, temperature, volume, params)
     - pressure * volume;
