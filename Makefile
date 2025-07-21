@@ -106,7 +106,7 @@ $(BIN_DIR):
 
 # Run tests
 test: $(TEST_TARGET)
-	$(TEST_TARGET)
+	@echo "Build complete. Run tests with: $(TEST_TARGET)"
 
 # Clean up
 clean:
@@ -121,5 +121,5 @@ clean:
 #release: $(TARGET)
 
 .PHONY: all clean test
-	
+
 #NOTE: careful to test/checkout eigen opt flags, e.g. -DEIGEN_USE_THREADS -DEIGEN_DONT_ALIGN
