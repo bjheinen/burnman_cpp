@@ -155,16 +155,6 @@ class MT : public EquationOfState{
     double volume,
     const MineralParams& params) const override;
 
- private:
-  /**
-  * @brief GSL function wrapper to compute P(V) - P
-  *
-  * @param x Volume to test (passed by solver)
-  * @param p Generic pointer for parameter object
-  * @see `ParamsGSL::SolverParams_P`
-  */
-  static double bm_gsl_wrapper(double x, void* p);
-
 };
 
 #endif // BURNMAN_EOS_MODIFIED_TAIT_HPP_INCLUDED
