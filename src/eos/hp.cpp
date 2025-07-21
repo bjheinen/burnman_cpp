@@ -371,7 +371,7 @@ double HP_TMT::compute_intCpoverTdT(
 ) const {
   CpParams cp_params = *params.Cp;
   double T_0 = *params.T_0;
-  return 
+  return
     (
       cp_params.a * std::log(temperature)
       + cp_params.b * temperature
