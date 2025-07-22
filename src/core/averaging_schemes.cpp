@@ -88,7 +88,7 @@ double Averaging::hs_bulk_fn(
 ) {
   Eigen::ArrayXd vol_frac = volumes / volumes.sum();
   double K_n = n ? bulk_moduli.maxCoeff() : bulk_moduli.minCoeff();
-  double G_n = n ? shear_moduli.maxCoeff() : shear_moduli.maxCoeff();
+  double G_n = n ? shear_moduli.maxCoeff() : shear_moduli.minCoeff();
   double alpha_n = -3.0 / (3.0 * K_n + 4.0 * G_n);
   Eigen::Array<bool, Eigen::Dynamic, 1> mask = (bulk_moduli != K_n);
   Eigen::ArrayXd denominator = (1.0 / (bulk_moduli - K_n)) - alpha_n;
@@ -106,7 +106,7 @@ double Averaging::hs_shear_fn(
 ) {
   Eigen::ArrayXd vol_frac = volumes / volumes.sum();
   double K_n = n ? bulk_moduli.maxCoeff() : bulk_moduli.minCoeff();
-  double G_n = n ? shear_moduli.maxCoeff() : shear_moduli.maxCoeff();
+  double G_n = n ? shear_moduli.maxCoeff() : shear_moduli.minCoeff();
   double beta_n = -3.0 * (K_n + 2.0 * G_n) / (5.0 * G_n * (3.0 * K_n + 4.0 * G_n));
   Eigen::Array<bool, Eigen::Dynamic, 1> mask = (shear_moduli != G_n);
   Eigen::ArrayXd denominator = (1.0 / (2.0 * (shear_moduli - G_n)) - beta_n);
