@@ -19,13 +19,18 @@ namespace constants {
 
   /**
    * Physical constants
-   * Mostly CODATA 2022 values
+   * Using CODATA 2022 values
+   * n.b. To match the python implementation / scipy > 1.15 we use
+   *      more digits for R and hbar than the CODATA2022 database.
+   *      R is defined as k_B * N_A, and hbar as h / (2pi), so we
+   *      can calculate them to full double precision.
    */
   namespace physics {
     /**
      * R in [J/mol/K]
+     * CODATA2022: 8.314 462 618 ... J mol-1 K-1
      */
-    constexpr double gas_constant = 8.314462618;
+    constexpr double gas_constant = 8.31446261815324;
     /**
      * k_B in [J/K]
      */
@@ -36,12 +41,13 @@ namespace constants {
     constexpr double avogadro = 6.02214076e23;
     /**
      * Reduced planck constant (Dirac) in Js.
+     * CODATA2022: 1.054 571 817 ...  x 10-34 J s
      */
-    constexpr double dirac = 1.054571817e-34;
+    constexpr double dirac = 1.0545718176461565e-34;
     /**
      * Newtonian constant of gravitation, G in [m^3/kg/s^2].
      */
-     constexpr double gravitation = 6.67430e-11;
+    constexpr double gravitation = 6.67430e-11;
   }
 
   /**
