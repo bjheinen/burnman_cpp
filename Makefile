@@ -68,7 +68,7 @@ OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
 TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(TEST_SOURCES))
 
 # Generate dependencies
-DEPENDS := $(OBJECTS:.o=.d)
+DEPENDS := $(OBJECTS:.o=.d) $(TEST_OBJECTS:.o=.d)
 
 # Output target
 TARGET := $(BIN_DIR)/$(TARGET_EXEC)$(BUILD_SUFFIX)
