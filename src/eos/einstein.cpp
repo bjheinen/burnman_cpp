@@ -66,7 +66,7 @@ double einstein::compute_entropy_impl(
   double exm1 = std::expm1(x);
   // S
   return 3.0 * napfu * constants::physics::gas_constant
-    * (x / exm1) - (std::log(exm1) - x);
+    * ((x / exm1) - (std::log(exm1) - x));
 }
 
 double einstein::compute_dmolar_heat_capacity_v_dT_impl(
