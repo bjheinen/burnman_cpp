@@ -74,7 +74,7 @@ TaitConstants MT::compute_tait_constants(const MineralParams& params) {
   double Kprime_0_plus_one = 1.0 + Kprime_0;
   double a = Kprime_0_plus_one / (Kprime_0_plus_one + K_0 * Kdprime_0);
   double b = Kprime_0 / K_0 - Kdprime_0 / Kprime_0_plus_one;
-  double c = Kprime_0_plus_one + K_0 * Kdprime_0
+  double c = (Kprime_0_plus_one + K_0 * Kdprime_0)
     / (Kprime_0 * Kprime_0 + Kprime_0 - K_0 * Kdprime_0);
   return {a, b, c};
 }
