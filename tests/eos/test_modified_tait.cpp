@@ -126,9 +126,10 @@ TEST_CASE("Check reference conditions", "[modified_tait][eos]") {
     CHECK_THAT(mt.compute_isothermal_bulk_modulus_reuss(P, T, V, params),
       WithinRel(*params.K_0, tol_rel) || WithinAbs(*params.K_0, tol_abs));
     CHECK_THAT(mt.compute_gibbs_free_energy(P, T, V, params),
-      WithinRel(P*V, tol_rel) || WithinAbs(P*V, tol_abs));
+      WithinRel((*params.P_0)*(*params.V_0), tol_rel)
+        || WithinAbs((*params.P_0)*(*params.V_0), tol_abs));
     CHECK_THAT(mt.compute_volume(*params.P_0, T, params),
-      WithinRel(V, tol_rel) || WithinAbs(V, tol_abs));
+      WithinRel(*params.V_0, tol_rel) || WithinAbs(*params.V_0, tol_abs));
     // K_S returns 1.0e99 in MT
     //CHECK_THAT(mt.compute_isentropic_bulk_modulus_reuss(P, T, V, params),
     //  WithinRel(*params.K_0, tol_rel) || WithinAbs(*params.K_0, tol_abs));
