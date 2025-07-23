@@ -256,8 +256,8 @@ double HP_TMT::compute_gibbs_free_energy(
     intVdP = P_diff * (*params.V_0)
       * (1.0 - a
         + (a
-          * (std::pow((1.0 - b * Pth), -c)
-            - std::pow((1.0 + b * P_iso), -c))
+          * (std::pow((1.0 - b * Pth), 1.0 - c)
+            - std::pow((1.0 + b * P_iso), 1.0 - c))
           / (b * (c - 1.0) * P_diff)));
   } else {
     intVdP = 0.0;
