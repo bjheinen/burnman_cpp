@@ -18,6 +18,9 @@
 #include <map>
 using namespace Catch::Matchers;
 
+// TODO: REMOVE!
+#include <iostream>
+
 TEST_CASE("Test validate parameters", "[modified_tait][eos]") {
   MineralParams params;
   params.V_0 = 11.24e-6;
@@ -82,7 +85,7 @@ TEST_CASE("Tait constant", "[modified_tait][eos]") {
       WithinAbs(-*params.Kdprime_0, tol_abs));
   }
   SECTION("Reference check") {
-    double ref_a = -625/180;
+    double ref_a = -625.0/180.0;
     double ref_b = 3.284472049689441e-11;
     double ref_c = -0.05446293494704991;
     result = MT::compute_tait_constants(params);
