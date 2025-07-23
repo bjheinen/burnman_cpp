@@ -195,6 +195,12 @@ TEST_CASE("Test Bragg-Williams", "[prop_mod][eos]") {
   excesses::BraggWilliamsParams params = {
     1, 0.8, 1000.0, 1.0e-7, 1000.0, 1.0e-7};
   SECTION("BW High P") {
+    // Implementation differences build up here as the margins are tiny
+    // Using a relaxed tolerance.
+    //double tol_abs_relaxed =
+    double tol_abs_relaxed = 1.0e-14;
+    double tol_abs_very_relaxed = 2.5e-10;
+    double tol_rel_relaxed = 1.0e-10;
     double P = 1.0e11;
     double T = 1000.0;
     double G_ref = -551.347145218419;
@@ -204,18 +210,21 @@ TEST_CASE("Test Bragg-Williams", "[prop_mod][eos]") {
     double d2GdP2_ref = -1.3642420526593924e-18;
     double d2GdPdT_ref = 7.051539796520956e-11;
     excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    // Don't relax tolerance on G calculation
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
+    // Other differences, including sign flips in second derivatives, come
+    // from differences in G that are below tolerances.
     CHECK_THAT(calc_excess.dGdT,
-      WithinRel(dGdT_ref, tol_rel) || WithinAbs(dGdT_ref, tol_abs));
+      WithinRel(dGdT_ref, tol_rel_relaxed) || WithinAbs(dGdT_ref, tol_abs_relaxed));
     CHECK_THAT(calc_excess.dGdP,
-      WithinRel(dGdP_ref, tol_rel) || WithinAbs(dGdP_ref, tol_abs));
+      WithinRel(dGdP_ref, tol_rel_relaxed) || WithinAbs(dGdP_ref, tol_abs_relaxed));
     CHECK_THAT(calc_excess.d2GdT2,
-      WithinRel(d2GdT2_ref, tol_rel) || WithinAbs(d2GdT2_ref, tol_abs));
+      WithinRel(d2GdT2_ref, tol_rel_relaxed) || WithinAbs(d2GdT2_ref, tol_abs_very_relaxed));
     CHECK_THAT(calc_excess.d2GdP2,
-      WithinRel(d2GdP2_ref, tol_rel) || WithinAbs(d2GdP2_ref, tol_abs));
+      WithinRel(d2GdP2_ref, tol_rel_relaxed) || WithinAbs(d2GdP2_ref, tol_abs_relaxed));
     CHECK_THAT(calc_excess.d2GdPdT,
-      WithinRel(d2GdPdT_ref, tol_rel) || WithinAbs(d2GdPdT_ref, tol_abs));
+      WithinRel(d2GdPdT_ref, tol_rel_relaxed) || WithinAbs(d2GdPdT_ref, tol_abs_relaxed));
   }
   SECTION("BW Low P") {
     // No root for lower P. Make sure we are catching Brent
