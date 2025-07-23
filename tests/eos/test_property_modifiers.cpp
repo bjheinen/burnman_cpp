@@ -191,7 +191,7 @@ TEST_CASE("Test Linear", "[prop_mod][eos]") {
     WithinRel(d2GdPdT_ref, tol_rel) || WithinAbs(d2GdPdT_ref, tol_abs));
 }
 
-TEST_CASE("Test Bragg-Williams", "[prop_mod][eos][!throws]") {
+TEST_CASE("Test Bragg-Williams", "[prop_mod][eos]") {
   excesses::BraggWilliamsParams params = {
     1, 0.8, 1000.0, 1.0e-7, 1000.0, 1.0e-7};
   SECTION("BW High P") {
