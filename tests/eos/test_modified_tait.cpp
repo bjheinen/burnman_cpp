@@ -18,9 +18,6 @@
 #include <map>
 using namespace Catch::Matchers;
 
-// TODO: REMOVE!
-#include <iostream>
-
 TEST_CASE("Test validate parameters", "[modified_tait][eos]") {
   MineralParams params;
   params.V_0 = 11.24e-6;
