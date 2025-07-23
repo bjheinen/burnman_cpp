@@ -158,12 +158,13 @@ double Vinet::compute_molar_internal_energy(
   double volume,
   const MineralParams& params
 ) const {
-  double eta = (3.0/2.0) * ((*params.Kprime_0) - 1.0);
+  double eta = 1.5 * ((*params.Kprime_0) - 1.0);
   double x_cbrt = std::cbrt(volume / (*params.V_0));
   double mu = 1.0 - x_cbrt;
+  double eta_mu = eta * mu;
   double intPdV = 9.0 * (*params.V_0) * (*params.K_0)
     / (eta * eta)
-    * ((1.0 - eta * mu) * std::exp(eta * mu) - 1.0);
+    * ((1.0 - eta_mu) * std::exp(eta_mu) - 1.0);
   return -intPdV + (*params.E_0);
 }
 
