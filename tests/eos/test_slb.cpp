@@ -19,204 +19,92 @@
 using namespace Catch::Matchers;
 
 TEST_CASE("Test validate parameters", "[eos][slb]") {
+  MineralParams params;
+  params.molar_mass = 0.0055;
+  params.napfu = 1;
+  params.V_0 = 7.0e-06;
+  params.K_0 = 1.6e11;
+  params.Kprime_0 = 6.0;
+  params.F_0 = 11.82;
+  params.debye_0 = 398.0;
+  params.grueneisen_0 = 1.7;
+  params.q_0 = 0.9;
+  params.G_0 = 8.1e10;
+  params.Gprime_0 = 1.9;
+  params.eta_s_0 = 5.9;
+  params.bel_0 = 0.004;
+  params.gel = 1.5;
   SLB3 slb;
+  SECTION("Full params") {
+    REQUIRE_NOTHROW(slb.validate_parameters(params));
+  }
   SECTION("Missing V_0") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.V_0.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("Missing K_0") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.K_0.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("Missing Kprime_0") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.Kprime_0.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("Missing molar mass") {
-    MineralParams params;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.molar_mass.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("Missing napfu") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.napfu.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("Missing debye_0") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.debye_0.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("Missing grueneisen_0") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.grueneisen_0.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("Missing q_0") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
-    params.gel = 1.5;
+    params.q_0.reset();
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("SLB3Conductive; Missing bel_0") {
     SLB3Conductive slb_c;
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.gel = 1.5;
+    params.bel_0.reset();
     REQUIRE_THROWS(slb_c.validate_parameters(params));
   }
   SECTION("SLB3Conductive; Missing gel") {
     SLB3Conductive slb_c;
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.F_0 = 11.82;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    params.G_0 = 8.1e10;
-    params.Gprime_0 = 1.9;
-    params.eta_s_0 = 5.9;
-    params.bel_0 = 0.004;
+    params.gel.reset();
     REQUIRE_THROWS(slb_c.validate_parameters(params));
   }
   SECTION("Optional Parameters") {
-    MineralParams params;
-    params.molar_mass = 0.0055;
-    params.napfu = 1;
-    params.V_0 = 7.0e-06;
-    params.K_0 = 1.6e11;
-    params.Kprime_0 = 6.0;
-    params.debye_0 = 398.0;
-    params.grueneisen_0 = 1.7;
-    params.q_0 = 0.9;
-    REQUIRE_FALSE(params.T_0.has_value());
-    REQUIRE_FALSE(params.P_0.has_value());
-    REQUIRE_FALSE(params.E_0.has_value());
-    REQUIRE_FALSE(params.F_0.has_value());
-    REQUIRE_FALSE(params.G_0.has_value());
-    REQUIRE_FALSE(params.Gprime_0.has_value());
-    REQUIRE_FALSE(params.eta_s_0.has_value());
-    REQUIRE_NOTHROW(slb.validate_parameters(params));
-    REQUIRE(*params.T_0 == 300.0);
-    REQUIRE(*params.P_0 == 0);
-    REQUIRE(*params.E_0 == 0);
-    REQUIRE(*params.F_0 == 0);
-    REQUIRE(std::isnan(*params.G_0));
-    REQUIRE(std::isnan(*params.Gprime_0));
-    REQUIRE(std::isnan(*params.eta_s_0));
+    MineralParams params_no_opt;
+    params_no_opt.molar_mass = 0.0055;
+    params_no_opt.napfu = 1;
+    params_no_opt.V_0 = 7.0e-06;
+    params_no_opt.K_0 = 1.6e11;
+    params_no_opt.Kprime_0 = 6.0;
+    params_no_opt.debye_0 = 398.0;
+    params_no_opt.grueneisen_0 = 1.7;
+    params_no_opt.q_0 = 0.9;
+    REQUIRE_FALSE(params_no_opt.T_0.has_value());
+    REQUIRE_FALSE(params_no_opt.P_0.has_value());
+    REQUIRE_FALSE(params_no_opt.E_0.has_value());
+    REQUIRE_FALSE(params_no_opt.F_0.has_value());
+    REQUIRE_FALSE(params_no_opt.G_0.has_value());
+    REQUIRE_FALSE(params_no_opt.Gprime_0.has_value());
+    REQUIRE_FALSE(params_no_opt.eta_s_0.has_value());
+    REQUIRE_NOTHROW(slb.validate_parameters(params_no_opt));
+    REQUIRE(*params_no_opt.T_0 == 300.0);
+    REQUIRE(*params_no_opt.P_0 == 0);
+    REQUIRE(*params_no_opt.E_0 == 0);
+    REQUIRE(std::isnan(*params_no_opt.F_0));
+    REQUIRE(std::isnan(*params_no_opt.G_0));
+    REQUIRE(std::isnan(*params_no_opt.Gprime_0));
+    REQUIRE(std::isnan(*params_no_opt.eta_s_0));
   }
 }
 
@@ -323,9 +211,10 @@ TEST_CASE("Shear modulus expansion", "[eos][slb]") {
   REQUIRE_NOTHROW(slb3.compute_shear_modulus(P, T, V, params));
   CHECK(std::isnan(slb2.compute_shear_modulus(P, T, V, params)));
   CHECK(std::isnan(slb3.compute_shear_modulus(P, T, V, params)));
-  // Set G0/G'0
+  // Set G0/G'0/eta_s_0
   params.G_0 = 131.0e9;
   params.Gprime_0 = 2.1;
+  params.eta_s_0 = 4.5;
   CHECK_FALSE(std::isnan(slb2.compute_shear_modulus(P, T, V, params)));
   CHECK_FALSE(std::isnan(slb3.compute_shear_modulus(P, T, V, params)));
   // Ensure expansion order different
