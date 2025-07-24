@@ -102,7 +102,7 @@ TEST_CASE_METHOD(OlivineFixture, "IdealSolution", "[core][solution_model]") {
     CHECK(ol_ss.site_names == std::vector<std::string>{"Mg_A", "Fe_A"});
     CHECK(ol_ss.sites == std::vector<std::vector<std::string>>{{"Mg", "Fe"}});
     CHECK(ol_ss.solution_formulae ==
-      std::vector<std::map<std::string, double>>{ {{"Mg", 2.0}, {"Fe", 2.0}} });
+      std::vector<std::map<std::string, double>>{ {{"Mg", 2.0}}, {{"Fe", 2.0}} });
     // Eigen - can do CHECK(m1.isApprox(m2, rel_tolerance));
     CHECK(ol_ss.site_multiplicities.isApprox(
       (Eigen::ArrayXXd(2, 2) << 2.0, 2.0,
@@ -147,7 +147,7 @@ TEST_CASE_METHOD(OlivineFixture, "Single ss", "[core][solution_model]") {
   CHECK(fo_ss.site_names == std::vector<std::string>{"Mg_A"});
   CHECK(fo_ss.sites == std::vector<std::vector<std::string>>{{"Mg"}});
   CHECK(fo_ss.solution_formulae ==
-    std::vector<std::map<std::string, double>>{ {{"Mg", 2.0}, {"Mg", 2.0}} });
+    std::vector<std::map<std::string, double>>{ {{"Mg", 2.0}}, {{"Mg", 2.0}} });
   CHECK(fo_ss.site_multiplicities.isApprox(
     (Eigen::ArrayXXd(2, 1) << 2.0,
                               2.0).finished(), tol_rel));
