@@ -18,13 +18,13 @@
 #include "burnman/utils/matrix_utils.hpp"
 
 SolutionModel::SolutionModel(const PairedEndmemberList& endmember_list) {
-  n_endmembers = endmember_list.size();
-  endmembers.reserve(n_endmembers);
-  formulas.reserve(n_endmembers);
+  this->n_endmembers = endmember_list.size();
+  this->endmembers.reserve(this->n_endmembers);
+  this->formulas.reserve(this->n_endmembers);
   // Unpack and store endmembers/formulas separately
   for (const auto& [mineral, formula] : endmember_list) {
-    endmembers.push_back(mineral);
-    formulas.push_back(formula);
+    this->endmembers.push_back(mineral);
+    this->formulas.push_back(formula);
   }
   // Process chemistry sets up site multiplicities/occupancies etc.
   process_solution_chemistry();
@@ -33,14 +33,14 @@ SolutionModel::SolutionModel(const PairedEndmemberList& endmember_list) {
 void SolutionModel::process_solution_chemistry() {
 
   // Reset n_occupancies count to zero
-  n_occupancies = 0;
+  this->n_occupancies = 0;
 
   // Set class n_sites
-  n_sites = std::count(formulas[0].begin(), formulas[0].end(), '[');
+  this->n_sites = std::count(this->formulas[0].begin(), this->formulas[0].end(), '[');
 
   // Check that number of sites is constant
-  for (const std::string& f : formulas) {
-    if (std::count(f.begin(), f.end(), '[') != n_sites) {
+  for (const std::string& f : this->formulas) {
+    if (std::count(f.begin(), f.end(), '[') != this->n_sites) {
       throw std::runtime_error("All formulae must have the same number of distinct sites.");
     }
   }
@@ -50,19 +50,19 @@ void SolutionModel::process_solution_chemistry() {
   std::vector<std::vector<std::vector<double>>> list_occupancies;
 
   // Store multiplicities
-  formula_multiplicities.resize(n_endmembers, n_sites);
+  formula_multiplicities.resize(this->n_endmembers, this->n_sites);
   // Resize other data containers
-  solution_formulae.resize(n_endmembers);
-  sites.resize(n_sites);
+  this->solution_formulae.resize(this->n_endmembers);
+  this->sites.resize(this->n_sites);
   // List occupancies is triple nested vector
   // std::vector<std::vector<std::vector<double>>>
   // Outer --> n_endmembers
   // Inner --> n_site
   // Innermost --> n_species (not known until parsed)
-  list_occupancies.resize(n_endmembers);
-  for (int i = 0; i < n_endmembers; ++i) {
-    list_occupancies[i].resize(n_sites);
-    for (int j = 0; j < n_sites; ++j) {
+  list_occupancies.resize(this->n_endmembers);
+  for (int i = 0; i < this->n_endmembers; ++i) {
+    list_occupancies[i].resize(this->n_sites);
+    for (int j = 0; j < this->n_sites; ++j) {
       list_occupancies[i][j].resize(0);
     }
   }
@@ -76,15 +76,15 @@ void SolutionModel::process_solution_chemistry() {
   std::regex species_frac_split_regex("([0-9][^A-Z]*)");
 
   // Loop over endmembers
-  for (int i_mbr = 0; i_mbr < n_endmembers; ++i_mbr) {
+  for (int i_mbr = 0; i_mbr < this->n_endmembers; ++i_mbr) {
     // Split formula into sites - 'Mg]3', 'Al]2', 'etc.'
     std::sregex_token_iterator it_sites(
-      formulas[i_mbr].begin(), formulas[i_mbr].end(),
+      this->formulas[i_mbr].begin(), this->formulas[i_mbr].end(),
       site_split_regex, -1);
     // Discard string before first [ by ++it first
     std::vector<std::string> site_formulas(++it_sites, {});
     // Loop over sites in formula
-    for (int i_site = 0; i_site < n_sites; ++i_site) {
+    for (int i_site = 0; i_site < this->n_sites; ++i_site) {
       // Split on ] to get site occupancy and multiplicity
       std::sregex_token_iterator it_occ(
         site_formulas[i_site].begin(), site_formulas[i_site].end(),
@@ -125,20 +125,20 @@ void SolutionModel::process_solution_chemistry() {
         }
 
         // TODO: When species spread across sites?
-        solution_formulae[i_mbr][species_name] += site_mult * proportion_species_on_site;
+        this->solution_formulae[i_mbr][species_name] += site_mult * proportion_species_on_site;
 
         // Add to sites[i_site] if not present
-        auto& site_species = sites[i_site];
+        auto& site_species = this->sites[i_site];
         auto species_pos = std::find(site_species.begin(), site_species.end(), species_name);
         int i_el;
         if (species_pos == site_species.end()) {
           // Use current size as index of next entry
           i_el = site_species.size();
           site_species.push_back(species_name);
-          ++n_occupancies;
+          ++this->n_occupancies;
           // Append 0 to list_occupancies for already parsed endmembers
           // when found new species
-          for (int k = 0; k < n_endmembers; ++k) {
+          for (int k = 0; k < this->n_endmembers; ++k) {
             // Check and resize outer if needed
             auto& occupancies = list_occupancies[k];
             if (occupancies.size() <= i_site) {
@@ -167,31 +167,31 @@ void SolutionModel::process_solution_chemistry() {
   } // Endmember loop
 
   // Resize occupancy/multiplicity arrays
-  endmember_occupancies.resize(n_endmembers, n_occupancies);
-  site_multiplicities.resize(n_endmembers, n_occupancies);
+  this->endmember_occupancies.resize(this->n_endmembers, this->n_occupancies);
+  this->site_multiplicities.resize(this->n_endmembers, this->n_occupancies);
 
   // Loop over endmembers again
-  for (int i_mbr = 0; i_mbr < n_endmembers; ++i_mbr) {
+  for (int i_mbr = 0; i_mbr < this->n_endmembers; ++i_mbr) {
     int n_species = 0;
-    for (int i_site = 0; i_site < n_sites; ++i_site) {
+    for (int i_site = 0; i_site < this->n_sites; ++i_site) {
       for (size_t i_el = 0; i_el < list_occupancies[i_mbr][i_site].size(); ++i_el) {
-        endmember_occupancies(i_mbr, n_species) = list_occupancies[i_mbr][i_site][i_el];
-        site_multiplicities(i_mbr, n_species) = formula_multiplicities(i_mbr, i_site);
+        this->endmember_occupancies(i_mbr, n_species) = list_occupancies[i_mbr][i_site][i_el];
+        this->site_multiplicities(i_mbr, n_species) = formula_multiplicities(i_mbr, i_site);
         ++n_species;
       }
     }
   } // Endmember loop
 
   // Element-wise multiply for n_occ
-  endmember_n_occupancies = endmember_occupancies * site_multiplicities;
+  this->endmember_n_occupancies = this->endmember_occupancies * this->site_multiplicities;
 
   // Get site names
-  site_names.clear();
-  for (int i_site = 0; i_site < n_sites; ++i_site) {
+  this->site_names.clear();
+  for (int i_site = 0; i_site < this->n_sites; ++i_site) {
     // Grab uppercase letter from index (works to 26!)
     char site_id = 'A' + i_site;
-    for (const std::string& sp : sites[i_site]) {
-      site_names.push_back(sp + "_" + site_id);
+    for (const std::string& sp : this->sites[i_site]) {
+      this->site_names.push_back(sp + "_" + site_id);
     }
   }
 
@@ -200,22 +200,22 @@ void SolutionModel::process_solution_chemistry() {
   //   [Mg]2SiO4, A[Fe]2SiO4 --> [Mg,Fe]2SiO4 -- does this matter?
   // Do parsed chemical formula etc. (general and empty)
   // Replace [sites] with [] on one formula for empty formula
-  empty_formula = std::regex_replace(formulas[0], site_pattern_regex, "[]");
+  this->empty_formula = std::regex_replace(this->formulas[0], site_pattern_regex, "[]");
   // Split original formula on [.*?] site pattern
   std::sregex_token_iterator it_empty_split(
-    formulas[0].begin(),
-    formulas[0].end(),
+    this->formulas[0].begin(),
+    this->formulas[0].end(),
     site_pattern_regex, -1);
   std::sregex_token_iterator end;
   std::vector<std::string> split_empty(it_empty_split, end);
   // Take first token to start general formula (may be empty)
-  general_formula = split_empty[0];
+  this->general_formula = split_empty[0];
   // Loop through and replace sites with multi species lists
-  for (int i = 0; i < n_sites; ++i) {
-    general_formula += "[" + utils::join(sites[i], ",") + "]";
+  for (int i = 0; i < this->n_sites; ++i) {
+    this->general_formula += "[" + utils::join(this->sites[i], ",") + "]";
     // Append final part after site if present
     if (i + 1 < static_cast<int>(split_empty.size()))
-    general_formula += split_empty[i + 1];
+    this->general_formula += split_empty[i + 1];
   }
 
 }
@@ -305,7 +305,7 @@ Eigen::ArrayXd IdealSolution::compute_excess_partial_volumes(
   double temperature,
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  return Eigen::ArrayXd::Zero(n_endmembers);
+  return Eigen::ArrayXd::Zero(this->n_endmembers);
 }
 
 Eigen::MatrixXd IdealSolution::compute_gibbs_hessian(
@@ -329,7 +329,7 @@ Eigen::MatrixXd IdealSolution::compute_volume_hessian(
   double temperature,
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  return Eigen::MatrixXd::Zero(n_endmembers, n_endmembers);
+  return Eigen::MatrixXd::Zero(this->n_endmembers, this->n_endmembers);
 }
 
 Eigen::ArrayXd IdealSolution::compute_activities(
@@ -345,15 +345,15 @@ Eigen::ArrayXd IdealSolution::compute_activity_coefficients(
   double temperature,
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  return Eigen::ArrayXd::Ones(n_endmembers);
+  return Eigen::ArrayXd::Ones(this->n_endmembers);
 }
 
 // Private functions for IdealSolution
 Eigen::ArrayXd IdealSolution::compute_endmember_configurational_entropies() const {
   return -constants::physics::gas_constant
-  * (endmember_n_occupancies
-    * (utils::logish(endmember_n_occupancies)
-      - utils::logish(site_multiplicities))
+  * (this->endmember_n_occupancies
+    * (utils::logish(this->endmember_n_occupancies)
+      - utils::logish(this->site_multiplicities))
     ).rowwise().sum();
 }
 
@@ -375,11 +375,10 @@ Eigen::ArrayXd IdealSolution::compute_ideal_activities(
   const Eigen::ArrayXd& molar_fractions
 ) const {
   // Dot product
-  Eigen::ArrayXd reduced_n_occupancies = (endmember_n_occupancies.colwise() * molar_fractions).colwise().sum();
-  Eigen::ArrayXd reduced_multiplicities = (site_multiplicities.colwise() * molar_fractions).colwise().sum();
+  Eigen::ArrayXd reduced_n_occupancies = (this->endmember_n_occupancies.colwise() * molar_fractions).colwise().sum();
+  Eigen::ArrayXd reduced_multiplicities = (this->site_multiplicities.colwise() * molar_fractions).colwise().sum();
   Eigen::ArrayXd reduced_occupancies = reduced_n_occupancies * utils::inverseish(reduced_multiplicities);
-  // endmember_n_occupancies is class member
-  double a = reduced_occupancies.pow(endmember_n_occupancies).prod();
+  double a = reduced_occupancies.pow(this->endmember_n_occupancies).prod();
   Eigen::ArrayXd norm_constants = (endmember_configurational_entropies / constants::physics::gas_constant).exp();
   return norm_constants * a;
 }
@@ -387,10 +386,10 @@ Eigen::ArrayXd IdealSolution::compute_ideal_activities(
 Eigen::ArrayXd IdealSolution::compute_log_ideal_activities(
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  Eigen::ArrayXd reduced_n_occupancies = (endmember_n_occupancies.colwise() * molar_fractions).colwise().sum();
-  Eigen::ArrayXd reduced_multiplicities = (site_multiplicities.colwise() * molar_fractions).colwise().sum();
+  Eigen::ArrayXd reduced_n_occupancies = (this->endmember_n_occupancies.colwise() * molar_fractions).colwise().sum();
+  Eigen::ArrayXd reduced_multiplicities = (this->site_multiplicities.colwise() * molar_fractions).colwise().sum();
   Eigen::ArrayXd lna = (
-    endmember_n_occupancies.rowwise()
+    this->endmember_n_occupancies.rowwise()
     * (utils::logish(reduced_n_occupancies)
       - utils::logish(reduced_multiplicities)
       ).transpose()
@@ -402,13 +401,13 @@ Eigen::ArrayXd IdealSolution::compute_log_ideal_activities(
 Eigen::MatrixXd IdealSolution::compute_log_ideal_activity_derivatives(
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  Eigen::ArrayXd reduced_n_occupancies = (endmember_n_occupancies.colwise() * molar_fractions).colwise().sum();
-  Eigen::ArrayXd reduced_multiplicities = (site_multiplicities.colwise() * molar_fractions).colwise().sum();
+  Eigen::ArrayXd reduced_n_occupancies = (this->endmember_n_occupancies.colwise() * molar_fractions).colwise().sum();
+  Eigen::ArrayXd reduced_multiplicities = (this->site_multiplicities.colwise() * molar_fractions).colwise().sum();
   Eigen::MatrixXd dlnadp =
-    ((endmember_n_occupancies.rowwise() * utils::inverseish(reduced_n_occupancies).transpose()).matrix()
-      * endmember_n_occupancies.matrix().transpose())
-    - ((endmember_n_occupancies.rowwise() * utils::inverseish(reduced_multiplicities).transpose()).matrix()
-      * site_multiplicities.matrix().transpose());
+    ((this->endmember_n_occupancies.rowwise() * utils::inverseish(reduced_n_occupancies).transpose()).matrix()
+      * this->endmember_n_occupancies.matrix().transpose())
+    - ((this->endmember_n_occupancies.rowwise() * utils::inverseish(reduced_multiplicities).transpose()).matrix()
+      * this->site_multiplicities.matrix().transpose());
   return dlnadp;
 }
 
@@ -428,29 +427,29 @@ AsymmetricRegularSolution::AsymmetricRegularSolution(
   std::vector<std::vector<double>> entropy_interaction
 ) : IdealSolution(endmember_list) {
   // Map alphas to an Eigen::ArrayXd
-  alphas = Eigen::Map<Eigen::ArrayXd>(
+  this->alphas = Eigen::Map<Eigen::ArrayXd>(
     alphas_vector.data(), alphas_vector.size());
 
-  W_e = utils::populate_interaction_matrix(
-    utils::jagged2square(energy_interaction, n_endmembers),
-    alphas,
-    n_endmembers);
+  this->W_e = utils::populate_interaction_matrix(
+    utils::jagged2square(energy_interaction, this->n_endmembers),
+    this->alphas,
+    this->n_endmembers);
 
   if (!volume_interaction.empty()) {
-    W_v = utils::populate_interaction_matrix(
-      utils::jagged2square(volume_interaction, n_endmembers),
-      alphas,
-      n_endmembers);
+    this->W_v = utils::populate_interaction_matrix(
+      utils::jagged2square(volume_interaction, this->n_endmembers),
+      this->alphas,
+      this->n_endmembers);
   } else {
-    W_v = Eigen::MatrixXd::Zero(n_endmembers, n_endmembers);
+    this->W_v = Eigen::MatrixXd::Zero(this->n_endmembers, this->n_endmembers);
   }
   if (!entropy_interaction.empty()) {
-    W_s = utils::populate_interaction_matrix(
-      utils::jagged2square(entropy_interaction, n_endmembers),
-      alphas,
-      n_endmembers);
+    this->W_s = utils::populate_interaction_matrix(
+      utils::jagged2square(entropy_interaction, this->n_endmembers),
+      this->alphas,
+      this->n_endmembers);
   } else {
-    W_s = Eigen::MatrixXd::Zero(n_endmembers, n_endmembers);
+    this->W_s = Eigen::MatrixXd::Zero(this->n_endmembers, this->n_endmembers);
   }
 }
 
@@ -473,7 +472,7 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_entropies(
 ) const {
   return IdealSolution::compute_excess_partial_entropies(
       pressure, temperature, molar_fractions)
-    + compute_non_ideal_interactions(W_e, molar_fractions);
+    + compute_non_ideal_interactions(this->W_e, molar_fractions);
 }
 
 Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_volumes(
@@ -483,7 +482,7 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_volumes(
 ) const {
   return IdealSolution::compute_excess_partial_volumes(
       pressure, temperature, molar_fractions)
-    + compute_non_ideal_interactions(W_v, molar_fractions);
+    + compute_non_ideal_interactions(this->W_v, molar_fractions);
 }
 
 Eigen::MatrixXd AsymmetricRegularSolution::compute_gibbs_hessian(
@@ -491,7 +490,7 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_gibbs_hessian(
   double temperature,
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  Eigen::MatrixXd interactions = W_e - temperature * W_s + pressure * W_v;
+  Eigen::MatrixXd interactions = this->W_e - temperature * this->W_s + pressure * this->W_v;
   return IdealSolution::compute_gibbs_hessian(
       pressure, temperature, molar_fractions)
     + compute_non_ideal_hessian(interactions, molar_fractions);
@@ -504,7 +503,7 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_entropy_hessian(
 ) const {
   return IdealSolution::compute_entropy_hessian(
       pressure, temperature, molar_fractions)
-    + compute_non_ideal_hessian(W_s, molar_fractions);
+    + compute_non_ideal_hessian(this->W_s, molar_fractions);
 }
 
 Eigen::MatrixXd AsymmetricRegularSolution::compute_volume_hessian(
@@ -514,7 +513,7 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_volume_hessian(
 ) const {
   return IdealSolution::compute_volume_hessian(
       pressure, temperature, molar_fractions)
-    + compute_non_ideal_hessian(W_v, molar_fractions);
+    + compute_non_ideal_hessian(this->W_v, molar_fractions);
 }
 
 Eigen::ArrayXd AsymmetricRegularSolution::compute_activities(
@@ -548,7 +547,7 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_activity_coefficients(
 Eigen::ArrayXd AsymmetricRegularSolution::compute_phi(
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  Eigen::ArrayXd phi = alphas * molar_fractions;
+  Eigen::ArrayXd phi = this->alphas * molar_fractions;
   return phi / phi.sum();
 }
 
@@ -557,9 +556,9 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_non_ideal_interactions(
   const Eigen::ArrayXd& molar_fractions
 ) const {
   Eigen::ArrayXd phi = compute_phi(molar_fractions);
-  Eigen::MatrixXd I = Eigen::MatrixXd::Identity(n_endmembers, n_endmembers);
+  Eigen::MatrixXd I = Eigen::MatrixXd::Identity(this->n_endmembers, this->n_endmembers);
   Eigen::MatrixXd q = I.rowwise() - phi.matrix().transpose();
-  Eigen::ArrayXd W_int = -alphas * (q * W).cwiseProduct(q).rowwise().sum().array();
+  Eigen::ArrayXd W_int = -this->alphas * (q * W).cwiseProduct(q).rowwise().sum().array();
   return W_int;
 }
 
@@ -568,9 +567,9 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_non_ideal_excess_partial_gibbs
   double temperature,
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  Eigen::ArrayXd E_int = compute_non_ideal_interactions(W_e, molar_fractions);
-  Eigen::ArrayXd S_int = compute_non_ideal_interactions(W_s, molar_fractions);
-  Eigen::ArrayXd V_int = compute_non_ideal_interactions(W_v, molar_fractions);
+  Eigen::ArrayXd E_int = compute_non_ideal_interactions(this->W_e, molar_fractions);
+  Eigen::ArrayXd S_int = compute_non_ideal_interactions(this->W_s, molar_fractions);
+  Eigen::ArrayXd V_int = compute_non_ideal_interactions(this->W_v, molar_fractions);
   return E_int - temperature * S_int + pressure * V_int;
 }
 
@@ -580,11 +579,11 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_non_ideal_hessian(
 ) const {
   // Maybe factor out - reused in non_ideal_interactions
   Eigen::ArrayXd phi = compute_phi(molar_fractions);
-  Eigen::MatrixXd I = Eigen::MatrixXd::Identity(n_endmembers, n_endmembers);
+  Eigen::MatrixXd I = Eigen::MatrixXd::Identity(this->n_endmembers, this->n_endmembers);
   Eigen::MatrixXd q = I.rowwise() - phi.matrix().transpose();
   //
-  double sum_pa = molar_fractions.matrix().dot(alphas.matrix());
-  Eigen::MatrixXd alpha_outer_product = alphas.matrix() * (alphas/sum_pa).matrix().transpose();
+  double sum_pa = molar_fractions.matrix().dot(this->alphas.matrix());
+  Eigen::MatrixXd alpha_outer_product = this->alphas.matrix() * (this->alphas/sum_pa).matrix().transpose();
   Eigen::MatrixXd qWq_product = q * interactions * q.transpose();
   Eigen::MatrixXd weighted_product = qWq_product.cwiseProduct(alpha_outer_product);
   Eigen::MatrixXd hessian = weighted_product + weighted_product.transpose();
