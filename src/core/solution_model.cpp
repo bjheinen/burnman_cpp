@@ -378,7 +378,7 @@ Eigen::ArrayXd IdealSolution::compute_ideal_activities(
   Eigen::ArrayXd reduced_n_occupancies = (this->endmember_n_occupancies.colwise() * molar_fractions).colwise().sum();
   Eigen::ArrayXd reduced_multiplicities = (this->site_multiplicities.colwise() * molar_fractions).colwise().sum();
   Eigen::ArrayXd reduced_occupancies = reduced_n_occupancies * utils::inverseish(reduced_multiplicities);
-  double a = reduced_occupancies.pow(this->endmember_n_occupancies).prod();
+  Eigen::ArrayXd a = reduced_occupancies.transpose().replicate(this->n_endmembers, 1).pow(this->endmember_n_occupancies.array()).rowwise().prod();
   Eigen::ArrayXd norm_constants = (endmember_configurational_entropies / constants::physics::gas_constant).exp();
   return norm_constants * a;
 }
