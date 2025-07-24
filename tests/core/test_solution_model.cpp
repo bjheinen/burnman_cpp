@@ -202,9 +202,8 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
             0,         0,      0;
   Eigen::MatrixXd ref_Wa(3,3);
   ref_Wa << 0, 10000*(2.0/3.0), 5000*(2.0/3.0),
-            0,           0,       -5000,
-            0,           0,          0;
-
+            0,               0,          -5000,
+            0,               0,              0;
   SECTION("Symmetric Solution - alphas") {
     SymmetricRegularSolution sym_sol(em, interactions);
     AsymmetricRegularSolution asym_sol(em, a_ones, interactions);
@@ -293,6 +292,18 @@ TEST_CASE("Reference value tests", "[core][solution_model]") {
         6.92871884846104,    6.92871884846104, -52.46029985263353, -17.81670561032837,    41.5723130907662,
         41.5723130907662,    41.5723130907662, -17.81670561032837, -66.72530924652389,    41.5723130907662,
       -19.26521826157457,    41.5723130907662,   41.5723130907662,   41.5723130907662, -111.64813624105501;
+    // Check sizes first
+    REQUIRE(ideal_sol.compute_excess_partial_gibbs_free_energies(P, T, x).size() == 5);
+    REQUIRE(ideal_sol.compute_excess_partial_entropies(P, T, x).size() == 5);
+    REQUIRE(ideal_sol.compute_excess_partial_volumes(P, T, x).size() == 5);
+    REQUIRE(ideal_sol.compute_activities(P, T, x).size() == 5);
+    REQUIRE(ideal_sol.compute_activity_coefficients(P, T, x).size() == 5);
+    REQUIRE(ideal_sol.compute_gibbs_hessian(P, T, x).rows() == 5);
+    REQUIRE(ideal_sol.compute_entropy_hessian(P, T, x).rows() == 5);
+    REQUIRE(ideal_sol.compute_volume_hessian(P, T, x).rows() == 5);
+    REQUIRE(ideal_sol.compute_gibbs_hessian(P, T, x).cols() == 5);
+    REQUIRE(ideal_sol.compute_entropy_hessian(P, T, x).cols() == 5);
+    REQUIRE(ideal_sol.compute_volume_hessian(P, T, x).cols() == 5);
     CHECK(ideal_sol.compute_excess_volume(P, T, x) == 0);
     CHECK(ideal_sol.compute_excess_enthalpy(P, T, x) == 0);
     CHECK_THAT(ideal_sol.compute_excess_gibbs_free_energy(P, T, x),
@@ -301,7 +312,7 @@ TEST_CASE("Reference value tests", "[core][solution_model]") {
       WithinRel(ref_ideal_excess_entropy, tol_rel) || WithinAbs(ref_ideal_excess_entropy, tol_abs));
     CHECK(ideal_sol.compute_excess_partial_gibbs_free_energies(P, T, x).isApprox(ref_ideal_excess_partial_gibbs_free_energies, tol_rel));
     CHECK(ideal_sol.compute_excess_partial_entropies(P, T, x).isApprox(ref_ideal_excess_partial_entropies, tol_rel));
-    CHECK(ideal_sol.compute_excess_partial_volumes(P, T, x).isOnes());
+    CHECK(ideal_sol.compute_excess_partial_volumes(P, T, x).isZero());
     CHECK(ideal_sol.compute_activities(P, T, x).isApprox(ref_ideal_activities, tol_rel));
     CHECK(ideal_sol.compute_activity_coefficients(P, T, x).isOnes());
     CHECK(ideal_sol.compute_gibbs_hessian(P, T, x).isApprox(ref_ideal_gibbs_hessian, tol_rel));
