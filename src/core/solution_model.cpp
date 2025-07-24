@@ -138,7 +138,7 @@ void SolutionModel::process_solution_chemistry() {
           ++n_occupancies;
           // Append 0 to list_occupancies for already parsed endmembers
           // when found new species
-          for (int k = 0; k <= i_mbr; ++k) {
+          for (int k = 0; k < n_endmembers; ++k) {
             // Check and resize outer if needed
             auto& occupancies = list_occupancies[k];
             if (occupancies.size() <= i_site) {
