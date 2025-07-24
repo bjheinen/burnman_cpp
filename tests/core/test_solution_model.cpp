@@ -208,6 +208,7 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
   SECTION("Symmetric Solution - alphas") {
     SymmetricRegularSolution sym_sol(em, interactions);
     AsymmetricRegularSolution asym_sol(em, a_ones, interactions);
+    REQUIRE(sym_sol.alphas.size() == 3);
     REQUIRE((sym_sol.alphas == asym_sol.alphas).all());
     REQUIRE(sym_sol.alphas.isOnes());
   }
@@ -226,6 +227,7 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
   }
   SECTION("Asymmetric Solution - interactions") {
     AsymmetricRegularSolution sol(em, alphas, interactions);
+    REQUIRE(sol.alphas.size() == 3);
     REQUIRE((sol.alphas == (Eigen::ArrayXd(3) << 1, 2, 2).finished()).all());
     CHECK(sol.W_e.isApprox(ref_Wa, tol_rel));
   }
