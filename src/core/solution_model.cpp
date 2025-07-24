@@ -67,8 +67,9 @@ void SolutionModel::process_solution_chemistry() {
     }
   }
 
-  // TODO: move these to more senible place, maybe factor out into string_utils
+  // TODO: move these to more sensible place, maybe factor out into string_utils
   // Regex strings for splits
+  std::regex site_pattern_regex(R"(\[.*?\])");
   std::regex site_split_regex(R"(\[)");
   std::regex occ_split_regex(R"(\])");
   std::regex species_split_regex("[A-Z][^A-Z]*");
@@ -92,11 +93,9 @@ void SolutionModel::process_solution_chemistry() {
       // do if (it != std::sregex_token_iterator())
       std::string site_occ = *it_occ++;
       std::string site_mult_str = (it_occ != std::sregex_token_iterator()) ? it_occ->str() : "";
-
       // site multiplicity may have rest of formula, so split
       site_mult_str = utils::extract_numeric_prefix(site_mult_str);
       double site_mult = site_mult_str.empty() ? 1.0 : utils::stod(site_mult_str);
-
       // Store multiplicity
       formula_multiplicities(i_mbr, i_site) = site_mult;
 
@@ -196,23 +195,27 @@ void SolutionModel::process_solution_chemistry() {
     }
   }
 
+  // NOTE:
+  //   Currently A[Mg]2SiO4, [Fe]2SiO4 --> A[Mg,Fe]2SiO4, but
+  //   [Mg]2SiO4, A[Fe]2SiO4 --> [Mg,Fe]2SiO4 -- does this matter?
   // Do parsed chemical formula etc. (general and empty)
   // Replace [sites] with [] on one formula for empty formula
-  empty_formula = std::regex_replace(formulas[0], std::regex(R"(\[.*?\])"), "[]");
-  // Split empty formula on [, then re-join with site species for general
-  std::regex split_brackets(R"(\[)");
+  empty_formula = std::regex_replace(formulas[0], site_pattern_regex, "[]");
+  // Split original formula on [.*?] site pattern
   std::sregex_token_iterator it_empty_split(
-    empty_formula.begin(),
-    empty_formula.end(),
-    split_brackets, -1);
+    formulas[0].begin(),
+    formulas[0].end(),
+    site_pattern_regex, -1);
   std::sregex_token_iterator end;
   std::vector<std::string> split_empty(it_empty_split, end);
-  // Cut first element here if needed to stop overflow from pre-increment
-  if (!split_empty.empty() && split_empty[0].empty())
-    split_empty.erase(split_empty.begin());
+  // Take first token to start general formula (may be empty)
   general_formula = split_empty[0];
+  // Loop through and replace sites with multi species lists
   for (int i = 0; i < n_sites; ++i) {
-    general_formula += "[" + utils::join(sites[i], ",") + split_empty[i + 1];
+    general_formula += "[" + utils::join(sites[i], ",") + "]";
+    // Append final part after site if present
+    if (i + 1 < static_cast<int>(split_empty.size()))
+    general_formula += split_empty[i + 1];
   }
 
 }
