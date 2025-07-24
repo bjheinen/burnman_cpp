@@ -180,11 +180,11 @@ TEST_CASE_METHOD(MultiSiteFixture, "Check multi-site solutions", "[core][solutio
                               3, 3, 2, 2, 2,
                               3, 3, 2, 2, 2).finished(), tol_rel));
   CHECK(sol.endmember_occupancies.isApprox(
-    (Eigen::ArrayXXd(3, 2) << 1, 0, 1, 0, 0,
+    (Eigen::ArrayXXd(3, 5) << 1, 0, 1, 0, 0,
                               0, 1, 1, 0, 0,
                               1, 0, 0, 0.5, 0.5).finished(), tol_rel));
   CHECK(sol.endmember_n_occupancies.isApprox(
-    (Eigen::ArrayXXd(3, 2) << 3, 0, 2, 0, 0,
+    (Eigen::ArrayXXd(3, 5) << 3, 0, 2, 0, 0,
                               0, 3, 2, 0, 0,
                               3, 0, 0, 1, 1).finished(), tol_rel));
 }
