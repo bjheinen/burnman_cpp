@@ -201,8 +201,8 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
             0,         0, -10000,
             0,         0,      0;
   Eigen::MatrixXd ref_Wa(3,3);
-  ref_Wa << 0, 10000*(2/3), 5000*(2/3),
-            0,           0,       5000,
+  ref_Wa << 0, 10000*(2.0/3.0), 5000*(2.0/3.0),
+            0,           0,       -5000,
             0,           0,          0;
 
   SECTION("Symmetric Solution - alphas") {
