@@ -428,7 +428,7 @@ AsymmetricRegularSolution::AsymmetricRegularSolution(
   std::vector<std::vector<double>> entropy_interaction
 ) : IdealSolution(endmember_list) {
   // Map alphas to an Eigen::ArrayXd
-  Eigen::ArrayXd alphas = Eigen::Map<Eigen::ArrayXd>(
+  alphas = Eigen::Map<Eigen::ArrayXd>(
     alphas_vector.data(), alphas_vector.size());
 
   W_e = utils::populate_interaction_matrix(
