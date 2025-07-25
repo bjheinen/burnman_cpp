@@ -79,12 +79,12 @@ class CompositeMaterial : public Material {
    * elements can be inferred by:
    *   -compositional_null_basis[independent_element_indices].dot(element_amounts)
    */
-  std::vector<int>& get_independent_element_indices() const;
+  std::vector<Eigen::Index>& get_independent_element_indices() const;
 
   /**
    * @brief The element indices not in the independent list.
    */
-  std::vector<int>& get_dependent_element_indices() const;
+  std::vector<Eigen::Index>& get_dependent_element_indices() const;
 
   /**
    * @brief The matrix describing material stoichiometry.
@@ -135,8 +135,8 @@ class CompositeMaterial : public Material {
   mutable std::optional<int> n_endmembers;
   mutable std::optional<int> n_elements;
   mutable std::optional<int> n_reactions;
-  mutable std::optional<std::vector<int>> independent_element_indices;
-  mutable std::optional<std::vector<int>> dependent_element_indices;
+  mutable std::optional<std::vector<Eigen::Index>> independent_element_indices;
+  mutable std::optional<std::vector<Eigen::Index>> dependent_element_indices;
   mutable std::optional<std::vector<std::string>> endmember_names;
   mutable std::optional<std::vector<std::string>> elements;
   mutable std::optional<std::vector<FormulaMap>> endmember_formulae;
@@ -150,8 +150,8 @@ class CompositeMaterial : public Material {
   int compute_n_elements() const;
   int compute_n_reactions() const;
   std::vector<std::string> compute_elements() const;
-  std::vector<int> compute_independent_element_indices() const;
-  std::vector<int> compute_dependent_element_indices() const;
+  std::vector<Eigen::Index> compute_independent_element_indices() const;
+  std::vector<Eigen::Index> compute_dependent_element_indices() const;
   Eigen::MatrixXd compute_stoichiometric_matrix() const;
   Eigen::MatrixXd compute_compositional_basis() const;
   Eigen::MatrixXd compute_compositional_null_basis() const;

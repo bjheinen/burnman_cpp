@@ -41,14 +41,14 @@ std::vector<std::string>& CompositeMaterial::get_elements() const {
   return *elements;
 }
 
-std::vector<int>& CompositeMaterial::get_independent_element_indices() const {
+std::vector<Eigen::Index>& CompositeMaterial::get_independent_element_indices() const {
   if (!independent_element_indices.has_value()) {
     independent_element_indices = compute_independent_element_indices();
   }
   return *independent_element_indices;
 }
 
-std::vector<int>& CompositeMaterial::get_dependent_element_indices() const {
+std::vector<Eigen::Index>& CompositeMaterial::get_dependent_element_indices() const {
   if (!dependent_element_indices.has_value()) {
     dependent_element_indices = compute_dependent_element_indices();
   }
@@ -127,15 +127,15 @@ std::vector<std::string> CompositeMaterial::compute_elements() const {
   return utils::sort_element_list_to_IUPAC_order(all_elements);
 }
 
-std::vector<int> CompositeMaterial::compute_independent_element_indices() const {
+std::vector<Eigen::Index> CompositeMaterial::compute_independent_element_indices() const {
   return utils::get_independent_row_indices(get_stoichiometric_matrix());
 }
 
-std::vector<int> CompositeMaterial::compute_dependent_element_indices() const {
+std::vector<Eigen::Index> CompositeMaterial::compute_dependent_element_indices() const {
   const std::vector<std::string>& elems = get_elements();
-  const std::vector<int> indep = get_independent_element_indices();
-  std::vector<int> dep;
-  for (int i = 0; i < elems.size(); ++i) {
+  const std::vector<Eigen::Index>& indep = get_independent_element_indices();
+  std::vector<Eigen::Index> dep;
+  for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(elems.size()); ++i) {
     if (std::find(
       indep.begin(), indep.end(), i) == indep.end()
     ) {
@@ -174,7 +174,7 @@ Eigen::MatrixXd CompositeMaterial::compute_compositional_basis() const {
 
 Eigen::MatrixXd CompositeMaterial::compute_compositional_null_basis() const {
   const Eigen::MatrixXd& stoich_mat = get_stoichiometric_matrix();
-  const std::vector<int>& dep = get_dependent_element_indices();
+  const std::vector<Eigen::Index>& dep = get_dependent_element_indices();
   Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp(stoich_mat);
   Eigen::MatrixXd nullspace = lu_decomp.kernel();
   // Maybe consider threshold?

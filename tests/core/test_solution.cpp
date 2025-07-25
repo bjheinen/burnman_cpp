@@ -219,8 +219,8 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]"
   int ref_n_endmembers = 3;
   int ref_n_elements = 5;
   int ref_n_reactions = 0;
-  std::vector<int> ref_independent_element_indices = {0, 1, 2};
-  std::vector<int> ref_dependent_element_indices = {3, 4};
+  std::vector<Eigen::Index> ref_independent_element_indices = {0, 1, 2};
+  std::vector<Eigen::Index> ref_dependent_element_indices = {3, 4};
   Eigen::MatrixXd ref_stoichiometric_matrix(3,5);
   ref_stoichiometric_matrix <<
     1, 0, 0, 1, 3,

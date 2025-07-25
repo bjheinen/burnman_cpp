@@ -136,8 +136,8 @@ TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
       1, 0, 0, 1, 3,
       0, 1, 0, 1, 3,
       0, 0, 2, 0, 3;
-    std::vector<int> expected = {0, 1, 2};
-    std::vector<int> result = utils::get_independent_row_indices(m);
+    std::vector<Eigen::Index> expected = {0, 1, 2};
+    std::vector<Eigen::Index> result = utils::get_independent_row_indices(m);
     REQUIRE(result == expected);
   }
   SECTION("some independent rows") {
@@ -147,8 +147,8 @@ TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
       0, 1, 1, 3,
       1, 0, 1, 3,
       0, 1, 1, 3;
-    std::vector<int> expected = {0, 1};
-    std::vector<int> result = utils::get_independent_row_indices(m);
+    std::vector<Eigen::Index> expected = {0, 1};
+    std::vector<Eigen::Index> result = utils::get_independent_row_indices(m);
     REQUIRE(result == expected);
   }
   SECTION("One independent row") {
@@ -156,13 +156,13 @@ TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
     m <<
       2, 1, 4,
       2, 1, 4;
-    std::vector<int> expected = {0};
-    std::vector<int> result = utils::get_independent_row_indices(m);
+    std::vector<Eigen::Index> expected = {0};
+    std::vector<Eigen::Index> result = utils::get_independent_row_indices(m);
     REQUIRE(result == expected);
   }
   SECTION("No independent rows - zero matrix") {
     Eigen::MatrixXd m = Eigen::MatrixXd::Zero(5, 5);
-    std::vector<int> result = utils::get_independent_row_indices(m);
+    std::vector<Eigen::Index> result = utils::get_independent_row_indices(m);
     REQUIRE(result.empty());
   }
 }

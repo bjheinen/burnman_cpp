@@ -76,7 +76,7 @@ namespace utils {
    * @param mat Matrix
    * @returns Sorted list of indices of linearly independent rows
    */
-  inline std::vector<int> get_independent_row_indices(
+  inline std::vector<Eigen::Index> get_independent_row_indices(
     const Eigen::MatrixXd& mat
   ) {
     // Transpose to get rows instead of cols
@@ -88,7 +88,7 @@ namespace utils {
     // colsPermutation() retrieves P
     // head(rank) takes needed block
     Eigen::VectorXi indices_vector = qr.colsPermutation().indices().head(rank);
-    std::vector<int> indices(indices_vector.begin(), indices_vector.begin() + rank);
+    std::vector<Eigen::Index> indices(indices_vector.begin(), indices_vector.begin() + rank);
     std::sort(indices.begin(), indices.end());
     return indices;
   }
@@ -105,8 +105,8 @@ namespace utils {
   inline Eigen::MatrixXd complete_basis(
     const Eigen::MatrixXd& basis
   ) {
-    Eigen::Index n = basis.rows();
-    Eigen::Index m = basis.cols();
+    const Eigen::Index n = basis.rows();
+    const Eigen::Index m = basis.cols();
     if (n >= m) {
       return basis;
     }
