@@ -280,7 +280,7 @@ double SolutionModel::compute_VoverKT_excess() const {
 IdealSolution::IdealSolution(const PairedEndmemberList& endmember_list)
   : SolutionModel(endmember_list) {
   // Calculate configurational entropies also
-  endmember_configurational_entropies = compute_endmember_configurational_entropies();
+  this->endmember_configurational_entropies = compute_endmember_configurational_entropies();
 }
 
 // Public function overrides for IdealSolution
@@ -379,7 +379,7 @@ Eigen::ArrayXd IdealSolution::compute_ideal_activities(
   Eigen::ArrayXd reduced_multiplicities = (this->site_multiplicities.colwise() * molar_fractions).colwise().sum();
   Eigen::ArrayXd reduced_occupancies = reduced_n_occupancies * utils::inverseish(reduced_multiplicities);
   Eigen::ArrayXd a = reduced_occupancies.transpose().replicate(this->n_endmembers, 1).pow(this->endmember_n_occupancies.array()).rowwise().prod();
-  Eigen::ArrayXd norm_constants = (endmember_configurational_entropies / constants::physics::gas_constant).exp();
+  Eigen::ArrayXd norm_constants = (this->endmember_configurational_entropies / constants::physics::gas_constant).exp();
   return norm_constants * a;
 }
 
@@ -394,7 +394,7 @@ Eigen::ArrayXd IdealSolution::compute_log_ideal_activities(
       - utils::logish(reduced_multiplicities)
       ).transpose()
   ).rowwise().sum();
-  Eigen::ArrayXd norm_constants = endmember_configurational_entropies / constants::physics::gas_constant;
+  Eigen::ArrayXd norm_constants = this->endmember_configurational_entropies / constants::physics::gas_constant;
   return lna + norm_constants;
 }
 
