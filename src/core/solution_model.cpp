@@ -472,7 +472,7 @@ Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_entropies(
 ) const {
   return IdealSolution::compute_excess_partial_entropies(
       pressure, temperature, molar_fractions)
-    + compute_non_ideal_interactions(this->W_e, molar_fractions);
+    + compute_non_ideal_interactions(this->W_s, molar_fractions);
 }
 
 Eigen::ArrayXd AsymmetricRegularSolution::compute_excess_partial_volumes(
