@@ -145,7 +145,7 @@ double HP_TMT::compute_grueneisen_parameter(
 double HP_TMT::compute_isothermal_bulk_modulus_reuss(
   double pressure,
   double temperature,
-  double volume,
+  double volume [[maybe_unused]],
   const MineralParams& params
 ) const {
   double Pth = compute_relative_thermal_pressure(temperature, params);
@@ -168,10 +168,10 @@ double HP_TMT::compute_isentropic_bulk_modulus_reuss(
 }
 
 double HP_TMT::compute_shear_modulus(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -194,7 +194,7 @@ double HP_TMT::compute_molar_heat_capacity_v(
 double HP_TMT::compute_molar_heat_capacity_p(
   double pressure,
   double temperature,
-  double volume,
+  double volume [[maybe_unused]],
   const MineralParams& params
 ) const {
   auto [a, b, c] = MT::compute_tait_constants(params);
@@ -226,7 +226,7 @@ double HP_TMT::compute_molar_heat_capacity_p(
 double HP_TMT::compute_thermal_expansivity(
   double pressure,
   double temperature,
-  double volume,
+  double volume [[maybe_unused]],
   const MineralParams& params
 ) const {
   auto [a, b, c] = MT::compute_tait_constants(params);
@@ -244,7 +244,7 @@ double HP_TMT::compute_thermal_expansivity(
 double HP_TMT::compute_gibbs_free_energy(
   double pressure,
   double temperature,
-  double volume,
+  double volume [[maybe_unused]],
   const MineralParams& params
 ) const {
   auto [a, b, c] = MT::compute_tait_constants(params);
@@ -271,7 +271,7 @@ double HP_TMT::compute_gibbs_free_energy(
 double HP_TMT::compute_entropy(
   double pressure,
   double temperature,
-  double volume,
+  double volume [[maybe_unused]],
   const MineralParams& params
 ) const {
   // S(P_0, T) = S_0 + int Cp/T dT

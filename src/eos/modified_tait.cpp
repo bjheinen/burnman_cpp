@@ -109,14 +109,14 @@ double MT::compute_modified_tait_volume(
 // Specific EOS functions
 double MT::compute_volume(
   double pressure,
-  double temperature,
+  double temperature [[maybe_unused]],
   const MineralParams& params
 ) const {
   return compute_modified_tait_volume(pressure, params);
 }
 
 double MT::compute_pressure(
-  double temperature,
+  double temperature [[maybe_unused]],
   double volume,
   const MineralParams& params
 ) const {
@@ -125,18 +125,18 @@ double MT::compute_pressure(
 
 double MT::compute_isothermal_bulk_modulus_reuss(
   double pressure,
-  double temperature,
-  double volume,
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
   const MineralParams& params
 ) const {
   return compute_modified_tait_bulk_modulus(pressure, params);
 }
 
 double MT::compute_isentropic_bulk_modulus_reuss(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   // TODO: maybe just return K_T??
   return 1.0e99;
@@ -154,8 +154,8 @@ double MT::compute_molar_internal_energy(
 
 double MT::compute_gibbs_free_energy(
   double pressure,
-  double temperature,
-  double volume,
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
   const MineralParams& params
 ) const {
   auto [a, b, c] = compute_tait_constants(params);
@@ -170,55 +170,55 @@ double MT::compute_gibbs_free_energy(
 }
 
 double MT::compute_shear_modulus(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
 
 double MT::compute_molar_heat_capacity_v(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
 
 double MT::compute_molar_heat_capacity_p(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
 
 double MT::compute_thermal_expansivity(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
 
 double MT::compute_entropy(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
 
 double MT::compute_grueneisen_parameter(
-  double pressure,
-  double temperature,
-  double volume,
-  const MineralParams& params
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
+  double volume [[maybe_unused]],
+  const MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }

@@ -248,8 +248,8 @@ double SLB3::compute_pressure(
 }
 
 double SLB3::compute_grueneisen_parameter(
-  double pressure,
-  double temperature,
+  double pressure [[maybe_unused]],
+  double temperature [[maybe_unused]],
   double volume,
   const MineralParams& params
 ) const {
@@ -279,7 +279,7 @@ double SLB3::compute_slb_grueneisen_parameter(
 }
 
 double SLB3::compute_isothermal_bulk_modulus_reuss(
-  double pressure,
+  double pressure [[maybe_unused]],
   double temperature,
   double volume,
   const MineralParams& params
@@ -345,7 +345,7 @@ double SLB3::compute_shear_modulus_delta(
 
 // Second order (SLB2)
 double SLB2::compute_shear_modulus(
-  double pressure,
+  double pressure [[maybe_unused]],
   double temperature,
   double volume,
   const MineralParams& params
@@ -356,7 +356,7 @@ double SLB2::compute_shear_modulus(
 
 // Third order (SLB3)
 double SLB3::compute_shear_modulus(
-  double pressure,
+  double pressure [[maybe_unused]],
   double temperature,
   double volume,
   const MineralParams& params
@@ -366,7 +366,7 @@ double SLB3::compute_shear_modulus(
 }
 
 double SLB3::compute_molar_heat_capacity_v(
-  double pressure,
+  double pressure [[maybe_unused]],
   double temperature,
   double volume,
   const MineralParams& params
@@ -447,7 +447,7 @@ double SLB3::compute_gibbs_free_energy(
 }
 
 double SLB3::compute_entropy(
-  double pressure,
+  double pressure [[maybe_unused]],
   double temperature,
   double volume,
   const MineralParams& params
@@ -482,7 +482,7 @@ double SLB3::compute_molar_internal_energy(
 }
 
 double SLB3::compute_helmholtz_free_energy(
-  double pressure,
+  double pressure [[maybe_unused]],
   double temperature,
   double volume,
   const MineralParams& params
