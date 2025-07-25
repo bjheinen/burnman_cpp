@@ -40,9 +40,9 @@ namespace utils {
    */
   inline Eigen::MatrixXd jagged2square(const std::vector<std::vector<double>>& v, int n) {
     Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(n, n);
-    for (int i = 0; i < v.size(); i++) {
-      int col = n - 1;
-      for (int j = v[i].size() - 1; j >= 0; --j) {
+    for (std::size_t i = 0; i < v.size(); i++) {
+      std::ptrdiff_t col = n - 1;
+      for (std::ptrdiff_t j = static_cast<std::ptrdiff_t>(v[i].size()) - 1; j >= 0; --j) {
         mat(i, col) = v[i][j];
         --col;
       }
@@ -84,7 +84,7 @@ namespace utils {
     // QR decomp with column pivoting
     Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(A);
     // Use rank as num independent cols
-    int rank = qr.rank();
+    Eigen::Index rank = qr.rank();
     // colsPermutation() retrieves P
     // head(rank) takes needed block
     Eigen::VectorXi indices_vector = qr.colsPermutation().indices().head(rank);
@@ -105,8 +105,8 @@ namespace utils {
   inline Eigen::MatrixXd complete_basis(
     const Eigen::MatrixXd& basis
   ) {
-    int n = basis.rows();
-    int m = basis.cols();
+    Eigen::Index n = basis.rows();
+    Eigen::Index m = basis.cols();
     if (n >= m) {
       return basis;
     }
@@ -115,13 +115,13 @@ namespace utils {
     // FullPivLU decomposition to get RREF
     Eigen::FullPivLU<Eigen::MatrixXd> lu_basis(basis_flipped);
     // Get the rank of the matrix
-    int rank = lu_basis.rank();
+    Eigen::Index rank = lu_basis.rank();
     Eigen::MatrixXd U = lu_basis.matrixLU().triangularView<Eigen::Upper>();
     // Get the indices of the pivot columns for each row -
     // first non-zero element in each row.
-    std::vector<int> pivot_columns;
-    for (int i = 0; i < rank; ++i) {
-      for (int j = i; j < m; ++j) {
+    std::vector<Eigen::Index> pivot_columns;
+    for (Eigen::Index i = 0; i < rank; ++i) {
+      for (Eigen::Index j = i; j < m; ++j) {
         if (U(i, j) != 0) {
           pivot_columns.push_back(m - 1 - j);
           break;
@@ -129,16 +129,16 @@ namespace utils {
       }
     }
     // Get excluded indices
-    std::vector<bool> excluded(m, false);
-    for (int val : pivot_columns) {
+    std::vector<bool> excluded(static_cast<std::size_t>(m), false);
+    for (Eigen::Index val : pivot_columns) {
       if (val >= 0 && val < m)
-        excluded[val] = true;
+        excluded[static_cast<std::size_t>(val)] = true;
     }
     // Get indices of identity matrix to use
-    std::vector<int> basis_indices;
-    basis_indices.reserve(m - pivot_columns.size());
-    for (int i = 0; i < m; ++i) {
-      if (!excluded[i])
+    std::vector<Eigen::Index> basis_indices;
+    basis_indices.reserve(static_cast<std::size_t>(m) - pivot_columns.size());
+    for (Eigen::Index i = 0; i < m; ++i) {
+      if (!excluded[static_cast<std::size_t>(i)])
         basis_indices.push_back(i);
     }
     // Get identity matrix and concatenate with basis
