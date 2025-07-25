@@ -136,14 +136,14 @@ namespace utils {
     }
     // Get indices of identity matrix to use
     std::vector<Eigen::Index> basis_indices;
-    basis_indices.reserve(static_cast<std::size_t>(m) - pivot_columns.size());
+    basis_indices.reserve(static_cast<std::size_t>(m - static_cast<Eigen::Index>(pivot_columns.size())));
     for (Eigen::Index i = 0; i < m; ++i) {
       if (!excluded[static_cast<std::size_t>(i)])
         basis_indices.push_back(i);
     }
     // Get identity matrix and concatenate with basis
     Eigen::MatrixXd I = Eigen::MatrixXd::Identity(m, m);
-    Eigen::MatrixXd full_basis(n + basis_indices.size(), m);
+    Eigen::MatrixXd full_basis(n + static_cast<Eigen::Index>(basis_indices.size()), m);
     full_basis <<
       basis,
       I(basis_indices, Eigen::all);

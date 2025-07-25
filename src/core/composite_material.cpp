@@ -108,11 +108,11 @@ void CompositeMaterial::set_endmember_formulae(std::vector<FormulaMap> formulae)
 // Compute functions common to all composite materials.
 
 int CompositeMaterial::compute_n_elements() const {
-  return get_elements().size();
+  return static_cast<int>(get_elements().size());
 }
 
 int CompositeMaterial::compute_n_reactions() const {
-  return get_reaction_basis().rows();
+  return static_cast<int>(get_reaction_basis().rows());
 }
 
 std::vector<std::string> CompositeMaterial::compute_elements() const {
@@ -179,7 +179,7 @@ Eigen::MatrixXd CompositeMaterial::compute_compositional_null_basis() const {
   Eigen::MatrixXd nullspace = lu_decomp.kernel();
   // Maybe consider threshold?
   // Check matrix
-  Eigen::MatrixXd M(nullspace.rows(), dep.size());
+  Eigen::MatrixXd M(nullspace.rows(), static_cast<Eigen::Index>(dep.size()));
   M = nullspace(Eigen::all, dep);
   // assert(M.cols() == M.rows());
   // assert(

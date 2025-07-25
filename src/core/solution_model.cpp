@@ -18,9 +18,9 @@
 #include "burnman/utils/matrix_utils.hpp"
 
 SolutionModel::SolutionModel(const PairedEndmemberList& endmember_list) {
-  this->n_endmembers = endmember_list.size();
-  this->endmembers.reserve(this->n_endmembers);
-  this->formulas.reserve(this->n_endmembers);
+  this->n_endmembers = static_cast<int>(endmember_list.size());
+  this->endmembers.reserve(static_cast<std::size_t>(this->n_endmembers));
+  this->formulas.reserve(static_cast<std::size_t>(this->n_endmembers));
   // Unpack and store endmembers/formulas separately
   for (const auto& [mineral, formula] : endmember_list) {
     this->endmembers.push_back(mineral);
@@ -36,7 +36,7 @@ void SolutionModel::process_solution_chemistry() {
   this->n_occupancies = 0;
 
   // Set class n_sites
-  this->n_sites = std::count(this->formulas[0].begin(), this->formulas[0].end(), '[');
+  this->n_sites = static_cast<int>(std::count(this->formulas[0].begin(), this->formulas[0].end(), '['));
 
   // Check that number of sites is constant
   for (const std::string& f : this->formulas) {
@@ -130,7 +130,7 @@ void SolutionModel::process_solution_chemistry() {
         // Add to sites[i_site] if not present
         auto& site_species = this->sites[i_site];
         auto species_pos = std::find(site_species.begin(), site_species.end(), species_name);
-        int i_el;
+        std::size_t i_el;
         if (species_pos == site_species.end()) {
           // Use current size as index of next entry
           i_el = site_species.size();

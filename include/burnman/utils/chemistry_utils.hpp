@@ -50,7 +50,7 @@ namespace utils {
     const Eigen::ArrayXd& weights
   ) {
     size_t n = formulae.size();
-    if (static_cast<size_t>(weights.size()) != n) {
+    if (static_cast<std::size_t>(weights.size()) != n) {
       throw std::invalid_argument(
         "Weights length must be equal to number of formulae");
     }
@@ -70,7 +70,7 @@ namespace utils {
   inline FormulaMap sum_formulae(
     const std::vector<FormulaMap>& formulae
   ) {
-    Eigen::ArrayXd ones = Eigen::ArrayXd::Ones(formulae.size());
+    Eigen::ArrayXd ones = Eigen::ArrayXd::Ones(static_cast<Eigen::Index>(formulae.size()));
     return sum_formulae(formulae, ones);
   }
 

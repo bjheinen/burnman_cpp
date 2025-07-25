@@ -191,7 +191,7 @@ Eigen::ArrayXd Assemblage::compute_volume_fractions() const {
 }
 
 int Assemblage::compute_n_endmembers() const {
-  return get_endmember_names().size();
+  return static_cast<int>(get_endmember_names().size());
 }
 
 void Assemblage::setup_endmember_names() const {
