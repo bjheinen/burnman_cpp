@@ -414,8 +414,8 @@ Eigen::MatrixXd IdealSolution::compute_log_ideal_activity_derivatives(
 Eigen::MatrixXd IdealSolution::compute_ideal_entropy_hessian(
   const Eigen::ArrayXd& molar_fractions
 ) const {
-  return constants::physics::gas_constant
-    * compute_log_ideal_activity_derivatives(molar_fractions);
+  return -(constants::physics::gas_constant
+    * compute_log_ideal_activity_derivatives(molar_fractions));
 }
 
 // Constructor for AsymmetricRegularSolution
