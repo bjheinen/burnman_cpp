@@ -11,10 +11,14 @@
 #define BURNMAN_OPTIM_ROOTS_HPP_INCLUDED
 
 #include <cassert>
+#include <stdexcept>
+#include <string>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
 #include "burnman/utils/eos.hpp"
 #include "burnman/utils/constants.hpp"
+
+#include <iostream>
 
 namespace roots {
   /**
@@ -47,8 +51,19 @@ namespace roots {
     // Define and allocate the solver
     const gsl_root_fsolver_type* T = gsl_root_fsolver_brent;
     gsl_root_fsolver* solver = gsl_root_fsolver_alloc(T);
-    // Set the GSL solver
-    gsl_root_fsolver_set(solver, &obj_func, x_lo, x_hi);
+
+    // Switch off GSL error handler (check status codes instead)
+    // TODO: switch off globally and remove the reset below?
+    gsl_error_handler_t* old_handler = gsl_set_error_handler_off();
+    // Set the GSL solver - handle for errors here
+    int solver_set_status = gsl_root_fsolver_set(solver, &obj_func, x_lo, x_hi);
+    if (solver_set_status != GSL_SUCCESS) {
+      gsl_root_fsolver_free(solver);
+      throw std::runtime_error(
+        std::string("Failed to initialise brent solver: invalid interval or function.")
+        + "Interval: [" + std::to_string(x_lo) + ", " + std::to_string(x_hi) + "]."
+      );
+    }
     // Iterate the solver
     int iter = 0;
     int maxiter = 100;
@@ -79,11 +94,16 @@ namespace roots {
     root = gsl_root_fsolver_root(solver);
     // Clean up
     gsl_root_fsolver_free(solver);
+    gsl_set_error_handler(old_handler);
 
     if (status == GSL_SUCCESS) {
-        return root;
+      return root;
     } else {
-        return -1; // throw an error? "Error: Root-finding did not converge!"
+      throw std::runtime_error(
+        std::string("Brent root-finding failed to converge after ") + std::to_string(iter)
+        + " iterations for interval: ["
+        + std::to_string(x_lo) + ", " + std::to_string(x_hi) + "]."
+      );
     }
   }
 
@@ -92,7 +112,7 @@ namespace roots {
     *
     * Used to check if a bracketing interval used as an input to Brent's
     * method is valid (i.e. a sign change exists between f(x_lo), f_x_hi).
-    * For invalid intervals the bracket is expanded in the 0 direction by
+    * For invalid intervals the bracket is expanded downhill by
     * a small amount (dx). The step increases with each iteration by a
     * contant factor (expansion_factor).
     * @see brent::find_root
@@ -103,9 +123,9 @@ namespace roots {
     * @param[in,out] x_hi High limit of starting interval.
     * @param dx Initial step size for bracket expansion.
     * @param expansion_factor Factor to increase step size each iteration.
-    * @param max_iter Maximum number of iterations
+    * @param max_iter Maximum number of iterations.
     *
-    * @return success Flag.
+    * @return true if valid root found in interval, false if not.
     */
   template <typename SolverParamsType>
   bool bracket_root(
@@ -117,14 +137,14 @@ namespace roots {
     double expansion_factor = 1.0,
     int max_iter = 100)
   {
-    // TODO: Use higher max_iter?
     assert(dx > 0 && "dx must be +ve!");
     // Evaluate function at interval bounds
     double f_lo = gsl_wrapper(x_lo, &gsl_wrapper_params);
     double f_hi = gsl_wrapper(x_hi, &gsl_wrapper_params);
     // Expand towards f(x)=0 if no sign change
     int n_iter = 0;
-    while (f_lo * f_hi >= 0 && n_iter < max_iter) {
+    bool bracket_found = (f_lo * f_hi < 0);
+    while (!bracket_found && n_iter < max_iter) {
       if (std::abs(f_lo) < std::abs(f_hi)) {
         x_lo -= dx;
         f_lo = gsl_wrapper(x_lo, &gsl_wrapper_params);
@@ -132,12 +152,13 @@ namespace roots {
         x_hi += dx;
         f_hi = gsl_wrapper(x_hi, &gsl_wrapper_params);
       }
+      bracket_found = (f_lo * f_hi < 0);
       // TODO Too risky to use factor? (overshoot leads to error at invalid V)
       dx *= expansion_factor;
       n_iter++;
     }
     // Return true if valid bracket
-    return (f_lo * f_hi < 0);
+    return bracket_found;
   }
 }
 #endif // BURNMAN_OPTIM_ROOTS_HPP_INCLUDED
