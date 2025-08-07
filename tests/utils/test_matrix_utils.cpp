@@ -14,7 +14,7 @@
 #include "burnman/utils/matrix_utils.hpp"
 
 TEST_CASE("jagged2square n=5", "[utils][matrix_utils]") {
-  int n = 5;
+  Eigen::Index n = 5;
   std::vector<std::vector<double>> v = {
     {0.0, 24.74e3, 26.0e3, 24.3e3},
     {24.74e3, 0.0, 0.0e3},
@@ -34,7 +34,7 @@ TEST_CASE("jagged2square n=5", "[utils][matrix_utils]") {
 }
 
 TEST_CASE("jagged2square n=5 (equal rows)", "[utils][matrix_utils]") {
-  int n = 5;
+  Eigen::Index n = 5;
   std::vector<std::vector<double>> v = {
     {0.0, 24.74e3, 26.0e3, 24.3e3},
     {24.74e3, 0.0, 0.0e3},
@@ -55,7 +55,7 @@ TEST_CASE("jagged2square n=5 (equal rows)", "[utils][matrix_utils]") {
 }
 
 TEST_CASE("jagged2square n=2", "[utils][matrix_utils]") {
-  int n = 2;
+  Eigen::Index n = 2;
   std::vector<std::vector<double>> v = {
     {18.0e3}
   };
@@ -76,7 +76,7 @@ TEST_CASE("jagged2square (empty input)", "[utils][matrix_utils]") {
 }
 
 TEST_CASE("populate_interaction_matrix; check shape", "[utils][matrix_utils]") {
-  int n = 3;
+  Eigen::Index n = 3;
   Eigen::ArrayXd alphas(n);
   alphas << 1.0, 2.0, 3.0;
   Eigen::MatrixXd interaction(n, n);
@@ -90,7 +90,7 @@ TEST_CASE("populate_interaction_matrix; check shape", "[utils][matrix_utils]") {
 }
 
 TEST_CASE("populate_interaction_matrix; values", "[utils][matrix_utils]") {
-  int n = 5;
+  Eigen::Index n = 5;
   Eigen::MatrixXd interaction(n, n);
   interaction <<
     0, 0, 24740,    26000, 24300,
@@ -169,7 +169,7 @@ TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
 
 TEST_CASE("complete_basis", "[utils][matrix_utils]") {
   SECTION("Basis already complete (square)") {
-    int n = 3;
+    Eigen::Index n = 3;
     Eigen::MatrixXd basis = Eigen::MatrixXd::Identity(n, n);
     Eigen::MatrixXd result = utils::complete_basis(basis);
     REQUIRE(result.rows() == n);

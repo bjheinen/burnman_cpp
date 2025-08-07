@@ -37,9 +37,10 @@ class SolutionModel {
   /// use endmembers.emplace_back( ) to add
 
   // Counts
-  int n_endmembers;
-  int n_sites;
-  int n_occupancies;
+  // Using Eigen::Index (usually std::ptrdiff_t) - cast to size_t for STL containers
+  Eigen::Index n_endmembers;
+  Eigen::Index n_sites;
+  Eigen::Index n_occupancies;
   // Site multiplicity and occupancy matrices
   Eigen::ArrayXXd site_multiplicities;
   Eigen::ArrayXXd endmember_occupancies;

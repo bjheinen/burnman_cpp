@@ -38,12 +38,12 @@ namespace utils {
    * @param n size of square matrix.
    * @return Square matrix.
    */
-  inline Eigen::MatrixXd jagged2square(const std::vector<std::vector<double>>& v, int n) {
+  inline Eigen::MatrixXd jagged2square(const std::vector<std::vector<double>>& v, Eigen::Index n) {
     Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(n, n);
     for (std::size_t i = 0; i < v.size(); i++) {
-      std::ptrdiff_t col = n - 1;
+      std::ptrdiff_t col = static_cast<std::ptrdiff_t>(n) - 1;
       for (std::ptrdiff_t j = static_cast<std::ptrdiff_t>(v[i].size()) - 1; j >= 0; --j) {
-        mat(i, col) = v[i][j];
+        mat(static_cast<Eigen::Index>(i), col) = v[i][j];
         --col;
       }
     }
@@ -55,7 +55,7 @@ namespace utils {
   inline Eigen::MatrixXd populate_interaction_matrix(
     const Eigen::MatrixXd& interaction,
     const Eigen::ArrayXd& alphas,
-    int n
+    Eigen::Index n
   ) {
     Eigen::MatrixXd alphas_outer_sum = alphas.replicate(1, n) + alphas.transpose().replicate(n, 1);
     // Compute 2.0 / alpha_sum element-wise

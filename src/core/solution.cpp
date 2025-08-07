@@ -401,7 +401,7 @@ FormulaMap Solution::compute_formula() const {
 // Setup functions for CompositeMaterial properties
 
 int Solution::compute_n_endmembers() const {
-  return solution_model->n_endmembers;
+  return static_cast<int>(solution_model->n_endmembers);
 }
 
 void Solution::setup_endmember_names() const {

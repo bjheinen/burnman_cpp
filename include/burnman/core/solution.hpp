@@ -97,7 +97,7 @@ class Solution : public CompositeMaterial {
   std::vector<T> map_endmembers_to_vector(Func&& func) const {
     const auto& em_ref = solution_model->endmembers;
     std::vector<T> mapped_properties;
-    mapped_properties.reserve(solution_model->n_endmembers);
+    mapped_properties.reserve(static_cast<std::size_t>(solution_model->n_endmembers));
     std::transform(
       em_ref.begin(), em_ref.end(), std::back_inserter(mapped_properties),
       [&func](const auto& em) {

@@ -18,7 +18,7 @@
 #include "burnman/utils/matrix_utils.hpp"
 
 SolutionModel::SolutionModel(const PairedEndmemberList& endmember_list) {
-  this->n_endmembers = static_cast<int>(endmember_list.size());
+  this->n_endmembers = static_cast<Eigen::Index>(endmember_list.size());
   this->endmembers.reserve(static_cast<std::size_t>(this->n_endmembers));
   this->formulas.reserve(static_cast<std::size_t>(this->n_endmembers));
   // Unpack and store endmembers/formulas separately
@@ -36,33 +36,31 @@ void SolutionModel::process_solution_chemistry() {
   this->n_occupancies = 0;
 
   // Set class n_sites
-  this->n_sites = static_cast<int>(std::count(this->formulas[0].begin(), this->formulas[0].end(), '['));
-
+  this->n_sites = static_cast<Eigen::Index>(
+    std::count(this->formulas[0].begin(), this->formulas[0].end(), '[')
+  );
   // Check that number of sites is constant
   for (const std::string& f : this->formulas) {
-    if (std::count(f.begin(), f.end(), '[') != this->n_sites) {
+    if (static_cast<Eigen::Index>(std::count(f.begin(), f.end(), '[')) != this->n_sites) {
       throw std::runtime_error("All formulae must have the same number of distinct sites.");
     }
   }
 
-  // Make intermediate occ/mult data containers for parsing
-  Eigen::ArrayXXd formula_multiplicities;
-  std::vector<std::vector<std::vector<double>>> list_occupancies;
-
-  // Store multiplicities
-  formula_multiplicities.resize(this->n_endmembers, this->n_sites);
-  // Resize other data containers
-  this->solution_formulae.resize(this->n_endmembers);
-  this->sites.resize(this->n_sites);
+  // Make intermediate occ/mult data containers for parsing and resize as needed
+  Eigen::ArrayXXd formula_multiplicities(this->n_endmembers, this->n_sites);
+  std::vector<std::vector<std::vector<double>>> list_occupancies(
+    static_cast<std::size_t>(this->n_endmembers)
+  );
+  this->solution_formulae.resize(static_cast<std::size_t>(this->n_endmembers));
+  this->sites.resize(static_cast<std::size_t>(this->n_sites));
   // List occupancies is triple nested vector
   // std::vector<std::vector<std::vector<double>>>
   // Outer --> n_endmembers
   // Inner --> n_site
   // Innermost --> n_species (not known until parsed)
-  list_occupancies.resize(this->n_endmembers);
-  for (int i = 0; i < this->n_endmembers; ++i) {
-    list_occupancies[i].resize(this->n_sites);
-    for (int j = 0; j < this->n_sites; ++j) {
+  for (std::size_t i = 0; i < static_cast<std::size_t>(this->n_endmembers); ++i) {
+    list_occupancies[i].resize(static_cast<std::size_t>(this->n_sites));
+    for (std::size_t j = 0; j < static_cast<std::size_t>(this->n_sites); ++j) {
       list_occupancies[i][j].resize(0);
     }
   }
@@ -76,7 +74,7 @@ void SolutionModel::process_solution_chemistry() {
   std::regex species_frac_split_regex("([0-9][^A-Z]*)");
 
   // Loop over endmembers
-  for (int i_mbr = 0; i_mbr < this->n_endmembers; ++i_mbr) {
+  for (std::size_t i_mbr = 0; i_mbr < static_cast<std::size_t>(this->n_endmembers); ++i_mbr) {
     // Split formula into sites - 'Mg]3', 'Al]2', 'etc.'
     std::sregex_token_iterator it_sites(
       this->formulas[i_mbr].begin(), this->formulas[i_mbr].end(),
@@ -84,7 +82,7 @@ void SolutionModel::process_solution_chemistry() {
     // Discard string before first [ by ++it first
     std::vector<std::string> site_formulas(++it_sites, {});
     // Loop over sites in formula
-    for (int i_site = 0; i_site < this->n_sites; ++i_site) {
+    for (std::size_t i_site = 0; i_site < static_cast<std::size_t>(this->n_sites); ++i_site) {
       // Split on ] to get site occupancy and multiplicity
       std::sregex_token_iterator it_occ(
         site_formulas[i_site].begin(), site_formulas[i_site].end(),
@@ -97,7 +95,10 @@ void SolutionModel::process_solution_chemistry() {
       site_mult_str = utils::extract_numeric_prefix(site_mult_str);
       double site_mult = site_mult_str.empty() ? 1.0 : utils::stod(site_mult_str);
       // Store multiplicity
-      formula_multiplicities(i_mbr, i_site) = site_mult;
+      formula_multiplicities(
+        static_cast<Eigen::Index>(i_mbr),
+        static_cast<Eigen::Index>(i_site)
+      ) = site_mult;
 
       // Split occupancy into species
       std::vector<std::string> species;
@@ -108,7 +109,6 @@ void SolutionModel::process_solution_chemistry() {
 
       // Loop over species on site
       for (const std::string& sp : species) {
-
         // "Mg" --> "Mg"; "Mg1/2" --> ["Mg", "1/2"]
         std::sregex_token_iterator it_frac(
           sp.begin(), sp.end(),
@@ -138,7 +138,7 @@ void SolutionModel::process_solution_chemistry() {
           ++this->n_occupancies;
           // Append 0 to list_occupancies for already parsed endmembers
           // when found new species
-          for (int k = 0; k < this->n_endmembers; ++k) {
+          for (std::size_t k = 0; k < static_cast<std::size_t>(this->n_endmembers); ++k) {
             // Check and resize outer if needed
             auto& occupancies = list_occupancies[k];
             if (occupancies.size() <= i_site) {
@@ -171,12 +171,21 @@ void SolutionModel::process_solution_chemistry() {
   this->site_multiplicities.resize(this->n_endmembers, this->n_occupancies);
 
   // Loop over endmembers again
-  for (int i_mbr = 0; i_mbr < this->n_endmembers; ++i_mbr) {
-    int n_species = 0;
-    for (int i_site = 0; i_site < this->n_sites; ++i_site) {
-      for (size_t i_el = 0; i_el < list_occupancies[i_mbr][i_site].size(); ++i_el) {
-        this->endmember_occupancies(i_mbr, n_species) = list_occupancies[i_mbr][i_site][i_el];
-        this->site_multiplicities(i_mbr, n_species) = formula_multiplicities(i_mbr, i_site);
+  for (std::size_t i_mbr = 0; i_mbr < static_cast<std::size_t>(this->n_endmembers); ++i_mbr) {
+    Eigen::Index n_species = 0;
+    for (std::size_t i_site = 0; i_site < static_cast<std::size_t>(this->n_sites); ++i_site) {
+      for (std::size_t i_el = 0; i_el < list_occupancies[i_mbr][i_site].size(); ++i_el) {
+        this->endmember_occupancies(
+          static_cast<Eigen::Index>(i_mbr),
+          n_species
+        ) = list_occupancies[i_mbr][i_site][i_el];
+        this->site_multiplicities(
+          static_cast<Eigen::Index>(i_mbr),
+          n_species
+        ) = formula_multiplicities(
+          static_cast<Eigen::Index>(i_mbr),
+          static_cast<Eigen::Index>(i_site)
+        );
         ++n_species;
       }
     }
@@ -187,9 +196,9 @@ void SolutionModel::process_solution_chemistry() {
 
   // Get site names
   this->site_names.clear();
-  for (int i_site = 0; i_site < this->n_sites; ++i_site) {
+  for (std::size_t i_site = 0; i_site < static_cast<std::size_t>(this->n_sites); ++i_site) {
     // Grab uppercase letter from index (works to 26!)
-    char site_id = 'A' + i_site;
+    char site_id = static_cast<char>('A' + i_site);
     for (const std::string& sp : this->sites[i_site]) {
       this->site_names.push_back(sp + "_" + site_id);
     }
@@ -211,13 +220,13 @@ void SolutionModel::process_solution_chemistry() {
   // Take first token to start general formula (may be empty)
   this->general_formula = split_empty[0];
   // Loop through and replace sites with multi species lists
-  for (int i = 0; i < this->n_sites; ++i) {
+  for (std::size_t i = 0; i < static_cast<std::size_t>(this->n_sites); ++i) {
     this->general_formula += "[" + utils::join(this->sites[i], ",") + "]";
     // Append final part after site if present
-    if (i + 1 < static_cast<int>(split_empty.size()))
-    this->general_formula += split_empty[i + 1];
+    if (i + 1 < split_empty.size()) {
+      this->general_formula += split_empty[i + 1];
+    }
   }
-
 }
 
 double SolutionModel::compute_excess_gibbs_free_energy(
@@ -581,7 +590,6 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_non_ideal_hessian(
   Eigen::ArrayXd phi = compute_phi(molar_fractions);
   Eigen::MatrixXd I = Eigen::MatrixXd::Identity(this->n_endmembers, this->n_endmembers);
   Eigen::MatrixXd q = I.rowwise() - phi.matrix().transpose();
-  //
   double sum_pa = molar_fractions.matrix().dot(this->alphas.matrix());
   Eigen::MatrixXd alpha_outer_product = this->alphas.matrix() * (this->alphas/sum_pa).matrix().transpose();
   Eigen::MatrixXd qWq_product = q * interactions * q.transpose();
