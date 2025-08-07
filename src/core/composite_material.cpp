@@ -154,11 +154,11 @@ Eigen::MatrixXd CompositeMaterial::compute_stoichiometric_matrix() const {
   stoich_mat.resize(n_embr, n_elem);
   stoich_mat.setZero();
   for (int i = 0; i < n_embr; ++i) {
-    const auto& formula = embr_formulae[i];
+    const auto& formula_i = embr_formulae[i];
     for (int j = 0; j < n_elem; ++j) {
       const std::string& element = elems[j];
-      auto it = formula.find(element);
-      if (it != formula.end()) {
+      auto it = formula_i.find(element);
+      if (it != formula_i.end()) {
         stoich_mat(i, j) = it->second;
       }
     }

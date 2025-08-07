@@ -203,9 +203,9 @@ void Assemblage::setup_endmember_formulae() const {
 }
 
 void Assemblage::setup_endmember_properties() const {
-  std::vector<FormulaMap> endmember_formulae;
-  std::vector<std::string> endmember_names;
-  std::vector<int> embr_per_phase;
+  std::vector<FormulaMap> temp_formulae;
+  std::vector<std::string> temp_names;
+  std::vector<int> temp_empp;
   // Loop through phases
   for (const auto& ph : phases) {
     // If phase is a Solution
@@ -214,31 +214,31 @@ void Assemblage::setup_endmember_properties() const {
       const auto& names = sol->get_endmember_names();
       const auto& formulae = sol->get_endmember_formulae();
       // Batch add endmember formulas
-      endmember_formulae.insert(endmember_formulae.end(),
+      temp_formulae.insert(temp_formulae.end(),
                                 formulae.begin(), formulae.end());
       // Add endmember names
-      endmember_names.reserve(endmember_names.size() + names.size());
+      temp_names.reserve(temp_names.size() + names.size());
       const std::string& phase_name  = sol->get_name();
-      for (const auto& name : names) {
-        endmember_names.push_back(name + " in " + phase_name);
+      for (const auto& name_i : names) {
+        temp_names.push_back(name_i + " in " + phase_name);
       }
       // Add number of endmembers to list
-      embr_per_phase.push_back(sol->get_n_endmembers());
+      temp_empp.push_back(sol->get_n_endmembers());
     // If phase is a Mineral
     } else if (auto min = std::dynamic_pointer_cast<Mineral>(ph)) {
       // Store mineral properties
-      endmember_formulae.push_back(min->get_formula());
-      endmember_names.push_back(min->get_name());
-      embr_per_phase.push_back(1);
+      temp_formulae.push_back(min->get_formula());
+      temp_names.push_back(min->get_name());
+      temp_empp.push_back(1);
     } else {
       throw std::runtime_error(
         "Unsupported Material type; expected Mineral or Solution.");
     }
   }
   // Set properties
-  set_endmember_names(endmember_names);
-  set_endmember_formulae(endmember_formulae);
-  set_endmembers_per_phase(embr_per_phase);
+  set_endmember_names(temp_names);
+  set_endmember_formulae(temp_formulae);
+  set_endmembers_per_phase(temp_empp);
 }
 
 void Assemblage::set_endmembers_per_phase(std::vector<int> v) const {
