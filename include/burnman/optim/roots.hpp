@@ -114,7 +114,7 @@ namespace roots {
     double& x_lo,
     double& x_hi,
     double dx,
-    double expansion_factor = 1.2,
+    double expansion_factor = 1.0,
     int max_iter = 100)
   {
     // TODO: Use higher max_iter?
@@ -133,7 +133,7 @@ namespace roots {
         f_hi = gsl_wrapper(x_hi, &gsl_wrapper_params);
       }
       // TODO Too risky to use factor? (overshoot leads to error at invalid V)
-      //dx *= expansion_factor;
+      dx *= expansion_factor;
       n_iter++;
     }
     // Return true if valid bracket
