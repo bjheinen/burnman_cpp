@@ -20,7 +20,7 @@ TEST_CASE("jagged2square n=5", "[utils][matrix_utils]") {
     {24.74e3, 0.0, 0.0e3},
     {60.53136e3, 0.0},
     {10.0e3}
-  };  
+  };
   Eigen::MatrixXd expected(n, n);
   expected <<
     0, 0, 24740,    26000, 24300,
@@ -41,7 +41,7 @@ TEST_CASE("jagged2square n=5 (equal rows)", "[utils][matrix_utils]") {
     {60.53136e3, 0.0},
     {10.0e3},
     {}
-  };  
+  };
   Eigen::MatrixXd expected(n, n);
   expected <<
     0, 0, 24740,    26000, 24300,
