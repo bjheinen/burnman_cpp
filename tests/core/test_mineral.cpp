@@ -102,6 +102,7 @@ TEST_CASE("Set state", "[core][mineral]") {
   };
   REQUIRE_NOTHROW(test_mineral.set_property_modifier_params(excess_params));
   test_mineral.set_state(test_P, test_T);
+  test_excess = test_mineral.get_property_modifiers();
   CHECK_THAT(test_excess.G,
     !WithinRel(zero_excess.G, tol_rel) &&
     !WithinAbs(zero_excess.G, tol_abs));
