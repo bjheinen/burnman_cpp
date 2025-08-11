@@ -71,6 +71,18 @@ enum class EOSType {
 };
 
 /**
+ * Enum used to define averaging scheme type
+ */
+enum class AveragingType {
+  Voigt,
+  Reuss,
+  VRH,
+  HashinShtrikmanLower,
+  HashinShtrikmanUpper,
+  HashinShtrikman
+};
+
+/**
  * Type aliases for constructing solid solution models.
  */
 class Mineral; // Forward declare

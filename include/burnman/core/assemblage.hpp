@@ -95,6 +95,29 @@ class Assemblage : public CompositeMaterial {
     return mapped_properties;
   }
 
+  // Public setters for assemblage properties
+  /**
+   * @brief Sets the averaging scheme to use for computing properties.
+   *
+   * Sets the averaging scheme as an AveragingType, can be one of:
+   *  Voigt
+   *  Reuss
+   *  VRH
+   *  HashinShtrikmanLower
+   *  HashinShtrikmanUpper
+   *  HashinShtrikman
+   *
+   */
+  void set_averaging_scheme(AveragingType scheme_type);
+
+  /**
+   * @brief Sets the averaging scheme to use for computing properties.
+   *
+   * Sets the averaging scheme to a custom class. Must be derived from `Averaging'.
+   *
+   */
+  void set_averaging_scheme(std::unique_ptr<Averaging> custom_scheme);
+
   // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
   void set_method(EOSType new_method) override;
@@ -153,7 +176,7 @@ class Assemblage : public CompositeMaterial {
 
  private:
 
-  // Shared pointer to solution model class
+  // Vector of pointers to phases in the assemblage
   std::vector<std::shared_ptr<Material>> phases;
 
   // Unique pointer to averaging scheme

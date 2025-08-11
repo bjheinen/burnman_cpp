@@ -18,6 +18,38 @@ void Assemblage::reset() {
   volume_fractions.reset();
 }
 
+// Public setters for assemblage properties
+void Assemblage::set_averaging_scheme(AveragingType scheme_type) {
+  switch (scheme_type) {
+    case AveragingType::Voigt:
+      averaging_scheme = std::make_unique<Voigt>();
+      break;
+    case AveragingType::Reuss:
+      averaging_scheme = std::make_unique<Reuss>();
+      break;
+    case AveragingType::VoigtReussHill:
+      averaging_scheme = std::make_unique<VoigtReussHill>();
+      break;
+    case AveragingType::HashinShtrikmanLower:
+      averaging_scheme = std::make_unique<HashinShtrikmanLower>();
+      break;
+    case AveragingType::HashinShtrikmanUpper:
+      averaging_scheme = std::make_unique<HashinShtrikmanUpper>();
+      break;
+    case AveragingType::HashinShtrikman:
+      averaging_scheme = std::make_unique<HashinShtrikman>();
+      break;
+    default:
+      throw std::invalid_argument("Unknown Averaging Scheme!");
+  }
+}
+
+void Assemblage::set_averaging_scheme(std::unique_ptr<Averaging> custom_scheme) {
+  averaging_scheme = std::move(custom_scheme);
+}
+
+
+
 // Public setter overrides of Material
 void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
   for (auto& ph : phases) {
