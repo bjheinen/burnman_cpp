@@ -118,12 +118,17 @@ struct BridgmaniteFixture {
 TEST_CASE_METHOD(BridgmaniteFixture, "Test interface", "[core][solution]") {
   // Make solution
   Solution bdg;
-
   // Test name(s)
   REQUIRE_NOTHROW(bdg.get_name());
   REQUIRE(bdg.get_name() != "Test solution");
   REQUIRE_NOTHROW(bdg.set_name("Test solution"));
   REQUIRE(bdg.get_name() == "Test solution");
+
+  // Check composition can't be set if no solution model
+  REQUIRE_THROWS(bdg.set_composition(molar_fractions));
+  // Set solution_model
+  REQUIRE_NOTHROW(bdg.set_solution_model(bdg_solution_model));
+
   // Check get_names (and internal set_names from params) is working
   std::vector<std::string> expected_names =
     {"MgSiO3 perovskite", "FeSiO3 perovskite", "AlAlO3 perovskite"};
@@ -155,10 +160,6 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test interface", "[core][solution]") {
 
   // Test composition setting
   // Molar fractions of endmembers (Mg, Fe, Al)
-  // Check composition can't be set if no solution model
-  REQUIRE_THROWS(bdg.set_composition(molar_fractions));
-  // Set solution_model
-  REQUIRE_NOTHROW(bdg.set_solution_model(bdg_solution_model));
   // Check bad molar fractions array
   REQUIRE_THROWS(bdg.set_composition((Eigen::ArrayXd(2) << 1, 1).finished()));
   REQUIRE_THROWS(bdg.set_composition((Eigen::ArrayXd(3) << 0.1, 0.1, 0.1).finished()));
@@ -262,6 +263,7 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]"
 
   // Make solution
   Solution bdg;
+  bdg.set_solution_model(bdg_solution_model);
   bdg.set_method(EOSType::Auto);
   bdg.set_composition(molar_fractions);
   bdg.set_state(P, T);
@@ -333,19 +335,23 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]"
   CHECK(bdg.get_gibbs_hessian().isApprox(ref_gibbs_hessian, tol_rel));
   CHECK(bdg.get_entropy_hessian().isApprox(ref_entropy_hessian, tol_rel));
   CHECK(bdg.get_stoichiometric_matrix().isApprox(ref_stoichiometric_matrix, tol_rel));
+  CHECK(bdg.get_compositional_basis().isApprox(ref_compositional_basis, tol_rel));
   CHECK(bdg.get_compositional_null_basis().isApprox(ref_compositional_null_basis, tol_rel));
   CHECK(bdg.get_reaction_basis() == ref_reaction_basis);
 }
 
 TEST_CASE_METHOD(BridgmaniteFixture, "Test reactions", "[core][solution]") {
-  // Make solution
+  // Make solution model & solution
   PairedEndmemberList em = {
     {mg_si_perovskite, "[Mg][Si]O3"},
     {fe_si_perovskite, "[Fe][Si]O3"},
     {mg_si_perovskite, "[Mg][Si]O3"},
     {fe_si_perovskite, "[Fe][Si]O3"}
   };
+  std::shared_ptr<IdealSolution> sol_model;
+  sol_model = std::make_shared<IdealSolution>(em);
   Solution sol;
+  sol.set_solution_model(sol_model);
   REQUIRE(sol.get_n_endmembers() == 4);
   REQUIRE(sol.get_n_reactions() == 2);
 
