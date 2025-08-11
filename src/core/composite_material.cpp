@@ -13,9 +13,6 @@
 #include "burnman/core/composite_material.hpp"
 #include "burnman/utils/utils.hpp"
 
-
-#include <iostream>
-
 int CompositeMaterial::get_n_endmembers() const {
   if (!n_endmembers.has_value()) {
     n_endmembers = compute_n_endmembers();
@@ -190,12 +187,10 @@ Eigen::MatrixXd CompositeMaterial::compute_compositional_null_basis() const {
 
 Eigen::MatrixXd CompositeMaterial::compute_reaction_basis() const {
   const Eigen::MatrixXd& stoich_mat = get_stoichiometric_matrix();
-  Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp(stoich_mat.transpose());
-  Eigen::MatrixXd nullspace = lu_decomp.kernel();
-  // Maybe consider threshold?
-  if (nullspace.cols() == 0) {
+  Eigen::MatrixXd nullspace = utils::nullspace(stoich_mat.transpose());
+  if (nullspace.rows() == 0) {
     return Eigen::MatrixXd(0, get_n_endmembers());
   } else {
-    return nullspace.transpose();
+    return nullspace;
   }
 }
