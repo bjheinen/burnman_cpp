@@ -333,6 +333,7 @@ class Solution : public CompositeMaterial {
   double compute_thermal_expansivity() const override;
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
+  double compute_isentropic_thermal_gradient() const override;
   FormulaMap compute_formula() const override;
 
   // Overrides of pure virtual functions from CompositeMaterial

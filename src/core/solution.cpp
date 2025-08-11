@@ -394,6 +394,12 @@ double Solution::compute_molar_heat_capacity_p() const {
   return (em_Cp * molar_fractions).sum() + solution_model->compute_Cp_excess();
 }
 
+double Solution::compute_isentropic_thermal_gradient() const {
+  return
+    (get_molar_volume() * get_temperature() * get_thermal_expansivity())
+    / get_molar_heat_capacity_p();
+}
+
 FormulaMap Solution::compute_formula() const {
   return utils::sum_formulae(get_endmember_formulae(), molar_fractions);
 }

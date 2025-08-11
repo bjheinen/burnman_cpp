@@ -19,8 +19,6 @@
 #include "burnman/core/mineral.hpp"
 #include "burnman/utils/types.hpp"
 
-#include <iostream>
-
 using namespace Catch::Matchers;
 
 struct BridgmaniteFixture {
