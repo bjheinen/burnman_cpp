@@ -13,6 +13,9 @@
 #include "burnman/core/composite_material.hpp"
 #include "burnman/utils/utils.hpp"
 
+
+#include <iostream>
+
 int CompositeMaterial::get_n_endmembers() const {
   if (!n_endmembers.has_value()) {
     n_endmembers = compute_n_endmembers();
@@ -174,17 +177,14 @@ Eigen::MatrixXd CompositeMaterial::compute_compositional_basis() const {
 
 Eigen::MatrixXd CompositeMaterial::compute_compositional_null_basis() const {
   const Eigen::MatrixXd& stoich_mat = get_stoichiometric_matrix();
-  const std::vector<Eigen::Index>& dep = get_dependent_element_indices();
-  Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp(stoich_mat);
-  Eigen::MatrixXd nullspace = lu_decomp.kernel();
+  Eigen::MatrixXd nullspace = utils::nullspace(stoich_mat);
   // Maybe consider threshold?
-  // Check matrix
-  Eigen::MatrixXd M(nullspace.rows(), static_cast<Eigen::Index>(dep.size()));
-  M = nullspace(Eigen::all, dep);
+  // Check matrix:
+  // const std::vector<Eigen::Index>& dep = get_dependent_element_indices();
+  // Eigen::MatrixXd M(nullspace.rows(), static_cast<Eigen::Index>(dep.size()));
+  // M = nullspace(Eigen::all, dep);
   // assert(M.cols() == M.rows());
-  // assert(
-  //   M.isApprox(Eigen::MatrixXd::Identity(M.rows(), M.cols()),
-  //     constants::precision::abs_tolerance));
+  // assert(M.isIdentity(constants::precision::abs_tolerance));
   return nullspace;
 }
 
