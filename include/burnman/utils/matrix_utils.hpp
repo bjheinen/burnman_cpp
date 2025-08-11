@@ -17,6 +17,113 @@
 namespace utils {
 
   /**
+  * @struct RREFResult
+  * @brief Holds the result of a Reduced Row Echelon Form (RREF) computation.
+  *
+  * Contains the RREF matrix, the indices of pivot columns, and the rank of the matrix.
+  */
+  struct RREFResult {
+    Eigen::MatrixXd rref_matrix;
+    Eigen::VectorXi pivot_columns;
+    int rank;
+  };
+
+  /**
+  * @brief Computes the Reduced Row Echelon Form (RREF) of a given matrix.
+  *
+  * Computes RREF by manual gaussian elimination. Keeps track of indices of pivot columns.
+  *
+  * @param M The input matrix..
+  * @param tol A tolerance value to determine when an element is zero. Default is 1.0e-12.
+  *
+  * @return RREFResult Struct containing the RREF matrix, pivot column indices, and matrix rank.
+  */
+  inline RREFResult compute_rref(Eigen::MatrixXd M, double tol = 1.0e-12) {
+    // Get number of rows/cols
+    const Eigen::Index rows = M.rows();
+    const Eigen::Index cols = M.cols();
+    // Keep track of pivot row index
+    Eigen::Index pivot_row = 0;
+    // Keep track of pivot columns
+    std::vector<int> pivot_columns_list;
+    // Loop through and construct RREF
+    for (Eigen::Index col = 0; col < cols && pivot_row < rows; ++col) {
+      // Find pivot in the column - the max value
+      Eigen::Index pivot;
+      M.col(col).tail(rows - pivot_row).cwiseAbs().maxCoeff(&pivot);
+      pivot += pivot_row;
+      // Skip if no pivot in column
+      if (std::abs(M(pivot, col)) < tol) {
+        continue;
+      }
+      // Swap pivot row into position
+      M.row(pivot_row).swap(M.row(pivot));
+      // Normalise pivot row
+      M.row(pivot_row) /= M(pivot_row, col);
+      // Eliminate other rows in the column
+      for (Eigen::Index i = 0; i < rows; ++i) {
+        if (i != pivot_row) {
+          M.row(i) -= M(i, col) * M.row(pivot_row);
+        }
+      }
+      // Store pivot column index
+      pivot_columns_list.push_back(static_cast<int>(col));
+      ++pivot_row;
+    }
+    // Cleanup - zero small values
+    M = (M.cwiseAbs().array() < tol).select(0.0, M);
+    // Convert pivot columns to VectorXi
+    Eigen::VectorXi pivot_columns = Eigen::Map<Eigen::VectorXi>(
+      pivot_columns_list.data(), static_cast<Eigen::Index>(pivot_columns_list.size())
+    );
+    return {M, pivot_columns, static_cast<int>(pivot_columns.size())};
+  }
+
+  /**
+  * @brief Computes the canonical nullspace basis of a given matrix.
+  *
+  * Uses the Reduced Row Echelon Form (RREF) of the matrix to find the
+  * canonical basis for its nullspace. Basis vectors are returned as rows
+  * in the output matrix.
+  *
+  * @param M Input matrix.
+  * @param tol A tolerance value to determine when an element is considered zero. Default is 1.0e-12.
+  *
+  * @return Nullspace basis matrix.
+  */
+  inline Eigen::MatrixXd nullspace(const Eigen::MatrixXd& M, double tol = 1.0e-12) {
+    // Get RREF
+    RREFResult rref = compute_rref(M, tol);
+    const Eigen::MatrixXd& R = rref.rref_matrix;
+    const Eigen::Index cols = R.cols();
+    const Eigen::VectorXi& pivots = rref.pivot_columns;
+    const Eigen::Index num_pivots = pivots.size();
+    // Make a boolean array for pivot locations
+    Eigen::Array<bool, Eigen::Dynamic, 1> is_pivot = Eigen::Array<bool, Eigen::Dynamic, 1>::Constant(cols, false);
+    is_pivot(pivots) = true;
+    // Pre-allocate the nullspace matrix
+    const Eigen::Index nullity = cols - num_pivots;
+    Eigen::MatrixXd basis(cols, nullity);
+    // Loop through and fill
+    Eigen::Index basis_col = 0;
+    for (Eigen::Index free_index = 0; free_index < cols; ++free_index) {
+      // Skip if pivot (not free)
+      if (is_pivot(free_index)) {
+        continue;
+      }
+      Eigen::VectorXd vec = Eigen::VectorXd::Zero(cols);
+      vec(free_index) = 1.0;
+      for (Eigen::Index i = 0; i < num_pivots; ++i) {
+        vec(pivots(i)) = -R(i, free_index);
+      }
+      // Store column and increment
+      basis.col(basis_col++) = vec;
+    }
+    // Transpose to match expected form
+    return basis.transpose();
+  }
+
+  /**
    * @brief Convert jagged upper triangle to Eigen::Matrix
    * 
    * e.g.:

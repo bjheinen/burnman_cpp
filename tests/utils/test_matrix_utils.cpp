@@ -217,3 +217,99 @@ TEST_CASE("complete_basis", "[utils][matrix_utils]") {
   }
   // Only used from reaction_basis? What about square but not full rank.
 }
+
+TEST_CASE("Test compute_rref for identity matrix", "[utils][matrix_utils]") {
+  SECTION("Check RREF for identity matrix") {
+    Eigen::MatrixXd I = Eigen::MatrixXd::Identity(3, 3);
+    auto result = utils::compute_rref(I);
+    REQUIRE(result.rank == 3);
+    REQUIRE(result.pivot_columns.size() == 3);
+    // The RREF of identity matrix is still identity matrix
+    REQUIRE(result.rref_matrix.isIdentity(tol_rel));
+  }
+  SECTION("RREF for zero matrix") {
+    Eigen::MatrixXd Z = Eigen::MatrixXd::Zero(3, 4);
+    auto result = utils::compute_rref(Z);
+    REQUIRE(result.rank == 0);
+    REQUIRE(result.pivot_columns.size() == 0);
+    REQUIRE(result.rref_matrix.isZero(tol_rel));
+  }
+  SECTION("Check matrix 1") {
+    Eigen::MatrixXd M(3, 4);
+    M <<
+      1, 2, 3, 4,
+      2, 4, 6, 8,
+      3, 6, 9, 12;
+    Eigen::MatrixXd expected_rref(3, 4);
+    expected_rref <<
+      1, 2, 3, 4,
+      0, 0, 0, 0,
+      0, 0, 0, 0;
+    auto result = utils::compute_rref(M);
+    REQUIRE(result.rank == 1);
+    REQUIRE(result.pivot_columns.size() == 1);
+    REQUIRE(result.pivot_columns(0) == 0);
+    REQUIRE(result.rref_matrix.isApprox(expected_rref, tol_rel));
+  }
+  SECTION("Check matrix 2") {
+    Eigen::MatrixXd M(3, 5);
+    M <<
+      1, 0, 0, 1, 3,
+      0, 1, 0, 1, 3,
+      0, 0, 2, 0, 3;
+    Eigen::MatrixXd expected_rref(3, 5);
+    expected_rref <<
+      1, 0, 0, 1, 3,
+      0, 1, 0, 1, 3,
+      0, 0, 1, 0, 1.5;
+    auto result = utils::compute_rref(M);
+    REQUIRE(result.rank == 3);
+    REQUIRE(result.pivot_columns.size() == 3);
+    REQUIRE(result.rref_matrix.isApprox(expected_rref, tol_rel));
+  }
+}
+
+TEST_CASE("Test nullspace", "[utils][matrix_utils]") {
+  SECTION("Zero nullspace for full rank square matrix") {
+    Eigen::MatrixXd I = Eigen::MatrixXd::Identity(3, 3);
+    Eigen::MatrixXd ns = utils::nullspace(I);
+    // Full rank means nullspace dimension = 0
+    REQUIRE(ns.rows() == 0);
+    REQUIRE(ns.cols() == 3);
+    REQUIRE(ns.isZero(tol_rel));
+  }
+  SECTION("Nullspace is idetity matrix for zero matrix") {
+    Eigen::MatrixXd Z = Eigen::MatrixXd::Zero(3, 5);
+    Eigen::MatrixXd ns = utils::nullspace(Z);
+    REQUIRE(ns.rows() == 5);
+    REQUIRE(ns.cols() == 5);
+    REQUIRE(ns.isIdentity(tol_rel));
+  }
+  SECTION("Check matrix example A") {
+    Eigen::MatrixXd M(3, 4);
+    M << 1, 2, 3, 4,
+         2, 4, 6, 8,
+         3, 6, 9, 12;
+    Eigen::MatrixXd ns = utils::nullspace(M);
+    REQUIRE(ns.rows() == 3);
+    REQUIRE(ns.cols() == 4);
+    // Check that M * ns^T is zero matrix
+    Eigen::MatrixXd test = M * ns.transpose();
+    REQUIRE(test.isZero(tol_rel));
+  }
+  SECTION("Check matrix example B") {
+    Eigen::MatrixXd M(3, 5);
+    M <<
+      1, 0, 0, 1, 3,
+      0, 1, 0, 1, 3,
+      0, 0, 2, 0, 3;
+    Eigen::MatrixXd expected_ns(2, 5);
+    expected_ns <<
+      -1, -1,    0, 1, 0,
+      -3, -3, -1.5, 0, 1;
+    Eigen::MatrixXd ns = utils::nullspace(M);
+    REQUIRE(ns.rows() == 2);
+    REQUIRE(ns.cols() == 5);
+    REQUIRE(ns.isApprox(expected_ns, tol_rel));
+  }
+}
