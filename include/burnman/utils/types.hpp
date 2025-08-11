@@ -83,6 +83,15 @@ enum class AveragingType {
 };
 
 /**
+ * Enum used to define fraction type
+ */
+enum class FractionType {
+  Molar,
+  Mass,
+  Volume
+};
+
+/**
  * Type aliases for constructing solid solution models.
  */
 class Mineral; // Forward declare

@@ -96,6 +96,17 @@ class Assemblage : public CompositeMaterial {
   }
 
   // Public setters for assemblage properties
+
+  /**
+   * @brief Sets the fraction of each phase in the assemblage.
+   *
+   * Fractions can be FractionType::Molar or FractionType::Mass.
+   * Mass fractions will be converted to molar fractions automatically.
+   */
+  void set_fractions(
+    const Eigen::ArrayXd& fractions,
+    const FractionType fraction_type = FractionType::Molar);
+
   /**
    * @brief Sets the averaging scheme to use for computing properties.
    *
@@ -198,6 +209,10 @@ class Assemblage : public CompositeMaterial {
   // Setters for cached properties
   void set_endmembers_per_phase(std::vector<int> v) const;
 
+  /**
+   * @brief Convert from mass fractions to molar fractions.
+   */
+  Eigen::ArrayXd convert_mass_to_molar_fractions(const Eigen::ArrayXd& mass_fractions) const;
 
 };
 

@@ -22,22 +22,22 @@ void Assemblage::reset() {
 void Assemblage::set_averaging_scheme(AveragingType scheme_type) {
   switch (scheme_type) {
     case AveragingType::Voigt:
-      averaging_scheme = std::make_unique<Voigt>();
+      this->averaging_scheme = std::make_unique<Voigt>();
       break;
     case AveragingType::Reuss:
-      averaging_scheme = std::make_unique<Reuss>();
+      this->averaging_scheme = std::make_unique<Reuss>();
       break;
-    case AveragingType::VoigtReussHill:
-      averaging_scheme = std::make_unique<VoigtReussHill>();
+    case AveragingType::VRH:
+      this->averaging_scheme = std::make_unique<VoigtReussHill>();
       break;
     case AveragingType::HashinShtrikmanLower:
-      averaging_scheme = std::make_unique<HashinShtrikmanLower>();
+      this->averaging_scheme = std::make_unique<HashinShtrikmanLower>();
       break;
     case AveragingType::HashinShtrikmanUpper:
-      averaging_scheme = std::make_unique<HashinShtrikmanUpper>();
+      this->averaging_scheme = std::make_unique<HashinShtrikmanUpper>();
       break;
     case AveragingType::HashinShtrikman:
-      averaging_scheme = std::make_unique<HashinShtrikman>();
+      this->averaging_scheme = std::make_unique<HashinShtrikman>();
       break;
     default:
       throw std::invalid_argument("Unknown Averaging Scheme!");
@@ -45,10 +45,49 @@ void Assemblage::set_averaging_scheme(AveragingType scheme_type) {
 }
 
 void Assemblage::set_averaging_scheme(std::unique_ptr<Averaging> custom_scheme) {
-  averaging_scheme = std::move(custom_scheme);
+  this->averaging_scheme = std::move(custom_scheme);
 }
 
-
+// Eigen::ArrayXd version (core implementation)
+void Assemblage::set_fractions(
+  const Eigen::ArrayXd& fractions,
+  const FractionType fraction_type
+) {
+  // Asserts for valid fraction array
+  if (fractions.size() != static_cast<Eigen::Index>(this->phases.size())) {
+    throw std::invalid_argument(
+      "Fractions size doesn't match number of phases!"
+    );
+  }
+  if ((fractions < -1e-12).any()) {
+    throw std::invalid_argument(
+      "Fractions contain negative values! (Less than -1e-12)."
+    );
+  }
+  double total = fractions.sum();
+  reset();
+  Eigen::ArrayXd norm_fractions = fractions;
+  if (std::abs(total - 1.0) > 1e-12) {
+    // Todo: Warnings"
+    //std::cerr << "Warning: list of fractions does not add up to one but "
+    //          << total << ". Normalizing.\n";
+    norm_fractions /= total;
+  }
+  switch (fraction_type) {
+    case FractionType::Molar :
+      this->molar_fractions = norm_fractions;
+      break;
+    case FractionType::Mass :
+      this->molar_fractions = convert_mass_to_molar_fractions(norm_fractions);
+      break;
+    default :
+      throw std::invalid_argument(
+        "Fraction type not recognised. Please use 'molar' or 'mass'."
+      );
+  }
+  // Clip to zero as in Py version
+  this->molar_fractions = molar_fractions.cwiseMax(0.0);
+}
 
 // Public setter overrides of Material
 void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
@@ -275,6 +314,13 @@ void Assemblage::setup_endmember_properties() const {
 
 void Assemblage::set_endmembers_per_phase(std::vector<int> v) const {
   endmembers_per_phase = std::move(v);
+}
+
+Eigen::ArrayXd Assemblage::convert_mass_to_molar_fractions(
+  const Eigen::ArrayXd& mass_fractions
+) const {
+  Eigen::ArrayXd moles = mass_fractions / map_phases_to_array(&Material::get_molar_mass);
+  return moles / moles.sum();
 }
 
 /*
