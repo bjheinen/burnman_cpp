@@ -19,6 +19,8 @@
 #include "burnman/core/mineral.hpp"
 #include "burnman/utils/types.hpp"
 
+#include <iostream>
+
 using namespace Catch::Matchers;
 
 struct BridgmaniteFixture {
@@ -337,7 +339,10 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]"
   CHECK(bdg.get_stoichiometric_matrix().isApprox(ref_stoichiometric_matrix, tol_rel));
   CHECK(bdg.get_compositional_basis().isApprox(ref_compositional_basis, tol_rel));
   CHECK(bdg.get_compositional_null_basis().isApprox(ref_compositional_null_basis, tol_rel));
-  CHECK(bdg.get_reaction_basis() == ref_reaction_basis);
+  Eigen::MatrixXd reaction_basis = bdg.get_reaction_basis();
+  CHECK(reaction_basis.size() == 0);
+  CHECK(reaction_basis.rows() == ref_reaction_basis.rows());
+  CHECK(reaction_basis.cols() == ref_reaction_basis.cols());
 }
 
 TEST_CASE_METHOD(BridgmaniteFixture, "Test reactions", "[core][solution]") {
