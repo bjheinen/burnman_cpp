@@ -12,7 +12,9 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+#include <variant>
 
 /**
  * Custom type alias for chemical formulae.
