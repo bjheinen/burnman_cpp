@@ -83,15 +83,15 @@ TEMPLATE_TEST_CASE_METHOD(AveragingSchemeMulti, "Averaging (common fns)",
   Voigt, Reuss, VoigtReussHill,
   HashinShtrikmanLower, HashinShtrikmanUpper, HashinShtrikman
 ) {
-  auto& scheme = this->scheme;
-  auto& v_a = this->v_a;
-  auto& X_a = this->X_a;
-  CHECK(scheme.average_density(v_a, X_a) == 1.75);
-  CHECK(scheme.average_density(v_a*2.0, X_a) == 1.75);
-  CHECK(scheme.average_thermal_expansivity(v_a, X_a) == 1.75);
-  CHECK(scheme.average_thermal_expansivity(v_a*2.0, X_a) == 1.75);
-  CHECK(scheme.average_heat_capacity_v(v_a, X_a) == 1.75);
-  CHECK(scheme.average_heat_capacity_p(v_a, X_a) == 1.75);
+  auto& sch = this->scheme;
+  auto& va = this->v_a;
+  auto& Xa = this->X_a;
+  CHECK(sch.average_density(va, Xa) == 1.75);
+  CHECK(sch.average_density(va*2.0, Xa) == 1.75);
+  CHECK(sch.average_thermal_expansivity(va, Xa) == 1.75);
+  CHECK(sch.average_thermal_expansivity(va*2.0, Xa) == 1.75);
+  CHECK(sch.average_heat_capacity_v(va, Xa) == 1.75);
+  CHECK(sch.average_heat_capacity_p(va, Xa) == 1.75);
 }
 
 TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikmanLower", "[core][averaging_schemes]") {
