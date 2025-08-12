@@ -19,6 +19,42 @@ void Assemblage::reset() {
 }
 
 // Public setters for assemblage properties
+
+// Single phase by ptr
+void Assemblage::add_phase(const std::shared_ptr<Material>& phase_ptr) {
+  this->phases.push_back(phase_ptr);
+}
+
+// Multiple phases by value
+void Assemblage::add_phases(const PhaseVariantVector& phase_list) {
+  this->add_phase_variants(phase_list);
+}
+
+void Assemblage::add_phases(std::initializer_list<PhaseVariant> phase_list) {
+  this->add_phase_variants(phase_list);
+}
+
+// Multiple phases by pointer
+void Assemblage::add_phases(
+  const std::vector<std::shared_ptr<Material>>& phase_ptr_list
+) {
+  this->phases.insert(
+    this->phases.end(),
+    phase_ptr_list.begin(),
+    phase_ptr_list.end()
+  );
+}
+
+void Assemblage::add_phases(
+  std::initializer_list<std::shared_ptr<Material>> phase_ptr_list
+) {
+  this->phases.insert(
+    this->phases.end(),
+    phase_ptr_list.begin(),
+    phase_ptr_list.end()
+  );
+}
+
 void Assemblage::set_averaging_scheme(AveragingType scheme_type) {
   switch (scheme_type) {
     case AveragingType::Voigt:

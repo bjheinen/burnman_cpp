@@ -13,6 +13,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
+#include <type_traits>
 #include <Eigen/Dense>
 #include "burnman/core/material.hpp"
 #include "burnman/core/composite_material.hpp"
@@ -96,6 +97,69 @@ class Assemblage : public CompositeMaterial {
   }
 
   // Public setters for assemblage properties
+
+  // Set phases
+
+  /**
+   * @brief Appends a single phase to the phase list
+   *
+   * Overload to add a phase by value (no external access to pointer).
+   */
+  template <typename PhaseType>
+  void add_phase(const PhaseType& phase) {
+    static_assert(
+      std::is_base_of<Material, PhaseType>::value,
+      "PhaseType must derive from Material!"
+    );
+    this->phases.push_back(std::make_shared<PhaseType>(phase));
+  }
+
+  /**
+   * @brief Appends a single phase to the phase list
+   *
+   * Overload to add a phase pointer (for external access to pointer).
+   * Do:
+   *   auto ol_ptr = std::make_shared<Solution>(olivine);
+   *   assemblage.add_phase(ol_ptr);
+   */
+  void add_phase(const std::shared_ptr<Material>& phase_ptr);
+
+  // Multiple phases
+
+  /**
+   * @brief Sets the phase list
+   *
+   * Overload to add phases by value (no external access to pointers).
+   * This uses a PhaseVariantVector (see /utils/types.hpp).
+   */
+  void add_phases(const PhaseVariantVector& phase_list);
+
+  /**
+   * @brief Sets the phase list
+   *
+   * Overload to add phases by value (no external access to pointers).
+   * This overload works with an initialiser list so you can do:
+   *  add_phases({bdg, fper, capv});
+   */
+  void add_phases(std::initializer_list<PhaseVariant> phase_list);
+
+  /**
+   * @brief Sets the phase list
+   *
+   * Overload to add phase pointers (for external access to pointers).
+   * Construct a std::vector<std::shared_ptr<Material>> first.
+   */
+  void add_phases(
+    const std::vector<std::shared_ptr<Material>>& phase_ptr_list);
+
+  /**
+   * @brief Sets the phase list
+   *
+   * Overload to add phase pointers (for external access to pointers).
+   * Overload to pass an initialiser list.
+   */
+  void add_phases(
+    std::initializer_list<std::shared_ptr<Material>> phase_ptr_list);
 
   /**
    * @brief Sets the fraction of each phase in the assemblage.
@@ -232,6 +296,21 @@ class Assemblage : public CompositeMaterial {
    * @brief Convert from mass fractions to molar fractions.
    */
   Eigen::ArrayXd convert_mass_to_molar_fractions(const Eigen::ArrayXd& mass_fractions) const;
+
+  /**
+   * @brief Helper to add PhaseVariant to phase list.
+   */
+  template <typename Container>
+  void add_phase_variants(const Container& container) {
+    for (const auto& variant : container) {
+      std::visit(
+        [this](auto&& phase_obj) {
+          this->add_phase(std::forward<decltype(phase_obj)>(phase_obj));
+        },
+        variant
+      );
+    }
+  }
 
 };
 
