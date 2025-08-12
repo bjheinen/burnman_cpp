@@ -35,7 +35,7 @@
  * To convert: V_uc * 1e-30 * N_a / Z, where N_a is Avogadro's number and Z is
  * the number of formula units per unit cell.
  *
- */ 
+ */
 class Mineral : public Material{
  public:
 
@@ -59,22 +59,22 @@ class Mineral : public Material{
 
   /**
    * @brief Computes and sums excesses from all property modifiers.
-   * 
+   *
    * Uses vector or property modifiers defined in property_modifier_params.
    * Stores values in the Excesses struct property_modifier_excesses.
-   * 
+   *
    * To calculate thermodynamic properties use the following functions,
    * where _o suffix implies the original value,
    * and e is property_modifier_excesses
-   * 
+   *
    * Gibbs = Gibbs_o + e.G
    * S = S_o - e.dGdT
    * V = V_o + e.dGdP
    * K_T = V / ((V_o / K_T_o) - e.d2GdP2)
    * C_p = C_p_o - T * e.d2GdT2
    * alpha = ((alpha_o * V_o) + e.d2GdPdT) / V
-   * 
-   * @note Modifies property_modifier_excesses. 
+   *
+   * @note Modifies property_modifier_excesses.
    */
   void compute_property_modifiers();
 
