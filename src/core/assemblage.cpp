@@ -119,6 +119,11 @@ void Assemblage::set_state(
   }
 }
 
+// Public convenience getters
+std::shared_ptr<Material> Assemblage::get_phase(size_t index) const {
+  return this->phases.at(index);
+}
+
 // Public getter functions with caching
 Eigen::ArrayXd Assemblage::get_volume_fractions() const {
   if (!volume_fractions.has_value()) {

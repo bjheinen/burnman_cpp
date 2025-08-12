@@ -50,7 +50,7 @@ class Assemblage : public CompositeMaterial {
    *
    * Virtual dispatch should allow this to work for `Material' and any
    * derived classes.
-   * 
+   *
    * Usage:
    *  map_phases_to_array(&Material::get_property);
    *    where, get_property() is the function needed
@@ -151,6 +151,25 @@ class Assemblage : public CompositeMaterial {
    * @brief Retrieves a list of the number of endmembers in each phase.
    */
   std::vector<int> get_endmembers_per_phase() const;
+
+  /**
+   * @brief Retrieves the phase at specified index.
+   *
+   * Returns a shared_ptr<Material>, use a dynamic cast to access behaviour
+   * specific to derived classes (Mineral, Solution, etc.).
+   */
+  std::shared_ptr<Material> get_phase(size_t index) const;
+
+  /**
+   * @brief Retrieves the phase at specified index.
+   *
+   * Returns a shared_ptr<T> where T is the phase type.
+   * Usage example: assemblage.get_phase<Solution>(0);
+   */
+  template <typename T>
+  std::shared_ptr<T> get_phase(size_t index) const {
+    return std::dynamic_pointer_cast<T>(this->phases.at(index));
+  }
 
  protected:
 
