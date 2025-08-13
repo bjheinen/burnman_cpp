@@ -108,7 +108,7 @@ class Assemblage : public CompositeMaterial {
   template <typename PhaseType>
   void add_phase(const PhaseType& phase) {
     static_assert(
-      std::is_base_of<Material, PhaseType>::value,
+      std::is_base_of_v<Material, PhaseType>,
       "PhaseType must derive from Material!"
     );
     this->phases.push_back(std::make_shared<PhaseType>(phase));
