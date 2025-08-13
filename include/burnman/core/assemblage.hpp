@@ -168,6 +168,19 @@ class Assemblage : public CompositeMaterial {
     const Eigen::ArrayXd& fractions,
     const FractionType fraction_type = FractionType::Molar);
 
+
+  /**
+   * @brief Sets the fraction of each phase in the assemblage.
+   *
+   * Fractions can be FractionType::Molar or FractionType::Mass.
+   * Mass fractions will be converted to molar fractions automatically.
+   *
+   * Overload to pass an initialiser list: set_fractions({0.5, 0.5});
+   */
+  void set_fractions(
+    std::initializer_list<double> fractions,
+    const FractionType fraction_type = FractionType::Molar);
+
   /**
    * @brief Sets the averaging scheme to use for computing properties.
    *

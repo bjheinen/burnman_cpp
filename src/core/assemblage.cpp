@@ -116,6 +116,16 @@ void Assemblage::set_fractions(
   this->molar_fractions = molar_fractions.cwiseMax(0.0);
 }
 
+void Assemblage::set_fractions(
+  std::initializer_list<double> fractions,
+  const FractionType fraction_type
+) {
+  this->set_fractions(
+    Eigen::Map<const Eigen::ArrayXd>(fractions.begin(), fractions.size()),
+    fraction_type
+  );
+}
+
 // Public setter overrides of Material
 void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
   for (auto& ph : phases) {
