@@ -25,15 +25,6 @@ void Assemblage::add_phase(const std::shared_ptr<Material>& phase_ptr) {
   this->phases.push_back(phase_ptr);
 }
 
-// Multiple phases by value
-void Assemblage::add_phases(const PhaseVariantVector& phase_list) {
-  this->add_phase_variants(phase_list);
-}
-
-void Assemblage::add_phases(std::initializer_list<PhaseVariant> phase_list) {
-  this->add_phase_variants(phase_list);
-}
-
 // Multiple phases by pointer
 void Assemblage::add_phases(
   const std::vector<std::shared_ptr<Material>>& phase_ptr_list

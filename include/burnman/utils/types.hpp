@@ -97,23 +97,11 @@ enum class FractionType {
  * Forward declarations
  */
 class Mineral;
-class Solution;
-class Assemblage;
 
 /**
  * Type aliases for constructing solid solution models.
  */
 using MineralFormulaPair = std::pair<Mineral, std::string>;
 using PairedEndmemberList = std::vector<MineralFormulaPair>;
-
-/**
- * Type aliases for phases when constructing Assemblage
- */
-using PhaseVariant = std::variant<
-  Mineral,
-  Solution,
-  Assemblage
->;
-using PhaseVariantVector = std::vector<PhaseVariant>;
 
 #endif // BURNMAN_UTILS_TYPES_HPP_INCLUDED

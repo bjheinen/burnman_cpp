@@ -130,18 +130,15 @@ class Assemblage : public CompositeMaterial {
    * @brief Sets the phase list
    *
    * Overload to add phases by value (no external access to pointers).
-   * This uses a PhaseVariantVector (see /utils/types.hpp).
+   * This overload works with variadic template types so you can do:
+   *  add_phases(bdg, fper, capv, ...);
+   * Storing objects in a container first isn't supported as we want
+   * to allow mixed types including Assemblage (so run into recursion issues).
    */
-  void add_phases(const PhaseVariantVector& phase_list);
-
-  /**
-   * @brief Sets the phase list
-   *
-   * Overload to add phases by value (no external access to pointers).
-   * This overload works with an initialiser list so you can do:
-   *  add_phases({bdg, fper, capv});
-   */
-  void add_phases(std::initializer_list<PhaseVariant> phase_list);
+  template<typename... Ts>
+  void add_phases(Ts&&... args) {
+      (add_phase(std::forward<Ts>(args)), ...);
+  }
 
   /**
    * @brief Sets the phase list
@@ -296,21 +293,6 @@ class Assemblage : public CompositeMaterial {
    * @brief Convert from mass fractions to molar fractions.
    */
   Eigen::ArrayXd convert_mass_to_molar_fractions(const Eigen::ArrayXd& mass_fractions) const;
-
-  /**
-   * @brief Helper to add PhaseVariant to phase list.
-   */
-  template <typename Container>
-  void add_phase_variants(const Container& container) {
-    for (const auto& variant : container) {
-      std::visit(
-        [this](auto&& phase_obj) {
-          this->add_phase(std::forward<decltype(phase_obj)>(phase_obj));
-        },
-        variant
-      );
-    }
-  }
 
 };
 
