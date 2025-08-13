@@ -7,7 +7,6 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-
 #ifndef TESTS_SOLUTION_FIXTURES_HPP_INCLUDED
 #define TESTS_SOLUTION_FIXTURES_HPP_INCLUDED
 
@@ -295,7 +294,7 @@ struct PyroliteAssemblageFixture {
     assemblage.add_phase(bdg_fix.bdg);
     assemblage.add_phase(fp_fix.fp);
     assemblage.add_phase(capv_fix.ca_perovskite);
-    assemblage.set_fractions({0.6, 0.3, 0.1});
+    assemblage.set_fractions({0.7, 0.2, 0.1});
   }
 };
 
