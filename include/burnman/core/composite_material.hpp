@@ -57,12 +57,12 @@ class CompositeMaterial : public Material {
   /**
    * @brief Vector of chemical elements in the material in IUPAC order.
    */
-  std::vector<std::string>& get_elements() const;
+  const std::vector<std::string>& get_elements() const;
 
   /**
    * @brief Vector of names of all endmembers in the material.
    */
-  std::vector<std::string>& get_endmember_names() const;
+  const std::vector<std::string>& get_endmember_names() const;
 
   /**
    * @brief Vector of chemical formula of all endmembers in the material.
@@ -70,7 +70,7 @@ class CompositeMaterial : public Material {
    * Each formula is a FormulaMap, where
    * FormulaMap = std::unordered_map<std::string, double>>;
    */
-  std::vector<FormulaMap>& get_endmember_formulae() const;
+  const std::vector<FormulaMap>& get_endmember_formulae() const;
 
   /**
    * @brief The independent set of element indices.
@@ -79,12 +79,12 @@ class CompositeMaterial : public Material {
    * elements can be inferred by:
    *   -compositional_null_basis[independent_element_indices].dot(element_amounts)
    */
-  std::vector<Eigen::Index>& get_independent_element_indices() const;
+  const std::vector<Eigen::Index>& get_independent_element_indices() const;
 
   /**
    * @brief The element indices not in the independent list.
    */
-  std::vector<Eigen::Index>& get_dependent_element_indices() const;
+  const std::vector<Eigen::Index>& get_dependent_element_indices() const;
 
   /**
    * @brief The matrix describing material stoichiometry.
@@ -92,12 +92,12 @@ class CompositeMaterial : public Material {
    * Each element M[i,j] corresponds to the number of
    * atoms of element j in endmember i.
    */
-  Eigen::MatrixXd& get_stoichiometric_matrix() const;
+  const Eigen::MatrixXd& get_stoichiometric_matrix() const;
 
   /**
    * @brief The compositional basis of the material.
    */
-  Eigen::MatrixXd& get_compositional_basis() const;
+  const Eigen::MatrixXd& get_compositional_basis() const;
 
   /**
    * @brief The compositional null basis of the material.
@@ -105,7 +105,7 @@ class CompositeMaterial : public Material {
    * The matrix where N[b] = 0 for all bulk compositions that
    * can be produced with a linear sum of the endmembers in the material.
    */
-  Eigen::MatrixXd& get_compositional_null_basis() const;
+  const Eigen::MatrixXd& get_compositional_null_basis() const;
 
   /**
    * @brief The reaction basis of the material.
@@ -113,7 +113,7 @@ class CompositeMaterial : public Material {
    * Each element M[i,j] corresponds to the number of moles
    * of endmember j involved in reaction i.
    */
-  Eigen::MatrixXd& get_reaction_basis() const;
+  const Eigen::MatrixXd& get_reaction_basis() const;
 
  protected:
 

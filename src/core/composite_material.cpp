@@ -34,63 +34,63 @@ int CompositeMaterial::get_n_reactions() const {
   return *n_reactions;
 }
 
-std::vector<std::string>& CompositeMaterial::get_elements() const {
+const std::vector<std::string>& CompositeMaterial::get_elements() const {
   if (!elements.has_value()) {
     elements = compute_elements();
   }
   return *elements;
 }
 
-std::vector<Eigen::Index>& CompositeMaterial::get_independent_element_indices() const {
+const std::vector<Eigen::Index>& CompositeMaterial::get_independent_element_indices() const {
   if (!independent_element_indices.has_value()) {
     independent_element_indices = compute_independent_element_indices();
   }
   return *independent_element_indices;
 }
 
-std::vector<Eigen::Index>& CompositeMaterial::get_dependent_element_indices() const {
+const std::vector<Eigen::Index>& CompositeMaterial::get_dependent_element_indices() const {
   if (!dependent_element_indices.has_value()) {
     dependent_element_indices = compute_dependent_element_indices();
   }
   return *dependent_element_indices;
 }
 
-Eigen::MatrixXd& CompositeMaterial::get_stoichiometric_matrix() const {
+const Eigen::MatrixXd& CompositeMaterial::get_stoichiometric_matrix() const {
   if (!stoichiometric_matrix.has_value()) {
     stoichiometric_matrix = compute_stoichiometric_matrix();
   }
   return *stoichiometric_matrix;
 }
 
-Eigen::MatrixXd& CompositeMaterial::get_compositional_basis() const {
+const Eigen::MatrixXd& CompositeMaterial::get_compositional_basis() const {
   if (!compositional_basis.has_value()) {
     compositional_basis = compute_compositional_basis();
   }
   return *compositional_basis;
 }
 
-Eigen::MatrixXd& CompositeMaterial::get_compositional_null_basis() const {
+const Eigen::MatrixXd& CompositeMaterial::get_compositional_null_basis() const {
   if (!compositional_null_basis.has_value()) {
     compositional_null_basis = compute_compositional_null_basis();
   }
   return *compositional_null_basis;
 }
 
-Eigen::MatrixXd& CompositeMaterial::get_reaction_basis() const {
+const Eigen::MatrixXd& CompositeMaterial::get_reaction_basis() const {
   if (!reaction_basis.has_value()) {
     reaction_basis = compute_reaction_basis();
   }
   return *reaction_basis;
 }
 
-std::vector<std::string>& CompositeMaterial::get_endmember_names() const {
+const std::vector<std::string>& CompositeMaterial::get_endmember_names() const {
   if (!endmember_names.has_value()) {
     setup_endmember_names();
   }
   return *endmember_names;
 }
 
-std::vector<FormulaMap>& CompositeMaterial::get_endmember_formulae() const {
+const std::vector<FormulaMap>& CompositeMaterial::get_endmember_formulae() const {
   if (!endmember_formulae.has_value()) {
     setup_endmember_formulae();
   }
