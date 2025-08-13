@@ -104,14 +104,17 @@ class Assemblage : public CompositeMaterial {
    * @brief Appends a single phase to the phase list
    *
    * Overload to add a phase by value (no external access to pointer).
+   * Consumes phase object
    */
   template <typename PhaseType>
-  void add_phase(const PhaseType& phase) {
+  void add_phase(PhaseType&& phase) {
     static_assert(
-      std::is_base_of_v<Material, PhaseType>,
+      std::is_base_of_v<Material, std::remove_reference_t<PhaseType>>,
       "PhaseType must derive from Material!"
     );
-    this->phases.push_back(std::make_shared<PhaseType>(phase));
+    this->phases.push_back(
+      std::make_shared<std::remove_reference_t<PhaseType>>(std::move(phase))
+    );
   }
 
   /**
@@ -134,6 +137,7 @@ class Assemblage : public CompositeMaterial {
    *  add_phases(bdg, fper, capv, ...);
    * Storing objects in a container first isn't supported as we want
    * to allow mixed types including Assemblage (so run into recursion issues).
+   * Consumes phase objects.
    */
   template<typename... Ts>
   void add_phases(Ts&&... args) {
@@ -201,7 +205,7 @@ class Assemblage : public CompositeMaterial {
    * Sets the averaging scheme to a custom class. Must be derived from `Averaging'.
    *
    */
-  void set_averaging_scheme(std::unique_ptr<Averaging> custom_scheme);
+  void set_averaging_scheme(std::shared_ptr<Averaging> custom_scheme);
 
   // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
@@ -284,7 +288,7 @@ class Assemblage : public CompositeMaterial {
   std::vector<std::shared_ptr<Material>> phases;
 
   // Unique pointer to averaging scheme
-  std::unique_ptr<Averaging> averaging_scheme;
+  std::shared_ptr<Averaging> averaging_scheme;
 
   // Molar fractions - define public getter if Assemblage subclassed.
   Eigen::ArrayXd molar_fractions;
