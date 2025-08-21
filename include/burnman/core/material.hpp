@@ -42,7 +42,7 @@ class EquationOfState;
     unroll
     evaluate
     evaluate_with_volumes
- */ 
+ */
 class Material {
 
  public:
@@ -60,7 +60,7 @@ class Material {
   // Public setter functions
   /**
    * @brief Sets the human readable material name
-   * 
+   *
    * @param new_name
    */
   void set_name(std::string new_name);
@@ -86,7 +86,7 @@ class Material {
 
   /**
    * @brief Sets the material to given pressure and temperature
-   * 
+   *
    * @param new_pressure The desired pressure in [Pa]
    * @param new_temperature The desired temperature in [K]
    */
@@ -95,7 +95,7 @@ class Material {
   // Public getter functions
   /**
    * @brief Gets the material name
-   * 
+   *
    * @return The material name if set, else returns the class name
    */
   virtual std::string get_name() const;
@@ -118,7 +118,7 @@ class Material {
 
   /**
    * @brief Returns current temperature
-   * 
+   *
    * @note Use Material::set_state() to set temperature
    *
    * @return Temperature in [K]
@@ -187,12 +187,12 @@ class Material {
 
   /**
    * @brief Retrieves the molar volume (unmodified) of the mineral.
-   * 
+   *
    * Uses a cached value if available, or calls
    * `Material::compute_molar_volume_unmodified()` and caches the result.
-   * 
+   *
    * @note `Use Material::reset()` to clear cached values.
-   * 
+   *
    * @return Molar volume in [m^3/mol].
    */
   double get_molar_volume_unmodified() const;
@@ -257,7 +257,7 @@ class Material {
    * @return Isentropic bulk modulus in [Pa].
    */
   double get_isentropic_bulk_modulus_reuss() const;
-  
+
   /**
    * @brief Retrieves the isothermal compressibility of the mineral.
    *
@@ -453,11 +453,11 @@ class Material {
 
   /**
    * @brief Computes the molar volume of the mineral.
-   * 
+   *
    * @note Default implementation throws NotImplementedError.
    *       Derived classes should override method.
    *       Used along with compute_molar_volume when excess modifiers needed.
-   * 
+   *
    * @returns Molar volume in [m^3/mol].
    * @throws NotImplementedError if default implementation called.
    */
@@ -517,7 +517,7 @@ class Material {
    * @throws NotImplementedError if default implementation called.
    */
   virtual double compute_isentropic_bulk_modulus_reuss() const;
-  
+
   /**
    * @brief Computes the isothermal compressibility of the mineral.
    *
@@ -692,7 +692,7 @@ class Material {
    * Use __func__ for method name
    */
   [[noreturn]] void throw_not_implemented_error(const std::string& method) const;
-  
+
   /**
    * @brief Helper function to get name of class (incl. derived)
    */
