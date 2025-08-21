@@ -18,14 +18,12 @@
 #include "burnman/utils/eos.hpp"
 #include "burnman/utils/constants.hpp"
 
-#include <iostream>
-
 namespace roots {
   /**
     * @brief Finds root of function in region [x_lo,x_hi] via Brent's method.
     *
     * Uses GSL implementation of Brent's method to a find a root of function
-    * defined in a GSL function wrapper. 
+    * defined in a GSL function wrapper.
     * The main use here to find volume by minimising P(V,T,...) - P
     *
     * @param gsl_wrapper Pointer to a GSL function wrapper.
@@ -40,7 +38,7 @@ namespace roots {
     double (*gsl_wrapper)(double, void*),
     SolverParamsType gsl_wrapper_params,
     double x_lo,
-    double x_hi) 
+    double x_hi)
   {
     // Find root in [P(V) - P] to find V that fits P
     // Set up GSL function object and params
