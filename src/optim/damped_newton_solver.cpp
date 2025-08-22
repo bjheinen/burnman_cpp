@@ -23,7 +23,7 @@ double compute_lambda(
   double h,
   const LambdaBounds& lambda_bounds
 ) const {
-  // TODO: move eps to settings or consructor
+  // TODO: move eps to settings or constructor
   const double eps = 2 * constants::precision::double_eps;
   // TODO: move assert of lambda bounds validity to function
   // at call of lambda_bounds_func
@@ -51,18 +51,15 @@ std::vector<std::pair<int, double>>
 DampedNewtonSolver::constrain_step_to_feasible_region(
   const Eigen::VectorXd& x,
   const Eigen::VectorXd& dx,
-  double& lambda
+  double& lambda,
   Eigen::VectorXd& x_j
 ) const {
-  // Todo grab from settings
+  // TODO grab from settings
   const double eps = 2.0 * constants::precision::double_eps;
-
   Eigen::VectorXd c_x = evaluate_constraints(x);
   Eigen::VectorXd c_x_j = evaluate_constraints(x_j);
-
   std::vector<std::pair<int, double>> violated_constraints;
-
-  // Todo why separate n_constraints?
+  // TODO why separate n_constraints?
   for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(c_x.size()); ++i) {
     if (c_x_j(i) >= eps) {
       double lambda_i = c_x(i) / (c_x(i) - c_x_j(i));
