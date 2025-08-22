@@ -10,11 +10,11 @@
 #ifndef BURNMAN_OPTIM_DAMPED_NEWTON_HPP_INCLUDED
 #define BURNMAN_OPTIM_DAMPED_NEWTON_HPP_INCLUDED
 
-#include <Eigen/Dense>
 #include <functional>
 #include <optional>
 #include <string>
 #include <vector>
+#include <Eigen/Dense>
 
 // Do optim::roots::brent etc. instead
 namespace optim{
@@ -158,14 +158,24 @@ class DampedNewtonSolver {
  private:
 
   DampedNewtonSettings settings;
+  LinearConstraints linear_constraints;
 
-  Eigen::VectorXd constraints(const Eigen::VectorXd& x) const;
+  /**
+   * @brief Eavluates the linear constraints (A·x + b)
+   */
+  Eigen::VectorXd evaluate_constraints(const Eigen::VectorXd& x) const;
 
-  double update_lambda(
+  /**
+   * @brief Computes the damping factor, λ.
+   *
+   * Updates the damping factor for the current x and dx given a
+   * heuristic, h, and the bounds lambda_bounds.
+   */
+  double compute_lambda(
     const Eigen::VectorXd& x,
     const Eigen::VectorXd& dx,
-    const Eigen::VectorXd& h,
-    LambdaBounds lambda_bounds
+    double h,
+    const LambdaBounds& lambda_bounds
   ) const;
 
   std::tuple<Eigen::VectorXd, Eigen::VectorXd, double> solve_subject_to_constraints(
@@ -175,14 +185,38 @@ class DampedNewtonSolver {
     const Eigen::MatrixXd& c_prime
   ) const;
 
-  std::tuple<double, Eigen::VectorXd, std::vector<std::pair<int, double>>>
+
+  /**
+   * @brief Project a trial Newton step back into feasible region
+   *
+   * The function checks if a trial point x_j = x + lambda·dx violates any
+   * linear constraints (A·x + b <= 0). If so, it computes the maximum
+   * allowable step scaling factor to remain feasible, reduces lambda
+   * accordingly, and updates the trial iterate.
+   *
+   * The scaling factor is computed per violated constraint as
+   *   lambda_i = c_x[i] / (c_x[i] - c_x_j[i])
+   * where c_x and c_x_j are the constraint function values at x and x_j.
+   * The smallest lambda_i is used to rescale the step to just touch the
+   * first violated constraint.
+   *
+   * @param[in] x Current solution vector
+   * @param[in] dx Current Newton step direction
+   * @param[in,out] lambda Current damping factor (scaled in place)
+   * @param[in,out] x_j Current trial iterate, x + lambda·dx (updated in place)
+   *
+   * @return violated_constraints Sorted list given as (index, lambda_i) pair,
+   *         in ascending order of lambda_i.
+   *
+   * @note Modifies @p lambda and @p x_j.
+   */
+  std::vector<std::pair<int, double>>
   constrain_step_to_feasible_region(
     const Eigen::VectorXd& x,
     const Eigen::VectorXd& dx,
-    int n_constraints,
-    double lambda,
+    double& lambda,
     Eigen::VectorXd& x_j
-  ) const;
+  );
 
   std::pair<Eigen::VectorXd, double> lagrangian_walk_along_constraints(
     const DampedNewtonResult& sol,
@@ -192,11 +226,20 @@ class DampedNewtonSolver {
     const std::vector<std::pair<int, double>>& violated_constraints
   ) const;
 
+
+  /**
+   * @brief Checks solve convergence
+   *
+   * Successful convergence requires meeting three criteria:
+   *   - dx(simplified Newton step) < tol
+   *   - dx(full Newton step) < sqrt(10*tol)
+   *   - lambda = max (1 for full Newton step)
+   */
   bool is_converged(
-    Eigen::VectorXd& dxbar_j,
-    Eigen::VectorXd& dx,
+    const Eigen::VectorXd& dxbar_j,
+    const Eigen::VectorXd& dx,
     double lambda,
-    LambdaBounds lambda_bounds
+    const LambdaBounds& lambda_bounds
   ) const;
 
   // TODO --> think about return here (maybe just update state)
