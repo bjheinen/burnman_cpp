@@ -66,15 +66,17 @@ DampedNewtonSolver::constrain_step_to_feasible_region(
       violated_constraints.emplace_back(i, lambda_i);
     }
   }
-  // Sort list
-  std::sort(violated_constraints.begin(), violated_constraints.end(),
-    [](const auto& a, const auto& b) {
-      return a.second < b.second;
-    }
-  );
-  // Update lambda and x_j
-  lambda *= violated_constraints.front().second;
-  x_j = x + lambda * dx;
+  if (!violated_constraints.empty()) {
+    // Sort list
+    std::sort(violated_constraints.begin(), violated_constraints.end(),
+      [](const auto& a, const auto& b) {
+        return a.second < b.second;
+      }
+    );
+    // Update lambda and x_j
+    lambda *= violated_constraints.front().second;
+    x_j = x + lambda * dx;
+  }
   // Return violated_constraints - lambda & x_j modified in place
   return violated_constraints;
 }
