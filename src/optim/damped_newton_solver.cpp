@@ -13,6 +13,108 @@
 namespace optim{
 namespace roots{
 
+DampedNewtonResult DampedNewtonSolver::solve(
+  const Eigen::VectorXd& x0,
+  const std::function<Eigen::VectorXd(const Eigen::VectorXd&)>& F,
+  const std::function<Eigen::MatrixXd(const Eigen::VectorXd&)>& J,
+  LinearConstraints linear_constraints
+) const {
+
+  // Make solution object
+  DampedNewtonResult sol;
+  // Populate with starting vector etc.
+  sol.x = x0;
+  sol.F = F(x0);
+
+  // TODO: factor out store_iteration?
+  if (settings.store_iterates) {
+    sol.iteration_history.x.push_back(sol.x);
+    sol.iteration_history.F.push_back(sol.F);
+    sol.iteration_history.lambda.push_back(0.0);
+  }
+
+  double lambda = 0.0;
+  Eigen::VectorXd dxprev = Eigen::VectorXd::Ones(sol.x.size());
+  Eigen::VectorXd dxbar = Eigen::VectorXd::Ones(sol.x.size());
+  sol.n_iterations = 0;
+  Eigen::Index n_constraints = evaluate_constraints(sol.x).size();
+  bool minimum_lambda = False;
+  bool converged = False;
+  bool persistent_bound_violation = False;
+
+  // TODO: perhaps move all solver info to sol --> then set as class member
+  // Main loop
+  while (sol.n_iterations < this->settings.max_iterations
+      && !minimum_lambda
+      && !persistent_bound_violation
+      && !converged)
+  {
+    sol.J = J(sol.x);
+    Eigen::PartialPivLU<Eigen::MatrixXd> luJ(sol.J);
+    // TODO: declare this before? is ok just local to loop iteration?
+    Eigen::VectorXd dx = luJ.solve(-sol.F);
+    double dx_norm = dx.norm();
+    // Get lambda_bounds from function
+    LambdaBounds lambda_bounds = settings.lambda_bounds_func(dx, sol.x);
+    double h = lambda
+      * (dxbar - dx).norm()
+      * dx_norm
+      / (dxprev.norm * dxbar.norm);
+    lambda = compute_lambda(sol.x, dx, h, lambda_bounds);
+
+    Eigen::VectorXd x_j = sol.x + lambda * dx;
+    Eigen::VectorXd c_x_j = evaluate_constraints(x_j);
+
+    if ((c_x_j.array() >= this->settings.eps).any()) {
+      // Updates lmabda and x_j in place
+      std::vector<std::pair<int, double>> violated_constraints =
+        constrain_step_to_feasible_region(
+          sol.x, dx, lambda, x_j
+        );
+    }
+    if (lambda < this->settings.eps) {
+      TYPE? persistent_bound_violation =
+        lagrangian_walk_along_constraints(
+          sol, dx, luJ, dx_norm, violated_constraints
+        );
+    }
+
+    Eigen::VectorXd F_j = F(x_j);
+    Eigen::VectorXd dxbar_j = luJ.solve(-F_j);
+    double dxbar_j_norm = dxbar_j.norm();
+    converged = is_converged(dxbar_j, dx, lambda, lambda_bounds);
+    bool require_posteriori_loop = !converged;
+
+    // call posteriori_loop here
+
+    // Store history
+    // TODO: factor out store_iteration?
+    if (this->settings.store_iterates) {
+      sol.iteration_history.x.push_back(sol.x);
+      sol.iteration_history.F.push_back(sol.F);
+      sol.iteration_history.lambda.push_back(lambda);
+    }
+    // bump n_it
+    ++sol.n_iterations;
+  }
+
+  // Final adjustments for constraints
+  // TODO --> persist.. define outside of loop
+  if (converged && !persistent_bound_violation) {
+    sol.x = x_j + dxbar_j;
+    if ((evaluate_constraints(sol.x).array() > 0.0).any()) {
+      sol.x -= dxbar_j;
+    }
+  }
+  sol.F = F(sol.x);
+  sol.F_norm = sol.F.norm();
+  sol.J = J(sol.x);
+
+  // Call get_termination_info here
+
+  return sol;
+}
+
 Eigen::VectorXd DampedNewtonSolver::evaluate_constraints(
   const Eigen::VectorXd& x
 ) const {
