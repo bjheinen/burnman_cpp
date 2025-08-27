@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
+#include "burnman/utils/constants.hpp"
 
 // Do optim::roots::brent etc. instead
 namespace optim{
@@ -107,6 +108,7 @@ struct DampedNewtonSettings {
   double regularisation = 0.0;              ///< Regularization parameter for the KKT system in Lagrangian solves
   double condition_threshold_lu = 1e12;     ///< Condition number below which LU decomposition is considered stable
   double condition_threshold_lstsq = 1e15;  ///< Condition number below which least-squares fallback is considered stable
+  double eps = 2.0 * constants::precision::double_eps;
   LambdaBoundsFunc lambda_bounds =              ///< Callable (dx, x) that returns min, max for the damping factor
     [](const Eigen::VectorXd&, const Eigen::VectorXd&) {
       return std::make_pair(1.0e-8, 1.0);
