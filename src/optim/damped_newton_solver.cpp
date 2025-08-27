@@ -10,6 +10,9 @@
 #include "burnman/optim/damped_newton_solver.hpp"
 #include "burnman/utils/constants.hpp"
 
+namespace optim{
+namespace roots{
+
 Eigen::VectorXd DampedNewtonSolver::evaluate_constraints(
   const Eigen::VectorXd& x
 ) const {
@@ -17,7 +20,7 @@ Eigen::VectorXd DampedNewtonSolver::evaluate_constraints(
   return A * x + b;
 }
 
-double compute_lambda(
+double DampedNewtonSolver::compute_lambda(
   const Eigen::VectorXd& x,
   const Eigen::VectorXd& dx,
   double h,
@@ -53,7 +56,7 @@ DampedNewtonSolver::constrain_step_to_feasible_region(
   const Eigen::VectorXd& dx,
   double& lambda,
   Eigen::VectorXd& x_j
-) const {
+) {
   // TODO grab from settings
   const double eps = 2.0 * constants::precision::double_eps;
   Eigen::VectorXd c_x = evaluate_constraints(x);
@@ -81,5 +84,5 @@ DampedNewtonSolver::constrain_step_to_feasible_region(
   return violated_constraints;
 }
 
-
-
+} // namespace roots
+} // namespace optim
