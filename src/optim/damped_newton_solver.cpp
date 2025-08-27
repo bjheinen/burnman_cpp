@@ -78,5 +78,64 @@ DampedNewtonSolver::constrain_step_to_feasible_region(
   return violated_constraints;
 }
 
+std::tuple<Eigen::VectorXd, Eigen::VectorXd, double>
+DampedNewtonSolver::solve_subject_to_constraints(
+  const Eigen::VectorXd& x,
+  const Eigen::MatrixXd& Jx,
+  const Eigen::VectorXd& c_x,
+  const Eigen::MatrixXd& c_prime
+) const {
+
+  const Eigen::Index n_x = x.size();
+  const Eigen::Index n_c = c_x.size();
+
+  Eigen::MatrixXd JTJ_reg = Jx.transpose() * Jx
+    + this->settings.regularisation * Eigen::MatrixXd::Identity(n_x, n_x);
+
+  double norm = static_cast<double>(n_x * n_x) / JTJ_reg.norm();
+  // KKT = np.block([[JTJ_reg * norm, c_prime.T], [c_prime, np.zeros((n_c, n_c))]])
+  // Top left - JTJ_reg * norm
+  // top right - c_prime.T
+  // bottom left - c_prime
+  // bottom right - zeros
+  Eigen::MatrixXd KKT = Eigen::MatrixXd::Zero(n_x + n_c, n_x + n_c);
+  KKT.topLeftCorner(n_x, n_x) = JTJ_reg * norm;
+  KKT.topRightCorner(n_x, n_c) = c_prime.transpose();
+  KKT.bottomLeftCorner(n_c, n_x) = c_prime;
+  Eigen::VectorXd rhs = Eigen::VectorXd::Zero(n_x + n_c);
+  rhs.tail(n_c) = -c_x;
+  // Get conditon number from SVD
+  Eigen::JacobiSVD<Eigen::MatrixXd> svd(KKT);
+  double cond = svd.singularValues()(0)
+    / svd.singularValues()(svd.singularValues().size() - 1);
+  Eigen::VectorXd dx_lambda;
+  if (cond < this->settings.condition_threshold_lu) {
+    // LU solve
+    Eigen::PartialPivLU<Eigen::MatrixXd> lu(KKT);
+    dx_lambda = lu.solve(rhs);
+    // dx_lambda = KKT.partialPivLu().solve(rhs);
+  } else if (cond < this->settings.condition_threshold_lstsq) {
+    // LSTSQ solve in np
+    // Here using the SVD seems closest equivalent
+    dx_lambda = svd.solve(rhs);
+  } else {
+    // Python fallback is manual pseudo-inverse with SVD
+    Eigen::VectorXd s = svd.singularValues();
+    // cwiseInverse doesn't use a threshold
+    Eigen::VectorXd s_inv = s.unaryExpr([](double val) {
+      return (val > 1.0e-12) ? 1.0 / val : 0.0;
+    });
+    dx_lambda = svd.matrixV() * s_inv.asDiagonal()
+      * svd.matrixU().transpose() * rhs;
+    // This might just be equivalent to what svd.solve() does internally?
+    // Other options - ColPivHouseholderQR
+    // Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(KKT);
+    // dx_lambda = qr.solve(rhs);
+  }
+  Eigen::VectorXd dx = dx_lambda.head(n_x);
+  Eigen::VectorXd lambda = dx_lambda.tail(n_c);
+  return {x + dx, lambdas, cond};
+}
+
 } // namespace roots
 } // namespace optim
