@@ -180,6 +180,51 @@ class DampedNewtonSolver {
     const LambdaBounds& lambda_bounds
   ) const;
 
+  /**
+   * @brief Solve a constrained Newton correction step using KKT system.
+   *
+   * Computes a step, `dx', that minimises the linearised residual ||J(x)·dx||
+   * subject to linear equality constraints derived from the currently active
+   * inequality constraints.
+   *
+   * The system is solved using the KKT (Karush-Kuhn-Tucker) formulation:
+   * \f[
+   *  \begin{bmatrix}
+   *    J^T J + \alpha I & A^T \\
+   *    A & 0
+   *  \end{bmatrix}
+   *  \begin{bmatrix}
+   *    dx \\
+   *    \lambda
+   *  \end{bmatrix}
+   *  =
+   *  - \begin{bmatrix}
+   *      0 \\
+   *      c(x)
+   *    \end{bmatrix}
+   * \f]
+   *
+   * where:
+   *  - \c J is the Jacobian at \c x
+   *  - \c A is the constraint Jacobian (c_prime)
+   *  - \c c(x) is the constraint evaluation
+   *  - \c \lambda are the Lagrange multipliers
+   *  - \c \alpha = \c settings.regularisation is an optional regularization parameter
+   *
+   * The KKT system is solved using one of thee strategies depending on
+   * the estimated condition number of the matrix:
+   *   1. TODO: decide on strategies in Eigen
+   *
+   * @param x Current solution vector.
+   * @param Jx Current Jacobian matrix J(x).
+   * @param c_x Values of active constraints at x.
+   * @param c_prime Jacobian of active constraints (A in Ax + b = 0).
+   *
+   * @return tuple containing:
+   *   x_new - Updated solution vector, x + dx.
+   *   lambdas - Langrange multipliers for active constraints.
+   *   condition_number - Estimated condition number of KKT matrix.
+   */
   std::tuple<Eigen::VectorXd, Eigen::VectorXd, double> solve_subject_to_constraints(
     const Eigen::VectorXd& x,
     const Eigen::MatrixXd& Jx,
