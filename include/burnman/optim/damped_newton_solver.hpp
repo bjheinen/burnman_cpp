@@ -45,16 +45,25 @@ struct DampedNewtonSolverState {
   double h;                                 ///< Heuristic used to compute lambda.
   double lambda = 0.0;                      ///< Current step scaling (damping) factor.
   LambdaBounds lambda_bounds;               ///< Current bounds (min, max) on lambda.
-  std::vector<std::pair<int, double>> violated_constraints;
+  std::vector<std::pair<Eigen::Index, double>> violated_constraints;
+  int n_iterations = 0;
   bool converged = false;
   bool minimum_lambda = false;
   bool persistent_bound_violation = false;
   bool require_posteriori_loop = true;
   // Constructor to store const refs
   DampedNewtonSolverState(
+    const Eigen::VectorXd& x0,
     const std::function<Eigen::VectorXd(const Eigen::VectorXd&)>& F_func_,
     const LinearConstraints& linear_constraints_)
-      : F_func(F_func_), linear_constraints(linear_constraints_) {}
+      : x(x0),
+        F_func(F_func_),
+        linear_constraints(linear_constraints_),
+        F(F_func_(x0)),
+        n_constraints(linear_constraints_.first.rows()),
+        dxbar(Eigen::VectorXd::Ones(x0.size())),
+        dx_prev(Eigen::VectorXd::Ones(x0.size()))
+    {}
 };
 
 /**
@@ -199,9 +208,12 @@ class DampedNewtonSolver {
   LinearConstraints linear_constraints;
 
   /**
-   * @brief Eavluates the linear constraints (A·x + b)
+   * @brief Evaluates the linear constraints (A·x + b)
    */
-  Eigen::VectorXd evaluate_constraints(const Eigen::VectorXd& x) const;
+  Eigen::VectorXd evaluate_constraints(
+    const Eigen::VectorXd& x,
+    const DampedNewtonSolverState& state
+  ) const;
 
   /**
    * @brief Updates the damping factor, λ.
@@ -265,7 +277,6 @@ class DampedNewtonSolver {
     const Eigen::MatrixXd& c_prime
   ) const;
 
-
   /**
    * @brief Project a trial Newton step back into feasible region
    *
@@ -324,13 +335,14 @@ class DampedNewtonSolver {
 
   void posteriori_loop(DampedNewtonSolverState& state);
 
-  termination_info;
-  // --> update state of Result object? or pass back termination info type and add to result?
+  void make_termination_info(
+    DampedNewtonResult& sol
+    const DampedNewtonSolverState& state
+  );
 
 };
 
 } // namespace roots
 } // namespace optim
-
 
 #endif // BURNMAN_OPTIM_DAMPED_NEWTON_HPP_INCLUDED
