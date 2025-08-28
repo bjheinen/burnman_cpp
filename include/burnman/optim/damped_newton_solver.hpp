@@ -38,11 +38,12 @@ struct SolverState {
   Eigen::MatrixXd J;                        ///< Current Jacobian matrix J(x).
   Eigen::PartialPivLU<Eigen::MatrixXd> luJ; ///< LU decomposition of J.
   Eigen::Index n_constraints;               ///< Number of constraints.
-  LambdaBounds lambda_bounds;               ///< Current bounds (min, max) on lambda.
   double dx_norm;                           ///< L2 norm of dx.
   double dxbar_j_norm;                      ///< L2 norm of dxbar_j.
   double h;                                 ///< Heuristic used to compute lambda.
   double lambda = 0.0;                      ///< Current step scaling (damping) factor.
+  LambdaBounds lambda_bounds;               ///< Current bounds (min, max) on lambda.
+  std::vector<std::pair<int, double>> violated_constraints;
   bool converged = false;
   bool minimum_lambda = false;
   bool persistent_bound_violation = false;
@@ -196,17 +197,14 @@ class DampedNewtonSolver {
   Eigen::VectorXd evaluate_constraints(const Eigen::VectorXd& x) const;
 
   /**
-   * @brief Computes the damping factor, λ.
+   * @brief Updates the damping factor, λ.
    *
    * Updates the damping factor for the current x and dx given a
    * heuristic, h, and the bounds lambda_bounds.
+   *
+   * Modifies state.lambda
    */
-  double compute_lambda(
-    const Eigen::VectorXd& x,
-    const Eigen::VectorXd& dx,
-    double h,
-    const LambdaBounds& lambda_bounds
-  ) const;
+  void update_lambda(DampedNewtonSolverState& state);
 
   /**
    * @brief Solve a constrained Newton correction step using KKT system.
@@ -274,26 +272,16 @@ class DampedNewtonSolver {
    * where c_x and c_x_j are the constraint function values at x and x_j.
    * The smallest lambda_i is used to rescale the step to just touch the
    * first violated constraint.
-   *
-   * @param[in] x Current solution vector
-   * @param[in] dx Current Newton step direction
-   * @param[in,out] lambda Current damping factor (scaled in place)
-   * @param[in,out] x_j Current trial iterate, x + lambda·dx (updated in place)
-   *
-   * @return violated_constraints Sorted list given as (index, lambda_i) pair,
-   *         in ascending order of lambda_i.
-   *
-   * @note Modifies @p lambda and @p x_j.
+   * @param state Current solver state. Uses:
+   *   state.x Current solution vector
+   *   state.dx Current Newton step direction
+   *   state.lambda Current damping factor (scaled in place)
+   *   state.x_j Current trial iterate, x + lambda·dx (updated in place)
+   *   violated_constraints Sorted list given as (index, lambda_i) pairs,
+   *     in ascending order of lambda_i.
    */
-  std::vector<std::pair<int, double>>
-  constrain_step_to_feasible_region(
-    const Eigen::VectorXd& x,
-    const Eigen::VectorXd& dx,
-    double& lambda,
-    Eigen::VectorXd& x_j
-  );
+  void constrain_step_to_feasible_region(DampedNewtonSolverState& state);
 
-  // TODO --> move x_j, lambda etc. to solver state sol?
   /**
    * @brief Attempts to find a constrained Newton step
    *
@@ -304,26 +292,18 @@ class DampedNewtonSolver {
    * the active constraints to remain in the feasible region while decreasing
    * the residual norm ||F(x)||.
    *
-   * @param[in] sol Current solver state with x and F
-   * @param[in] dx_norm L2 norm of current Newton step
-   * @param[in] luJ LU decomposition of the current Jacobian
-   * @param[in] violated_constraints List of index, fraction pairs for constraints that would be violated by the current step.
-   * @param[in,out] lambda Current damping factor (scaled in place).
-   * @param[in,out] dx Current Newton step direction (modified in place).
-   * @param[in,out] x_j Current trial iterate, x + lambda·dx (updated in place).
-   *
-   * @return persistent_bound_violation flag.
+   * @param state Current solver state. Uses:
+   *   state.x Current solution vector
+   *   state.F Current function evaluation, F(x)
+   *   state.dx_norm L2 norm of current Newton step
+   *   state.luJ LU decomposition of the current Jacobian
+   *   state.violated_constraints List of index, fraction pairs for constraints that would be violated by the current step.
+   *   state.lambda Current damping factor (scaled in place).
+   *   state.dx Current Newton step direction (modified in place).
+   *   state.x_j Current trial iterate, x + lambda·dx (updated in place).
+   *   state.persistent_bound_violation flag set.
    */
-  bool lagrangian_walk_along_constraints(
-    const DampedNewtonResult& sol,
-    const double dx_norm,
-    const Eigen::PartialPivLU<Eigen::MatrixXd>& luJ,
-    const std::vector<std::pair<int, double>>& violated_constraints
-    double& lambda,
-    Eigen::VectorXd& dx,
-    Eigen::VectorXd& x_j
-  );
-
+  void lagrangian_walk_along_constraints(DampedNewtonSolverState& state);
 
   /**
    * @brief Checks solve convergence
@@ -333,30 +313,9 @@ class DampedNewtonSolver {
    *   - dx(full Newton step) < sqrt(10*tol)
    *   - lambda = max (1 for full Newton step)
    */
-  bool is_converged(
-    const Eigen::VectorXd& dxbar_j,
-    const Eigen::VectorXd& dx,
-    double lambda,
-    const LambdaBounds& lambda_bounds
-  ) const;
+  bool is_converged(const DampedNewtonSolverState& state) const;
 
-  // TODO --> think about return here (maybe just update state)
-  std::tuple<?> posteriori_loop(
-    Eigen::VectorXd& x,
-    Eigen::VectorXd& Fx,
-    Eigen::VectorXd& dx,
-    double dx_norm,
-    Eigen::VectorXd& dxbar_j,
-    double dxbar_j_norm,
-    Eigen::VectorXd& x_j,
-    ? luJ,
-    double lambda,
-    LambdaBounds lambda_bounds,
-    bool converged,
-    bool minimum_lambda,
-    bool persistent_bound_violation,
-    bool require_posteriori_loop
-  ) const;
+  void posteriori_loop(DampedNewtonSolverState& state);
 
   termination_info;
   // --> update state of Result object? or pass back termination info type and add to result?
