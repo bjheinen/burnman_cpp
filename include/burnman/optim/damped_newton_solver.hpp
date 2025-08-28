@@ -25,7 +25,9 @@ namespace roots{
  * @struct DampedNewtonSolverState
  * @brief Stores internal solver state.
  */
-struct SolverState {
+struct DampedNewtonSolverState {
+  const std::function<Eigen::VectorXd(const Eigen::VectorXd&)>& F_func;
+  const LinearConstraints& linear_constraints;
   Eigen::VectorXd x                         ///< Current solution vector.
   Eigen::VectorXd F;                        ///< Current function evaluation, F(x).
   Eigen::VectorXd dx;                       ///< Current Newton step direction.
@@ -48,6 +50,11 @@ struct SolverState {
   bool minimum_lambda = false;
   bool persistent_bound_violation = false;
   bool require_posteriori_loop = true;
+  // Constructor to store const refs
+  DampedNewtonSolverState(
+    const std::function<Eigen::VectorXd(const Eigen::VectorXd&)>& F_func_,
+    const LinearConstraints& linear_constraints_)
+      : F_func(F_func_), linear_constraints(linear_constraints_) {}
 };
 
 /**
