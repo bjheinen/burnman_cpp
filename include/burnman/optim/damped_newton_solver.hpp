@@ -333,8 +333,24 @@ class DampedNewtonSolver {
    */
   bool is_converged(const DampedNewtonSolverState& state) const;
 
+  /**
+   * @brief Posteriori step-size control loop
+   *
+   * Performs the posteriori step-size control loop of Deuflhard's
+   * damped Newton method.
+   *
+   * After computing as trial step x_j = x + lambda·dx, this loop checks
+   * whether the simplified Newton step (dx̄_j) decreases the residual norm
+   * ||F(x)|| monotonically. If not, the damping factor lambda is reduced and
+   * the trial step is recomputed until either monotonicity is restored
+   * or the minimum lambda bound is reached. This procedure prevents divergence
+   * and stabilised the Newton iteration in highly nonlinear regions.
+   */
   void posteriori_loop(DampedNewtonSolverState& state);
 
+  /**
+   * @brief Sets solver termination info codes and message.
+   */
   void make_termination_info(
     DampedNewtonResult& sol
     const DampedNewtonSolverState& state
