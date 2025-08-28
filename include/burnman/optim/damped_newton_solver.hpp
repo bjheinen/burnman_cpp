@@ -22,11 +22,39 @@ namespace optim{
 namespace roots{
 
 /**
+ * @struct DampedNewtonSolverState
+ * @brief Stores internal solver state.
+ */
+struct SolverState {
+  Eigen::VectorXd x                         ///< Current solution vector.
+  Eigen::VectorXd F;                        ///< Current function evaluation, F(x).
+  Eigen::VectorXd dx;                       ///< Current Newton step direction.
+  Eigen::VectorXd dxbar;                    ///< Simplified Newton step.
+  Eigen::VectorXd dx_prev;                  ///< Newton step from previous iteration.
+  Eigen::VectorXd x_j;                      ///< Trial iterate for solution vector.
+  Eigen::VectorXd c_x_j;                    ///< Constraints evaluated at x_j.
+  Eigen::VectorXd F_j;                      ///< Function evaluated at x_j.
+  Eigen::VectorXd dxbar_j;                  ///< Simplified Newton step at trial iterate.
+  Eigen::MatrixXd J;                        ///< Current Jacobian matrix J(x).
+  Eigen::PartialPivLU<Eigen::MatrixXd> luJ; ///< LU decomposition of J.
+  Eigen::Index n_constraints;               ///< Number of constraints.
+  LambdaBounds lambda_bounds;               ///< Current bounds (min, max) on lambda.
+  double dx_norm;                           ///< L2 norm of dx.
+  double dxbar_j_norm;                      ///< L2 norm of dxbar_j.
+  double h;                                 ///< Heuristic used to compute lambda.
+  double lambda = 0.0;                      ///< Current step scaling (damping) factor.
+  bool converged = false;
+  bool minimum_lambda = false;
+  bool persistent_bound_violation = false;
+  bool require_posteriori_loop = true;
+};
+
+/**
  * @struct DampedNewtonResult
  * @brief Result of the damped Newton solver.
  *
  * This object stores the result of `DampedNewtonSolver::solve',
- * which attempts to solve F(x) = 0, subject to linea inequality
+ * which attempts to solve F(x) = 0, subject to linear inequality
  * constraints A·x + b <= 0.
  *
  * If the solver fails to converge, it terminates with an informative
