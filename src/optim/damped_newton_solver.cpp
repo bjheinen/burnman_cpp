@@ -239,5 +239,97 @@ DampedNewtonSolver::solve_subject_to_constraints(
   return {x + dx, lambdas, cond};
 }
 
+bool DampedNewtonSolver::lagrangian_walk_along_constraints(
+  const DampedNewtonResult& sol,
+  const double dx_norm,
+  const Eigen::PartialPivLU<Eigen::MatrixXd>& luJ,
+  const std::vector<std::pair<int, double>>& violated_constraints,
+  double& lambda,
+  Eigen::VectorXd& dx,
+  Eigen::VectorXd& x_j
+) {
+
+  // TODO: use Eigen::Index for constraint indices?
+  // Desparate active/inactive constraints
+  std::vector<int> act_ind_temp;
+  std::vector<int> inact_ind_temp;
+  for (const auto& vc : violated_constraints) {
+    int i = vc.first;
+    double frac = vc.second;
+    if (frac < this->settings.eps) {
+      act_ind_temp.push_back(i);
+    } else {
+      inact_ind_temp.push_back(i);
+    }
+  }
+  Eigen::VectorXi active_constraint_indices =
+    Eigen::Map<Eigen::VectorXi>(act_ind_temp.data(), act_ind_temp.size());
+  Eigen::VectorXi inactive_constraint_indices =
+    Eigen::Map<Eigen::VectorXi>(inact_ind_temp.data(), inact_ind_temp.size());
+
+  Eigen::VectorXd x_n = sol.x + dx;
+  Eigen::VectorXd c_newton = evaluate_constraints(x_n)(active_constraint_indices);
+  Eigen::MatrixXd c_A = (this->linear_constraints.first)(active_constraint_indices, Eigen::all);
+  bool persistent_bound_violation = false;
+
+  Eigen::VectorXd x_m;
+  if (c_A.rows() > 0 && Eigen::FullPivLU<Eigen::MatrixXd>(c_A).rank() == dx.size()) {
+    std::size_t n_act = active_constraint_indices.size();
+    for (std::size_t i_rm = 0; i_rm < n_act; ++i_rm) {
+      std::vector<int> p_act_ind_temp;
+      for (std::size_t i = 0; i < n_act; ++i) {
+        if (i != i_rm) {
+          p_act_ind_temp.push_back(active_constraint_indices[i]);
+        }
+      }
+      Eigen::VectorXi potential_active_indices = Eigen::Map<Eigen::VectorXi>(p_act_ind_temp.data(), p_act_ind_temp.size());
+      c_newton = evaluate_constraints(sol.x + dx)(potential_active_indices);
+      c_A = (this->linear_constraints.first)(potential_active_indices, Eigen::all);
+      x_m = std::get<0>(solve_subject_to_constraints(x_n, sol.J, c_newton, c_A));
+      if (evaluate_constraints(x_m)(active_constraint_indices[i_rm]) < 0.0) {
+        break;
+      }
+    }
+  } else {
+    x_m = std::get<0>(solve_subject_to_constraints(x_n, sol.J, c_newton, c_A));
+  }
+
+  // Update dx, lambda
+  dx = x_m - sol.x;
+  LambdaBounds lambda_bounds_new = this->settings.lambda_bounds_func(dx, sol.x);
+  lambda = lambda_bounds_new.second;
+  x_j = sol.x + lambda * dx;
+  // Check feasibility
+  Eigen::VectorXd x_j_min = sol.x + lambda_bounds_new.first * dx;
+  // TODO --> make F, J members?
+  Eigen::VectorXd F_j_min = F(x_j_min);
+  Eigen::VectorXd dxbar_j_min = luJ.solve(-F_j_min);
+  double dxbar_j_min_norm = dxbar_j_min.norm();
+  if (dxbar_j_min_norm > dx_norm || dx.norm() < this->settings.eps) {
+    persistent_bound_violation = true;
+  }
+
+  // Check newly violated inactive constraints
+  std::size_t n_inactive = inactive_constraint_indices.size();
+  Eigen::VectorXd c_x_j = evaluate_constraints(x_j)(inactive_constraint_indices);
+  if ((c_x_j.array() >= this->settings.eps).any()) {
+    Eigen::VectorXd c_x = evaluate_constraints(sol.x)(inactive_constraint_indices);
+    std::vector<std::pair<int, double>> newly_violated_constraints;
+    for (std::size_t k = 0; k < n_inactive; ++k) {
+      if (c_x_j[k] >= this->settings.eps) {
+        double frac = c_x[k] / (c_x[k] - c_x_j[k]);
+        newly_violated_constraints.emplace_back(inactive_constraint_indices[k], frac);
+      }
+    }
+    std::sort(newly_violated_constraints.begin(), newly_violated_constraints.end(),
+      [](auto& a, auto& b) { return a.second < b.second; });
+    if (!newly_violated_constraints.empty()) {
+      lambda *= newly_violated_constraints[0].second;
+      x_j = sol.x + lambda * dx;
+    }
+  }
+  return persistent_bound_violation;
+}
+
 } // namespace roots
 } // namespace optim

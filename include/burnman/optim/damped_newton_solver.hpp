@@ -220,13 +220,36 @@ class DampedNewtonSolver {
     Eigen::VectorXd& x_j
   );
 
-  std::pair<Eigen::VectorXd, double> lagrangian_walk_along_constraints(
+  // TODO --> move x_j, lambda etc. to solver state sol?
+  /**
+   * @brief Attempts to find a constrained Newton step
+   *
+   * This function attempts to find a constrained Newton step when a step
+   * along the standard Newton direction would violate active linear
+   * inequality constraints (A·x + b <= 0).
+   * Uses the method of Lagrange multipliers, attempting to "walk along"
+   * the active constraints to remain in the feasible region while decreasing
+   * the residual norm ||F(x)||.
+   *
+   * @param[in] sol Current solver state with x and F
+   * @param[in] dx_norm L2 norm of current Newton step
+   * @param[in] luJ LU decomposition of the current Jacobian
+   * @param[in] violated_constraints List of index, fraction pairs for constraints that would be violated by the current step.
+   * @param[in,out] lambda Current damping factor (scaled in place).
+   * @param[in,out] dx Current Newton step direction (modified in place).
+   * @param[in,out] x_j Current trial iterate, x + lambda·dx (updated in place).
+   *
+   * @return persistent_bound_violation flag.
+   */
+  bool lagrangian_walk_along_constraints(
     const DampedNewtonResult& sol,
-    const Eigen::VectorXd& dx,
-    double dx_norm,
-    ? luJ,
+    const double dx_norm,
+    const Eigen::PartialPivLU<Eigen::MatrixXd>& luJ,
     const std::vector<std::pair<int, double>>& violated_constraints
-  ) const;
+    double& lambda,
+    Eigen::VectorXd& dx,
+    Eigen::VectorXd& x_j
+  );
 
 
   /**
