@@ -89,6 +89,10 @@ void Solution::set_state(
   }
 }
 
+Eigen::ArrayXd Solution::get_molar_fractions() const {
+  return this->molar_fractions;
+}
+
 // Public getter functions with caching
 double Solution::get_excess_gibbs() const {
   if (!excess_gibbs.has_value()) {

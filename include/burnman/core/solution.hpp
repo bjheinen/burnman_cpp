@@ -131,6 +131,11 @@ class Solution : public CompositeMaterial {
 
   // Public getters for extra Solution functions
   /**
+   * @brief Retrieves molar fractions array.
+   */
+  Eigen::ArrayXd get_molar_fractions() const;
+
+  /**
    * @brief Retrieves molar excess gibbs free energy the of the solid solution.
    *
    * Uses a cached value if available, or calls
@@ -450,7 +455,6 @@ class Solution : public CompositeMaterial {
  private:
 
   // Molar fractions - not cached so not deleted by reset()
-  // If Solution is subclassed will need a public getter function
   Eigen::ArrayXd molar_fractions;
 
   // Shared pointer to solution model class
