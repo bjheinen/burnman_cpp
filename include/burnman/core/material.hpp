@@ -655,6 +655,11 @@ class Material {
    */
   bool has_custom_name() const;
 
+  /**
+   * @brief Helper function to check if P & T set.
+   */
+  bool has_state() const;
+
  private:
   // std::optional used for caching
   mutable std::optional<double> pressure;

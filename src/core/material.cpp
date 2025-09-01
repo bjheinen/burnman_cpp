@@ -60,6 +60,10 @@ bool Material::has_custom_name() const {
   return name.has_value();
 }
 
+bool Material::has_state() const {
+  return pressure.has_value() && temperature.has_value();
+}
+
 const FormulaMap& Material::get_formula() const {
   if (!formula.has_value()) {
     formula = compute_formula();
@@ -83,6 +87,7 @@ void Material::set_state(double new_pressure, double new_temperature) {
   temperature = new_temperature;
 }
 
+// TODO: watch out here! check for value first?
 double Material::get_pressure() const {
   return *pressure;
 }
@@ -246,7 +251,6 @@ double Material::get_isentropic_thermal_gradient() const {
   }
   return *isentropic_thermal_gradient;
 }
-
 
 // Default compute function implementations (override in derived classes)
 double Material::compute_molar_internal_energy() const {
