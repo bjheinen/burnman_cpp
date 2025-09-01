@@ -126,7 +126,7 @@ void Assemblage::set_fractions(
   );
 }
 
-void Material::set_n_moles(double new_n_moles) {
+void Assemblage::set_n_moles(double new_n_moles) {
   this->n_moles = new_n_moles;
 }
 
@@ -161,16 +161,23 @@ void Assemblage::set_state(
 }
 
 // Public convenience getters
+int Assemblage::get_n_phases() const {
+  return static_cast<int>(this->phases.size());
+}
+
 std::shared_ptr<Material> Assemblage::get_phase(size_t index) const {
   return this->phases.at(index);
 }
 
-Eigen::ArrayXd Material::get_molar_fractions() const {
+Eigen::ArrayXd Assemblage::get_molar_fractions() const {
   return this->molar_fractions;
 }
 
-double Material::get_n_moles() const {
-  return this->n_moles;
+double Assemblage::get_n_moles() const {
+  if (!this->n_moles.has_value()) {
+    throw std::runtime_error("n_moles not set!");
+  }
+  return *n_moles;
 }
 
 // Public getter functions with caching

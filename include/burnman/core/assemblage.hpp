@@ -261,9 +261,14 @@ class Assemblage : public CompositeMaterial {
   }
 
   /**
+   * @brief Get number of phases in the assemblage.
+   */
+  int get_n_phases() const;
+
+  /**
    * @brief Get n_moles (Used to convert mole fractions / absolute phase amounts).
    */
-  double set_n_moles() const;
+  double get_n_moles() const;
 
  protected:
 
