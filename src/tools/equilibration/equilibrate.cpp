@@ -36,3 +36,22 @@ Eigen::VectorXd get_parameter_vector(
   }
   return params;
 }
+
+Eigen::VectorXd get_endmember_amounts(
+  const Assemblage& assemblage
+) {
+  Eigen::ArrayXd phase_amounts = assemblage.get_n_moles * assemblage.get_molar_fractions();
+  Eigen::VectorXd abs_amounts(assemblage.get_n_endmembers());
+  std::vector<int> embr_per_phase = assemblage.get_endmembers_per_phase();
+  Eigen::Index j = 0;
+  for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(assemblage.get_n_phases()); ++i) {
+    if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(i))) {
+      abs_amounts.segment(j, j + static_cast<Eigen::Index>(embr_per_phase(i))) =
+        phase_amounts(i) * ph.get_molar_fractions();
+    } else {
+      abs_amounts(j) = phase_amounts(i);
+    }
+    j += embr_per_phase[static_cast<std::size_t>(i)];
+  }
+  return abs_amounts;
+}

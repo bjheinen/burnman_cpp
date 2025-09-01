@@ -34,4 +34,10 @@ Eigen::VectorXd get_parameter_vector(
   const Assemblage& assemblage,
   int n_free_compositional_vectors = 0);
 
+/**
+ * @brief Get the absolute amounts of all the endmembers in the solution.
+ */
+Eigen::VectorXd get_endmember_amounts(
+  const Assemblage& assemblage);
+
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
