@@ -126,6 +126,10 @@ void Assemblage::set_fractions(
   );
 }
 
+void Material::set_n_moles(double new_n_moles) {
+  this->n_moles = new_n_moles;
+}
+
 // Public setter overrides of Material
 void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
   for (auto& ph : phases) {
@@ -159,6 +163,14 @@ void Assemblage::set_state(
 // Public convenience getters
 std::shared_ptr<Material> Assemblage::get_phase(size_t index) const {
   return this->phases.at(index);
+}
+
+Eigen::ArrayXd Material::get_molar_fractions() const {
+  return this->molar_fractions;
+}
+
+double Material::get_n_moles() const {
+  return this->n_moles;
 }
 
 // Public getter functions with caching

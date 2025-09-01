@@ -212,7 +212,18 @@ class Assemblage : public CompositeMaterial {
   void set_method(EOSType new_method) override;
   void set_method(std::shared_ptr<EquationOfState> new_method) override;
 
+  /**
+   * @brief Set n_moles (Used to convert mole fractions / absolute phase amounts).
+   */
+  void set_n_moles(double new_n_moles);
+
   // Public getters for extra Assemblage functions
+
+  /**
+   * @brief Retrieves molar fraction array.
+   */
+  Eigen::ArrayXd get_molar_fractions() const;
+
   /**
    * @brief Retrieves n_i * V_i.
    *
@@ -248,6 +259,11 @@ class Assemblage : public CompositeMaterial {
   std::shared_ptr<T> get_phase(size_t index) const {
     return std::dynamic_pointer_cast<T>(this->phases.at(index));
   }
+
+  /**
+   * @brief Get n_moles (Used to convert mole fractions / absolute phase amounts).
+   */
+  double set_n_moles() const;
 
  protected:
 
@@ -290,7 +306,6 @@ class Assemblage : public CompositeMaterial {
   // Unique pointer to averaging scheme
   std::shared_ptr<Averaging> averaging_scheme;
 
-  // Molar fractions - define public getter if Assemblage subclassed.
   Eigen::ArrayXd molar_fractions;
 
   // Cached properties (can be reset)
@@ -299,6 +314,8 @@ class Assemblage : public CompositeMaterial {
 
   // Stored (cached) properties not reset
   mutable std::optional<std::vector<int>> endmembers_per_phase;
+
+  mutable std::optional<double> n_moles;
 
   // Compute / setup functions for Composite properties
   void setup_endmember_properties() const;
