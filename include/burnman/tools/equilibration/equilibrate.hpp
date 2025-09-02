@@ -10,10 +10,13 @@
 #ifndef BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
 #define BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
 
+#include <string>
 #include <utility>
+#include <unordered_map>
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/assemblage.hpp"
+#include "burnman/utils/types.hpp"
 
 // namespace equilibrate maybe?
 
@@ -81,5 +84,10 @@ std::pair<double, double> lambda_bounds_func(
   const Eigen::VectorXd& dx,
   const Eigen::VectorXd& x,
   const std::vector<int>& endmembers_per_phase);
+
+EquilibrationParameters get_equilibration_parameters(
+  const Assemblage& assemblage,
+  const FormulaMap& composition,
+  const std::vector<std::unordered_map<std::string, double>>& free_compositional_vectors);
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
