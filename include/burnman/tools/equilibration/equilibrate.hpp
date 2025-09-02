@@ -40,4 +40,13 @@ Eigen::VectorXd get_parameter_vector(
 Eigen::VectorXd get_endmember_amounts(
   const Assemblage& assemblage);
 
+/**
+ * @brief Helper function to set state and composition from parameter vector.
+ *
+ * Parameter vector contains P, T, X.
+ */
+void set_composition_and_state_from_parameters(
+  Assemblage& assemblage,
+  const Eigen::VectorXd& parameters);
+
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED

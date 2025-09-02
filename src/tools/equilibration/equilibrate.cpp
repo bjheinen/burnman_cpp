@@ -7,6 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <cassert>
 #include <Eigen/Dense>
 #include "burnman/tools/equilibration/equilibrate.hpp"
 
@@ -54,4 +55,34 @@ Eigen::VectorXd get_endmember_amounts(
     j += embr_per_phase[static_cast<std::size_t>(i)];
   }
   return abs_amounts;
+}
+
+void set_composition_and_state_from_parameters(
+  Assemblage& assemblage,
+  const Eigen::VectorXd& parameters
+) {
+  // Set P & T (first two parameters)
+  assemblage.set_state(parameters(0), parameters(1));
+  Eigen::Index n_phases = static_cast<Eigen::Index>(assemblage.get_n_phases());
+  Eigen::ArrayXd phase_amounts = Eigen::ArrayXd::Zero(n_phases);
+  Eigen::Index i = 2;
+  for (Eigen::Index phase_idx = 0; phase_idx < n_phases; ++phase_idx) {
+    phase_amounts(phase_idx) = parameters(i);
+    // TODO: get_phase take Eigen::Index?
+    if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(phase_idx))) {
+      // TODO: make public get_n_endmembers - + use internally
+      Eigen::Index n_mbrs = static_cast<Eigen::Index>(ph.compute_n_endmembers());
+      Eigen::ArrayXd f = Eigen::ArrayXd::Zero(n_mbrs);
+      f.segment(1, n_mbrs - 1) = parameters.segment(i + 1, n_mbrs - 1);
+      f(0) = 1.0 - f.tail(n_mbrs - 1).sum();
+      ph.set_composition(f);
+      i += n_mbrs;
+    } else {
+      ++i;
+    }
+  }
+  assert((phase_amounts > -1.0e-8).all());
+  phase_amounts = phase_amounts.abs();
+  assemblage.set_n_moles = phase_amounts.sum();
+  assemblage.set_fractions(phase_amounts / assemblage.get_n_moles());
 }
