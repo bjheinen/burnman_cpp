@@ -94,7 +94,7 @@ EquilibrationParameters get_equilibration_parameters(
   const std::vector<std::unordered_map<std::string, double>>& free_compositional_vectors);
 
 /**
- * @brief Calculates the linear inequality constraints boudning the valid parameter space for an assemblage.
+ * @brief Calculates the linear inequality constraints bounding the valid parameter space for an assemblage.
  *
  * The constraints are:
  *   - Pressure and temperature must be +ve.
