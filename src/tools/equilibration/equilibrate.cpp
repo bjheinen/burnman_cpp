@@ -213,8 +213,57 @@ EquilibrationParameters get_equilibration_parameters(
   prm.reduced_composition_vector = prm.bulk_composition_vector(indep);
   prm.reduced_free_compositional_vectors = prm.free_compositional_vectors(Eigen::all, indep);
   // Process constraints
-  auto [constraint_matrix, constraint_vector] = calculate_constraints(assemblage, n_free_compositional_vectors);
+  auto [constraint_matrix, constraint_vector] = calculate_constraints(assemblage, static_cast<int>(n_free_compositional_vectors));
   prm.constraint_matrix = constraint_matrix;
   prm.constraint_vector = constraint_vector;
   return prm
+}
+
+std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
+  const Assemblage& assemblage,
+  int n_free_compositional_vectors
+) {
+  // Use std::optional for empty bounds
+  std::vector<std::optional<Eigen::ArrayXXd>> bounds;
+  Eigen::Index n_constraints = 0;
+  std::vector<int> embr_per_phase = assemblage.get_endmembers_per_phase();
+  for (std::size_t i = 0; i < embr_per_phase.size(); ++i) {
+    std::optional<Eigen::ArrayXXd> bound;
+    if (embr_per_phase[i] > 1) {
+      bound = assemblage.get_phase<Solution>(i).get_endmember_occupancies();
+      n_constraints += bound.cols(); // n_elements
+    }
+    bounds.push_back(bound);
+    ++n_constraints;
+  }
+  // Setup of vector/matrix
+  Eigen::VectorXd c_vector = Eigen::VectorXd::Zero(n_constraints + 2);
+  Eigen::MatrixXd c_matrix = Eigen::MatrixXd::Zero(
+    n_constraints + 2,
+    assemblage.get_n_endmembers() + 2 + n_free_compositional_vectors
+  );
+  // Manually set P T constraints
+  c_matrix(0, 0) = -1.0 // P > 0
+  c_matrix(1, 1) = -1.0 // T > 0
+  Eigen::Index cidx = 2; // Index of current compositional constraint (row)
+  Eigen::Index pidx = 0; // Starting index of current phase
+  for (std::size_t i = 0; i < embr_per_phase.size(); ++i) {
+    Eigen::Index n = static_cast<Eigen::Index>(embr_per_phase[i]);
+    c_matrix(cidx, pidx + 2) = -1.0 // phase prop > 0
+    // The first endmember proportion is not a free variable
+    // (all endmembers in solution must sum to one)
+    // Re-express the constraints without the first endmember
+    ++c_idx;
+    if (bounds[i].has_value()) {
+      const Eigen::ArrayXXd& occ = *(bounds[i]);
+      Eigen::Index m = occ.cols();
+      c_vector.segment(cidx, m) = -occ.row(0);
+      c_matrix.block(cidx, pidx + 3, m, n - 1) =
+        (occ.row(0).transpose().matrix() * Eigen::VectorXd::Ones(n - 1).transpose())
+        - occ.transpose().block(0, 1, m, n-1).matrix();
+      cidx += m;
+    }
+    pidx += n;
+  }
+  return {c_matrix, c_vector};
 }

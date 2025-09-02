@@ -85,9 +85,28 @@ std::pair<double, double> lambda_bounds_func(
   const Eigen::VectorXd& x,
   const std::vector<int>& endmembers_per_phase);
 
+/**
+ * @brief Builds the equilibration parameter object.
+ */
 EquilibrationParameters get_equilibration_parameters(
   const Assemblage& assemblage,
   const FormulaMap& composition,
   const std::vector<std::unordered_map<std::string, double>>& free_compositional_vectors);
+
+/**
+ * @brief Calculates the linear inequality constraints boudning the valid parameter space for an assemblage.
+ *
+ * The constraints are:
+ *   - Pressure and temperature must be +ve.
+ *   - All phase fractions must be +ve.
+ *   - All site-species occupancies must be +ve.
+ *
+ * The constraints are stored in a vector (b) and matrix (A).
+ * The sign convention is chosen such that the constraint is satisfied
+ * if A·x + b < eps.
+ */
+std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
+  const Assemblage& assemblage,
+  int n_free_compositional_vectors);
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
