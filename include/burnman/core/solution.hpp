@@ -136,6 +136,21 @@ class Solution : public CompositeMaterial {
   Eigen::ArrayXd get_molar_fractions() const;
 
   /**
+   * @brief Returns fractional site occupancy matrix from solution model.
+   */
+  Eigen::ArrayXXd get_endmember_occupancies() const;
+
+  /**
+   * @brief Returns site occupancy matrix (absolute number of atoms) from solution model.
+   */
+  Eigen::ArrayXXd get_endmember_n_occupancies() const;
+
+  /**
+   * @brief Returns site names from solution model.
+   */
+  std::vector<std::string> get_site_names() const;
+
+  /**
    * @brief Retrieves molar excess gibbs free energy the of the solid solution.
    *
    * Uses a cached value if available, or calls

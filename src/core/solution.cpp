@@ -93,6 +93,18 @@ Eigen::ArrayXd Solution::get_molar_fractions() const {
   return this->molar_fractions;
 }
 
+Eigen::ArrayXXd Solution::get_endmember_occupancies() const {
+  return this->solution_model->endmember_occupancies;
+}
+
+Eigen::ArrayXXd Solution::get_endmember_n_occupancies() const {
+  return this->solution_model->endmember_n_occupancies;
+}
+
+std::vector<std::string> Solution::get_site_names() const {
+  return this->solution_model->site_names();
+}
+
 // Public getter functions with caching
 double Solution::get_excess_gibbs() const {
   if (!excess_gibbs.has_value()) {
