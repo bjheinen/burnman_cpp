@@ -102,7 +102,7 @@ Eigen::ArrayXXd Solution::get_endmember_n_occupancies() const {
 }
 
 std::vector<std::string> Solution::get_site_names() const {
-  return this->solution_model->site_names();
+  return this->solution_model->site_names;
 }
 
 // Public getter functions with caching
