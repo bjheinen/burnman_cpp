@@ -10,6 +10,8 @@
 #ifndef BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_HPP_INCLUDED
 #define BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_HPP_INCLUDED
 
+#include <memory>
+#include <utility>
 #include <Eigen/Dense>
 #include "burnman/core/assemblage.hpp"
 
@@ -39,8 +41,15 @@ public:
     const Assemblage& assemblage) const = 0;
 };
 
-// Implemented constraints
+/**
+ * @brief Helper function to construct constraint objects.
+ */
+template <typename ConstraintT, typename... Args>
+std::unique_ptr<EqualityConstraint> make_constraint(Args&&... args) {
+  return std::make_unique<ConstraintT>(std::forward<Args>(args)...);
+}
 
+// Implemented constraints
 class PressureConstraint : EqualityConstraint {
  public:
   explicit PressureConstraint(double value);
