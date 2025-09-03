@@ -31,6 +31,7 @@
  *   PhaseFractionConstraint
  *
  * Use `EqualityConstraint::evaluate()' to compute F.
+ * Use `EqualityConstraint::derivative()' to compute J.
  *
  */
 class EqualityConstraint {
@@ -39,6 +40,10 @@ public:
   virtual double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const = 0;
+  virtual Eigen::VectorXd derivative(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage,
+    Eigen::Index J_size) const = 0;
 };
 
 /**
@@ -56,6 +61,10 @@ class PressureConstraint : EqualityConstraint {
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
+  virtual Eigen::VectorXd derivative(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage,
+    Eigen::Index J_size) const = 0;
  private:
   double value;
 };
@@ -66,6 +75,10 @@ class TemperatureConstraint : EqualityConstraint {
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
+  virtual Eigen::VectorXd derivative(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage,
+    Eigen::Index J_size) const = 0;
  private:
   double value;
 };
@@ -76,6 +89,10 @@ class EntropyConstraint : EqualityConstraint {
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
+  virtual Eigen::VectorXd derivative(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage,
+    Eigen::Index J_size) const = 0;
  private:
   double value;
 };
@@ -86,6 +103,10 @@ class VolumeConstraint : EqualityConstraint {
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
+  virtual Eigen::VectorXd derivative(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage,
+    Eigen::Index J_size) const = 0;
  private:
   double value;
 };
@@ -96,6 +117,10 @@ class PTEllipseConstraint : EqualityConstraint {
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
+  virtual Eigen::VectorXd derivative(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage,
+    Eigen::Index J_size) const = 0;
  private:
   Eigen::Vector2d centre;
   Eigen::Vector2d scaling;
@@ -107,6 +132,10 @@ class LinearConstraintX : EqualityConstraint {
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
+  virtual Eigen::VectorXd derivative(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage,
+    Eigen::Index J_size) const = 0;
  private:
   Eigen::VectorXd A;
   double b;
