@@ -44,7 +44,9 @@ public:
 class PressureConstraint : EqualityConstraint {
  public:
   explicit PressureConstraint(double value);
-  double evaluate(const Eigen::VectorXd& x, const Assemblage&) const override;
+  double evaluate(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage) const override;
  private:
   double value;
 };
@@ -52,7 +54,9 @@ class PressureConstraint : EqualityConstraint {
 class TemperatureConstraint : EqualityConstraint {
  public:
   explicit TemperatureConstraint(double value);
-  double evaluate(const Eigen::VectorXd& x, const Assemblage&) const override;
+  double evaluate(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage) const override;
  private:
   double value;
 };
@@ -60,7 +64,9 @@ class TemperatureConstraint : EqualityConstraint {
 class EntropyConstraint : EqualityConstraint {
  public:
   explicit EntropyConstraint(double value);
-  double evaluate(const Eigen::VectorXd& x, const Assemblage&) const override;
+  double evaluate(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage) const override;
  private:
   double value;
 };
@@ -68,24 +74,30 @@ class EntropyConstraint : EqualityConstraint {
 class VolumeConstraint : EqualityConstraint {
  public:
   explicit VolumeConstraint(double value);
-  double evaluate(const Eigen::VectorXd& x, const Assemblage&) const override;
+  double evaluate(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage) const override;
  private:
   double value;
 };
 
 class PTEllipseConstraint : EqualityConstraint {
  public:
-  PTEllipseConstraint(const Eigen::Array2d& center, const Eigen::Vector2d& scaling);
-  double evaluate(const Eigen::VectorXd& x, const Assemblage&) const override;
+  PTEllipseConstraint(const Eigen::Vector2d& centre, const Eigen::Vector2d& scaling);
+  double evaluate(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage) const override;
  private:
-  Eigen::Vector2d center;
+  Eigen::Vector2d centre;
   Eigen::Vector2d scaling;
 };
 
 class LinearConstraintX : EqualityConstraint {
  public:
   LinearConstraintX(const Eigen::VectorXd& A, double b);
-  double evaluate(const Eigen::VectorXd& x, const Assemblage&) const override;
+  double evaluate(
+    const Eigen::VectorXd& x,
+    const Assemblage& assemblage) const override;
  private:
   Eigen::VectorXd A;
   double b;
