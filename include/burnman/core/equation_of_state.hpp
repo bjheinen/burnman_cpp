@@ -367,6 +367,3 @@ class EquationOfState {
 };
 
 #endif // BURNMAN_CORE_EQUATION_OF_STATE_HPP_INCLUDED
-
-
-
