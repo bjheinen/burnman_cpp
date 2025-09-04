@@ -110,7 +110,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
   int n_free_compositional_vectors);
 
 /**
- * Objective function for equilibration.
+ * @brief Objective function for equilibration.
  *
  * The vector-valued function for which the root is sought.
  * The first two vector values depend on the equality_constraints chosen:
@@ -130,8 +130,20 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
 Eigen::VectorXd F(
   const Eigen::VectorXd& x,
   Assemblage& assemblage,
-  const std::vector<std::unique_ptr<EqualityConstraint>>& constraints,
+  const std::vector<std::unique_ptr<EqualityConstraint>>& equality_constraints,
   const Eigen::VectorXd& reduced_composition_vector,
+  const Eigen::MatrixXd& reduced_free_composition_vectors);
+
+/**
+ * @brief Jacobian function for equilibration, dF/dx.
+ *
+ * TODO: @param
+ *
+ */
+Eigen::MatrixXd J(
+  const Eigen::VectorXd& x,
+  Assemblage& assemblage,
+  const std::vector<std::unique_ptr<EqualityConstraint>>& equality_constraints,
   const Eigen::MatrixXd& reduced_free_composition_vectors);
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
