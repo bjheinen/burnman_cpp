@@ -109,4 +109,29 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
   const Assemblage& assemblage,
   int n_free_compositional_vectors);
 
+/**
+ * Objective function for equilibration.
+ *
+ * The vector-valued function for which the root is sought.
+ * The first two vector values depend on the equality_constraints chosen:
+ *   eq[i] is PressureConstraint, F[i] = P - eq[i].value
+ *   eq[i] is TemperatureConstraint, F[i] = T - eq[i].value
+ *   eq[i] is EntropyConstraint, F[i] = entropy - eq.value
+ *   eq[i] is VolumeConstraint, F[i] = volume - eq.value
+ *   eq[i] is PTEllipseConstraint, F[i] = norm(([P, T] - eq.centre)/eq.scaling) - 1
+ *   eq[i] is LinearConstraintX, F[i] = eq.A.dot(x) - eq.b
+ * See `EqualityConstraint::evaluate()' for details.
+ *
+ * The next set of vector values correspond to the reaction affinities.
+ * The final set of vector values correspond to the bulk composition constraints.
+ *
+ * TODO: @param
+ */
+Eigen::VectorXd F(
+  const Eigen::VectorXd& x,
+  Assemblage& assemblage,
+  const std::vector<std::unique_ptr<EqualityConstraint>>& constraints,
+  const Eigen::VectorXd& reduced_composition_vector,
+  const Eigen::MatrixXd& reduced_free_composition_vectors);
+
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED

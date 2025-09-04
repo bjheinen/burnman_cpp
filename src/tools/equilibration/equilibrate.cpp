@@ -267,3 +267,39 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
   }
   return {c_matrix, c_vector};
 }
+
+Eigen::VectorXd F(
+  const Eigen::VectorXd& x,
+  Assemblage& assemblage,
+  const std::vector<std::unique_ptr<EqualityConstraint>>& equality_constraints,
+  const Eigen::VectorXd& reduced_composition_vector,
+  const Eigen::MatrixXd& reduced_free_composition_vectors
+) {
+  // Update assemblage state
+  set_composition_and_state_from_parameters(assemblage, x);
+  // Retrieve updated endmember amounts
+  Eigen::VectorXd new_endmember_amounts = get_endmember_amounts(assemblage);
+  // Allocate F
+  Eigen::Index n_eqc = static_cast<Eigen::Index>(equality_constraints.size());
+  Eigen::VectorXd eqns = Eigen::VectorXd::Zero(
+    static_cast<Eigen::Index>(assemblage.get_n_endmembers()) + n_eqc);
+  // Fill equality constraint portion of F
+  for (Eigen::Index i = 0; i < n_eqc; ++i) {
+    eqns(i) = equality_constraints[static_cast<std::size_t>(i)]->evaluate(x, assemblage);
+  }
+  // Compute reduced composition vector
+  Eigen::VectorXd new_reduced_composition_vector = reduced_composition_vector;
+  if (n_eqc > 2) {
+    new_reduced_composition_vector +=
+      x.tail(n_eqc - 2).transpose() * reduced_free_composition_vectors;
+  }
+  // TODO:: Assemblage::get_reaction_affinities
+  Eigen::Index n_reac = static_cas<Eigen::Index>(assemblage.get_n_reactions());
+  eqns.segment(n_eqc, n_reac) = assemblage.get_reaction_affinities();
+  // TODO:: Assemblage::get_reduced_stoichiometric_matrix
+  eqns.tail(eqns.size() - (n_eqc + n_reac)) = (
+    assemblage.get_reduced_stoichiometric_matrix().transpose()
+    * new_endmember_amounts
+    ) - new_reduced_composition_vector;
+  return eqns;
+}
