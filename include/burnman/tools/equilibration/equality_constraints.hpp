@@ -28,7 +28,7 @@
  *   EntropyConstraint
  *   VolumeConstraint
  *   PTEllipseConstraint
- *   PhaseFractionConstraint
+ *   LinearConstraintX
  *
  * Use `EqualityConstraint::evaluate()' to compute F.
  * Use `EqualityConstraint::derivative()' to compute J.
