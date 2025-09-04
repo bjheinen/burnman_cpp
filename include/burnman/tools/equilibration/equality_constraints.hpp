@@ -54,6 +54,36 @@ std::unique_ptr<EqualityConstraint> make_constraint(Args&&... args) {
   return std::make_unique<ConstraintT>(std::forward<Args>(args)...);
 }
 
+/**
+ * @brief Helper function to construct multiple constraints from vector of constraint values.
+ */
+template <typename ConstraintT>
+std::vector<std::unique_ptr<EqualityConstraint>>
+make_constraints_from_array(const Eigen::ArrayXd& values) {
+  std::vector<std::unique_ptr<EqualityConstraint>> constraints;
+  constraints.reserve(static_cast<std::size_t>(values.size()));
+  for (double v : values) {
+    constraints.push_back(make_constraint<ConstraintT>(v));
+  }
+  return constraints;
+}
+
+// Specialised template for PTEllipseConstraint
+template <>
+std::vector<std::unique_ptr<EqualityConstraint>>
+make_constraints_from_array<PTEllipseConstraint>(
+  const std::pair<Eigen::ArrayXd, Eigen::ArrayXd>& values
+) {
+  const Eigen::ArrayXd& centres = values.first;
+  const Eigen::ArrayXd& scales = values.second;
+  std::vector<std::unique_ptr<EqualityConstraint>> constraints;
+  constraints.reserve(static_cast<std::size_t>(centres.size()));
+  for (Eigen::Index i = 0; i < centres.szie(); ++i) {
+    constraints.push_back(make_constraint<PTEllipseConstraint>(centres(i), scales(i)));
+  }
+  return constraints;
+}
+
 // Implemented constraints
 class PressureConstraint : EqualityConstraint {
  public:
