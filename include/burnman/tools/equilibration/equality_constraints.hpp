@@ -171,4 +171,24 @@ class LinearConstraintX : EqualityConstraint {
   double b;
 };
 
+// Subclasses for constructing Linear constraints from higher level args
+
+// Forward declaration of EquilibrationParameters
+struct EquilibrationParameters;
+
+class PhaseFractionConstraint : LinearConstraintX {
+ public:
+  PhaseFractionConstraint(
+    Eigen::Index phase_index,
+    double fraction,
+    const EquilibrationParameters& prm);
+ private:
+  Eigen::Index phase_index;
+  double phase_fraction;
+  static Eigen::VectorXd compute_A(
+    std::size_t phase_idx,
+    double fraction,
+    const EquilibrationParameters& prm);
+};
+
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_HPP_INCLUDED

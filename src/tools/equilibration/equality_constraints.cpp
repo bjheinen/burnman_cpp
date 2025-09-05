@@ -8,6 +8,8 @@
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
 #include "burnman/tools/equilibrate/equality_constraints.hpp"
+// TODO: could put prm in types.hpp, or a separate parameters.hpp
+#include "burnman/tools/equilibrate/equilibration.hpp"
 
 // TODO: think about namespaces
 
@@ -31,6 +33,26 @@ PTEllipseConstraint::PTEllipseConstraint(
 
 LinearConstraintX::LinearConstraintX(const Eigen::VectorXd& A, double b)
   : A(A), b(b) {}
+
+PhaseFractionConstraint::PhaseFractionConstraint(
+  Eige::Index phase_index,
+  double fraction,
+  const EquilibrationParameters& prm)
+  : LinearConstraintX(compute_A(phase_idx, fraction, prm), 0.0),
+    phase_index(phase_index),
+    fraction(fraction) {}
+
+Eigen::VectorXd PhaseFractionConstraint::compute_A(
+  Eigen::Index phase_index,
+  double fraction,
+  const EquilibrationParameters& prm
+) {
+  Eigen::VectorXd A = Eigen::VectorXd::Zero(prm.n_parameters);
+  A(prm.phase_amount_indices) =
+    Eigen::VectorXd::Constant(prm.phase_amount_indices.size(), -fraction);
+  A(prm.phase_amount_indices(phase_idx)) += 1.0;
+  return A;
+}
 
 // Evaluate implementations
 double PressureConstraint::evaluate(
