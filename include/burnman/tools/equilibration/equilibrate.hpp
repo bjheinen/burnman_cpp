@@ -20,6 +20,9 @@
 
 // namespace equilibrate maybe?
 
+// TODO: move to types.hpp?
+using FreeVectorMap = std::unordered_map<std::string, double>;
+
 /**
  * @brief Contains parameters and data required for equilibration.
  */
@@ -170,6 +173,16 @@ Eigen::MatrixXd J(
  *
  * TODO: @param
  */
-
+// TODO: EquilibrateResult or similar to hold output?
+? equilibrate(
+  const FormulaMap& composition,
+  Assemblage& assemblage,
+  const ConstraintList& equality_constraints,
+  const std::vector<FreeVectorMap>& free_compositional_vectors = {},
+  double tol = 1.0e-3,
+  bool store_iterates = false,
+  bool store_assemblage = true,
+  int max_iterations = 100,
+  bool verbose = false);
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED

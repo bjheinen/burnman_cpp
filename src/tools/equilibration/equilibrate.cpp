@@ -414,3 +414,143 @@ Eigen::MatrixXd J(
   }
   return jacobian;
 }
+
+// TODO: EquilibrateResult or similar to hold output?
+? equilibrate(
+  const FormulaMap& composition,
+  Assemblage& assemblage,
+  const ConstraintList& equality_constraints,
+  const std::vector<FreeVectorMap>& free_compositional_vectors = {},
+  double tol = 1.0e-3,
+  bool store_iterates = false,
+  bool store_assemblage = true,
+  int max_iterations = 100,
+  bool verbose = false
+) {
+  // Check compositions of solutions set
+  // TODO:: could implement a has_composition() for convenience here
+  for (std::size_t i = 0; i < static_cast<std::size_t>(assemblage.get_n_phases()); ++i) {
+    if (auto& ph = assemblage.get_phase<Solution>(i)) {
+      if (!ph->get_molar_fractions().size()) {
+        throw std::runtime_error(
+          "Set composition for solution " + ph->get_name() + " before running equilibrate!"
+        );
+      }
+    }
+  }
+  // Check number constraints OK
+  std::size_t n_equality_constraints = equality_constraints.size();
+  std::size_t n_free_compositional_vectors = free_compositional_vectors.size();
+  if (n_equality_constraints != n_free_compositional_vectors + 2) {
+    throw std::runtime_error(
+      "The number of equality constraints (" + std::to_string(n_equality_constraints)
+      + ") must be two more than the number of free_compositional_vectors ("
+      + std::to_string(n_free_compositional_vectors) + ")."
+    );
+  }
+  // Check free_compositional_vectors values sum to zero
+  for (auto const& vec : free_compositional_vectors) {
+    double sum = 0;
+    for (const auto& pair : vec) {
+      sum += pair.second;
+    }
+    if (std::abs(sum) > constants::precision::abs_tolerance) {
+      throw std::runtime_error(
+        "The amounts of each free_compositional_vector must sum to zero");
+    }
+  }
+
+
+  // Set default assemblage molar_fractions if none
+  if (!assemblage.get_molar_fractions().size()) {
+    int n_phases = assemblage->get_n_phases();
+    Eigen::ArrayXd f = Eigen::ArrayXd::Constant(n_phases, 1.0 / n_phases);
+    assemblage->set_fractions(f);
+  }
+  // Set n_moles
+  double comp_sum = 0
+  for (const auto& pair : composition) {
+    comp_sum += pair.second;
+  }
+  double form_sum = 0;
+  for (const auto& pair : assemblage.get_formula()) {
+    form_sum += pair.second;
+  }
+  assemblage.set_n_moles(comp_sum / form_sum);
+
+  // Make parameters
+  EquilibrationParameters prm = get_equilibration_parameters(
+    assemblage, composition, free_compositional_vectors);
+
+  // Set up solves constraint indices from ConstraintList
+  std::vector<std::size_t> nc;
+  nc.reserve(equality_constraints.size());
+  for (const ConstraintGroup& c_group : equality_constraints) {
+    nc.push_back(c_group.size());
+  }
+
+  // Set default state if none
+  double initial_pressure = 5.0e9;
+  double initial_temperature = 1200.0;
+  // overwrite if state already set
+  if (assemblage.has_state()) {
+    initial_pressure = assemblage.get_pressure();
+    initial_temperature = assemblage.get_temperature();
+  }
+  // Overwrite with state from constraints if applicable
+  for (const ConstraintGroup& c_group : equality_constraints) {
+    const auto& constraint = c_group[0];
+    if (auto P_c = dynamic_cast<PressureConstraint*>(constraint.get())) {
+      initial_pressure = P_c->value;
+    } else if (auto T_c = dynamic_cast<TemperatureConstraint*>(constraint.get())) {
+      initial_temperature = T_c->value;
+    } else if (auto PTE_c = dynamic_cast<PTEllipseConstraint*>(constraint.get())) {
+      Eigen::Vector2d value = PTE_c->scaling;
+      initial_pressure = value(0);
+      initial_temperature = value(1);
+    }
+  }
+  // Set the state
+  assemblage.set_state(initial_pressure, initial_temperature);
+
+  // Get parameter vector (x)
+  Eigen::VectorXd parameter_vector = get_parameter_vector(assemblage, n_free_compositional_vectors);
+
+  // Set up combinations of constraints for the solve loop
+
+  // Loop over problems and solve for each one
+
+}
+
+// TODO: if we want to store assemblages like in the python then they need to be copyable:
+//       maybe possible with clones?
+//       Material:
+//         virtual std::shared_ptr<Material> clone() const = 0;
+//       Mineral:
+//         std::shared_ptr<Material> clone() const override {
+//           return std::make_shared<Mineral>(*this);
+//         }
+//       SolutionModel:
+//         virtual std::shared_ptr<SolutionModel> clone() const = 0;
+//       IdealSolution etc.:
+//         std::shared_ptr<SolutionModel> clone() const override {
+//           return std::make_shared<IdealSolutionModel>(*this);
+//         }
+//       Solution: (implement to copy solution models)
+//         std::shared_ptr<Material> clone() const override {
+//           auto copy = std::make_shared<Solution>(*this);
+//           if (solution_model) {
+//             copy->solution_model = solution_model->clone();
+//           }
+//           return copy;
+//          }
+//       Assemblage (implement to copy phases)
+//         std::shared_ptr<Material> clone() const override {
+//           auto copy = std::make_shared<Assemblage>(*this);
+//           copy->phases.clear();
+//           for (const auto& phase : phases) {
+//             copy->phases.push_back(phase->clone());
+//           }
+//           return copy;
+//         }
+//       Then: std::shared_ptr<Assemblage> copy = std::dynamic_pointer_cast<Assemblage>(assemblage.clone());
