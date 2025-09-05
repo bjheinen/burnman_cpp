@@ -17,6 +17,12 @@
 
 // namespace?
 
+// Constraint group to keep expanded constraint vectors together
+// Single constraints also get put in ConstraintGroup for normalisation
+using ConstraintGroup = std::vector<std::unique_ptr<EqualityConstraint>>;
+// Nested list of constraint groups for equilibrate function
+using ConstraintList = std::vector<ConstraintGroup>;
+
 // Virtual base class
 /**
  * @brief Base class for linear equality constraints
@@ -82,6 +88,24 @@ make_constraints_from_array<PTEllipseConstraint>(
     constraints.push_back(make_constraint<PTEllipseConstraint>(centres(i), scales(i)));
   }
   return constraints;
+}
+
+// Helpers to wrap single constraint or pass through an existing group
+inline ConstraintGroup wrap_constraint(std::unique_ptr<EqualityConstraint> c) {
+  return {std::move(c)};
+}
+
+inline ConstraintGroup wrap_constraint(ConstraintGroup g) {
+  return g;
+}
+
+// Helper to construct a ConstraintList from any sequence of single/multiple constraints
+// TODO:: docs / usage example
+template <typename... Args>
+ConstraintList make_constraint_list(Args&&... args) {
+  ConstraintList list;
+  (list.push_back(wrap_constraint(std::forward<Args>(args))), ...);
+  return list;
 }
 
 // Implemented constraints

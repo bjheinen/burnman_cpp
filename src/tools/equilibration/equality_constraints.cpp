@@ -103,6 +103,7 @@ std::pair<Eigen::VectorXd, double> PhaseCompositionConstraint::compute_Ab(
   const Assemblage& assemblage,
   const EquilibrationParameters& prm
 ) {
+  // TODO: Confirm len site_names, numerator, denominator all equal
   // Get phase
   const auto& phase = assemblage.get_phase<Solution>(static_cast<std::size_t>(phase_index));
   // If the phase isn't a solution we should throw an error
