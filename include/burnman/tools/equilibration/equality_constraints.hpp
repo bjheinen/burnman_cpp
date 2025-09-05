@@ -123,7 +123,7 @@ class PressureConstraint : EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const = 0;
- private:
+ protected:
   double value;
 };
 
@@ -137,7 +137,7 @@ class TemperatureConstraint : EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const = 0;
- private:
+ protected:
   double value;
 };
 
@@ -151,7 +151,7 @@ class EntropyConstraint : EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const = 0;
- private:
+ protected:
   double value;
 };
 
@@ -165,7 +165,7 @@ class VolumeConstraint : EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const = 0;
- private:
+ protected:
   double value;
 };
 
@@ -179,7 +179,7 @@ class PTEllipseConstraint : EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const = 0;
- private:
+ protected:
   Eigen::Vector2d centre;
   Eigen::Vector2d scaling;
 };
@@ -194,7 +194,7 @@ class LinearXConstraint : EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const = 0;
- private:
+ protected:
   Eigen::VectorXd A;
   double b;
 };
@@ -210,9 +210,10 @@ class PhaseFractionConstraint : LinearXConstraint {
     Eigen::Index phase_index,
     double fraction,
     const EquilibrationParameters& prm);
- private:
+ protected:
   Eigen::Index phase_index;
   double phase_fraction;
+ private:
   static Eigen::VectorXd compute_A(
     std::size_t phase_idx,
     double fraction,
@@ -229,12 +230,13 @@ class PhaseCompositionConstraint : LinearXConstraint {
     double value,
     const Assemblage& assemblage,
     const EquilibrationParameters& prm);
- private:
+ protected:
   Eigen::Index phase_index;
   std::vector<std::string> site_names;
   Eigen::VectorXd numerator;
   Eigen::VectorXd denominator;
   double value;
+ private:
   PhaseCompositionConstraint(
     const std::pair<Eigen::VectorXd, double>& Ab,
     Eigen::Index phase_index,
