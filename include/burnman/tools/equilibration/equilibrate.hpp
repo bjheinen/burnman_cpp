@@ -119,7 +119,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
  *   eq[i] is EntropyConstraint, F[i] = entropy - eq.value
  *   eq[i] is VolumeConstraint, F[i] = volume - eq.value
  *   eq[i] is PTEllipseConstraint, F[i] = norm(([P, T] - eq.centre)/eq.scaling) - 1
- *   eq[i] is LinearConstraintX, F[i] = eq.A.dot(x) - eq.b
+ *   eq[i] is LinearXConstraint, F[i] = eq.A.dot(x) - eq.b
  * See `EqualityConstraint::evaluate()' for details.
  *
  * The next set of vector values correspond to the reaction affinities.
@@ -145,5 +145,31 @@ Eigen::MatrixXd J(
   Assemblage& assemblage,
   const std::vector<std::unique_ptr<EqualityConstraint>>& equality_constraints,
   const Eigen::MatrixXd& reduced_free_composition_vectors);
+
+/**
+ * @brief Finds equilibrium state of assemblage subject to constraints.
+ *
+ * This finds the thermodynamic equilibrium state of an assemblage subject to
+ * given equality constraints by solving a set of nonlinear equations
+ * related to the chemical potentials and other state variables of the system.
+ *
+ * Usage requires an assemblage and 2 + n_c equality constraints, where n_c is
+ * the number of bulk compositional degrees of freedom. The equilibrate
+ * function attempts to find the remaining unknowns that satisfy those constraints.
+ *
+ * See `EqualityConstraint' for information on constraints TODO: note namespace here
+ * Possible constraints are:
+ *   PressureConstraint
+ *   TemperatureConstraint
+ *   EntropyConstraint
+ *   VolumeConstraint
+ *   PTEllipseConstraint
+ *   PhaseFractionConstraint
+ *   PhaseCompositionConstraint
+ *   LinearXConstraint
+ *
+ * TODO: @param
+ */
+
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED

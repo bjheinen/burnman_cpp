@@ -17,6 +17,10 @@
 
 // namespace?
 
+// TODO: Currently cant make a constraint group for LinearXConstraint,
+//       PhaseFractionConstraint, or PhaseCompositionConstraint.
+//       Can add extra template specialisation for these, but probably not needed ever.
+
 // Constraint group to keep expanded constraint vectors together
 // Single constraints also get put in ConstraintGroup for normalisation
 using ConstraintGroup = std::vector<std::unique_ptr<EqualityConstraint>>;
@@ -34,7 +38,7 @@ using ConstraintList = std::vector<ConstraintGroup>;
  *   EntropyConstraint
  *   VolumeConstraint
  *   PTEllipseConstraint
- *   LinearConstraintX
+ *   LinearXConstraint
  *
  * Use `EqualityConstraint::evaluate()' to compute F.
  * Use `EqualityConstraint::derivative()' to compute J.
@@ -180,9 +184,9 @@ class PTEllipseConstraint : EqualityConstraint {
   Eigen::Vector2d scaling;
 };
 
-class LinearConstraintX : EqualityConstraint {
+class LinearXConstraint : EqualityConstraint {
  public:
-  LinearConstraintX(const Eigen::VectorXd& A, double b);
+  LinearXConstraint(const Eigen::VectorXd& A, double b);
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
@@ -200,7 +204,7 @@ class LinearConstraintX : EqualityConstraint {
 // Forward declaration of EquilibrationParameters
 struct EquilibrationParameters;
 
-class PhaseFractionConstraint : LinearConstraintX {
+class PhaseFractionConstraint : LinearXConstraint {
  public:
   PhaseFractionConstraint(
     Eigen::Index phase_index,
@@ -215,7 +219,7 @@ class PhaseFractionConstraint : LinearConstraintX {
     const EquilibrationParameters& prm);
 };
 
-class PhaseCompositionConstraint : LinearConstraintX {
+class PhaseCompositionConstraint : LinearXConstraint {
  public:
   PhaseCompositionConstraint(
     Eigen::Index phase_index,

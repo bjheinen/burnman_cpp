@@ -32,14 +32,14 @@ PTEllipseConstraint::PTEllipseConstraint(
   const Eigen::Vector2d& scaling)
   : centre(centre), scaling(scaling) {}
 
-LinearConstraintX::LinearConstraintX(const Eigen::VectorXd& A, double b)
+LinearXConstraint::LinearXConstraint(const Eigen::VectorXd& A, double b)
   : A(A), b(b) {}
 
 PhaseFractionConstraint::PhaseFractionConstraint(
   Eige::Index phase_index,
   double fraction,
   const EquilibrationParameters& prm)
-  : LinearConstraintX(compute_A(phase_idx, fraction, prm), 0.0),
+  : LinearXConstraint(compute_A(phase_idx, fraction, prm), 0.0),
     phase_index(phase_index),
     fraction(fraction) {}
 
@@ -87,7 +87,7 @@ PhaseCompositionConstraint::PhaseCompositionConstraint(
   const Eigen::VectorXd& numerator,
   const Eigen::VectorXd& denominator,
   double value)
-  : LinearConstraintX(Ab.first, Ab.second),
+  : LinearXConstraint(Ab.first, Ab.second),
   phase_index(phase_index),
   site_names(site_names),
   numerator(numerator),
@@ -193,7 +193,7 @@ double PTEllipseConstraint::evaluate(
   return v_scaled.matrix().norm() - 1.0;
 }
 
-double LinearConstraintX::evaluate(
+double LinearXConstraint::evaluate(
   const Eigen::VectorXd& x,
   const Assemblage& assemblage [[maybe_unused]]
 ) const {
@@ -290,7 +290,7 @@ Eigen::VectorXd PTEllipseConstraint::derivative(
   return row;
 }
 
-Eigen::VectorXd LinearConstraintX::derivative(
+Eigen::VectorXd LinearXConstraint::derivative(
   const Eigen::VectorXd& x [[maybe_unused]],
   const Assemblage& assemblage [[maybe_unused]],
   Eigen::Index J_size
