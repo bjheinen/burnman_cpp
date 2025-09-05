@@ -7,6 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <numeric>
 #include "burnman/tools/equilibrate/equality_constraints.hpp"
 // TODO: could put prm in types.hpp, or a separate parameters.hpp
 #include "burnman/tools/equilibrate/equilibration.hpp"
@@ -52,6 +53,106 @@ Eigen::VectorXd PhaseFractionConstraint::compute_A(
     Eigen::VectorXd::Constant(prm.phase_amount_indices.size(), -fraction);
   A(prm.phase_amount_indices(phase_idx)) += 1.0;
   return A;
+}
+
+PhaseCompositionConstraint::PhaseCompositionConstraint(
+  Eigen::Index phase_index,
+  const std::vector<std::string>& site_names,
+  const Eigen::VectorXd& numerator,
+  const Eigen::VectorXd& denominator,
+  double value,
+  const Assemblage& assemblage,
+  const EquilibrationParameters& prm)
+  : PhaseCompositionConstraint(
+    compute_Ab(
+      phase_index,
+      site_names,
+      numerator,
+      denominator,
+      value,
+      assemblage,
+      prm
+    ),
+    phase_index,
+    site_names,
+    numerator,
+    denominator,
+    value
+  ) {}
+
+PhaseCompositionConstraint::PhaseCompositionConstraint(
+  const std::pair<Eigen::VectorXd, double>& Ab,
+  Eigen::Index phase_index,
+  const std::vector<std::string>& site_names,
+  const Eigen::VectorXd& numerator,
+  const Eigen::VectorXd& denominator,
+  double value)
+  : LinearConstraintX(Ab.first, Ab.second),
+  phase_index(phase_index),
+  site_names(site_names),
+  numerator(numerator),
+  denominator(denominator),
+  value(value) {}
+
+std::pair<Eigen::VectorXd, double> PhaseCompositionConstraint::compute_Ab(
+  Eigen::Index phase_index,
+  const std::vector<std::string>& site_names,
+  const Eigen::VectorXd& numerator,
+  const Eigen::VectorXd& denominator,
+  double value,
+  const Assemblage& assemblage,
+  const EquilibrationParameters& prm
+) {
+  // Get phase
+  const auto& phase = assemblage.get_phase<Solution>(static_cast<std::size_t>(phase_index));
+  // If the phase isn't a solution we should throw an error
+  if (!phase) {
+    throw std::runtime_error(
+      "Phase at index " + std::to_string(phase_index) + " is not a solution!");
+  }
+  // all solution site names
+  const std::vector<std::string>& solution_site_names = phase.get_site_names();
+  // Get site indices from site names
+  Eigen::ArrayXi site_indices(static_cast<Eigen::Index>(site_names.size()));
+  for (std::size_t i = 0; i < site_names.size(); ++i) {
+    auto it = std::find(
+      solution_site_names.begin(), solution_site_names.end(),
+      site_names[i]
+    );
+    if (it == solution_site_names.end()) {
+      throw std::runtime_error("Site name " + site_names[i] + " not found!")
+    }
+    site_indices(static_cast<Eigen::Index>(i)) =
+      static_cast<int>(
+        std::distance(solution_site_names.begin(), it)
+      );
+  }
+  // Get indices for x vector
+  const std::vector<int>& embr_per_phase = assemblage.get_endmembers_per_phase();
+  Eigen::Index start_idx = std::accumulate(
+    embr_per_phase.begin(),
+    embr_per_phase.begin() + phase_index,
+    0
+  ) + 3;
+  Eigen::Index n_indices = embr_per_phase[static_cast<std::size_t>(phase_index)] - 1;
+  // Get endmember occupancy matrix
+  const Eigen::ArrayXXd& n_occ = phase.get_endmember_n_occupancies();
+  // Convert site constraints into endmember constraints
+  // Shape should be (n_endmembers, 2)
+  Eigen::MatrixXd numer_denom(2, numerator.size());
+  numer_denom.row(0) = numerator;
+  numer_denom.row(2) = denominator;
+  Eigen::MatrixXd embr_c = n_occ(Eigen::all, site_indices).matrix()
+    * numer_denom.transpose();
+  // Compute b using 1st two values
+  double b = value * embr_c(0, 1) - embr_c(0, 0);
+  // Compute A
+  embr_c.rowwise() -= embr_c.row(0).eval();
+  Eigen::VectorXd numer = embr_c.col(0).segment(1, n_indices);
+  Eigen::VectorXd denom = embr_c.col(1).segment(1, n_indices);
+  Eigen::VectorXd A = Eigen::VectorXd::Zero(prm.n_parameters);
+  A.segment(start_idx, n_indices) = numer - value * denom;
+  return {A, b};
 }
 
 // Evaluate implementations

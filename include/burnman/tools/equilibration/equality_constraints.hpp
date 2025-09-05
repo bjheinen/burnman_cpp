@@ -191,4 +191,37 @@ class PhaseFractionConstraint : LinearConstraintX {
     const EquilibrationParameters& prm);
 };
 
+class PhaseCompositionConstraint : LinearConstraintX {
+ public:
+  PhaseCompositionConstraint(
+    Eigen::Index phase_index,
+    const std::vector<std::string>& site_names,
+    const Eigen::VectorXd& numerator,
+    const Eigen::VectorXd& denominator,
+    double value,
+    const Assemblage& assemblage,
+    const EquilibrationParameters& prm);
+ private:
+  Eigen::Index phase_index;
+  std::vector<std::string> site_names;
+  Eigen::VectorXd numerator;
+  Eigen::VectorXd denominator;
+  double value;
+  PhaseCompositionConstraint(
+    const std::pair<Eigen::VectorXd, double>& Ab,
+    Eigen::Index phase_index,
+    const std::vector<std::string>& site_names,
+    const Eigen::VectorXd& numerator,
+    const Eigen::VectorXd& denominator,
+    double value);
+  static std::pair<Eigen::VectorXd, double> compute_Ab(
+    Eigen::Index phase_index,
+    const std::vector<std::string>& site_names,
+    const Eigen::VectorXd& numerator,
+    const Eigen::VectorXd& denominator,
+    double value,
+    const Assemblage& assemblage,
+    const EquilibrationParameters& prm);
+};
+
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_HPP_INCLUDED
