@@ -39,6 +39,8 @@ using ConstraintList = std::vector<ConstraintGroup>;
  *   VolumeConstraint
  *   PTEllipseConstraint
  *   LinearXConstraint
+ *   PhaseFractionConstraint
+ *   PhaseCompositionConstraint
  *
  * Use `EqualityConstraint::evaluate()' to compute F.
  * Use `EqualityConstraint::derivative()' to compute J.
@@ -47,6 +49,7 @@ using ConstraintList = std::vector<ConstraintGroup>;
 class EqualityConstraint {
 public:
   virtual ~EqualityConstraint() = default;
+  virtual std::unique_ptr<EqualityConstraint> clone() const = 0;
   virtual double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const = 0;
@@ -116,6 +119,7 @@ ConstraintList make_constraint_list(Args&&... args) {
 class PressureConstraint : EqualityConstraint {
  public:
   explicit PressureConstraint(double value);
+  std::unique_ptr<EqualityConstraint> clone() const override;
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
@@ -130,6 +134,7 @@ class PressureConstraint : EqualityConstraint {
 class TemperatureConstraint : EqualityConstraint {
  public:
   explicit TemperatureConstraint(double value);
+  std::unique_ptr<EqualityConstraint> clone() const override;
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
@@ -144,6 +149,7 @@ class TemperatureConstraint : EqualityConstraint {
 class EntropyConstraint : EqualityConstraint {
  public:
   explicit EntropyConstraint(double value);
+  std::unique_ptr<EqualityConstraint> clone() const override;
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
@@ -158,6 +164,7 @@ class EntropyConstraint : EqualityConstraint {
 class VolumeConstraint : EqualityConstraint {
  public:
   explicit VolumeConstraint(double value);
+  std::unique_ptr<EqualityConstraint> clone() const override;
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
@@ -172,6 +179,7 @@ class VolumeConstraint : EqualityConstraint {
 class PTEllipseConstraint : EqualityConstraint {
  public:
   PTEllipseConstraint(const Eigen::Vector2d& centre, const Eigen::Vector2d& scaling);
+  std::unique_ptr<EqualityConstraint> clone() const override;
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
@@ -187,6 +195,7 @@ class PTEllipseConstraint : EqualityConstraint {
 class LinearXConstraint : EqualityConstraint {
  public:
   LinearXConstraint(const Eigen::VectorXd& A, double b);
+  std::unique_ptr<EqualityConstraint> clone() const override;
   double evaluate(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage) const override;
@@ -210,6 +219,7 @@ class PhaseFractionConstraint : LinearXConstraint {
     Eigen::Index phase_index,
     double fraction,
     const EquilibrationParameters& prm);
+  std::unique_ptr<EqualityConstraint> clone() const override;
  protected:
   Eigen::Index phase_index;
   double phase_fraction;
@@ -230,6 +240,7 @@ class PhaseCompositionConstraint : LinearXConstraint {
     double value,
     const Assemblage& assemblage,
     const EquilibrationParameters& prm);
+  std::unique_ptr<EqualityConstraint> clone() const override;
  protected:
   Eigen::Index phase_index;
   std::vector<std::string> site_names;

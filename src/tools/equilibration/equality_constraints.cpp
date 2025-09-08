@@ -156,6 +156,39 @@ std::pair<Eigen::VectorXd, double> PhaseCompositionConstraint::compute_Ab(
   return {A, b};
 }
 
+// Clone overrides
+std::unique_ptr<EqualityConstraint> PressureConstraint::clone() const {
+  return std::make_unique<PressureConstraint>(*this);
+}
+
+std::unique_ptr<EqualityConstraint> TemperatureConstraint::clone() const {
+  return std::make_unique<TemperatureConstraint>(*this);
+}
+
+std::unique_ptr<EqualityConstraint> EntropyConstraint::clone() const {
+  return std::make_unique<EntropyConstraint>(*this);
+}
+
+std::unique_ptr<EqualityConstraint> VolumeConstraint::clone() const {
+  return std::make_unique<VolumeConstraint>(*this);
+}
+
+std::unique_ptr<EqualityConstraint> PTEllipseConstraint::clone() const {
+  return std::make_unique<PTEllipseConstraint>(*this);
+}
+
+std::unique_ptr<EqualityConstraint> LinearXConstraint::clone() const {
+  return std::make_unique<LinearXConstraint>(*this);
+}
+
+std::unique_ptr<EqualityConstraint> PhaseFractionConstraint::clone() const {
+  return std::make_unique<PhaseFractionConstraint>(*this);
+}
+
+std::unique_ptr<EqualityConstraint> PhaseCompositionConstraint::clone() const {
+  return std::make_unique<PhaseCompositionConstraint>(*this);
+}
+
 // Evaluate implementations
 double PressureConstraint::evaluate(
   const Eigen::VectorXd& x,
