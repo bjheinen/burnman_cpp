@@ -181,8 +181,7 @@ Eigen::MatrixXd J(
  *
  * TODO: @param
  */
-// TODO: EquilibrateResult or similar to hold output?
-? equilibrate(
+EquilibrateResult equilibrate(
   const FormulaMap& composition,
   Assemblage& assemblage,
   const ConstraintList& equality_constraints,
