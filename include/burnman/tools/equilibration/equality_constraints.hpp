@@ -122,7 +122,7 @@ class PressureConstraint : EqualityConstraint {
   virtual Eigen::VectorXd derivative(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
-    Eigen::Index J_size) const = 0;
+    Eigen::Index J_size) const override;
  protected:
   double value;
 };
@@ -136,7 +136,7 @@ class TemperatureConstraint : EqualityConstraint {
   virtual Eigen::VectorXd derivative(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
-    Eigen::Index J_size) const = 0;
+    Eigen::Index J_size) const override;
  protected:
   double value;
 };
@@ -150,7 +150,7 @@ class EntropyConstraint : EqualityConstraint {
   virtual Eigen::VectorXd derivative(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
-    Eigen::Index J_size) const = 0;
+    Eigen::Index J_size) const override;
  protected:
   double value;
 };
@@ -164,7 +164,7 @@ class VolumeConstraint : EqualityConstraint {
   virtual Eigen::VectorXd derivative(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
-    Eigen::Index J_size) const = 0;
+    Eigen::Index J_size) const override;
  protected:
   double value;
 };
@@ -178,7 +178,7 @@ class PTEllipseConstraint : EqualityConstraint {
   virtual Eigen::VectorXd derivative(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
-    Eigen::Index J_size) const = 0;
+    Eigen::Index J_size) const override;
  protected:
   Eigen::Vector2d centre;
   Eigen::Vector2d scaling;
@@ -193,7 +193,7 @@ class LinearXConstraint : EqualityConstraint {
   virtual Eigen::VectorXd derivative(
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
-    Eigen::Index J_size) const = 0;
+    Eigen::Index J_size) const override;
  protected:
   Eigen::VectorXd A;
   double b;
