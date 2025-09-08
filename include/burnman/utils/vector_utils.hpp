@@ -55,6 +55,22 @@ namespace utils {
     return flat_index;
   }
 
+  /**
+   * @brief Maps flat index back to N-D grid index given strides.
+   *
+   * @see `compute_strides'
+   */
+  inline std::vector<std::size_t> map_index(
+    std::size_t flat_index,
+    const std::vector<std::size_t>& strides
+  ) {
+    std::vector<std::size_t> indices(strides.size());
+    for (std::size_t dim = 0; dim < strides.size(); ++dim) {
+      indices[dim] = flat_index / strides[dim];
+      flat_index %= strides[dim];
+    }
+  }
+
 } // namespace utils
 
 #endif // BURNMAN_UTILS_VECTOR_UTILS_INCLUDED
