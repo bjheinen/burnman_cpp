@@ -133,37 +133,37 @@ struct NDArray {
    * @brief Construct an NDArray with a given shape.
    */
   explicit NDArray(const std::vector<std::size_t>& shape)
-    : shape(shape), strides(utils::compute_strides(shape), size(compute_size(shape)))
+    : shape_(shape), strides_(utils::compute_strides(shape), size_(compute_size(shape)))
   {
-    this->data.resize(this->size);
+    this->storage_.resize(this->size_);
   }
 
   /**
    * @brief Convenience function for data access
    */
   std::vector<T>& data() {
-    return this->data;
+    return this->storage_;
   }
 
   /**
    * @brief Convenience function for read-only data access.
    */
   const std::vector<T>& data() const {
-    return this->data;
+    return this->storage_;
   }
 
   /**
    * @brief Returns NDArray shape.
    */
   const std::vector<std::size_t>& shape() const {
-    return this->shape;
+    return this->shape_;
   }
 
   /**
    * @brief Returns data size (total number of elements).
    */
   const std::size_t size() const {
-    return this->data.size();
+    return this->data.size_;
   }
 
   /**
@@ -172,23 +172,23 @@ struct NDArray {
    * @note Clears any existing data. To be used after default constructing.
    */
   void set_shape(const std::vector<std::size_t>& shape) {
-    this->shape = shape;
-    this->strides = utils::compute_strides(this->shape);
-    this->size = compute_size(this->shape);
+    this->shape_ = shape;
+    this->strides_ = utils::compute_strides(this->shape_);
+    this->size_ = compute_size(this->shape_);
     // Clear data
-    this->data.clear();
-    this->data.resize(this->size);
+    this->storage_.clear();
+    this->storage_.resize(this->size_);
   }
 
   // Indexing
   // Flat indexing
   // mutable, with []
   T& operator[](std::size_t flat_index) {
-    return this->data[flat_index];
+    return this->storage_[flat_index];
   }
   // const, with []
   const T& operator[](std::size_t flat_index) const {
-    return this->data[flat_index];
+    return this->storage_[flat_index];
   }
   // mutable, with ()
   T& operator()(std::size_t flat_index) {
@@ -201,11 +201,11 @@ struct NDArray {
   // Grid indexing
   // mutable, with vector
   T& operator()(const std::vector<std::size_t>& indices) {
-    return this->data[utils::flatten_index(indices, this->strides)];
+    return this->storage_[utils::flatten_index(indices, this->strides)];
   }
   // const, with vector
   const T& operator()(const std::vector<std::size_t>& indices) const {
-    return this->data[utils::flatten_index(indices, this->strides)];
+    return this->storage_[utils::flatten_index(indices, this->strides)];
   }
   // mutable, with initialiser list
   T& operator()(std::initializer_list<std::size_t> indices) {
@@ -217,17 +217,17 @@ struct NDArray {
   }
 
  private:
-  std::vector<T> data;
-  std::vector<std::size_t> shape;
-  std::vector<std::size_t> strides;
-  std::size_t size;
+  std::vector<T> storage_;
+  std::vector<std::size_t> shape_;
+  std::vector<std::size_t> strides_;
+  std::size_t size_;
 
-  static std::size_t compute_size(const std::vector<std::size_t>& new_shape) {
-    std::size_t new_size = 1;
-    for (std::size_t dim : new_shape) {
-      new_size *= dim;
+  static std::size_t compute_size(const std::vector<std::size_t>& shape) {
+    std::size_t size = 1;
+    for (std::size_t dim : shape) {
+      size *= dim;
     }
-    return new_size;
+    return size;
   }
 
 }
