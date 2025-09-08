@@ -39,6 +39,14 @@ struct EquilibrationParameters {
 };
 
 /**
+ * @brief Holds result of equilibration along with parameters
+ */
+struct EquilibrateResult {
+  NDArray<DampedNewtonResult> sol_array;
+  EquilibrationParameters prm;
+};
+
+/**
  * @brief Makes the starting parameter vector for equilibrium problem.
  *
  * The parameters are:
