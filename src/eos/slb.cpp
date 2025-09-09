@@ -12,8 +12,8 @@
 #include <stdexcept>
 #include "burnman/utils/constants.hpp"
 #include "burnman/optim/roots.hpp"
-#include "burnman/eos/bukowinski_electronic.hpp"
-#include "burnman/eos/debye.hpp"
+#include "burnman/eos/models/bukowinski_electronic.hpp"
+#include "burnman/eos/models/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
 
 

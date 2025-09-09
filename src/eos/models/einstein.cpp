@@ -7,7 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include "burnman/eos/einstein.hpp"
+#include "burnman/eos/models/einstein.hpp"
 #include <cmath>
 #include "burnman/utils/constants.hpp"
 

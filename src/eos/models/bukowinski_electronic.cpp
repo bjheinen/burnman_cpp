@@ -7,7 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include "burnman/eos/bukowinski_electronic.hpp"
+#include "burnman/eos/models/bukowinski_electronic.hpp"
 #include <cmath>
 
 double bukowinski::compute_helmholtz_el(

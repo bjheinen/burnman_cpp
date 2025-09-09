@@ -10,8 +10,8 @@
 #include "burnman/eos/property_modifiers.hpp"
 #include <cmath>
 #include "burnman/utils/constants.hpp"
-#include "burnman/eos/debye.hpp"
-#include "burnman/eos/einstein.hpp"
+#include "burnman/eos/models/debye.hpp"
+#include "burnman/eos/models/einstein.hpp"
 #include "burnman/optim/roots.hpp"
 
 // Anonymous namespace for BW helper functions
