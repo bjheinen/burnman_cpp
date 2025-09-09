@@ -13,6 +13,7 @@
 #include <cstddef>
 #include <initializer_list>
 #include <vector>
+#include "burnman/utils/vector_utils.hpp"
 
 /**
  * @brief Flat vector storage with convenience mapping to grid indices.
