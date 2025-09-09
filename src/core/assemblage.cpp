@@ -168,7 +168,7 @@ int Assemblage::get_n_phases() const {
   return static_cast<int>(this->phases.size());
 }
 
-std::shared_ptr<Material> Assemblage::get_phase(size_t index) const {
+std::shared_ptr<Material> Assemblage::get_phase(std::size_t index) const {
   return this->phases.at(index);
 }
 

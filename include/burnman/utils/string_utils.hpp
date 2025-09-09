@@ -10,6 +10,7 @@
 #ifndef BURNMAN_UTILS_STRING_UTILS_INCLUDED
 #define BURNMAN_UTILS_STRING_UTILS_INCLUDED
 
+#include <cstddef>
 #include <string>
 #include <regex>
 #include <stdexcept>
@@ -73,7 +74,7 @@ namespace utils {
     const std::string& delimiter = ""
   ) {
     std::string result;
-    for (size_t i = 0; i < string_list.size(); ++i) {
+    for (std::size_t i = 0; i < string_list.size(); ++i) {
       result += string_list[i];
       if (i + 1 < string_list.size()) {
         result += delimiter;

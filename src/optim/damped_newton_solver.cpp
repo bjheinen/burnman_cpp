@@ -9,6 +9,7 @@
  */
 #include <algorith>
 #include <cmath>
+#include <cstddef>
 #include "burnman/optim/damped_newton_solver.hpp"
 #include "burnman/utils/constants.hpp"
 
@@ -343,7 +344,7 @@ void DampedNewtonSolver::make_termination_info(
     } else if (state.persistent_bound_violation) {
       sol.code = 2;
       std::string s = "[";
-      for (size_t i = 0; i < state.violated_constraints.size(); ++i) {
+      for (std::size_t i = 0; i < state.violated_constraints.size(); ++i) {
         s += std::to_string(state.violated_constraints[i].first);
         if (i != state.violated_constraints.size() - 1) {
           s += ", ";

@@ -11,6 +11,7 @@
 #define BURNMAN_CORE_COMPOSITE_HPP_INCLUDED
 
 #include <algorithm>
+#include <cstddef>
 #include <initializer_list>
 #include <iterator>
 #include <memory>
@@ -251,7 +252,7 @@ class Assemblage : public CompositeMaterial {
    * Returns a shared_ptr<Material>, use a dynamic cast to access behaviour
    * specific to derived classes (Mineral, Solution, etc.).
    */
-  std::shared_ptr<Material> get_phase(size_t index) const;
+  std::shared_ptr<Material> get_phase(std::size_t index) const;
 
   /**
    * @brief Retrieves the phase at specified index.
@@ -260,7 +261,7 @@ class Assemblage : public CompositeMaterial {
    * Usage example: assemblage.get_phase<Solution>(0);
    */
   template <typename T>
-  std::shared_ptr<T> get_phase(size_t index) const {
+  std::shared_ptr<T> get_phase(std::size_t index) const {
     return std::dynamic_pointer_cast<T>(this->phases.at(index));
   }
 

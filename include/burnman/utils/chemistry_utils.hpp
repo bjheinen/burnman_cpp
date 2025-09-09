@@ -51,13 +51,13 @@ namespace utils {
     const std::vector<FormulaMap>& formulae,
     const Eigen::ArrayXd& weights
   ) {
-    size_t n = formulae.size();
+    std::size_t n = formulae.size();
     if (static_cast<std::size_t>(weights.size()) != n) {
       throw std::invalid_argument(
         "Weights length must be equal to number of formulae");
     }
     FormulaMap summed_formula;
-    for (size_t i = 0; i < n; ++i) {
+    for (std::size_t i = 0; i < n; ++i) {
       summed_formula += formulae[i] * weights[i];
     }
     return summed_formula;
