@@ -10,6 +10,7 @@
 #ifndef BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
 #define BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_HPP_INCLUDED
 
+#include <memory>
 #include <string>
 #include <utility>
 #include <unordered_map>
@@ -17,6 +18,7 @@
 #include <Eigen/Dense>
 #include "burnman/core/assemblage.hpp"
 #include "burnman/utils/types/simple_types.hpp"
+#include "burnman/utils/types/ndarray.hpp"
 
 // namespace equilibrate maybe?
 
