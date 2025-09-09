@@ -7,6 +7,9 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <cmath>
+#include <stdexcept>
+#include <string>
 #include "burnman/core/assemblage.hpp"
 #include "burnman/core/mineral.hpp"
 #include "burnman/utils/utils.hpp"

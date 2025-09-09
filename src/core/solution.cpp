@@ -8,6 +8,8 @@
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
 #include <cmath>
+#include <stdexcept>
+#include <utility>
 #include "burnman/core/solution.hpp"
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/chemistry_utils.hpp"

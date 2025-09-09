@@ -7,6 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <algorith>
+#include <cmath>
 #include "burnman/optim/damped_newton_solver.hpp"
 #include "burnman/utils/constants.hpp"
 

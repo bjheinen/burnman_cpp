@@ -9,6 +9,8 @@
  */
 #include <cmath>
 #include <stdexcept>
+#include <utility>
+#include <variant>
 #include "burnman/core/mineral.hpp"
 #include "burnman/eos/property_modifiers.hpp"
 #include "burnman/utils/make_eos.hpp"

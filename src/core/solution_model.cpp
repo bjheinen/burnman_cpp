@@ -7,10 +7,11 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <algorithm> // For std::count
+#include <algorithm>
+#include <cstddef>
+#include <iterator>
 #include <regex>
 #include <stdexcept>
-
 #include "burnman/core/solution_model.hpp"
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/string_utils.hpp"

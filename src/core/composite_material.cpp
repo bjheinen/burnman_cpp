@@ -8,6 +8,7 @@
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
 
+#include <algorithm>
 #include <utility>
 #include <unordered_set>
 #include "burnman/core/composite_material.hpp"

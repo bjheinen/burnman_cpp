@@ -10,6 +10,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
+#include <iostream>
+#include <optional>
+#include <stdexcept>
 #include <Eigen/Dense>
 #include "burnman/tools/equilibration/equilibrate.hpp"
 
@@ -586,7 +590,6 @@ EquilibrateResult equilibrate(
       // TODO: Maybe set equilibrium tolerance only here and not above?
     }
 
-    // TODO: include iostream
     if (verbose) {
       std::cout << sol.message << std::endl;
     }
