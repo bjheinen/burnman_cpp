@@ -10,7 +10,7 @@
 #include "burnman/optim/damped_newton_solver.hpp"
 #include <cmath>
 #include <cstddef>
-#include <algorith>
+#include <algorithm>
 #include "burnman/utils/constants.hpp"
 
 namespace optim{
