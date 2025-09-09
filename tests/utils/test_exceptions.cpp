@@ -7,9 +7,9 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <stdexcept>
 #include <catch2/catch_test_macros.hpp>
 #include "burnman/utils/exceptions.hpp"
+#include <stdexcept>
 
 TEST_CASE("NotImplementedError message", "[utils][exceptions]") {
   const std::string class_name = "AClass";

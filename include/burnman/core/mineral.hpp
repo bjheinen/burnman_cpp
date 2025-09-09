@@ -12,10 +12,10 @@
 
 #include <memory>
 #include <string>
-#include "burnman/core/material.hpp"
-#include "burnman/core/equation_of_state.hpp"
-#include "burnman/utils/eos.hpp"
 #include "burnman/utils/types/simple_types.hpp"
+#include "burnman/utils/eos.hpp"
+#include "burnman/core/equation_of_state.hpp"
+#include "burnman/core/material.hpp"
 
 /**
  * @class Mineral

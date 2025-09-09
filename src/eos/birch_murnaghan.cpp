@@ -7,11 +7,11 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include "burnman/eos/birch_murnaghan.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/eos/birch_murnaghan.hpp"
-#include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
+#include "burnman/optim/roots.hpp"
 
 bool BM3::validate_parameters(MineralParams& params) {
 

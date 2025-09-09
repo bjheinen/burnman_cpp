@@ -13,11 +13,11 @@
 #include <memory>
 #include <vector>
 #include <Eigen/Dense>
+#include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/mineral.hpp"
 #include "burnman/core/solution_model.hpp"
 #include "burnman/core/solution.hpp"
 #include "burnman/core/assemblage.hpp"
-#include "burnman/utils/types/simple_types.hpp"
 
 struct BridgmaniteFixture {
   // Declare variables to use

@@ -7,11 +7,10 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-
+#include "burnman/core/composite_material.hpp"
 #include <algorithm>
 #include <utility>
 #include <unordered_set>
-#include "burnman/core/composite_material.hpp"
 #include "burnman/utils/utils.hpp"
 
 int CompositeMaterial::get_n_endmembers() const {

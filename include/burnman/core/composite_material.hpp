@@ -14,8 +14,8 @@
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include "burnman/core/material.hpp"
 #include "burnman/utils/types/simple_types.hpp"
+#include "burnman/core/material.hpp"
 
 /**
  * @class CompositeMaterial

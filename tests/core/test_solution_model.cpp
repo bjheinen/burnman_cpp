@@ -7,15 +7,15 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
+#include "burnman/core/solution_model.hpp"
 #include <map>
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "tolerances.hpp"
-#include "burnman/core/solution_model.hpp"
 #include "burnman/core/mineral.hpp"
+#include "tolerances.hpp"
 
 using namespace Catch::Matchers;
 

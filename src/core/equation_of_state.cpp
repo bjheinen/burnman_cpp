@@ -7,8 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <typeinfo>
 #include "burnman/core/equation_of_state.hpp"
+#include <typeinfo>
 #include "burnman/utils/exceptions.hpp"
 
 // Helper functions to throw errors

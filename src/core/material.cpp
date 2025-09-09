@@ -7,8 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <typeinfo>
 #include "burnman/core/material.hpp"
+#include <typeinfo>
 #include "burnman/utils/exceptions.hpp"
 
 [[noreturn]] void Material::throw_not_implemented_error(const std::string& method) const {

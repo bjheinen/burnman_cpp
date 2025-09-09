@@ -7,14 +7,14 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include "burnman/core/mineral.hpp"
 #include <cmath>
 #include <stdexcept>
 #include <utility>
 #include <variant>
-#include "burnman/core/mineral.hpp"
-#include "burnman/eos/property_modifiers.hpp"
-#include "burnman/utils/make_eos.hpp"
 #include "burnman/utils/constants.hpp"
+#include "burnman/utils/make_eos.hpp"
+#include "burnman/eos/property_modifiers.hpp"
 
 std::string Mineral::get_name() const {
   if (has_custom_name()) {

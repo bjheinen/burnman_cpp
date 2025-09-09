@@ -7,15 +7,14 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include "burnman/core/solution.hpp"
 #include <cmath>
 #include <stdexcept>
 #include <utility>
-#include "burnman/core/solution.hpp"
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/utils/matrix_utils.hpp"
 #include "burnman/core/averaging_schemes.hpp"
-#include "burnman/utils/constants.hpp"
 
 void Solution::reset() {
   // Reset caches Material properties

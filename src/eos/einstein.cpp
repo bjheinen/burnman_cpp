@@ -7,8 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <cmath>
 #include "burnman/eos/einstein.hpp"
+#include <cmath>
 #include "burnman/utils/constants.hpp"
 
 double einstein::compute_thermal_energy_impl(

@@ -7,13 +7,13 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <cmath>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "tolerances.hpp"
 #include "burnman/eos/vinet.hpp"
+#include <cmath>
 #include "burnman/utils/eos.hpp"
+#include "tolerances.hpp"
 using namespace Catch::Matchers;
 
 TEST_CASE("Test validate parameters", "[vinet][eos]") {

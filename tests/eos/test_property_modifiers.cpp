@@ -9,9 +9,9 @@
  */
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "tolerances.hpp"
 #include "burnman/eos/property_modifiers.hpp"
 #include "burnman/utils/eos.hpp"
+#include "tolerances.hpp"
 using namespace Catch::Matchers;
 
 TEST_CASE("Test Landau", "[prop_mod][eos]") {

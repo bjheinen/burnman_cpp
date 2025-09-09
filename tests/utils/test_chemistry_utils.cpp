@@ -7,13 +7,13 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <catch2/catch_test_macros.hpp>
+#include "burnman/utils/chemistry_utils.hpp"
 #include <stdexcept>
 #include <string>
 #include <unordered_set>
 #include <vector>
 #include <Eigen/Dense>
-#include <catch2/catch_test_macros.hpp>
-#include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/utils/types/simple_types.hpp"
 
 TEST_CASE("sort_element_list_to_IUPAC_order (sort)", "[utils][chemistry_utils]") {

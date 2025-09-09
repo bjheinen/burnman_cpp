@@ -7,15 +7,15 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <algorithm>
+#include "burnman/tools/equilibration/equilibrate.hpp"
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <algorithm>
 #include <iostream>
 #include <optional>
 #include <stdexcept>
 #include <Eigen/Dense>
-#include "burnman/tools/equilibration/equilibrate.hpp"
 
 Eigen::VectorXd get_parameter_vector(
   const Assemblage& assemblage,

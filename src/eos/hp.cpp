@@ -7,11 +7,11 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include "burnman/eos/hp.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/eos/hp.hpp"
-#include "burnman/eos/modified_tait.hpp"
 #include "burnman/eos/einstein.hpp"
+#include "burnman/eos/modified_tait.hpp"
 
 bool HP_TMT::validate_parameters(MineralParams& params) {
   // Check for required keys

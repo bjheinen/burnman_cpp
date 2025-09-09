@@ -7,13 +7,13 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <memory>
-#include <string>
 #include <catch2/catch_test_macros.hpp>
 #include "burnman/core/material.hpp"
-#include "burnman/core/equation_of_state.hpp"
-#include "burnman/utils/eos.hpp"
+#include <memory>
+#include <string>
 #include "burnman/utils/exceptions.hpp"
+#include "burnman/utils/eos.hpp"
+#include "burnman/core/equation_of_state.hpp"
 
 TEST_CASE("Get/Set state", "[core][material]") {
   double test_P = 24e9;

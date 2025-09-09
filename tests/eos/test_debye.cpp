@@ -7,11 +7,11 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include <cmath>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "tolerances.hpp"
 #include "burnman/eos/debye.hpp"
+#include <cmath>
+#include "tolerances.hpp"
 
 using namespace debye;
 using namespace Catch::Matchers;

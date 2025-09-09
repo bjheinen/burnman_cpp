@@ -7,10 +7,10 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include "burnman/eos/debye.hpp"
 #include <cmath>
 #include <gsl/gsl_sf_debye.h>
 #include <gsl/gsl_integration.h>
-#include "burnman/eos/debye.hpp"
 #include "burnman/utils/constants.hpp"
 
 double debye::debye_fn_integrand(double xi, void*) {

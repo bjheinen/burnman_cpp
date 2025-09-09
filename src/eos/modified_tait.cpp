@@ -7,9 +7,9 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include "burnman/eos/modified_tait.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/eos/modified_tait.hpp"
 
 bool MT::validate_parameters(MineralParams& params) {
   // Check for required keys

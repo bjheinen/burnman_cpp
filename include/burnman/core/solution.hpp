@@ -10,18 +10,18 @@
 #ifndef BURNMAN_CORE_SOLUTION_HPP_INCLUDED
 #define BURNMAN_CORE_SOLUTION_HPP_INCLUDED
 
-#include <algorithm>
 #include <cstddef>
+#include <algorithm>
 #include <iterator>
 #include <memory>
 #include <optional>
 #include <string>
 #include <vector>
 #include <Eigen/Dense>
-#include "burnman/core/composite_material.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/mineral.hpp"
 #include "burnman/core/solution_model.hpp"
-#include "burnman/utils/types/simple_types.hpp"
+#include "burnman/core/composite_material.hpp"
 
 /**
  * @class Solution

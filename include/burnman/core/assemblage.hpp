@@ -10,8 +10,8 @@
 #ifndef BURNMAN_CORE_COMPOSITE_HPP_INCLUDED
 #define BURNMAN_CORE_COMPOSITE_HPP_INCLUDED
 
-#include <algorithm>
 #include <cstddef>
+#include <algorithm>
 #include <initializer_list>
 #include <iterator>
 #include <memory>
@@ -20,10 +20,10 @@
 #include <utility>
 #include <vector>
 #include <Eigen/Dense>
+#include "burnman/utils/types/simple_types.hpp"
+#include "burnman/core/averaging_schemes.hpp"
 #include "burnman/core/material.hpp"
 #include "burnman/core/composite_material.hpp"
-#include "burnman/core/averaging_schemes.hpp"
-#include "burnman/utils/types/simple_types.hpp"
 
 /**
  * @class Assemblage

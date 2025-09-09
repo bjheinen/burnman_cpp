@@ -11,8 +11,8 @@
 #define BURNMAN_EOS_SLB_HPP_INCLUDED
 
 #include <utility>
-#include "burnman/core/equation_of_state.hpp"
 #include "burnman/utils/eos.hpp"
+#include "burnman/core/equation_of_state.hpp"
 
 /**
  * @class SLB3

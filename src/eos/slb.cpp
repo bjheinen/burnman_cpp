@@ -7,14 +7,15 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include "burnman/eos/slb.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/eos/slb.hpp"
-#include "burnman/eos/debye.hpp"
-#include "burnman/eos/bukowinski_electronic.hpp"
-#include "burnman/eos/birch_murnaghan.hpp"
-#include "burnman/optim/roots.hpp"
 #include "burnman/utils/constants.hpp"
+#include "burnman/optim/roots.hpp"
+#include "burnman/eos/bukowinski_electronic.hpp"
+#include "burnman/eos/debye.hpp"
+#include "burnman/eos/birch_murnaghan.hpp"
+
 
 bool SLB3::validate_parameters(MineralParams& params) {
   // Check for required keys

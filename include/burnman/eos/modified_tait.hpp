@@ -10,8 +10,8 @@
 #ifndef BURNMAN_EOS_MODIFIED_TAIT_HPP_INCLUDED
 #define BURNMAN_EOS_MODIFIED_TAIT_HPP_INCLUDED
 
-#include "burnman/core/equation_of_state.hpp"
 #include "burnman/utils/eos.hpp"
+#include "burnman/core/equation_of_state.hpp"
 
 /**
  * @brief Struct to hold tait constants
