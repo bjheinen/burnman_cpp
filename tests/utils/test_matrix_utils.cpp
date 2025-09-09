@@ -7,6 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <vector>
 #include <Eigen/Dense>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>

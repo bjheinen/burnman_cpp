@@ -7,6 +7,9 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <memory>
+#include <string>
+#include <typeinfo>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "tolerances.hpp"
@@ -16,8 +19,6 @@
 #include "burnman/eos/mie_grueneisen_debye.hpp"
 #include "burnman/utils/eos.hpp"
 #include "burnman/utils/types/simple_types.hpp"
-#include <memory>
-#include <typeinfo>
 using namespace Catch::Matchers;
 
 TEST_CASE("Set method", "[core][mineral]") {

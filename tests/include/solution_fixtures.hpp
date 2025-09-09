@@ -11,6 +11,7 @@
 #define TESTS_SOLUTION_FIXTURES_HPP_INCLUDED
 
 #include <memory>
+#include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/mineral.hpp"
 #include "burnman/core/solution_model.hpp"

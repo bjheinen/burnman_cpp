@@ -7,15 +7,15 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <cmath>
+#include <map>
+#include <tuple>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "tolerances.hpp"
 #include "burnman/utils/eos.hpp"
 #include "burnman/eos/slb.hpp"
-#include <cmath>
-#include <tuple>
-#include <map>
 using namespace Catch::Matchers;
 
 TEST_CASE("Test validate parameters", "[eos][slb]") {

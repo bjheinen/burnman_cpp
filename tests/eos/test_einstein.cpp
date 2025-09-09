@@ -11,7 +11,6 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "tolerances.hpp"
 #include "burnman/eos/einstein.hpp"
-#include <cmath>
 
 using namespace einstein;
 using namespace Catch::Matchers;

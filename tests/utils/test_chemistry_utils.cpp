@@ -7,6 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <stdexcept>
 #include <string>
 #include <unordered_set>
 #include <vector>

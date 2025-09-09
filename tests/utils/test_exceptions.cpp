@@ -7,6 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
+#include <stdexcept>
 #include <catch2/catch_test_macros.hpp>
 #include "burnman/utils/exceptions.hpp"
 
