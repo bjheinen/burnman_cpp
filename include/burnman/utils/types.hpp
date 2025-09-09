@@ -230,6 +230,6 @@ struct NDArray {
     return size;
   }
 
-}
+};
 
 #endif // BURNMAN_UTILS_TYPES_HPP_INCLUDED
