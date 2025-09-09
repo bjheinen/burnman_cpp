@@ -14,7 +14,7 @@
 
 /**
  * @class Averaging
- * @brief Base interface for averaging shemes.
+ * @brief Base interface for averaging schemes.
  *
  * Functions return scalar values for a list of properties and
  * volume fractions.
@@ -242,7 +242,7 @@ class Reuss : public Averaging {
 
 
 /**
- * @class VoigtReussHills
+ * @class VoigtReussHill
  * @brief VRH averaging scheme.
  *
  * Class for computing the Voigt-Reuss-Hill average for elastic properties.
