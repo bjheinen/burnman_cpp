@@ -15,7 +15,7 @@
 #include "burnman/eos/birch_murnaghan.hpp"
 #include "burnman/eos/mie_grueneisen_debye.hpp"
 #include "burnman/utils/eos.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 #include <memory>
 #include <typeinfo>
 using namespace Catch::Matchers;

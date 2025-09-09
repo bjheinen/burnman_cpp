@@ -16,7 +16,7 @@
 #include "tolerances.hpp"
 #include "solution_fixtures.hpp"
 #include "burnman/core/assemblage.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 using namespace Catch::Matchers;
 

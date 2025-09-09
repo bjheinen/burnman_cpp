@@ -14,7 +14,7 @@
 #include <unordered_set>
 #include <vector>
 #include "burnman/utils/constants.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 namespace utils {
 

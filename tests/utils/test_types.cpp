@@ -10,7 +10,9 @@
 
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
+
+//TODO: Update directory structure - test new types
 
 TEST_CASE("FormulaMap addition and scalar multiplication", "[utils][types]") {
   

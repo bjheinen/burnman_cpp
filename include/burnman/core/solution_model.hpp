@@ -16,7 +16,7 @@
 #include <utility>
 #include <Eigen/Dense>
 #include "burnman/core/mineral.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 // TODO: rename IdealSolution -> IdealSolutionModel etc.?
 

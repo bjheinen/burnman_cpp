@@ -13,7 +13,7 @@
 #include <string>
 #include <optional>
 #include <memory>
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 // Forward declaration to avoid include
 class EquationOfState;

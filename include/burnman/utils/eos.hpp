@@ -14,7 +14,7 @@
 #include <optional>
 #include <variant>
 #include <vector>
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 /**
  * @namespace excesses

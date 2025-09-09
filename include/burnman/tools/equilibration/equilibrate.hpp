@@ -16,7 +16,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/assemblage.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 // namespace equilibrate maybe?
 

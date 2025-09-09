@@ -13,7 +13,7 @@
 #include <Eigen/Dense>
 #include <catch2/catch_test_macros.hpp>
 #include "burnman/utils/chemistry_utils.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 TEST_CASE("sort_element_list_to_IUPAC_order (sort)", "[utils][chemistry_utils]") {
   std::unordered_set<std::string> input = {

@@ -18,7 +18,7 @@
 #include "burnman/core/material.hpp"
 #include "burnman/core/composite_material.hpp"
 #include "burnman/core/averaging_schemes.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 /**
  * @class Assemblage

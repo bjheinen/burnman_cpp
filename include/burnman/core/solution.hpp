@@ -22,7 +22,7 @@
 #include "burnman/core/composite_material.hpp"
 #include "burnman/core/mineral.hpp"
 #include "burnman/core/solution_model.hpp"
-#include "burnman/utils/types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 
 /**
  * @class Solution
