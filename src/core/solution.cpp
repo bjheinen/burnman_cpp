@@ -14,7 +14,7 @@
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/utils/matrix_utils.hpp"
-#include "burnman/core/averaging_schemes.hpp"
+#include "burnman/tools/averaging/averaging_schemes.hpp"
 
 void Solution::reset() {
   // Reset caches Material properties
@@ -357,7 +357,7 @@ double Solution::compute_isentropic_compressibility_reuss() const {
 
 double Solution::compute_shear_modulus() const {
   Eigen::ArrayXd em_shear_moduli = map_endmembers_to_array(&Mineral::get_shear_modulus);
-  return Averaging::reuss_fn(molar_fractions, em_shear_moduli);
+  return averaging::utils::reuss_fn(molar_fractions, em_shear_moduli);
 }
 
 double Solution::compute_p_wave_velocity() const {

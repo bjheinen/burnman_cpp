@@ -10,10 +10,11 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "burnman/core/averaging_schemes.hpp"
+#include "burnman/tools/averaging/averaging_schemes.hpp"
 #include "tolerances.hpp"
 
 using namespace Catch::Matchers;
+using namespace averaging;
 
 struct AveragingSchemeFixture {
   Eigen::ArrayXd v_a = (Eigen::ArrayXd(2) << 0.25, 0.75).finished();
@@ -37,45 +38,45 @@ struct AveragingSchemeMulti : AveragingSchemeFixture {
 
 TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Voigt", "[core][averaging_schemes]") {
   // Quick check of Voigt average
-  REQUIRE(Averaging::voigt_fn(v_a, X_a) == 1.75);
+  REQUIRE(utils::voigt_fn(v_a, X_a) == 1.75);
   // Check voigt_fn normalises if needed
-  REQUIRE(Averaging::voigt_fn(v_a*34.235, X_a) == 1.75);
-  CHECK_THAT(Averaging::voigt_fn(v_b, X_b),
+  REQUIRE(utils::voigt_fn(v_a*34.235, X_a) == 1.75);
+  CHECK_THAT(utils::voigt_fn(v_b, X_b),
     WithinRel(ref_voigt, tol_rel) ||
     WithinAbs(ref_voigt, tol_abs));
   // Compare to scheme interface
   Voigt scheme;
   REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c)
     == scheme.average_shear_moduli(v_b, X_c, X_b));
-  REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == Averaging::voigt_fn(v_b, X_b));
+  REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == utils::voigt_fn(v_b, X_b));
 }
 
 TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Reuss", "[core][averaging_schemes]") {
   // Quick check of Reuss average
-  REQUIRE(Averaging::reuss_fn(v_a, X_a) == 1.6);
+  REQUIRE(utils::reuss_fn(v_a, X_a) == 1.6);
   // Check reuss_fn normalises if needed
-  REQUIRE(Averaging::reuss_fn(v_a*34.235, X_a) == 1.6);
-  CHECK_THAT(Averaging::reuss_fn(v_b, X_b),
+  REQUIRE(utils::reuss_fn(v_a*34.235, X_a) == 1.6);
+  CHECK_THAT(utils::reuss_fn(v_b, X_b),
     WithinRel(ref_reuss, tol_rel) ||
     WithinAbs(ref_reuss, tol_abs));
   // Compare to scheme interface
   Reuss scheme;
   REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c)
     == scheme.average_shear_moduli(v_b, X_c, X_b));
-  REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == Averaging::reuss_fn(v_b, X_b));
+  REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == utils::reuss_fn(v_b, X_b));
 }
 
 TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::VoigtReussHill", "[core][averaging_schemes]") {
   // Quick check of VRH average
-  REQUIRE(Averaging::voigt_reuss_hill_fn(v_a, X_a) == 1.675);
-  CHECK_THAT(Averaging::voigt_reuss_hill_fn(v_b, X_b),
+  REQUIRE(utils::voigt_reuss_hill_fn(v_a, X_a) == 1.675);
+  CHECK_THAT(utils::voigt_reuss_hill_fn(v_b, X_b),
     WithinRel(ref_vrh, tol_rel) ||
     WithinAbs(ref_vrh, tol_abs));
   // Compare to scheme interface
   VoigtReussHill scheme;
   REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c)
     == scheme.average_shear_moduli(v_b, X_c, X_b));
-  REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == Averaging::voigt_reuss_hill_fn(v_b, X_b));
+  REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == utils::voigt_reuss_hill_fn(v_b, X_b));
 }
 
 TEMPLATE_TEST_CASE_METHOD(AveragingSchemeMulti, "Averaging (common fns)",

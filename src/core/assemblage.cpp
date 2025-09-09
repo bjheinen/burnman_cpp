@@ -52,29 +52,29 @@ void Assemblage::add_phases(
 void Assemblage::set_averaging_scheme(AveragingType scheme_type) {
   switch (scheme_type) {
     case AveragingType::Voigt:
-      this->averaging_scheme = std::make_shared<Voigt>();
+      this->averaging_scheme = std::make_shared<averaging::Voigt>();
       break;
     case AveragingType::Reuss:
-      this->averaging_scheme = std::make_shared<Reuss>();
+      this->averaging_scheme = std::make_shared<averaging::Reuss>();
       break;
     case AveragingType::VRH:
-      this->averaging_scheme = std::make_shared<VoigtReussHill>();
+      this->averaging_scheme = std::make_shared<averaging::VoigtReussHill>();
       break;
     case AveragingType::HashinShtrikmanLower:
-      this->averaging_scheme = std::make_shared<HashinShtrikmanLower>();
+      this->averaging_scheme = std::make_shared<averaging::HashinShtrikmanLower>();
       break;
     case AveragingType::HashinShtrikmanUpper:
-      this->averaging_scheme = std::make_shared<HashinShtrikmanUpper>();
+      this->averaging_scheme = std::make_shared<averaging::HashinShtrikmanUpper>();
       break;
     case AveragingType::HashinShtrikman:
-      this->averaging_scheme = std::make_shared<HashinShtrikman>();
+      this->averaging_scheme = std::make_shared<averaging::HashinShtrikman>();
       break;
     default:
       throw std::invalid_argument("Unknown Averaging Scheme!");
   }
 }
 
-void Assemblage::set_averaging_scheme(std::shared_ptr<Averaging> custom_scheme) {
+void Assemblage::set_averaging_scheme(std::shared_ptr<averaging::AveragingScheme> custom_scheme) {
   this->averaging_scheme = std::move(custom_scheme);
 }
 

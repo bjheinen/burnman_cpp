@@ -21,7 +21,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/utils/types/simple_types.hpp"
-#include "burnman/core/averaging_schemes.hpp"
+#include "burnman/tools/averaging/averaging_schemes.hpp"
 #include "burnman/core/material.hpp"
 #include "burnman/core/composite_material.hpp"
 
@@ -207,10 +207,10 @@ class Assemblage : public CompositeMaterial {
   /**
    * @brief Sets the averaging scheme to use for computing properties.
    *
-   * Sets the averaging scheme to a custom class. Must be derived from `Averaging'.
+   * Sets the averaging scheme to a custom class. Must be derived from `AveragingScheme'.
    *
    */
-  void set_averaging_scheme(std::shared_ptr<Averaging> custom_scheme);
+  void set_averaging_scheme(std::shared_ptr<averaging::AveragingScheme> custom_scheme);
 
   // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
@@ -314,7 +314,7 @@ class Assemblage : public CompositeMaterial {
   std::vector<std::shared_ptr<Material>> phases;
 
   // Unique pointer to averaging scheme
-  std::shared_ptr<Averaging> averaging_scheme;
+  std::shared_ptr<averaging::AveragingScheme> averaging_scheme;
 
   Eigen::ArrayXd molar_fractions;
 
