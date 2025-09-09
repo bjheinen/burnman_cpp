@@ -11,6 +11,8 @@
 #define BURNMAN_UTILS_MATRIX_UTILS_INCLUDED
 
 #include <algorithm>
+#include <cmath>
+#include <cstddef>
 #include <vector>
 #include <Eigen/Dense>
 

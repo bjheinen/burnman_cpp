@@ -11,6 +11,7 @@
 #define BURNMAN_OPTIM_ROOTS_HPP_INCLUDED
 
 #include <cassert>
+#include <cmath>
 #include <stdexcept>
 #include <string>
 #include <gsl/gsl_errno.h>

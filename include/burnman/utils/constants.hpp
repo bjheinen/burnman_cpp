@@ -11,6 +11,8 @@
 #define BURNMAN_UTILS_CONSTANTS_HPP_INCLUDED
 
 #include <limits>
+#include <string>
+#include <vector>
 
 /**
  * Constants used in burnman

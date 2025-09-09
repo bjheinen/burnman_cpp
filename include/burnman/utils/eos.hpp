@@ -10,8 +10,8 @@
 #ifndef BURNMAN_UTILS_EOS_HPP_INCLUDED
 #define BURNMAN_UTILS_EOS_HPP_INCLUDED
 
-#include <string>
 #include <optional>
+#include <string>
 #include <variant>
 #include <vector>
 #include "burnman/utils/types/simple_types.hpp"

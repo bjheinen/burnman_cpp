@@ -10,9 +10,9 @@
 #ifndef BURNMAN_CORE_MATERIAL_HPP_INCLUDED
 #define BURNMAN_CORE_MATERIAL_HPP_INCLUDED
 
-#include <string>
-#include <optional>
 #include <memory>
+#include <optional>
+#include <string>
 #include "burnman/utils/types/simple_types.hpp"
 
 // Forward declaration to avoid include

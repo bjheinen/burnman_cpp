@@ -13,6 +13,8 @@
 #include <functional>
 #include <optional>
 #include <string>
+#include <tuple>
+#include <utility>
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/utils/constants.hpp"

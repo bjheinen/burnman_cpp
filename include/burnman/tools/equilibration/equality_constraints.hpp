@@ -10,8 +10,11 @@
 #ifndef BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_HPP_INCLUDED
 #define BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_HPP_INCLUDED
 
+#include <cstddef>
 #include <memory>
+#include <string>
 #include <utility>
+#include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/assemblage.hpp"
 

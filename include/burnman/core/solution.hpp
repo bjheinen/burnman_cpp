@@ -11,12 +11,11 @@
 #define BURNMAN_CORE_SOLUTION_HPP_INCLUDED
 
 #include <algorithm>
+#include <cstddef>
 #include <iterator>
 #include <memory>
 #include <optional>
 #include <string>
-#include <type_traits>
-#include <utility>
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/composite_material.hpp"

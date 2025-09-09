@@ -10,6 +10,8 @@
 #ifndef BURNMAN_UTILS_CHEMISTRY_UTILS_INCLUDED
 #define BURNMAN_UTILS_CHEMISTRY_UTILS_INCLUDED
 
+#include <cstddef>
+#include <stdexcept>
 #include <string>
 #include <unordered_set>
 #include <vector>

@@ -12,8 +12,8 @@
 
 #include <memory>
 #include <string>
-#include <utility>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/assemblage.hpp"

@@ -10,10 +10,9 @@
 #ifndef BURNMAN_CORE_SOLUTION_MODEL_HPP_INCLUDED
 #define BURNMAN_CORE_SOLUTION_MODEL_HPP_INCLUDED
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
-#include <utility>
 #include <Eigen/Dense>
 #include "burnman/core/mineral.hpp"
 #include "burnman/utils/types/simple_types.hpp"

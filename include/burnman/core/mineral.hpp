@@ -10,9 +10,8 @@
 #ifndef BURNMAN_CORE_MINERAL_HPP_INCLUDED
 #define BURNMAN_CORE_MINERAL_HPP_INCLUDED
 
-#include <string>
-#include <optional>
 #include <memory>
+#include <string>
 #include "burnman/core/material.hpp"
 #include "burnman/core/equation_of_state.hpp"
 #include "burnman/utils/eos.hpp"

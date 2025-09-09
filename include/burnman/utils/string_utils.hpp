@@ -13,6 +13,7 @@
 #include <string>
 #include <regex>
 #include <stdexcept>
+#include <vector>
 
 namespace utils {
 

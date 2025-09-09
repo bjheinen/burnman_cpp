@@ -10,10 +10,14 @@
 #ifndef BURNMAN_CORE_COMPOSITE_HPP_INCLUDED
 #define BURNMAN_CORE_COMPOSITE_HPP_INCLUDED
 
-#include <vector>
+#include <algorithm>
+#include <initializer_list>
+#include <iterator>
 #include <memory>
 #include <optional>
 #include <type_traits>
+#include <utility>
+#include <vector>
 #include <Eigen/Dense>
 #include "burnman/core/material.hpp"
 #include "burnman/core/composite_material.hpp"
