@@ -7,14 +7,13 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#ifndef BURNMAN_UTILS_TYPES_HPP_INCLUDED
-#define BURNMAN_UTILS_TYPES_HPP_INCLUDED
+#ifndef BURNMAN_UTILS_TYPES_SIMPLE_TYPES_HPP_INCLUDED
+#define BURNMAN_UTILS_TYPES_SIMPLE_TYPES_HPP_INCLUDED
 
 #include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <variant>
 
 /**
  * Custom type alias for chemical formulae.
@@ -104,4 +103,4 @@ class Mineral;
 using MineralFormulaPair = std::pair<Mineral, std::string>;
 using PairedEndmemberList = std::vector<MineralFormulaPair>;
 
-#endif // BURNMAN_UTILS_TYPES_HPP_INCLUDED
+#endif // BURNMAN_UTILS_TYPES_SIMPLE_TYPES_HPP_INCLUDED
