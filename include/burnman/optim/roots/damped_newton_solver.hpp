@@ -7,8 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#ifndef BURNMAN_OPTIM_DAMPED_NEWTON_HPP_INCLUDED
-#define BURNMAN_OPTIM_DAMPED_NEWTON_HPP_INCLUDED
+#ifndef BURNMAN_OPTIM_ROOTS_DAMPED_NEWTON_HPP_INCLUDED
+#define BURNMAN_OPTIM_ROOTS_DAMPED_NEWTON_HPP_INCLUDED
 
 #include <functional>
 #include <optional>
@@ -363,4 +363,4 @@ class DampedNewtonSolver {
 } // namespace roots
 } // namespace optim
 
-#endif // BURNMAN_OPTIM_DAMPED_NEWTON_HPP_INCLUDED
+#endif // BURNMAN_OPTIM_ROOTS_DAMPED_NEWTON_HPP_INCLUDED
