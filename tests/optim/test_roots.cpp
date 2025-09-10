@@ -14,7 +14,7 @@
 #include "tolerances.hpp"
 
 using namespace Catch::Matchers;
-using namespace roots;
+using namespace optim::roots;
 
 // Simple test function
 double test_function(double x, void*) {
