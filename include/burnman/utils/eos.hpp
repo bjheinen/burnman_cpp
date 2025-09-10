@@ -7,8 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#ifndef BURNMAN_UTILS_EOS_HPP_INCLUDED
-#define BURNMAN_UTILS_EOS_HPP_INCLUDED
+#ifndef BURNMAN_UTILS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
+#define BURNMAN_UTILS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
 
 #include <variant>
 #include <vector>
@@ -136,6 +136,6 @@ namespace excesses {
 
   using ExcessParamVector = std::vector<ExcessParamVariant>;
 
-} // End namespace ExcessParams
+} // End namespace excesses
 
-#endif // BURNMAN_UTILS_EOS_HPP_INCLUDED
+#endif // BURNMAN_UTILS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
