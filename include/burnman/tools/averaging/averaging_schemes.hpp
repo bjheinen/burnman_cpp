@@ -12,6 +12,7 @@
 
 // Convenience header to get all averaging schemes
 #include "burnman/tools/averaging/averaging_base.hpp"
+#include "burnman/tools/averaging/averaging_utils.hpp"
 #include "burnman/tools/averaging/voigt.hpp"
 #include "burnman/tools/averaging/reuss.hpp"
 #include "burnman/tools/averaging/vrh.hpp"
