@@ -57,7 +57,7 @@ template <typename ConstraintT>
 ConstraintGroup make_constraints_from_array(
   const Eigen::ArrayXd& values
 ) {
-  std::vector<std::unique_ptr<EqualityConstraint>> constraints;
+  ConstraintGroup constraints;
   constraints.reserve(static_cast<std::size_t>(values.size()));
   for (double v : values) {
     constraints.push_back(make_constraint<ConstraintT>(v));
@@ -68,28 +68,30 @@ ConstraintGroup make_constraints_from_array(
 /**
  * @brief Specialisation for creating PTEllipseConstraint objects from centre/scale arrays.
  *
- * Constructs a ConstraintGroup of PTEllipseConstraint objects from a pair of 
- * Eigen::ArrayXd representing centres and scales of ellipses.
+ * Constructs a ConstraintGroup of PTEllipseConstraint objects from a pair of
+ * Eigen::ArrayXXd representing centres and scales of ellipses. Centres and scales
+ * must have two rows, with n columns for n constraints.
  *
  * @param values Pair of arrays: first = centres, second = scales
  * @return ConstraintGroup of PTEllipseConstraint objects
  */
 template <>
 ConstraintGroup make_constraints_from_array<PTEllipseConstraint>(
-  const std::pair<Eigen::ArrayXd, Eigen::ArrayXd>& values
+  const std::pair<
+    Eigen::Array<double, 2, Eigen::Dynamic>
+    Eigen::Array<double, 2, Eigen::Dynamic>>& values
 ) {
-  const Eigen::ArrayXd& centres = values.first;
-  const Eigen::ArrayXd& scales = values.second;
-  std::vector<std::unique_ptr<EqualityConstraint>> constraints;
-  constraints.reserve(static_cast<std::size_t>(centres.size()));
-  for (Eigen::Index i = 0; i < centres.szie(); ++i) {
-    constraints.push_back(make_constraint<PTEllipseConstraint>(centres(i), scales(i)));
+  const Eigen::ArrayXXd& centres = values.first;
+  const Eigen::ArrayXXd& scales = values.second;
+  // TODO: could check centres.cols() == scales.cols()
+  ConstraintGroup constraints;
+  constraints.reserve(static_cast<std::size_t>(centres.cols()));
+  for (Eigen::Index i = 0; i < centres.cols(); ++i) {
+    constraints.push_back(make_constraint<PTEllipseConstraint>(centres.col(i), scales.col(i)));
   }
   return constraints;
 }
 
-
-// Helpers to wrap single constraint or pass through an existing group
 /**
  * @brief Wrap a single constraint into a ConstraintGroup.
  *
