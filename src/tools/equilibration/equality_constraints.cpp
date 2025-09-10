@@ -7,13 +7,11 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include "burnman/tools/equilibrate/equality_constraints.hpp"
+#include "burnman/tools/equilibrate/equality_constraint_variants.hpp"
 #include <algorithm>
 #include <iterator>
 #include <numeric>
 #include <stdexcept>
-// TODO: could put prm in types.hpp, or a separate parameters.hpp
-#include "burnman/tools/equilibration/equilibrate.hpp"
 
 // TODO: think about namespaces
 
