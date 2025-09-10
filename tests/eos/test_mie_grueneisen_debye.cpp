@@ -14,6 +14,7 @@
 #include <cmath>
 #include <map>
 #include <tuple>
+#include "burnman/utils/types/mineral_params.hpp"
 #include "tolerances.hpp"
 using namespace Catch::Matchers;
 

@@ -9,8 +9,8 @@
  */
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
-#include "burnman/eos/property_modifiers.hpp"
-#include "burnman/utils/eos.hpp"
+#include "burnman/eos/components/property_modifiers.hpp"
+#include "burnman/utils/types/excess_params.hpp"
 #include "tolerances.hpp"
 using namespace Catch::Matchers;
 

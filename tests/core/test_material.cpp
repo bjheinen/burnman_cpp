@@ -12,7 +12,6 @@
 #include <memory>
 #include <string>
 #include "burnman/utils/exceptions.hpp"
-#include "burnman/utils/eos.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
 TEST_CASE("Get/Set state", "[core][material]") {
