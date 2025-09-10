@@ -11,7 +11,7 @@
 #define BURNMAN_CORE_EQUATION_OF_STATE_HPP_INCLUDED
 
 #include <string>
-#include "burnman/utils/eos.hpp"
+#include "burnman/utils/types/mineral_params.hpp"
 
 /**
  * Base class for Equations of State.

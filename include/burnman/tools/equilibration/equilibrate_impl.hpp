@@ -15,7 +15,7 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/tools/equilibration/equality_constraint_base.hpp"
 #include "burnman/tools/equilibration/equilibrate_types.hpp"
-#include "burnman/core/assemblage.hpp" // could forward declare
+#include "burnman/core/assemblage.hpp"
 
 /**
  * @brief Finds equilibrium state of assemblage subject to constraints.

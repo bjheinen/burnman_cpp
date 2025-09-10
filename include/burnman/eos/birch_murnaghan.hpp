@@ -10,7 +10,7 @@
 #ifndef BURNMAN_EOS_BIRCH_MURNAGHAN_HPP_INCLUDED
 #define BURNMAN_EOS_BIRCH_MURNAGHAN_HPP_INCLUDED
 
-#include "burnman/utils/eos.hpp"
+#include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
 /**

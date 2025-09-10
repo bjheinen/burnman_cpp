@@ -10,7 +10,7 @@
 #ifndef BURNMAN_EOS_PROPERTY_MODIFIERS_HPP_INCLUDED
 #define BURNMAN_EOS_PROPERTY_MODIFIERS_HPP_INCLUDED
 
-#include "burnman/utils/eos.hpp"
+#include "burnman/utils/types/excess_params.hpp"
 
 /**
  * TODO: Add Docs to EOS module

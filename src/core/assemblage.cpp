@@ -11,7 +11,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
-#include "burnman/utils/utils.hpp"
+#include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/core/mineral.hpp"
 
 void Assemblage::reset() {

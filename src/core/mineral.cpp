@@ -13,8 +13,8 @@
 #include <utility>
 #include <variant>
 #include "burnman/utils/constants.hpp"
-#include "burnman/utils/make_eos.hpp"
-#include "burnman/eos/property_modifiers.hpp"
+#include "burnman/eos/components/property_modifiers.hpp"
+#include "burnman/eos/make_eos.hpp"
 
 std::string Mineral::get_name() const {
   if (has_custom_name()) {

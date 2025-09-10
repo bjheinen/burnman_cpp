@@ -10,7 +10,7 @@
 #include "burnman/eos/hp.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/eos/models/einstein.hpp"
+#include "burnman/eos/components/einstein.hpp"
 #include "burnman/eos/modified_tait.hpp"
 
 bool HP_TMT::validate_parameters(MineralParams& params) {

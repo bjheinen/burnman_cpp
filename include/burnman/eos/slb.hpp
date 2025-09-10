@@ -11,7 +11,7 @@
 #define BURNMAN_EOS_SLB_HPP_INCLUDED
 
 #include <utility>
-#include "burnman/utils/eos.hpp"
+#include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
 /**

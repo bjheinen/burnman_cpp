@@ -10,8 +10,6 @@
 #ifndef BURNMAN_EOS_DEBYE_HPP_INCLUDED
 #define BURNMAN_EOS_DEBYE_HPP_INCLUDED
 
-#include "burnman/utils/eos.hpp"
-
 /**
  * TODO: Add to EOS module
  * @namespace debye

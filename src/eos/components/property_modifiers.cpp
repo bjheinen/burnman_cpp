@@ -7,12 +7,13 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include "burnman/eos/property_modifiers.hpp"
+#include "burnman/eos/components/property_modifiers.hpp"
 #include <cmath>
 #include "burnman/utils/constants.hpp"
-#include "burnman/eos/models/debye.hpp"
-#include "burnman/eos/models/einstein.hpp"
-#include "burnman/optim/roots.hpp"
+#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/eos/components/debye.hpp"
+#include "burnman/eos/components/einstein.hpp"
+#include "burnman/optim/roots/brent.hpp"
 
 // Anonymous namespace for BW helper functions
 namespace {

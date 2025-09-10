@@ -10,7 +10,7 @@
 #ifndef BURNMAN_EOS_BUKOWINSKI_ELECTRONIC_HPP_INCLUDED
 #define BURNMAN_EOS_BUKOWINSKI_ELECTRONIC_HPP_INCLUDED
 
-#include "burnman/utils/eos.hpp"
+#include "burnman/utils/types/mineral_params.hpp"
 
 /**
  * TODO: Add to EOS module

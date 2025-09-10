@@ -10,8 +10,8 @@
 #include "burnman/eos/birch_murnaghan.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/utils/constants.hpp"
-#include "burnman/optim/roots.hpp"
+#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/optim/roots/brent.hpp"
 
 bool BM3::validate_parameters(MineralParams& params) {
 

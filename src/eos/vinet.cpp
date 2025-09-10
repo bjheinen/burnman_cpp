@@ -10,8 +10,8 @@
 #include "burnman/eos/vinet.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/utils/constants.hpp"
-#include "burnman/optim/roots.hpp"
+#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/optim/roots/brent.hpp"
 
 bool Vinet::validate_parameters(MineralParams& params) {
 

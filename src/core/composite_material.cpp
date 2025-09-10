@@ -11,7 +11,8 @@
 #include <algorithm>
 #include <utility>
 #include <unordered_set>
-#include "burnman/utils/utils.hpp"
+#include "burnman/utils/chemistry_utils.hpp"
+#include "burnman/utils/matrix_utils.hpp"
 
 int CompositeMaterial::get_n_endmembers() const {
   if (!n_endmembers.has_value()) {

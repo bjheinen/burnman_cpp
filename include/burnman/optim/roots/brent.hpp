@@ -15,7 +15,6 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_roots.h>
 #include "burnman/utils/constants.hpp"
-#include "burnman/utils/eos.hpp"
 
 namespace optim {
 namespace roots {

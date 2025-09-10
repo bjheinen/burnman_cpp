@@ -11,8 +11,9 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/utils/constants.hpp"
-#include "burnman/optim/roots.hpp"
-#include "burnman/eos/models/debye.hpp"
+#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/optim/roots/brent.hpp"
+#include "burnman/eos/components/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
 
 bool MGD3::validate_parameters(MineralParams& params) {

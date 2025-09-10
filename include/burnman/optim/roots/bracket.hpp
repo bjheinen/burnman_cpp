@@ -12,7 +12,6 @@
 
 #include <cassert>
 #include <cmath>
-#include "burnman/utils/eos.hpp"
 
 namespace optim {
 namespace roots {

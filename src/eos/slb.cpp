@@ -10,12 +10,12 @@
 #include "burnman/eos/slb.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/utils/constants.hpp"
-#include "burnman/optim/roots.hpp"
-#include "burnman/eos/models/bukowinski_electronic.hpp"
-#include "burnman/eos/models/debye.hpp"
+#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/optim/roots/bracket.hpp"
+#include "burnman/optim/roots/brent.hpp"
+#include "burnman/eos/components/bukowinski_electronic.hpp"
+#include "burnman/eos/components/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
-
 
 bool SLB3::validate_parameters(MineralParams& params) {
   // Check for required keys
