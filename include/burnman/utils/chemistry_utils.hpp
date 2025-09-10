@@ -15,6 +15,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <Eigen/Dense>
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/types/simple_types.hpp"
 
