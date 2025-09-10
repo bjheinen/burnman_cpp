@@ -60,8 +60,8 @@ else
 endif
 
 # Find source files
-SOURCES := $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp)
-TEST_SOURCES := $(wildcard $(TEST_DIR)/*.cpp) $(wildcard $(TEST_DIR)/**/*.cpp)
+SOURCES := $(shell find $(SRC_DIR) -name '*.cpp')
+TEST_SOURCES := $(shell find $(TEST_DIR) -name '*.cpp')
 
 # Generate object fnames
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
