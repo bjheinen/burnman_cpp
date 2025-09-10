@@ -57,7 +57,7 @@ namespace {
       1.0 - constants::precision::abs_tolerance, &react_params);
     double Q;
     if (f_lo * f_hi < 0) {
-      Q = roots::brent(
+      Q = optim::roots::brent(
         &reaction_bragg_williams_gsl_wrapper,
         react_params,
         constants::precision::abs_tolerance,

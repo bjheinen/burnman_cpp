@@ -192,7 +192,7 @@ double SLB3::compute_volume(
   double V_hi = *params.V_0;
   // Check / adjust bracketing interval
   // Note: modifies V_lo & V_hi internally
-  bool valid_bracket = roots::bracket_root(
+  bool valid_bracket = optim::roots::bracket_root(
     &slb_gsl_wrapper,
     slb_params,
     V_lo,
@@ -213,7 +213,7 @@ double SLB3::compute_volume(
     // TODO!
   }
 
-  double volume_root = roots::brent(
+  double volume_root = optim::roots::brent(
     &slb_gsl_wrapper,
     slb_params,
     V_lo,

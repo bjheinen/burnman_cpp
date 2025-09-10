@@ -136,7 +136,7 @@ double MGD3::compute_volume(
   // Set a, b limits
   double x_lo = 0.1 * (*params.V_0);
   double x_hi = 1.5 * (*params.V_0);
-  double volume_root = roots::brent(
+  double volume_root = optim::roots::brent(
     &mgd_gsl_wrapper,
     mgd_params,
     x_lo,
