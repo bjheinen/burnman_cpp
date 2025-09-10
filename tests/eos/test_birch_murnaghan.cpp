@@ -12,7 +12,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "burnman/eos/birch_murnaghan.hpp"
 #include <cmath>
-#include "burnman/utils/eos.hpp"
+#include "burnman/utils/types/mineral_params.hpp"
 #include "tolerances.hpp"
 using namespace Catch::Matchers;
 
