@@ -12,7 +12,7 @@
 
 #include <Eigen/Dense>
 #include "burnman/tools/equilibration/equality_constraint_base.hpp"
-#include "burnman/core/assemblage.hpp" // forward declare?
+#include "burnman/core/assemblage.hpp"
 
 /**
  * @brief Objective function for equilibration.

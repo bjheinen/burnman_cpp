@@ -16,7 +16,8 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/utils/types/simple_types.hpp"
-#include "burnman/core/assemblage.hpp" // Could forward declare...
+#include "burnman/tools/equilibrate/equilibrate_types.hpp"
+#include "burnman/core/assemblage.hpp"
 
 /**
  * @brief Builds the equilibration parameter object.
