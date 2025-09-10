@@ -19,6 +19,7 @@
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/eos.hpp"
 
+namespace optim {
 namespace roots {
   /**
     * @brief Finds root of function in region [x_lo,x_hi] via Brent's method.
@@ -159,5 +160,7 @@ namespace roots {
     // Return true if valid bracket
     return bracket_found;
   }
-}
+} // namespace roots
+} // namespace optim
+
 #endif // BURNMAN_OPTIM_ROOTS_HPP_INCLUDED
