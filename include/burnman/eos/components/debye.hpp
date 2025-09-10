@@ -10,6 +10,8 @@
 #ifndef BURNMAN_EOS_DEBYE_HPP_INCLUDED
 #define BURNMAN_EOS_DEBYE_HPP_INCLUDED
 
+#include "burnman/utils/types/simple_types.hpp"
+
 /**
  * TODO: Add to EOS module
  * @namespace debye
@@ -21,15 +23,6 @@
  * @note All functions assume SI units for all properties.
  */
 namespace debye {
-
-  /**
-   * Wrapper type to force explicit calls of Debye functions with
-   * double f instead of int napfu.
-   */
-  struct ExplicitDouble {
-    double value;
-    explicit ExplicitDouble(double v) : value(v) {}
-  };
 
   /**
    @brief Integrand of third-order Debye function.

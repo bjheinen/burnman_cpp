@@ -10,6 +10,8 @@
 #ifndef BURNMAN_EOS_EINSTEIN_HPP_INCLUDED
 #define BURNMAN_EOS_EINSTEIN_HPP_INCLUDED
 
+#include "burnman/utils/types/simple_types.hpp"
+
 /**
  * TODO: Add to EOS module
  * @namespace einstein
@@ -18,15 +20,6 @@
  * @note All functions assume SI units for all properties.
  */
 namespace einstein {
-
-  /**
-   * Wrapper type to force explicit calls of Einstein functions with
-   * double f instead of int napfu.
-   */
-  struct ExplicitDouble {
-    double value;
-    explicit ExplicitDouble(double v) : value(v) {}
-  };
 
   /**
    * @brief Computes thermal energy of material.
