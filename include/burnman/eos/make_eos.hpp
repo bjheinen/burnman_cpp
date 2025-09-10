@@ -11,7 +11,7 @@
 #define BURNMAN_EOS_MAKE_EOS_HPP_INCLUDED
 
 #include <memory>
-#include "burman/utils/types/simple_types.hpp"
+#include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
 /**
