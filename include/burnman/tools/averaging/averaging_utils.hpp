@@ -59,7 +59,7 @@ namespace utils {
   /**
    * @see `HashinShtrikmanLower::average_bulk_moduli'.
    */
-  static double lower_hs_bulk_fn(
+  double lower_hs_bulk_fn(
     const Eigen::ArrayXd& volumes,
     const Eigen::ArrayXd& bulk_moduli,
     const Eigen::ArrayXd& shear_moduli);
@@ -67,7 +67,7 @@ namespace utils {
   /**
    * @see `HashinShtrikmanLower::average_shear_moduli'.
    */
-  static double lower_hs_shear_fn(
+  double lower_hs_shear_fn(
     const Eigen::ArrayXd& volumes,
     const Eigen::ArrayXd& bulk_moduli,
     const Eigen::ArrayXd& shear_moduli);
@@ -75,7 +75,7 @@ namespace utils {
   /**
    * @see `HashinShtrikmanUpper::average_bulk_moduli'.
    */
-  static double upper_hs_bulk_fn(
+  double upper_hs_bulk_fn(
     const Eigen::ArrayXd& volumes,
     const Eigen::ArrayXd& bulk_moduli,
     const Eigen::ArrayXd& shear_moduli);
@@ -83,7 +83,7 @@ namespace utils {
   /**
    * @see `HashinShtrikmanUpper::average_shear_moduli'.
    */
-  static double upper_hs_shear_fn(
+  double upper_hs_shear_fn(
     const Eigen::ArrayXd& volumes,
     const Eigen::ArrayXd& bulk_moduli,
     const Eigen::ArrayXd& shear_moduli);
