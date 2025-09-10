@@ -7,7 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#ifndef BURNMAN_CORE_SOLUTION_MODELS_IDEAL_INCLUDED
+#ifndef BURNMAN_CORE_SOLUTION_MODELS_IDEAL_HPP_INCLUDED
 #define BURNMAN_CORE_SOLUTION_MODELS_IDEAL_HPP_INCLUDED
 
 #include <Eigen/Dense>
