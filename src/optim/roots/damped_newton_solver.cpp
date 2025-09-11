@@ -51,7 +51,7 @@ DampedNewtonResult DampedNewtonSolver::solve(
     state.h = state.lambda
       * (state.dxbar - state.dx).norm()
       * state.dx_norm
-      / (state.dx_prev.norm * state.dxbar.norm);
+      / (state.dx_prev.norm() * state.dxbar.norm());
     update_lambda(state);
 
     state.x_j = state.x + state.lambda * state.dx;
