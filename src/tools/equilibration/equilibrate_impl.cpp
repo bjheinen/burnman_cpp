@@ -18,6 +18,7 @@
 #include "burnman/core/solution.hpp"
 #include "burnman/optim/roots/damped_newton_types.hpp"
 #include "burnman/optim/roots/damped_newton_solver.hpp"
+#include "burnman/tools/equilibration/equality_constraint_variants.hpp"
 #include "burnman/tools/equilibration/equilibrate_lambda_bounds.hpp"
 #include "burnman/tools/equilibration/equilibrate_utils.hpp"
 #include "burnman/tools/equilibration/equilibrate_objective.hpp"
