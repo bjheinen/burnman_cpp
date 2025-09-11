@@ -173,14 +173,14 @@ Eigen::VectorXd get_parameter_vector(
 ) {
   int n_params = assemblage.get_n_endmembers() + 2 + n_free_compositional_vectors;
   Eigen::VectorXd params = Eigen::VectorXd::Zero(n_params);
-  Eigen::ArrayXd n_moles_per_phase = assemblage.n_moles * assemblage.molar_fractions;
+  Eigen::ArrayXd n_moles_per_phase = assemblage.get_n_moles() * assemblage.get_molar_fractions();
   // check pressure & temperature are set
   if (!assemblage.has_state()) {
     throw std::runtime_error("You need to set_state before getting parameters");
   }
   // Set P & T as first two params
-  params(0) = assemblage.pressure;
-  params(1) = assemblage.temperature;
+  params(0) = assemblage.get_pressure();
+  params(1) = assemblage.get_temperature();
   std::vector<int> embr_per_phase = assemblage.get_endmembers_per_phase();
   Eigen::Index j = 2;
   for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(assemblage.get_n_phases()); ++i) {
@@ -197,7 +197,7 @@ Eigen::VectorXd get_parameter_vector(
 Eigen::VectorXd get_endmember_amounts(
   const Assemblage& assemblage
 ) {
-  Eigen::ArrayXd phase_amounts = assemblage.get_n_moles * assemblage.get_molar_fractions();
+  Eigen::ArrayXd phase_amounts = assemblage.get_n_moles() * assemblage.get_molar_fractions();
   Eigen::VectorXd abs_amounts(assemblage.get_n_endmembers());
   std::vector<int> embr_per_phase = assemblage.get_endmembers_per_phase();
   Eigen::Index j = 0;
@@ -238,6 +238,7 @@ void set_composition_and_state_from_parameters(
   }
   assert((phase_amounts > -1.0e-8).all());
   phase_amounts = phase_amounts.abs();
-  assemblage.set_n_moles = phase_amounts.sum();
-  assemblage.set_fractions(phase_amounts / assemblage.get_n_moles());
+  double n_moles = phase_amounts.sum();
+  assemblage.set_n_moles(n_moles);
+  assemblage.set_fractions(phase_amounts / n_moles);
 }
