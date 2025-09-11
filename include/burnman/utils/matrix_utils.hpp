@@ -188,6 +188,7 @@ namespace utils {
   inline std::vector<Eigen::Index> get_independent_row_indices(
     const Eigen::MatrixXd& mat
   ) {
+    // TODO: Use Eigen::ArrayXi for indices?
     // Transpose to get rows instead of cols
     Eigen::MatrixXd A = mat.transpose();
     // QR decomp with column pivoting
@@ -222,6 +223,7 @@ namespace utils {
     // Flip basis
     Eigen::MatrixXd basis_flipped = basis.rowwise().reverse();
     // FullPivLU decomposition to get RREF
+    // TODO: use new RREF manual function
     Eigen::FullPivLU<Eigen::MatrixXd> lu_basis(basis_flipped);
     // Get the rank of the matrix
     Eigen::Index rank = lu_basis.rank();
