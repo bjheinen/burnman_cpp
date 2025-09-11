@@ -125,7 +125,7 @@ class PhaseFractionConstraint : public LinearXConstraint {
  public:
   PhaseFractionConstraint(
     Eigen::Index phase_index,
-    double fraction,
+    double phase_fraction,
     const EquilibrationParameters& prm);
   std::unique_ptr<EqualityConstraint> clone() const override;
  protected:
@@ -133,7 +133,7 @@ class PhaseFractionConstraint : public LinearXConstraint {
   double phase_fraction;
  private:
   static Eigen::VectorXd compute_A(
-    std::size_t phase_idx,
+    Eigen::Index phase_index,
     double fraction,
     const EquilibrationParameters& prm);
 };

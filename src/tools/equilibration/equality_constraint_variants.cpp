@@ -39,12 +39,12 @@ LinearXConstraint::LinearXConstraint(const Eigen::VectorXd& A, double b)
   : A(A), b(b) {}
 
 PhaseFractionConstraint::PhaseFractionConstraint(
-  Eige::Index phase_index,
-  double fraction,
+  Eigen::Index phase_index,
+  double phase_fraction,
   const EquilibrationParameters& prm)
-  : LinearXConstraint(compute_A(phase_idx, fraction, prm), 0.0),
+  : LinearXConstraint(compute_A(phase_index, phase_fraction, prm), 0.0),
     phase_index(phase_index),
-    fraction(fraction) {}
+    phase_fraction(phase_fraction) {}
 
 Eigen::VectorXd PhaseFractionConstraint::compute_A(
   Eigen::Index phase_index,
@@ -54,7 +54,7 @@ Eigen::VectorXd PhaseFractionConstraint::compute_A(
   Eigen::VectorXd A = Eigen::VectorXd::Zero(prm.n_parameters);
   A(prm.phase_amount_indices) =
     Eigen::VectorXd::Constant(prm.phase_amount_indices.size(), -fraction);
-  A(prm.phase_amount_indices(phase_idx)) += 1.0;
+  A(prm.phase_amount_indices(phase_index)) += 1.0;
   return A;
 }
 
@@ -124,7 +124,7 @@ std::pair<Eigen::VectorXd, double> PhaseCompositionConstraint::compute_Ab(
       site_names[i]
     );
     if (it == solution_site_names.end()) {
-      throw std::runtime_error("Site name " + site_names[i] + " not found!")
+      throw std::runtime_error("Site name " + site_names[i] + " not found!");
     }
     site_indices(static_cast<Eigen::Index>(i)) =
       static_cast<int>(
@@ -211,14 +211,14 @@ double EntropyConstraint::evaluate(
   const Eigen::VectorXd& [[maybe_unused]],
   const Assemblage& assemblage
 ) const {
-  return assemblage.get_molar_entropy() * assemblage.get_n_moles() - this->value();
+  return assemblage.get_molar_entropy() * assemblage.get_n_moles() - this->value;
 }
 
 double VolumeConstraint::evaluate(
   const Eigen::VectorXd& [[maybe_unused]],
   const Assemblage& assemblage
 ) const {
-  return assemblage.get_molar_volum() * assemblage.get_n_moles() - this->value();
+  return assemblage.get_molar_volume() * assemblage.get_n_moles() - this->value;
 }
 
 double PTEllipseConstraint::evaluate(
