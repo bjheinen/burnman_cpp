@@ -119,10 +119,10 @@ EquilibrateResult equilibrate(
   // Store strides for mapping back to grid_index
   std::vector<std::size_t> strides = utils::compute_strides(grid_shape);
   // Set up grid of solver results
-  NDArray<DampedNewtonResult> sol_array(grid_shape);
+  NDArray<optim::roots::DampedNewtonResult> sol_array(grid_shape);
 
   // Make solver settings
-  DampedNewtonSettings solver_settings;
+  optim::roots::DampedNewtonSettings solver_settings;
   solver_settings.store_iterates = store_iterates;
   solver_settings.max_iterations = max_iterations;
   solver_settings.tol = tol;
@@ -132,7 +132,7 @@ EquilibrateResult equilibrate(
       return lambda_bounds_func(dx, x, embr_per_phase);
     };
   // Make solver object
-  DampedNewtonSolver solver(solver_settings);
+  optim::roots::DampedNewtonSolver solver(solver_settings);
 
   // Loop over all the problems
   std::size_t n_problems = sol_array.size();
@@ -149,7 +149,7 @@ EquilibrateResult equilibrate(
     }
 
     // Note - mutates assemblage object (might need to clone before)
-    DampedNewtonResult sol = solver.solve(
+    optim::roots::DampedNewtonResult sol = solver.solve(
       parameter_vector,
       [&](const Eigen::VectorXd& x) {
         return F(
@@ -215,7 +215,7 @@ EquilibrateResult equilibrate(
       }
       bool updated_params = false;
       for (std::size_t idx : prev_indices) {
-        const DampedNewtonResult& s = sol_array(idx);
+        const optim::roots::DampedNewtonResult& s = sol_array(idx);
         if (s.success && !updated_params) {
           // Next guess based on a Newton step using
           // the old solution vector and Jacobian with new constraints
