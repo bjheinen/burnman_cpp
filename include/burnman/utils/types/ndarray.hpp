@@ -73,8 +73,8 @@ struct NDArray {
   /**
    * @brief Returns data size (total number of elements).
    */
-  const std::size_t size() const {
-    return this->data.size_;
+  std::size_t size() const {
+    return this->size_;
   }
 
   /**
@@ -112,11 +112,11 @@ struct NDArray {
   // Grid indexing
   // mutable, with vector
   T& operator()(const std::vector<std::size_t>& indices) {
-    return this->storage_[utils::flatten_index(indices, this->strides)];
+    return this->storage_[utils::flatten_index(indices, this->strides_)];
   }
   // const, with vector
   const T& operator()(const std::vector<std::size_t>& indices) const {
-    return this->storage_[utils::flatten_index(indices, this->strides)];
+    return this->storage_[utils::flatten_index(indices, this->strides_)];
   }
   // mutable, with initialiser list
   T& operator()(std::initializer_list<std::size_t> indices) {
