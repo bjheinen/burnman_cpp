@@ -16,7 +16,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/utils/types/simple_types.hpp"
-#include "burnman/tools/equilibrate/equilibrate_types.hpp"
+#include "burnman/tools/equilibration/equilibrate_types.hpp"
 #include "burnman/core/assemblage.hpp"
 
 /**

@@ -7,7 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#include "burnman/tools/equilibrate/equality_constraint_variants.hpp"
+#include "burnman/tools/equilibration/equality_constraint_variants.hpp"
 #include <algorithm>
 #include <iterator>
 #include <numeric>
