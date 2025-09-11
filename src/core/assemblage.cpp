@@ -19,6 +19,7 @@ void Assemblage::reset() {
   Material::reset();
   // Reset cached Assemblage properties
   volume_fractions.reset();
+  endmember_partial_gibbs.reset();
 }
 
 // Public setters for assemblage properties
@@ -191,6 +192,13 @@ Eigen::ArrayXd Assemblage::get_volume_fractions() const {
   return *volume_fractions;
 }
 
+Eigen::ArrayXd Assemblage::get_endmember_partial_gibbs() const {
+  if (!endmember_partial_gibbs.has_value()) {
+    endmember_partial_gibbs = compute_endmember_partial_gibbs();
+  }
+  return *endmember_partial_gibbs;
+}
+
 std::vector<int> Assemblage::get_endmembers_per_phase() const {
   if (!endmembers_per_phase.has_value()) {
     setup_endmember_properties();
@@ -323,6 +331,29 @@ FormulaMap Assemblage::compute_formula() const {
 
 Eigen::ArrayXd Assemblage::compute_volume_fractions() const {
   return map_phases_to_array(&Material::get_molar_volume) * molar_fractions;
+}
+
+Eigen::ArrayXd Assemblage::compute_endmember_partial_gibbs() const {
+  Eigen::ArrayXd partial_gibbs(get_n_endmembers());
+  // Loop over phases
+  Eigen::Index j = 0;
+  for (const auto& ph : this->phases) {
+    int n = 1;
+    // TODO: This will break is phase is Assemblage, but don't
+    // want to include Solution just for this. Should rename to
+    // partial gibbs and move to CompositeMaterial so can use
+    // polymorphism. Remember to cache in CompositeMaterial and
+    // make new CompositeMaterial reset() function.
+    // If phase is a Solution
+    if (auto sol = std::dynamic_pointer_cast<CompositeMaterial>(ph)) {
+      n = sol->get_n_endmembers();
+      partial_gibbs.segment(j, n) = sol->get_partial_gibbs();
+    } else {
+      partial_gibbs(j) = ph->get_molar_gibbs();
+    }
+    j += n;
+  }
+  return partial_gibbs;
 }
 
 int Assemblage::compute_n_endmembers() const {

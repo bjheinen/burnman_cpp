@@ -275,6 +275,13 @@ class Assemblage : public CompositeMaterial {
    */
   double get_n_moles() const;
 
+  // TODO: Could move partial_gibbs to CompositeMaterial and reuse in Solution
+  /**
+   * @brief Returns partial Gibbs energies for all the endmember
+   * minerals in the Composite.
+   */
+  Eigen::ArrayXd get_endmember_partial_gibbs() const;
+
  protected:
 
   // Overrides of defaults from Material
@@ -307,6 +314,7 @@ class Assemblage : public CompositeMaterial {
 
   // Additional Assemblage compute functions
   Eigen::ArrayXd compute_volume_fractions() const;
+  Eigen::ArrayXd compute_endmember_partial_gibbs() const;
 
  private:
 
@@ -321,6 +329,7 @@ class Assemblage : public CompositeMaterial {
   // Cached properties (can be reset)
   // 1D Eigen arrays (could be made Vectors)
   mutable std::optional<Eigen::ArrayXd> volume_fractions;
+  mutable std::optional<Eigen::ArrayXd> endmember_partial_gibbs;
 
   // Stored (cached) properties not reset
   mutable std::optional<std::vector<int>> endmembers_per_phase;
