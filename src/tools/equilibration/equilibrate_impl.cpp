@@ -15,9 +15,12 @@
 #include <string>
 #include <utility>
 #include "burnman/utils/types/ndarray.hpp"
+#include "burnman/core/solution.hpp"
 #include "burnman/optim/roots/damped_newton_types.hpp"
 #include "burnman/optim/roots/damped_newton_solver.hpp"
-#include "burnman/core/solution.hpp"
+#include "burnman/tools/equilibration/equilibrate_lambda_bounds.hpp"
+#include "burnman/tools/equilibration/equilibrate_utils.hpp"
+#include "burnman/tools/equilibration/equilibrate_objective.hpp"
 
 EquilibrateResult equilibrate(
   const FormulaMap& composition,
@@ -33,7 +36,7 @@ EquilibrateResult equilibrate(
   // Check compositions of solutions set
   // TODO:: could implement a has_composition() for convenience here
   for (std::size_t i = 0; i < static_cast<std::size_t>(assemblage.get_n_phases()); ++i) {
-    if (auto& ph = assemblage.get_phase<Solution>(i)) {
+    if (const auto& ph = assemblage.get_phase<Solution>(i)) {
       if (!ph->get_molar_fractions().size()) {
         throw std::runtime_error(
           "Set composition for solution " + ph->get_name() + " before running equilibrate!"
@@ -65,9 +68,9 @@ EquilibrateResult equilibrate(
 
   // Set default assemblage molar_fractions if none
   if (!assemblage.get_molar_fractions().size()) {
-    int n_phases = assemblage->get_n_phases();
+    int n_phases = assemblage.get_n_phases();
     Eigen::ArrayXd f = Eigen::ArrayXd::Constant(n_phases, 1.0 / n_phases);
-    assemblage->set_fractions(f);
+    assemblage.set_fractions(f);
   }
   // Set n_moles
   double comp_sum = 0;
