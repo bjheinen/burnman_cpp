@@ -26,12 +26,12 @@ EquilibrateResult equilibrate(
   const FormulaMap& composition,
   Assemblage& assemblage,
   const ConstraintList& equality_constraints,
-  const std::vector<FreeVectorMap>& free_compositional_vectors = {},
-  double tol = 1.0e-3,
-  bool store_iterates = false,
-  bool store_assemblage = true,
-  int max_iterations = 100,
-  bool verbose = false
+  const std::vector<FreeVectorMap>& free_compositional_vectors,
+  double tol,
+  bool store_iterates,
+  bool store_assemblage ,
+  int max_iterations,
+  bool verbose
 ) {
   // Check compositions of solutions set
   // TODO:: could implement a has_composition() for convenience here
@@ -236,10 +236,10 @@ EquilibrateResult equilibrate(
           Eigen::VectorXd c = prm.constraint_matrix * new_parameters + prm.constraint_vector;
           if ((c.array() <= 0.0).all()) {
             // Constraints satisfied - accept new guess
-            parameters = new_parameters;
+            parameter_vector = new_parameters;
           } else {
             // Fallback to last parameter vector
-            parameters = s.x;
+            parameter_vector = s.x;
             if (verbose) {
               std::vector<std::string> exhausted_phases;
               Eigen::ArrayXd phase_amounts = new_parameters(prm.phase_amount_indices);
