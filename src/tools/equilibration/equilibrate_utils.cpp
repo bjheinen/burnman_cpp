@@ -32,7 +32,7 @@ EquilibrationParameters get_equilibration_parameters(
   for (std::size_t i = 0; i < embr_per_phase.size(); ++i) {
     auto ph = assemblage.get_phase(i);
     phase_amount_ind_temp.push_back(static_cast<int>(prm.parameter_names.size()));
-    prm.parameter_names.push_back("x(" + ph.get_name() + ")");
+    prm.parameter_names.push_back("x(" + ph->get_name() + ")");
     int n_mbrs = embr_per_phase[i];
     // When n_mbrs > 1, add embr names (but skip 1st)
     for (int j = 1; j < n_mbrs; ++j) {
@@ -186,7 +186,7 @@ Eigen::VectorXd get_parameter_vector(
     params(j) = n_moles_per_phase(i);
     if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(i))) {
       Eigen::Index n_embr = static_cast<Eigen::Index>(embr_per_phase[i] - 1); // skip first embr
-      params.segment(j + 1, n_embr) = ph.get_molar_fractions().tail(n_embr);
+      params.segment(j + 1, n_embr) = ph->get_molar_fractions().tail(n_embr);
     }
     j += embr_per_phase[static_cast<std::size_t>(i)];
   }
@@ -203,7 +203,7 @@ Eigen::VectorXd get_endmember_amounts(
   for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(assemblage.get_n_phases()); ++i) {
     if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(i))) {
       abs_amounts.segment(j, j + static_cast<Eigen::Index>(embr_per_phase(i))) =
-        phase_amounts(i) * ph.get_molar_fractions();
+        phase_amounts(i) * ph->get_molar_fractions();
     } else {
       abs_amounts(j) = phase_amounts(i);
     }
@@ -225,11 +225,11 @@ void set_composition_and_state_from_parameters(
     phase_amounts(phase_idx) = parameters(i);
     // TODO: get_phase take Eigen::Index?
     if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(phase_idx))) {
-      Eigen::Index n_mbrs = static_cast<Eigen::Index>(ph.get_n_endmembers());
+      Eigen::Index n_mbrs = static_cast<Eigen::Index>(ph->get_n_endmembers());
       Eigen::ArrayXd f = Eigen::ArrayXd::Zero(n_mbrs);
       f.segment(1, n_mbrs - 1) = parameters.segment(i + 1, n_mbrs - 1);
       f(0) = 1.0 - f.tail(n_mbrs - 1).sum();
-      ph.set_composition(f);
+      ph->set_composition(f);
       i += n_mbrs;
     } else {
       ++i;
