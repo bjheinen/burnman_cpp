@@ -213,7 +213,7 @@ DampedNewtonSolver::solve_subject_to_constraints(
   return {x + dx, lambdas, cond};
 }
 
-DampedNewtonSolver::lagrangian_walk_along_constraints(
+void DampedNewtonSolver::lagrangian_walk_along_constraints(
   DampedNewtonSolverState& state
 ) const {
   // Separate active/inactive constraints
