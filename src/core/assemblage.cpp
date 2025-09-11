@@ -20,6 +20,7 @@ void Assemblage::reset() {
   // Reset cached Assemblage properties
   volume_fractions.reset();
   reaction_affinities.reset();
+  equilibrium_tolerance = 1.0e-3;
 }
 
 // Public setters for assemblage properties
@@ -134,6 +135,10 @@ void Assemblage::set_n_moles(double new_n_moles) {
   this->n_moles = new_n_moles;
 }
 
+void Assemblage::set_equilibrium_tolerance(double new_equilibrium_tolerance) {
+  this->equilibrium_tolerance = new_equilibrium_tolerance;
+}
+
 // Public setter overrides of Material
 void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
   for (auto& ph : phases) {
@@ -182,6 +187,10 @@ double Assemblage::get_n_moles() const {
     throw std::runtime_error("n_moles not set!");
   }
   return *n_moles;
+}
+
+double Assemblage::get_equilibrium_tolerance() const {
+  return this->equilibrium_tolerance;
 }
 
 // Public getter functions with caching

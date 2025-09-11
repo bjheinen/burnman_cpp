@@ -222,6 +222,11 @@ class Assemblage : public CompositeMaterial {
    */
   void set_n_moles(double new_n_moles);
 
+  /**
+   * @brief Set the assemblage equilibrium tolerance.
+   */
+  void set_equilibrium_tolerance(double new_equilibrium_tolerance);
+
   // Public getters for extra Assemblage functions
 
   /**
@@ -274,6 +279,14 @@ class Assemblage : public CompositeMaterial {
    * @brief Get n_moles (Used to convert mole fractions / absolute phase amounts).
    */
   double get_n_moles() const;
+
+  /**
+   * @brief Returns the equilibrium tolerance (J/reaction).
+   *
+   * @note Use `Assemblage::set_equilibtrium_tolerance' to change.
+   * The default value of 1.0e-3 is rest on calls to `Assemblage::reset()'.
+   */
+  double get_equilibrium_tolerance() const;
 
   /**
    * @brief Returns the reaction affinities vector.
@@ -334,6 +347,7 @@ class Assemblage : public CompositeMaterial {
   mutable std::optional<std::vector<int>> endmembers_per_phase;
 
   mutable std::optional<double> n_moles;
+  double equilibrium_tolerance = 1.0e-3; // J/reaction
 
   // Compute / setup functions for Composite properties
   void setup_endmember_properties() const;
