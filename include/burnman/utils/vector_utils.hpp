@@ -69,6 +69,7 @@ namespace utils {
       indices[dim] = flat_index / strides[dim];
       flat_index %= strides[dim];
     }
+    return indices;
   }
 
 } // namespace utils
