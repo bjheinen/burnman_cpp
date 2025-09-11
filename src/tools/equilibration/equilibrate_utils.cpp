@@ -203,7 +203,7 @@ Eigen::VectorXd get_endmember_amounts(
   Eigen::Index j = 0;
   for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(assemblage.get_n_phases()); ++i) {
     if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(i))) {
-      abs_amounts.segment(j, j + static_cast<Eigen::Index>(embr_per_phase(i))) =
+      abs_amounts.segment(j, j + static_cast<Eigen::Index>(embr_per_phase[i])) =
         phase_amounts(i) * ph->get_molar_fractions();
     } else {
       abs_amounts(j) = phase_amounts(i);
