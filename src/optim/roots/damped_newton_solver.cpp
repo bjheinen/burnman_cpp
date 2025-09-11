@@ -357,7 +357,7 @@ void DampedNewtonSolver::make_termination_info(
       sol.message =
         std::string("The descent vector crosses the constraints with ")
         + "the following indices: "
-        + s + "."
+        + s + ".";
     } else if (state.n_iterations == this->settings.max_iterations) {
       sol.code = 3;
       sol.message =
