@@ -13,6 +13,7 @@
 #include <cstddef>
 #include <optional>
 #include <stdexcept>
+#include "burnman/core/solution.hpp"
 
 EquilibrationParameters get_equilibration_parameters(
   const Assemblage& assemblage,
