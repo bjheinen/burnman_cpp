@@ -209,7 +209,7 @@ DampedNewtonSolver::solve_subject_to_constraints(
     // dx_lambda = qr.solve(rhs);
   }
   Eigen::VectorXd dx = dx_lambda.head(n_x);
-  Eigen::VectorXd lambda = dx_lambda.tail(n_c);
+  Eigen::VectorXd lambdas = dx_lambda.tail(n_c);
   return {x + dx, lambdas, cond};
 }
 
@@ -220,7 +220,7 @@ void DampedNewtonSolver::lagrangian_walk_along_constraints(
   std::vector<int> act_ind_temp;
   std::vector<int> inact_ind_temp;
   for (const auto& vc : state.violated_constraints) {
-    int i = static_cat<int>(vc.first);
+    int i = static_cast<int>(vc.first);
     double frac = vc.second;
     if (frac < this->settings.eps) {
       act_ind_temp.push_back(i);
@@ -272,7 +272,7 @@ void DampedNewtonSolver::lagrangian_walk_along_constraints(
   }
   // Check newly violated inactive constraints
   Eigen::Index n_inactive = inactive_constraint_indices.size();
-  Eigen::VectorXd c_x_j = evaluate_constraints(x_j, state)(inactive_constraint_indices);
+  Eigen::VectorXd c_x_j = evaluate_constraints(state.x_j, state)(inactive_constraint_indices);
   if ((c_x_j.array() >= this->settings.eps).any()) {
     Eigen::VectorXd c_x = evaluate_constraints(state.x, state)(inactive_constraint_indices);
     std::vector<std::pair<Eigen::Index, double>> newly_violated_constraints;
@@ -306,7 +306,7 @@ void DampedNewtonSolver::posteriori_loop(DampedNewtonSolverState& state) const {
         state.converged = true;
       }
       state.x = x_j;
-      state.F = state.F_func(x_j)
+      state.F = state.F_func(x_j);
       state.dxbar = dxbar_j;
       state.dx_prev = state.dx;
       state.require_posteriori_loop = false;
