@@ -92,6 +92,13 @@ class Material {
    */
   virtual void set_state(double new_pressure, double new_temperature);
 
+  // Public helper functions to check properties exist
+
+  /**
+   * @brief Helper function to check if P & T set.
+   */
+  bool has_state() const;
+
   // Public getter functions
   /**
    * @brief Gets the material name
@@ -654,11 +661,6 @@ class Material {
    * @brief Helper function to check if name set.
    */
   bool has_custom_name() const;
-
-  /**
-   * @brief Helper function to check if P & T set.
-   */
-  bool has_state() const;
 
  private:
   // std::optional used for caching
