@@ -63,6 +63,13 @@ const Eigen::MatrixXd& CompositeMaterial::get_stoichiometric_matrix() const {
   return *stoichiometric_matrix;
 }
 
+const Eigen::MatrixXd& CompositeMaterial::get_reduced_stoichiometric_matrix() const {
+  if (!reduced_stoichiometric_matrix.has_value()) {
+    reduced_stoichiometric_matrix = compute_reduced_stoichiometric_matrix();
+  }
+  return *reduced_stoichiometric_matrix;
+}
+
 const Eigen::MatrixXd& CompositeMaterial::get_compositional_basis() const {
   if (!compositional_basis.has_value()) {
     compositional_basis = compute_compositional_basis();
@@ -165,6 +172,10 @@ Eigen::MatrixXd CompositeMaterial::compute_stoichiometric_matrix() const {
     }
   }
   return stoich_mat;
+}
+
+Eigen::MatrixXd CompositeMaterial::compute_reduced_stoichiometric_matrix() const {
+  return (get_stoichiometric_matrix())(Eigen::all, get_independent_element_indices());
 }
 
 Eigen::MatrixXd CompositeMaterial::compute_compositional_basis() const {

@@ -95,6 +95,11 @@ class CompositeMaterial : public Material {
   const Eigen::MatrixXd& get_stoichiometric_matrix() const;
 
   /**
+   * @brief Stoichiometric matrix restricted to independent elements.
+   */
+  const Eigen::MatrixXd& get_reduced_stoichiometric_matrix() const;
+
+  /**
    * @brief The compositional basis of the material.
    */
   const Eigen::MatrixXd& get_compositional_basis() const;
@@ -135,13 +140,14 @@ class CompositeMaterial : public Material {
   mutable std::optional<int> n_endmembers;
   mutable std::optional<int> n_elements;
   mutable std::optional<int> n_reactions;
+  // TODO: Consider Eigen::ArrayXi for indices?
   mutable std::optional<std::vector<Eigen::Index>> independent_element_indices;
   mutable std::optional<std::vector<Eigen::Index>> dependent_element_indices;
   mutable std::optional<std::vector<std::string>> endmember_names;
   mutable std::optional<std::vector<std::string>> elements;
   mutable std::optional<std::vector<FormulaMap>> endmember_formulae;
   mutable std::optional<Eigen::MatrixXd> stoichiometric_matrix;
-  // stoichiometric_array?
+  mutable std::optional<Eigen::MatrixXd> reduced_stoichiometric_matrix;
   mutable std::optional<Eigen::MatrixXd> compositional_basis;
   mutable std::optional<Eigen::MatrixXd> compositional_null_basis;
   mutable std::optional<Eigen::MatrixXd> reaction_basis;
@@ -153,6 +159,7 @@ class CompositeMaterial : public Material {
   std::vector<Eigen::Index> compute_independent_element_indices() const;
   std::vector<Eigen::Index> compute_dependent_element_indices() const;
   Eigen::MatrixXd compute_stoichiometric_matrix() const;
+  Eigen::MatrixXd compute_reduced_stoichiometric_matrix() const;
   Eigen::MatrixXd compute_compositional_basis() const;
   Eigen::MatrixXd compute_compositional_null_basis() const;
   Eigen::MatrixXd compute_reaction_basis() const;
