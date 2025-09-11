@@ -8,7 +8,7 @@
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
 #include "burnman/tools/averaging/reuss.hpp"
-#include "burnman/utils/averaging/averaging_utils.hpp"
+#include "burnman/tools/averaging/averaging_utils.hpp"
 
 namespace averaging {
 
