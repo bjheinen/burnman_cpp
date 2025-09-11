@@ -114,7 +114,7 @@ EquilibrationParameters get_equilibration_parameters(
   auto [constraint_matrix, constraint_vector] = calculate_constraints(assemblage, static_cast<int>(n_free_compositional_vectors));
   prm.constraint_matrix = constraint_matrix;
   prm.constraint_vector = constraint_vector;
-  return prm
+  return prm;
 }
 
 std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
@@ -141,13 +141,13 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
     assemblage.get_n_endmembers() + 2 + n_free_compositional_vectors
   );
   // Manually set P T constraints
-  c_matrix(0, 0) = -1.0 // P > 0
-  c_matrix(1, 1) = -1.0 // T > 0
+  c_matrix(0, 0) = -1.0; // P > 0
+  c_matrix(1, 1) = -1.0; // T > 0
   Eigen::Index cidx = 2; // Index of current compositional constraint (row)
   Eigen::Index pidx = 0; // Starting index of current phase
   for (std::size_t i = 0; i < embr_per_phase.size(); ++i) {
     Eigen::Index n = static_cast<Eigen::Index>(embr_per_phase[i]);
-    c_matrix(cidx, pidx + 2) = -1.0 // phase prop > 0
+    c_matrix(cidx, pidx + 2) = -1.0; // phase prop > 0
     // The first endmember proportion is not a free variable
     // (all endmembers in solution must sum to one)
     // Re-express the constraints without the first endmember
