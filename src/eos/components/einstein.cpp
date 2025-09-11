@@ -100,7 +100,7 @@ double einstein::compute_thermal_energy(
 double einstein::compute_thermal_energy(
   double temperature,
   double einstein_temperature,
-  einstein::ExplicitDouble f) {
+  ExplicitDouble f) {
   return compute_thermal_energy_impl(
     temperature,
     einstein_temperature,
@@ -122,7 +122,7 @@ double einstein::compute_molar_heat_capacity_v(
 double einstein::compute_molar_heat_capacity_v(
   double temperature,
   double einstein_temperature,
-  einstein::ExplicitDouble f) {
+  ExplicitDouble f) {
   return compute_molar_heat_capacity_v_impl(
     temperature,
     einstein_temperature,
@@ -144,7 +144,7 @@ double einstein::compute_helmholtz_free_energy(
 double einstein::compute_helmholtz_free_energy(
   double temperature,
   double einstein_temperature,
-  einstein::ExplicitDouble f) {
+  ExplicitDouble f) {
   return compute_helmholtz_free_energy_impl(
     temperature,
     einstein_temperature,
@@ -166,7 +166,7 @@ double einstein::compute_entropy(
 double einstein::compute_entropy(
   double temperature,
   double einstein_temperature,
-  einstein::ExplicitDouble f) {
+  ExplicitDouble f) {
   return compute_entropy_impl(
     temperature,
     einstein_temperature,
@@ -188,7 +188,7 @@ double einstein::compute_dmolar_heat_capacity_v_dT(
 double einstein::compute_dmolar_heat_capacity_v_dT(
   double temperature,
   double einstein_temperature,
-  einstein::ExplicitDouble f) {
+  ExplicitDouble f) {
   return compute_dmolar_heat_capacity_v_dT_impl(
     temperature,
     einstein_temperature,
