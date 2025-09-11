@@ -20,6 +20,7 @@ void Assemblage::reset() {
   // Reset cached Assemblage properties
   volume_fractions.reset();
   endmember_partial_gibbs.reset();
+  reaction_affinities.reset();
 }
 
 // Public setters for assemblage properties
@@ -199,6 +200,13 @@ Eigen::ArrayXd Assemblage::get_endmember_partial_gibbs() const {
   return *endmember_partial_gibbs;
 }
 
+Eigen::VectorXd Assemblage::get_reaction_affinities() const {
+  if (!reaction_affinities.has_value()) {
+    reaction_affinities = compute_reaction_affinities();
+  }
+  return *reaction_affinities;
+}
+
 std::vector<int> Assemblage::get_endmembers_per_phase() const {
   if (!endmembers_per_phase.has_value()) {
     setup_endmember_properties();
@@ -356,6 +364,10 @@ Eigen::ArrayXd Assemblage::compute_endmember_partial_gibbs() const {
   return partial_gibbs;
 }
 
+Eigen::VectorXd Assemblage::compute_reaction_affinities() const {
+  return get_reaction_basis() * get_endmember_partial_gibbs().matrix();
+}
+
 int Assemblage::compute_n_endmembers() const {
   return static_cast<int>(get_endmember_names().size());
 }
@@ -421,5 +433,4 @@ Eigen::ArrayXd Assemblage::convert_mass_to_molar_fractions(
 /*
 stoichiometric_array
 reaction_basis_as_strings (skip for now)
-reduced_stoichiometric_array
 */
