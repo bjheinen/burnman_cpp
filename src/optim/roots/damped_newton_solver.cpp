@@ -66,8 +66,8 @@ DampedNewtonResult DampedNewtonSolver::solve(
       lagrangian_walk_along_constraints(state);
     }
 
-    state.F_j = F(state.x_j);
-    state.dxbar_j = luJ.solve(-state.F_j);
+    state.F_j = F_func(state.x_j);
+    state.dxbar_j = state.luJ.solve(-state.F_j);
     state.dxbar_j_norm = state.dxbar_j.norm();
     state.converged = is_converged(state);
     state.require_posteriori_loop = !state.converged;
