@@ -150,7 +150,7 @@ void DampedNewtonSolver::constrain_step_to_feasible_region(
     );
     // Update lambda and x_j
     state.lambda *= state.violated_constraints.front().second;
-    state.x_j = sate.x + state.lambda * state.dx;
+    state.x_j = state.x + state.lambda * state.dx;
   }
 }
 
