@@ -51,7 +51,7 @@ class DampedNewtonSolver {
     const std::function<Eigen::VectorXd(const Eigen::VectorXd&)>& F,
     const std::function<Eigen::MatrixXd(const Eigen::VectorXd&)>& J,
     // TODO: default empty A/B or 0, -1?
-    LinearConstraints linear_constraints = {
+    const LinearConstraints& linear_constraints = {
       Eigen::MatrixXd(0, 0),
       Eigen::VectorXd(0)
     }
@@ -207,7 +207,7 @@ class DampedNewtonSolver {
    * @brief Sets solver termination info codes and message.
    */
   void make_termination_info(
-    DampedNewtonResult& sol
+    DampedNewtonResult& sol,
     const DampedNewtonSolverState& state
   );
 
