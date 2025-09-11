@@ -17,7 +17,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/tools/equilibration/equality_constraint_base.hpp"
-#include "burnman/tools/equilibration/equilibration_types.hpp"
+#include "burnman/tools/equilibration/equilibrate_types.hpp"
 
 // Forward declarations
 struct EquilibrationParameters;
