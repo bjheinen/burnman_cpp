@@ -29,9 +29,11 @@ DampedNewtonResult DampedNewtonSolver::solve(
   DampedNewtonSolverState state{x0, F_func, linear_constraints};
 
   if (settings.store_iterates) {
-    sol.iteration_history.x.push_back(state.x);
-    sol.iteration_history.F.push_back(state.F);
-    sol.iteration_history.lambda.push_back(state.lambda);
+    // Initialise Iterates in-place
+    sol.iteration_history.emplace();
+    sol.iteration_history->x.push_back(state.x);
+    sol.iteration_history->F.push_back(state.F);
+    sol.iteration_history->lambda.push_back(state.lambda);
   }
 
   // Main loop
@@ -74,9 +76,9 @@ DampedNewtonResult DampedNewtonSolver::solve(
     // Store history
     // TODO: factor out store_iteration?
     if (this->settings.store_iterates) {
-      sol.iteration_history.x.push_back(state.x);
-      sol.iteration_history.F.push_back(state.F);
-      sol.iteration_history.lambda.push_back(state.lambda);
+      sol.iteration_history->x.push_back(state.x);
+      sol.iteration_history->F.push_back(state.F);
+      sol.iteration_history->lambda.push_back(state.lambda);
     }
     // bump n_it
     ++state.n_iterations;
