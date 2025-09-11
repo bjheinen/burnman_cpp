@@ -130,7 +130,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
     std::optional<Eigen::ArrayXXd> bound;
     if (embr_per_phase[i] > 1) {
       bound = assemblage.get_phase<Solution>(i)->get_endmember_occupancies();
-      n_constraints += bound.cols(); // n_elements
+      n_constraints += bound->cols(); // n_elements
     }
     bounds.push_back(bound);
     ++n_constraints;
@@ -152,7 +152,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
     // The first endmember proportion is not a free variable
     // (all endmembers in solution must sum to one)
     // Re-express the constraints without the first endmember
-    ++c_idx;
+    ++cidx;
     if (bounds[i].has_value()) {
       const Eigen::ArrayXXd& occ = *(bounds[i]);
       Eigen::Index m = occ.cols();
@@ -169,7 +169,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
 
 Eigen::VectorXd get_parameter_vector(
   const Assemblage& assemblage,
-  int n_free_compositional_vectors = 0
+  int n_free_compositional_vectors
 ) {
   int n_params = assemblage.get_n_endmembers() + 2 + n_free_compositional_vectors;
   Eigen::VectorXd params = Eigen::VectorXd::Zero(n_params);
