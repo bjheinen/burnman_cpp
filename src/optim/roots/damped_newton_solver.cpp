@@ -131,7 +131,7 @@ bool DampedNewtonSolver::is_converged(
 void DampedNewtonSolver::constrain_step_to_feasible_region(
   DampedNewtonSolverState& state
 ) const {
-  Eigen::VectorXd c_x = evaluate_constraints(state.x);
+  Eigen::VectorXd c_x = evaluate_constraints(state.x, state);
   Eigen::VectorXd c_x_j = evaluate_constraints(state.x_j, state);
   state.violated_constraints.clear();
   // TODO: just use c_x.size()?
