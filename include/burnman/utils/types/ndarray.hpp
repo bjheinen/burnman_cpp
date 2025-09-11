@@ -44,7 +44,7 @@ struct NDArray {
    * @brief Construct an NDArray with a given shape.
    */
   explicit NDArray(const std::vector<std::size_t>& shape)
-    : shape_(shape), strides_(utils::compute_strides(shape), size_(compute_size(shape)))
+    : shape_(shape), strides_(utils::compute_strides(shape)), size_(compute_size(shape))
   {
     this->storage_.resize(this->size_);
   }
