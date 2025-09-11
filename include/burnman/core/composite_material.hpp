@@ -149,7 +149,7 @@ class CompositeMaterial : public Material {
    *
    * @return Partial molar gibbs free energies in [J/mol].
    */
-  Eigen::ArrayXd compute_partial_gibbs() const = 0;
+  virtual Eigen::ArrayXd compute_partial_gibbs() const = 0;
 
   // Protected setters
   void set_endmember_names(std::vector<std::string> names) const;
