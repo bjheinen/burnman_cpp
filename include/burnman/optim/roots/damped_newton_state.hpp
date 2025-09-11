@@ -26,7 +26,7 @@ namespace roots{
 struct DampedNewtonSolverState {
   const std::function<Eigen::VectorXd(const Eigen::VectorXd&)>& F_func;
   const LinearConstraints& linear_constraints;
-  Eigen::VectorXd x                         ///< Current solution vector.
+  Eigen::VectorXd x;                        ///< Current solution vector.
   Eigen::VectorXd F;                        ///< Current function evaluation, F(x).
   Eigen::VectorXd dx;                       ///< Current Newton step direction.
   Eigen::VectorXd dxbar;                    ///< Simplified Newton step.
