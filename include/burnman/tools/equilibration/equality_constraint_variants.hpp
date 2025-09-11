@@ -23,7 +23,7 @@
 struct EquilibrationParameters;
 class Assemblage;
 
-class PressureConstraint : EqualityConstraint {
+class PressureConstraint : public EqualityConstraint {
  public:
   explicit PressureConstraint(double value);
   std::unique_ptr<EqualityConstraint> clone() const override;
@@ -38,7 +38,7 @@ class PressureConstraint : EqualityConstraint {
   double value;
 };
 
-class TemperatureConstraint : EqualityConstraint {
+class TemperatureConstraint : public EqualityConstraint {
  public:
   explicit TemperatureConstraint(double value);
   std::unique_ptr<EqualityConstraint> clone() const override;
@@ -53,7 +53,7 @@ class TemperatureConstraint : EqualityConstraint {
   double value;
 };
 
-class EntropyConstraint : EqualityConstraint {
+class EntropyConstraint : public EqualityConstraint {
  public:
   explicit EntropyConstraint(double value);
   std::unique_ptr<EqualityConstraint> clone() const override;
@@ -68,7 +68,7 @@ class EntropyConstraint : EqualityConstraint {
   double value;
 };
 
-class VolumeConstraint : EqualityConstraint {
+class VolumeConstraint : public EqualityConstraint {
  public:
   explicit VolumeConstraint(double value);
   std::unique_ptr<EqualityConstraint> clone() const override;
@@ -83,7 +83,7 @@ class VolumeConstraint : EqualityConstraint {
   double value;
 };
 
-class PTEllipseConstraint : EqualityConstraint {
+class PTEllipseConstraint : public EqualityConstraint {
  public:
   PTEllipseConstraint(const Eigen::Vector2d& centre, const Eigen::Vector2d& scaling);
   std::unique_ptr<EqualityConstraint> clone() const override;
@@ -99,7 +99,7 @@ class PTEllipseConstraint : EqualityConstraint {
   Eigen::Vector2d scaling;
 };
 
-class LinearXConstraint : EqualityConstraint {
+class LinearXConstraint : public EqualityConstraint {
  public:
   LinearXConstraint(const Eigen::VectorXd& A, double b);
   std::unique_ptr<EqualityConstraint> clone() const override;
@@ -118,7 +118,7 @@ class LinearXConstraint : EqualityConstraint {
 // Higher level constraints that generate generic LinearXConstraints from
 // user-friendly/readable args
 
-class PhaseFractionConstraint : LinearXConstraint {
+class PhaseFractionConstraint : public LinearXConstraint {
  public:
   PhaseFractionConstraint(
     Eigen::Index phase_index,
@@ -135,7 +135,7 @@ class PhaseFractionConstraint : LinearXConstraint {
     const EquilibrationParameters& prm);
 };
 
-class PhaseCompositionConstraint : LinearXConstraint {
+class PhaseCompositionConstraint : public LinearXConstraint {
  public:
   PhaseCompositionConstraint(
     Eigen::Index phase_index,
