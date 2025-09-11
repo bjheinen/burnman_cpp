@@ -10,6 +10,8 @@
 #include "burnman/tools/equilibration/equilibrate_objective.hpp"
 #include <cstddef>
 #include <vector>
+#include "burnman/tools/equilibration/equilibrate_utils.hpp"
+#include "burnman/core/solution.hpp"
 
 Eigen::VectorXd F(
   const Eigen::VectorXd& x,
@@ -37,7 +39,7 @@ Eigen::VectorXd F(
       x.tail(n_eqc - 2).transpose() * reduced_free_composition_vectors;
   }
   // TODO:: Assemblage::get_reaction_affinities
-  Eigen::Index n_reac = static_cas<Eigen::Index>(assemblage.get_n_reactions());
+  Eigen::Index n_reac = static_cast<Eigen::Index>(assemblage.get_n_reactions());
   eqns.segment(n_eqc, n_reac) = assemblage.get_reaction_affinities();
   // TODO:: Assemblage::get_reduced_stoichiometric_matrix
   eqns.tail(eqns.size() - (n_eqc + n_reac)) = (
@@ -142,7 +144,7 @@ Eigen::MatrixXd J(
     ) = bulk_hessian;
   } else {
     jacobian.block(
-      n_eq, 2,
+      n_eqc, 2,
       bulk_hessian.rows(), bulk_hessian.cols()
     ) = bulk_hessian;
   }
@@ -152,7 +154,7 @@ Eigen::MatrixXd J(
     Eigen::Index ncols = reduced_free_composition_vectors.rows();
     jacobian.block(
       jacobian.rows() - nrows, 2 + reaction_hessian.cols(),
-      nrows(), ncols()
+      nrows, ncols
     ) = -reduced_free_composition_vectors.transpose();
   }
   return jacobian;
