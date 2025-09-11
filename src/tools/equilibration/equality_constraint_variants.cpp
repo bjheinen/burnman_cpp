@@ -12,6 +12,8 @@
 #include <iterator>
 #include <numeric>
 #include <stdexcept>
+#include "burnman/core/solution.hpp"
+#include "burnman/core/assemblage.hpp"
 
 // TODO: think about namespaces
 
@@ -113,7 +115,7 @@ std::pair<Eigen::VectorXd, double> PhaseCompositionConstraint::compute_Ab(
       "Phase at index " + std::to_string(phase_index) + " is not a solution!");
   }
   // all solution site names
-  const std::vector<std::string>& solution_site_names = phase.get_site_names();
+  const std::vector<std::string>& solution_site_names = phase->get_site_names();
   // Get site indices from site names
   Eigen::ArrayXi site_indices(static_cast<Eigen::Index>(site_names.size()));
   for (std::size_t i = 0; i < site_names.size(); ++i) {
@@ -138,7 +140,7 @@ std::pair<Eigen::VectorXd, double> PhaseCompositionConstraint::compute_Ab(
   ) + 3;
   Eigen::Index n_indices = embr_per_phase[static_cast<std::size_t>(phase_index)] - 1;
   // Get endmember occupancy matrix
-  const Eigen::ArrayXXd& n_occ = phase.get_endmember_n_occupancies();
+  const Eigen::ArrayXXd& n_occ = phase->get_endmember_n_occupancies();
   // Convert site constraints into endmember constraints
   // Shape should be (n_endmembers, 2)
   Eigen::MatrixXd numer_denom(2, numerator.size());
