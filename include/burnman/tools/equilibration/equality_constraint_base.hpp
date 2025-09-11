@@ -18,30 +18,6 @@
 class Assemblage;
 
 /**
- * @brief Grouped top-level constraints.
- *
- * Use ConstraintGroup to keep expanded constraint vectors together.
- * Single constraints should also be put in a ConstraintGroup for
- * normalisation.
- *
- * @see `make_constraints_from_array' and `wrap_constraint'.
- */
-using ConstraintGroup = std::vector<std::unique_ptr<EqualityConstraint>>;
-
-/**
- * @brief Nested list of ConstraintGroups for equilibrate function.
- *
- * A ConstraintList should be constructed to pass to the equilibrate
- * function. Each top level ConstraintGroup can contain 1 or many
- * constraints. The equilibration routine will loop over all possible
- * lists of top level constraints constructed from the sub-constraints
- * in each group.
- *
- * @see `make_constraint_list'.
- */
-using ConstraintList = std::vector<ConstraintGroup>;
-
-/**
  * @brief Base class for linear equality constraints.
  *
  * Use `make_constraint<ConstraintType>()' to construct a constraint.
@@ -73,5 +49,29 @@ public:
     const Assemblage& assemblage,
     Eigen::Index J_size) const = 0;
 };
+
+/**
+ * @brief Grouped top-level constraints.
+ *
+ * Use ConstraintGroup to keep expanded constraint vectors together.
+ * Single constraints should also be put in a ConstraintGroup for
+ * normalisation.
+ *
+ * @see `make_constraints_from_array' and `wrap_constraint'.
+ */
+using ConstraintGroup = std::vector<std::unique_ptr<EqualityConstraint>>;
+
+/**
+ * @brief Nested list of ConstraintGroups for equilibrate function.
+ *
+ * A ConstraintList should be constructed to pass to the equilibrate
+ * function. Each top level ConstraintGroup can contain 1 or many
+ * constraints. The equilibration routine will loop over all possible
+ * lists of top level constraints constructed from the sub-constraints
+ * in each group.
+ *
+ * @see `make_constraint_list'.
+ */
+using ConstraintList = std::vector<ConstraintGroup>;
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINT_BASE_HPP_INCLUDED
