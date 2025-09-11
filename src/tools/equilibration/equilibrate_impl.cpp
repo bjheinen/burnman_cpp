@@ -17,6 +17,7 @@
 #include "burnman/utils/types/ndarray.hpp"
 #include "burnman/optim/roots/damped_newton_types.hpp"
 #include "burnman/optim/roots/damped_newton_solver.hpp"
+#include "burnman/core/solution.hpp"
 
 EquilibrateResult equilibrate(
   const FormulaMap& composition,
@@ -69,7 +70,7 @@ EquilibrateResult equilibrate(
     assemblage->set_fractions(f);
   }
   // Set n_moles
-  double comp_sum = 0
+  double comp_sum = 0;
   for (const auto& pair : composition) {
     comp_sum += pair.second;
   }

@@ -28,7 +28,7 @@ struct EquilibrationParameters {
   Eigen::VectorXd bulk_composition_vector;            ///< Bulk composition vector of assemblage elements.
   Eigen::VectorXd reduced_composition_vector;         ///< Bulk composition resitricted to independent elements.
   Eigen::MatrixXd free_compositional_vectors;         ///< Matrix of free compositional vectors (each row one vector).
-  Eigen::MatrixXd reduced_free_compositional_vectors; ///< Free compositional vectors restricted to independent elements.
+  Eigen::MatrixXd reduced_free_composition_vectors; ///< Free compositional vectors restricted to independent elements.
   Eigen::VectorXd constraint_vector;                  ///< Constraint vector, b, for constraints: (A·x + b).
   Eigen::MatrixXd constraint_matrix;                  ///< Constraint matrix, A, for contraints (A·x + b).
   Eigen::ArrayXi phase_amount_indices;                ///< Indices in parameter vector of phase amounts.
