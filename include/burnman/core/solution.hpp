@@ -257,17 +257,7 @@ class Solution : public CompositeMaterial {
    */
   Eigen::ArrayXd get_excess_partial_entropies() const;
 
-  /**
-   * @brief Retrieves the endmember partial molar gibbs free energy.
-   *
-   * Uses a cached value if available, or calls
-   * `Solution::compute_partial_gibbs()` and caches the result.
-   *
-   * @note Use `Solution::reset()` to clear cached values.
-   *
-   * @return Partial molar gibbs free energies in [J/mol].
-   */
-  Eigen::ArrayXd get_partial_gibbs() const;
+  // get_partial_gibbs() provided by CompositeMaterial
 
   /**
    * @brief Retrieves the endmember partial volumes of the solid solution.
@@ -359,6 +349,7 @@ class Solution : public CompositeMaterial {
   int compute_n_endmembers() const override;
   void setup_endmember_names() const override;
   void setup_endmember_formulae() const override;
+  Eigen::ArrayXd compute_partial_gibbs() const override;
 
   // New functions
   /**
@@ -425,13 +416,6 @@ class Solution : public CompositeMaterial {
   Eigen::ArrayXd compute_excess_partial_entropies() const;
 
   /**
-   * @brief Computes endmember partial molar gibbs free energies.
-   *
-   * @return Partial molar gibbs free energies in [J/mol].
-   */
-  Eigen::ArrayXd compute_partial_gibbs() const;
-
-  /**
    * @brief Computes endmember partial volumes of the solid solution.
    *
    * @return Partial volumes in [m^3].
@@ -485,7 +469,7 @@ class Solution : public CompositeMaterial {
   mutable std::optional<Eigen::ArrayXd> excess_partial_gibbs;
   mutable std::optional<Eigen::ArrayXd> excess_partial_volumes;
   mutable std::optional<Eigen::ArrayXd> excess_partial_entropies;
-  mutable std::optional<Eigen::ArrayXd> partial_gibbs;
+  // partial_gibbs provided by CompositeMaterial
   mutable std::optional<Eigen::ArrayXd> partial_volumes;
   mutable std::optional<Eigen::ArrayXd> partial_entropies;
   // 2D Matrices

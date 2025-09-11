@@ -15,11 +15,10 @@
 #include "burnman/core/mineral.hpp"
 
 void Assemblage::reset() {
-  // Reset caches Material properties
-  Material::reset();
+  // Reset cached Material & CompositeMaterial properties
+  CompositeMaterial::reset();
   // Reset cached Assemblage properties
   volume_fractions.reset();
-  endmember_partial_gibbs.reset();
   reaction_affinities.reset();
 }
 
@@ -193,13 +192,6 @@ Eigen::ArrayXd Assemblage::get_volume_fractions() const {
   return *volume_fractions;
 }
 
-Eigen::ArrayXd Assemblage::get_endmember_partial_gibbs() const {
-  if (!endmember_partial_gibbs.has_value()) {
-    endmember_partial_gibbs = compute_endmember_partial_gibbs();
-  }
-  return *endmember_partial_gibbs;
-}
-
 Eigen::VectorXd Assemblage::get_reaction_affinities() const {
   if (!reaction_affinities.has_value()) {
     reaction_affinities = compute_reaction_affinities();
@@ -341,18 +333,13 @@ Eigen::ArrayXd Assemblage::compute_volume_fractions() const {
   return map_phases_to_array(&Material::get_molar_volume) * molar_fractions;
 }
 
-Eigen::ArrayXd Assemblage::compute_endmember_partial_gibbs() const {
+Eigen::ArrayXd Assemblage::compute_partial_gibbs() const {
   Eigen::ArrayXd partial_gibbs(get_n_endmembers());
   // Loop over phases
   Eigen::Index j = 0;
   for (const auto& ph : this->phases) {
     int n = 1;
-    // TODO: This will break is phase is Assemblage, but don't
-    // want to include Solution just for this. Should rename to
-    // partial gibbs and move to CompositeMaterial so can use
-    // polymorphism. Remember to cache in CompositeMaterial and
-    // make new CompositeMaterial reset() function.
-    // If phase is a Solution
+    // If phase is a Solution or Assemblage
     if (auto sol = std::dynamic_pointer_cast<CompositeMaterial>(ph)) {
       n = sol->get_n_endmembers();
       partial_gibbs.segment(j, n) = sol->get_partial_gibbs();
@@ -365,7 +352,7 @@ Eigen::ArrayXd Assemblage::compute_endmember_partial_gibbs() const {
 }
 
 Eigen::VectorXd Assemblage::compute_reaction_affinities() const {
-  return get_reaction_basis() * get_endmember_partial_gibbs().matrix();
+  return get_reaction_basis() * get_partial_gibbs().matrix();
 }
 
 int Assemblage::compute_n_endmembers() const {

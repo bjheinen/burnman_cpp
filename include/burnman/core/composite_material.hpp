@@ -37,6 +37,9 @@ class CompositeMaterial : public Material {
   // map_to_array etc.
   // get_partial_volumes
 
+  // Override of reset to include additional solution properties
+  void reset() override;
+
   // Public getter functions for stored composite material properties
 
   /**
@@ -120,6 +123,18 @@ class CompositeMaterial : public Material {
    */
   const Eigen::MatrixXd& get_reaction_basis() const;
 
+  /**
+   * @brief Retrieves the endmember partial molar gibbs free energy.
+   *
+   * Uses a cached value if available, or calls
+   * `CompositeMaterial::compute_partial_gibbs()` and caches the result.
+   *
+   * @note Use `CompositeMaterial::reset()` to clear cached values.
+   *
+   * @return Partial molar gibbs free energies in [J/mol].
+   */
+  const Eigen::ArrayXd& get_partial_gibbs() const;
+
  protected:
 
   // Pure virtual funtions that must be implemented in derived classes
@@ -128,6 +143,13 @@ class CompositeMaterial : public Material {
   // Void functions should use protected setters!
   virtual void setup_endmember_formulae() const = 0;
   virtual void setup_endmember_names() const = 0;
+
+  /**
+   * @brief Computes endmember partial molar gibbs free energies.
+   *
+   * @return Partial molar gibbs free energies in [J/mol].
+   */
+  Eigen::ArrayXd compute_partial_gibbs() const = 0;
 
   // Protected setters
   void set_endmember_names(std::vector<std::string> names) const;
@@ -151,6 +173,9 @@ class CompositeMaterial : public Material {
   mutable std::optional<Eigen::MatrixXd> compositional_basis;
   mutable std::optional<Eigen::MatrixXd> compositional_null_basis;
   mutable std::optional<Eigen::MatrixXd> reaction_basis;
+
+  // Cached properties cleared by reset
+  mutable std::optional<Eigen::ArrayXd> partial_gibbs;
 
   // Compute functions common to all composite materials.
   int compute_n_elements() const;

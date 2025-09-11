@@ -14,6 +14,13 @@
 #include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/utils/matrix_utils.hpp"
 
+void CompositeMaterial::reset() {
+  // Reset caches Material properties
+  Material::reset();
+  // Reset cached CompositeMaterial properties
+  partial_gibbs.reset();
+}
+
 int CompositeMaterial::get_n_endmembers() const {
   if (!n_endmembers.has_value()) {
     n_endmembers = compute_n_endmembers();
@@ -103,6 +110,13 @@ const std::vector<FormulaMap>& CompositeMaterial::get_endmember_formulae() const
     setup_endmember_formulae();
   }
   return *endmember_formulae;
+}
+
+const Eigen::ArrayXd& CompositeMaterial::get_partial_gibbs() const {
+  if (!partial_gibbs.has_value()) {
+    partial_gibbs = compute_partial_gibbs();
+  }
+  return *partial_gibbs;
 }
 
 // Setters

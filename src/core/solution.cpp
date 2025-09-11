@@ -17,8 +17,8 @@
 #include "burnman/tools/averaging/averaging_schemes.hpp"
 
 void Solution::reset() {
-  // Reset caches Material properties
-  Material::reset();
+  // Reset cached Material & CompositeMaterial properties
+  CompositeMaterial::reset();
   // Reset cached Solution properties
   excess_gibbs.reset();
   excess_volume.reset();
@@ -29,7 +29,7 @@ void Solution::reset() {
   excess_partial_gibbs.reset();
   excess_partial_volumes.reset();
   excess_partial_entropies.reset();
-  partial_gibbs.reset();
+  // partial_gibbs reset by CompositeMaterial::reset()
   partial_volumes.reset();
   partial_entropies.reset();
   gibbs_hessian.reset();
@@ -168,13 +168,6 @@ Eigen::ArrayXd Solution::get_excess_partial_entropies() const {
     excess_partial_entropies = compute_excess_partial_entropies();
   }
   return *excess_partial_entropies;
-}
-
-Eigen::ArrayXd Solution::get_partial_gibbs() const {
-  if (!partial_gibbs.has_value()) {
-    partial_gibbs = compute_partial_gibbs();
-  }
-  return *partial_gibbs;
 }
 
 Eigen::ArrayXd Solution::get_partial_volumes() const {
