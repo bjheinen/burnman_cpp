@@ -111,7 +111,7 @@ Eigen::VectorXd DampedNewtonSolver::evaluate_constraints(
   return A * x + b;
 }
 
-void DampedNewtonSolver::update_lambda(DampedNewtonSolverState& state) {
+void DampedNewtonSolver::update_lambda(DampedNewtonSolverState& state) const {
   // TODO: move assert of lambda bounds validity to function
   // at call of lambda_bounds_func
   // e.g. assert(lambda_bounds.second < 1.0 + eps);
@@ -120,7 +120,7 @@ void DampedNewtonSolver::update_lambda(DampedNewtonSolverState& state) {
 }
 
 bool DampedNewtonSolver::is_converged(
-  const DampedNewtonSolverState state
+  const DampedNewtonSolverState& state
 ) const {
   bool simplified_step_below_tol = (state.dxbar_j.array().abs() < this->settings.tol).all();
   bool full_step_below_tol = (state.dx.array().abs() < std::sqrt(10.0 * this->settings.tol)).all();
@@ -130,7 +130,7 @@ bool DampedNewtonSolver::is_converged(
 
 void DampedNewtonSolver::constrain_step_to_feasible_region(
   DampedNewtonSolverState& state
-) {
+) const {
   Eigen::VectorXd c_x = evaluate_constraints(state.x);
   Eigen::VectorXd c_x_j = evaluate_constraints(state.x_j, state);
   state.violated_constraints.clear();
@@ -215,7 +215,7 @@ DampedNewtonSolver::solve_subject_to_constraints(
 
 DampedNewtonSolver::lagrangian_walk_along_constraints(
   DampedNewtonSolverState& state
-) {
+) const {
   // Separate active/inactive constraints
   std::vector<int> act_ind_temp;
   std::vector<int> inact_ind_temp;
@@ -291,7 +291,7 @@ DampedNewtonSolver::lagrangian_walk_along_constraints(
   }
 }
 
-void DampedNewtonSolver::posteriori_loop(DampedNewtonSolverState& state) {
+void DampedNewtonSolver::posteriori_loop(DampedNewtonSolverState& state) const {
   // Make local variables
   Eigen::VectorXd x_j = state.x_j;
   Eigen::VectorXd dxbar_j = state.dxbar_j;
@@ -329,7 +329,7 @@ void DampedNewtonSolver::posteriori_loop(DampedNewtonSolverState& state) {
 void DampedNewtonSolver::make_termination_info(
   DampedNewtonResult& sol,
   const DampedNewtonSolverState& state
-) {
+) const {
   sol.success = state.converged;
   if (sol.success) {
     sol.code = 0;

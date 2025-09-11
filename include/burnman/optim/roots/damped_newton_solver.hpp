@@ -78,7 +78,7 @@ class DampedNewtonSolver {
    *
    * Modifies state.lambda
    */
-  void update_lambda(DampedNewtonSolverState& state);
+  void update_lambda(DampedNewtonSolverState& state) const;
 
   /**
    * @brief Solve a constrained Newton correction step using KKT system.
@@ -153,7 +153,7 @@ class DampedNewtonSolver {
    *   violated_constraints Sorted list given as (index, lambda_i) pairs,
    *     in ascending order of lambda_i.
    */
-  void constrain_step_to_feasible_region(DampedNewtonSolverState& state);
+  void constrain_step_to_feasible_region(DampedNewtonSolverState& state) const;
 
   /**
    * @brief Attempts to find a constrained Newton step
@@ -176,7 +176,7 @@ class DampedNewtonSolver {
    *   state.x_j Current trial iterate, x + lambda·dx (updated in place).
    *   state.persistent_bound_violation flag set.
    */
-  void lagrangian_walk_along_constraints(DampedNewtonSolverState& state);
+  void lagrangian_walk_along_constraints(DampedNewtonSolverState& state) const;
 
   /**
    * @brief Checks solve convergence
@@ -201,7 +201,7 @@ class DampedNewtonSolver {
    * or the minimum lambda bound is reached. This procedure prevents divergence
    * and stabilised the Newton iteration in highly nonlinear regions.
    */
-  void posteriori_loop(DampedNewtonSolverState& state);
+  void posteriori_loop(DampedNewtonSolverState& state) const;
 
   /**
    * @brief Sets solver termination info codes and message.
@@ -209,7 +209,7 @@ class DampedNewtonSolver {
   void make_termination_info(
     DampedNewtonResult& sol,
     const DampedNewtonSolverState& state
-  );
+  ) const;
 
 };
 
