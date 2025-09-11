@@ -129,7 +129,7 @@ std::pair<Eigen::MatrixXd, Eigen::VectorXd> calculate_constraints(
   for (std::size_t i = 0; i < embr_per_phase.size(); ++i) {
     std::optional<Eigen::ArrayXXd> bound;
     if (embr_per_phase[i] > 1) {
-      bound = assemblage.get_phase<Solution>(i).get_endmember_occupancies();
+      bound = assemblage.get_phase<Solution>(i)->get_endmember_occupancies();
       n_constraints += bound.cols(); // n_elements
     }
     bounds.push_back(bound);
