@@ -334,7 +334,7 @@ Eigen::ArrayXd Assemblage::compute_volume_fractions() const {
 }
 
 Eigen::ArrayXd Assemblage::compute_partial_gibbs() const {
-  Eigen::ArrayXd partial_gibbs(get_n_endmembers());
+  Eigen::ArrayXd embr_partial_gibbs(get_n_endmembers());
   // Loop over phases
   Eigen::Index j = 0;
   for (const auto& ph : this->phases) {
@@ -342,13 +342,13 @@ Eigen::ArrayXd Assemblage::compute_partial_gibbs() const {
     // If phase is a Solution or Assemblage
     if (auto sol = std::dynamic_pointer_cast<CompositeMaterial>(ph)) {
       n = sol->get_n_endmembers();
-      partial_gibbs.segment(j, n) = sol->get_partial_gibbs();
+      embr_partial_gibbs.segment(j, n) = sol->get_partial_gibbs();
     } else {
-      partial_gibbs(j) = ph->get_molar_gibbs();
+      embr_partial_gibbs(j) = ph->get_molar_gibbs();
     }
     j += n;
   }
-  return partial_gibbs;
+  return embr_partial_gibbs;
 }
 
 Eigen::VectorXd Assemblage::compute_reaction_affinities() const {
