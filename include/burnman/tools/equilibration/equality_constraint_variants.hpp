@@ -34,6 +34,7 @@ class PressureConstraint : public EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
+  double get_value() const { return value; };
  protected:
   double value;
 };
@@ -49,6 +50,7 @@ class TemperatureConstraint : public EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
+  double get_value() const { return value; }
  protected:
   double value;
 };
@@ -94,6 +96,7 @@ class PTEllipseConstraint : public EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
+  Eigen::Vector2d get_scaling() const { return scaling; }
  protected:
   Eigen::Vector2d centre;
   Eigen::Vector2d scaling;

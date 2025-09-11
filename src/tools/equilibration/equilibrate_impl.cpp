@@ -100,11 +100,11 @@ EquilibrateResult equilibrate(
   for (const ConstraintGroup& c_group : equality_constraints) {
     const auto& constraint = c_group[0];
     if (auto P_c = dynamic_cast<PressureConstraint*>(constraint.get())) {
-      initial_pressure = P_c->value;
+      initial_pressure = P_c->get_value();
     } else if (auto T_c = dynamic_cast<TemperatureConstraint*>(constraint.get())) {
-      initial_temperature = T_c->value;
+      initial_temperature = T_c->get_value();
     } else if (auto PTE_c = dynamic_cast<PTEllipseConstraint*>(constraint.get())) {
-      Eigen::Vector2d value = PTE_c->scaling;
+      Eigen::Vector2d value = PTE_c->get_scaling();
       initial_pressure = value(0);
       initial_temperature = value(1);
     }
