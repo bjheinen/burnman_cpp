@@ -16,7 +16,7 @@
 #include <utility>
 #include "burnman/utils/types/ndarray.hpp"
 #include "burnman/optim/roots/damped_newton_types.hpp"
-#include "burman/optim/roots/damped_newton_solver.hpp"
+#include "burnman/optim/roots/damped_newton_solver.hpp"
 
 EquilibrateResult equilibrate(
   const FormulaMap& composition,
