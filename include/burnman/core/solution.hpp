@@ -36,7 +36,7 @@ namespace burnman {
  * require set_composition().
  * Solution states equire set_state().
  *
- * Uses an instance of `SolutionModel' (or derived class) to calculate
+ * Uses an instance of `solution_models::SolutionModel' (or derived class) to calculate
  * interaction terms between endmembers.
  *
  * All solution parameters and properties are in SI units.
@@ -118,7 +118,7 @@ class Solution : public CompositeMaterial {
    *
    * @param model Shared pointer to the solution model.
    */
-  void set_solution_model(std::shared_ptr<SolutionModel> model);
+  void set_solution_model(std::shared_ptr<solution_models::SolutionModel> model);
 
   /**
    * @brief Sets the molar amounts of each endmember.
@@ -458,7 +458,7 @@ class Solution : public CompositeMaterial {
   Eigen::ArrayXd molar_fractions;
 
   // Shared pointer to solution model class
-  std::shared_ptr<SolutionModel> solution_model;
+  std::shared_ptr<solution_models::SolutionModel> solution_model;
 
   // Cached properties
   mutable std::optional<double> excess_gibbs;

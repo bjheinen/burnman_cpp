@@ -40,7 +40,7 @@ void Solution::reset() {
 }
 
 // Public setters
-void Solution::set_solution_model(std::shared_ptr<SolutionModel> model) {
+void Solution::set_solution_model(std::shared_ptr<solution_models::SolutionModel> model) {
   // TODO: think about using clone semantics instead
   solution_model = std::move(model);
 }
