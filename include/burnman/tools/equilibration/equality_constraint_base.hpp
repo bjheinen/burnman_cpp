@@ -15,10 +15,11 @@
 #include <Eigen/Dense>
 
 namespace burnman {
-namespace equilibration {
 
 // Forward declaration
 class Assemblage;
+
+namespace equilibration {
 
 /**
  * @brief Base class for linear equality constraints.

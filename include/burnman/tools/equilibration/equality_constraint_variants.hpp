@@ -20,11 +20,14 @@
 #include "burnman/tools/equilibration/equilibrate_types.hpp"
 
 namespace burnman {
+
+// Forward declaration
+class Assemblage;
+
 namespace equilibration {
 
-// Forward declarations
+// Forward declaration
 struct EquilibrationParameters;
-class Assemblage;
 
 class PressureConstraint : public EqualityConstraint {
  public:
