@@ -54,13 +54,13 @@ struct DampedNewtonSolverState {
     const Eigen::VectorXd& x0,
     const std::function<Eigen::VectorXd(const Eigen::VectorXd&)>& F_func_,
     const LinearConstraints& linear_constraints_)
-      : x(x0),
-        F_func(F_func_),
+      : F_func(F_func_),
         linear_constraints(linear_constraints_),
+        x(x0),
         F(F_func_(x0)),
-        n_constraints(linear_constraints_.first.rows()),
         dxbar(Eigen::VectorXd::Ones(x0.size())),
-        dx_prev(Eigen::VectorXd::Ones(x0.size()))
+        dx_prev(Eigen::VectorXd::Ones(x0.size())),
+        n_constraints(linear_constraints_.first.rows())
     {}
 };
 
