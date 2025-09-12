@@ -9,6 +9,7 @@
  */
 #include <catch2/catch_test_macros.hpp>
 #include "burnman/utils/constants.hpp"
+using namespace burnman;
 // Compile time checks that physical constants haven't been modified
 TEST_CASE("constants::physics CODATA 2022 values", "[core][utils][constants]") {
   STATIC_REQUIRE(constants::physics::gas_constant == 8.31446261815324);

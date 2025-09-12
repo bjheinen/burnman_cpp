@@ -11,6 +11,8 @@
 #include "burnman/utils/exceptions.hpp"
 #include <stdexcept>
 
+using namespace burnman;
+
 TEST_CASE("NotImplementedError message", "[utils][exceptions]") {
   const std::string class_name = "AClass";
   const std::string func_name = "some_function";

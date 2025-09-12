@@ -16,6 +16,8 @@
 #include <Eigen/Dense>
 #include "burnman/utils/types/simple_types.hpp"
 
+using namespace burnman;
+
 TEST_CASE("sort_element_list_to_IUPAC_order (sort)", "[utils][chemistry_utils]") {
   std::unordered_set<std::string> input = {
     "H", "Si", "O", "He", "Na", "Ni", "K",

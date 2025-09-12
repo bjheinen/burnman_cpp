@@ -12,8 +12,9 @@
 #include "burnman/eos/components/einstein.hpp"
 #include "tolerances.hpp"
 
-using namespace einstein;
 using namespace Catch::Matchers;
+using namespace burnman;
+using namespace eos::einstein;
 
 TEST_CASE("Check zero returns in einstein model functions", "[eos][einstein]") {
   double theta_0 = 773.0;

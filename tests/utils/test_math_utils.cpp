@@ -15,6 +15,7 @@
 #include "tolerances.hpp"
 
 using namespace Catch::Matchers;
+using namespace burnman;
 
 TEST_CASE("logish is log for values > eps; 1D", "[utils][math_utils]") {
   Eigen::ArrayXd x(3);

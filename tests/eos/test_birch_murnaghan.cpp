@@ -14,7 +14,9 @@
 #include <cmath>
 #include "burnman/utils/types/mineral_params.hpp"
 #include "tolerances.hpp"
+
 using namespace Catch::Matchers;
+using namespace burnman;
 
 TEST_CASE("Test validate parameters", "[birch-murnaghan][eos]") {
   eos::BM3 bm3;

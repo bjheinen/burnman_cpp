@@ -19,6 +19,7 @@
 #include "solution_fixtures.hpp"
 
 using namespace Catch::Matchers;
+using namespace burnman;
 
 struct MultiMineralFixture {
   CaPerovskiteFixture capv_fix;

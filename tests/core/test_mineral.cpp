@@ -20,7 +20,9 @@
 #include "burnman/eos/birch_murnaghan.hpp"
 #include "burnman/eos/mie_grueneisen_debye.hpp"
 #include "tolerances.hpp"
+
 using namespace Catch::Matchers;
+using namespace burnman;
 
 TEST_CASE("Set method", "[core][mineral]") {
   Mineral test_mineral;

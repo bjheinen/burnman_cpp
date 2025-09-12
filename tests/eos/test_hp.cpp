@@ -16,7 +16,9 @@
 #include <tuple>
 #include "burnman/utils/types/mineral_params.hpp"
 #include "tolerances.hpp"
+
 using namespace Catch::Matchers;
+using namespace burnman;
 
 TEST_CASE("Test validate parameters", "[eos][hp]") {
   types::MineralParams params;

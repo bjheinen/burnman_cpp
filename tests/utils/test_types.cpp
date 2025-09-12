@@ -12,7 +12,8 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "burnman/utils/types/simple_types.hpp"
 
-//TODO: Update directory structure - test new types
+using namespace burnman;
+//TODO:  - test new types
 
 TEST_CASE("FormulaMap addition and scalar multiplication", "[utils][types]") {
   

@@ -14,6 +14,8 @@
 #include <vector>
 #include "tolerances.hpp"
 
+using namespace burnman;
+
 TEST_CASE("Extract numeric prefix", "[utils][string_utils]") {
   REQUIRE(utils::extract_numeric_prefix("2SiO2") == "2");
   REQUIRE(utils::extract_numeric_prefix("0.45SiO2") == "0.45");

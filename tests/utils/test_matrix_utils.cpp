@@ -14,6 +14,8 @@
 #include <Eigen/Dense>
 #include "tolerances.hpp"
 
+using namespace burnman;
+
 TEST_CASE("jagged2square n=5", "[utils][matrix_utils]") {
   Eigen::Index n = 5;
   std::vector<std::vector<double>> v = {

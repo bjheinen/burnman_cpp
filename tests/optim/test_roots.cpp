@@ -14,6 +14,7 @@
 #include "tolerances.hpp"
 
 using namespace Catch::Matchers;
+using namespace burnman;
 using namespace optim::roots;
 
 // Simple test function

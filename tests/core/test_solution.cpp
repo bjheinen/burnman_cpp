@@ -20,6 +20,7 @@
 #include "solution_fixtures.hpp"
 
 using namespace Catch::Matchers;
+using namespace burnman;
 
 TEST_CASE_METHOD(BridgmaniteFixture, "Test interface", "[core][solution]") {
   // Make solution

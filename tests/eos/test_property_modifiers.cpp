@@ -12,7 +12,9 @@
 #include "burnman/eos/components/property_modifiers.hpp"
 #include "burnman/utils/types/excess_params.hpp"
 #include "tolerances.hpp"
+
 using namespace Catch::Matchers;
+using namespace burnman;
 
 TEST_CASE("Test Landau", "[prop_mod][eos]") {
   double P = 1.0e11;

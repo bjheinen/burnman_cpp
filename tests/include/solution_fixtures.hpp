@@ -20,6 +20,8 @@
 #include "burnman/core/solution.hpp"
 #include "burnman/core/assemblage.hpp"
 
+using namespace burnman;
+
 struct BridgmaniteFixture {
   // Declare variables to use
   Mineral mg_si_perovskite;

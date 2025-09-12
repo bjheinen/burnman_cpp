@@ -14,6 +14,8 @@
 #include "burnman/utils/exceptions.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
+using namespace burnman;
+
 TEST_CASE("Get/Set state", "[core][material]") {
   double test_P = 24e9;
   double test_T = 2000.0;

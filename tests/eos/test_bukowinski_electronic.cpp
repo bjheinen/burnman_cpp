@@ -13,8 +13,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "tolerances.hpp"
 
-using namespace bukowinski;
 using namespace Catch::Matchers;
+using namespace burnman;
+using namespace eos::bukowinski;
 
 TEST_CASE("Check zero returns", "[eos][bukowinski]") {
   types::MineralParams params;

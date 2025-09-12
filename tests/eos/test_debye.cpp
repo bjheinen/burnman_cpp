@@ -13,8 +13,9 @@
 #include <cmath>
 #include "tolerances.hpp"
 
-using namespace debye;
 using namespace Catch::Matchers;
+using namespace burnman;
+using namespace eos::debye;
 
 TEST_CASE("Debye function integrand", "[debye][eos]") {
   REQUIRE(std::isnan(debye_fn_integrand(0.0, nullptr)));

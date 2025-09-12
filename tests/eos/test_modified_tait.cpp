@@ -16,7 +16,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/eos/modified_tait.hpp"
 #include "tolerances.hpp"
+
 using namespace Catch::Matchers;
+using namespace burnman;
 
 TEST_CASE("Test validate parameters", "[modified_tait][eos]") {
   types::MineralParams params;
