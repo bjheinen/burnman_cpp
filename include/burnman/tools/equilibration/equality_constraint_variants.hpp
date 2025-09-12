@@ -34,9 +34,9 @@ class PressureConstraint : public EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
-  double get_value() const { return value; };
+  double get_value() const { return value_; };
  protected:
-  double value;
+  double value_;
 };
 
 class TemperatureConstraint : public EqualityConstraint {
@@ -50,9 +50,9 @@ class TemperatureConstraint : public EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
-  double get_value() const { return value; }
+  double get_value() const { return value_; }
  protected:
-  double value;
+  double value_;
 };
 
 class EntropyConstraint : public EqualityConstraint {
@@ -67,7 +67,7 @@ class EntropyConstraint : public EqualityConstraint {
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
  protected:
-  double value;
+  double value_;
 };
 
 class VolumeConstraint : public EqualityConstraint {
@@ -82,7 +82,7 @@ class VolumeConstraint : public EqualityConstraint {
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
  protected:
-  double value;
+  double value_;
 };
 
 class PTEllipseConstraint : public EqualityConstraint {
@@ -96,10 +96,10 @@ class PTEllipseConstraint : public EqualityConstraint {
     const Eigen::VectorXd& x,
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
-  Eigen::Vector2d get_scaling() const { return scaling; }
+  Eigen::Vector2d get_scaling() const { return scaling_; }
  protected:
-  Eigen::Vector2d centre;
-  Eigen::Vector2d scaling;
+  Eigen::Vector2d centre_;
+  Eigen::Vector2d scaling_;
 };
 
 class LinearXConstraint : public EqualityConstraint {
@@ -114,8 +114,8 @@ class LinearXConstraint : public EqualityConstraint {
     const Assemblage& assemblage,
     Eigen::Index J_size) const override;
  protected:
-  Eigen::VectorXd A;
-  double b;
+  Eigen::VectorXd A_;
+  double b_;
 };
 
 // Higher level constraints that generate generic LinearXConstraints from
@@ -129,8 +129,8 @@ class PhaseFractionConstraint : public LinearXConstraint {
     const EquilibrationParameters& prm);
   std::unique_ptr<EqualityConstraint> clone() const override;
  protected:
-  Eigen::Index phase_index;
-  double phase_fraction;
+  Eigen::Index phase_index_;
+  double phase_fraction_;
  private:
   static Eigen::VectorXd compute_A(
     Eigen::Index phase_index,
@@ -150,11 +150,11 @@ class PhaseCompositionConstraint : public LinearXConstraint {
     const EquilibrationParameters& prm);
   std::unique_ptr<EqualityConstraint> clone() const override;
  protected:
-  Eigen::Index phase_index;
-  std::vector<std::string> site_names;
-  Eigen::VectorXd numerator;
-  Eigen::VectorXd denominator;
-  double value;
+  Eigen::Index phase_index_;
+  std::vector<std::string> site_names_;
+  Eigen::VectorXd numerator_;
+  Eigen::VectorXd denominator_;
+  double value_;
  private:
   PhaseCompositionConstraint(
     const std::pair<Eigen::VectorXd, double>& Ab,

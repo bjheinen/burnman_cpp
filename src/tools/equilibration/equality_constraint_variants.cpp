@@ -19,32 +19,32 @@
 
 // Constraint constructors
 PressureConstraint::PressureConstraint(double value)
-  : value(value) {}
+  : value_(value) {}
 
 TemperatureConstraint::TemperatureConstraint(double value)
-  : value(value) {}
+  : value_(value) {}
 
 EntropyConstraint::EntropyConstraint(double value)
-  : value(value) {}
+  : value_(value) {}
 
 VolumeConstraint::VolumeConstraint(double value)
-  : value(value) {}
+  : value_(value) {}
 
 PTEllipseConstraint::PTEllipseConstraint(
   const Eigen::Vector2d& centre,
   const Eigen::Vector2d& scaling)
-  : centre(centre), scaling(scaling) {}
+  : centre_(centre), scaling_(scaling) {}
 
 LinearXConstraint::LinearXConstraint(const Eigen::VectorXd& A, double b)
-  : A(A), b(b) {}
+  : A_(A), b_(b) {}
 
 PhaseFractionConstraint::PhaseFractionConstraint(
   Eigen::Index phase_index,
   double phase_fraction,
   const EquilibrationParameters& prm)
   : LinearXConstraint(compute_A(phase_index, phase_fraction, prm), 0.0),
-    phase_index(phase_index),
-    phase_fraction(phase_fraction) {}
+    phase_index_(phase_index),
+    phase_fraction_(phase_fraction) {}
 
 Eigen::VectorXd PhaseFractionConstraint::compute_A(
   Eigen::Index phase_index,
@@ -91,11 +91,11 @@ PhaseCompositionConstraint::PhaseCompositionConstraint(
   const Eigen::VectorXd& denominator,
   double value)
   : LinearXConstraint(Ab.first, Ab.second),
-  phase_index(phase_index),
-  site_names(site_names),
-  numerator(numerator),
-  denominator(denominator),
-  value(value) {}
+  phase_index_(phase_index),
+  site_names_(site_names),
+  numerator_(numerator),
+  denominator_(denominator),
+  value_(value) {}
 
 std::pair<Eigen::VectorXd, double> PhaseCompositionConstraint::compute_Ab(
   Eigen::Index phase_index,
@@ -197,35 +197,35 @@ double PressureConstraint::evaluate(
   const Eigen::VectorXd& x,
   const Assemblage& assemblage [[maybe_unused]]
 ) const {
-  return x(0) - this->value;
+  return x(0) - this->value_;
 }
 
 double TemperatureConstraint::evaluate(
   const Eigen::VectorXd& x,
   const Assemblage& assemblage [[maybe_unused]]
 ) const {
-  return x(1) - this->value;
+  return x(1) - this->value_;
 }
 
 double EntropyConstraint::evaluate(
   const Eigen::VectorXd& [[maybe_unused]],
   const Assemblage& assemblage
 ) const {
-  return assemblage.get_molar_entropy() * assemblage.get_n_moles() - this->value;
+  return assemblage.get_molar_entropy() * assemblage.get_n_moles() - this->value_;
 }
 
 double VolumeConstraint::evaluate(
   const Eigen::VectorXd& [[maybe_unused]],
   const Assemblage& assemblage
 ) const {
-  return assemblage.get_molar_volume() * assemblage.get_n_moles() - this->value;
+  return assemblage.get_molar_volume() * assemblage.get_n_moles() - this->value_;
 }
 
 double PTEllipseConstraint::evaluate(
   const Eigen::VectorXd& x,
   const Assemblage& assemblage [[maybe_unused]]
 ) const {
-  Eigen::Array2d v_scaled = (x.segment<2>(0).array() - this->centre.array()) / this->scaling.array();
+  Eigen::Array2d v_scaled = (x.segment<2>(0).array() - this->centre_.array()) / this->scaling_.array();
   return v_scaled.matrix().norm() - 1.0;
 }
 
@@ -233,7 +233,7 @@ double LinearXConstraint::evaluate(
   const Eigen::VectorXd& x,
   const Assemblage& assemblage [[maybe_unused]]
 ) const {
-  return this->A.dot(x) - this->b;
+  return this->A_.dot(x) - this->b_;
 }
 
 // Derivative implementations
@@ -321,8 +321,8 @@ Eigen::VectorXd PTEllipseConstraint::derivative(
   Eigen::Index J_size
 ) const {
   Eigen::VectorXd row = Eigen::VectorXd::Zero(J_size);
-  Eigen::Array2d v_scaled = (x.segment<2>(0) - centre).array() / scaling.array();
-  row.segment<2>(0) = (v_scaled / (v_scaled.matrix().norm() * scaling.array())).matrix();
+  Eigen::Array2d v_scaled = (x.segment<2>(0) - this->centre_).array() / this->scaling_.array();
+  row.segment<2>(0) = (v_scaled / (v_scaled.matrix().norm() * this->scaling_.array())).matrix();
   return row;
 }
 
@@ -332,6 +332,6 @@ Eigen::VectorXd LinearXConstraint::derivative(
   Eigen::Index J_size
 ) const {
   Eigen::VectorXd row = Eigen::VectorXd::Zero(J_size);
-  row.head(A.size()) = A;
+  row.head(this->A_.size()) = this->A_;
   return row;
 }
