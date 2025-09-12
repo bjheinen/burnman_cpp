@@ -15,6 +15,8 @@
 #include <string>
 #include "burnman/utils/types/simple_types.hpp"
 
+namespace burnman {
+
 // Forward declaration to avoid include
 class EquationOfState;
 
@@ -706,5 +708,7 @@ class Material {
   std::string get_class_name() const;
 
 };
+
+} // namespace burnman
 
 #endif // BURNMAN_CORE_MATERIAL_HPP_INCLUDED

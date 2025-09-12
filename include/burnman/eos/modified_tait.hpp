@@ -13,6 +13,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
  * @brief Struct to hold tait constants
  */
@@ -156,5 +159,8 @@ class MT : public EquationOfState{
     const MineralParams& params) const override;
 
 };
+
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_MODIFIED_TAIT_HPP_INCLUDED

@@ -23,6 +23,8 @@
 #include "burnman/tools/equilibration/equilibrate_utils.hpp"
 #include "burnman/tools/equilibration/equilibrate_objective.hpp"
 
+namespace burnman::equilibration {
+
 EquilibrateResult equilibrate(
   const FormulaMap& composition,
   Assemblage& assemblage,
@@ -307,3 +309,5 @@ EquilibrateResult equilibrate(
 //           return copy;
 //         }
 //       Then: std::shared_ptr<Assemblage> copy = std::dynamic_pointer_cast<Assemblage>(assemblage.clone());
+
+} // namespace burnman::equilibration

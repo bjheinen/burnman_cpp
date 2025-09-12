@@ -12,6 +12,7 @@
 
 #include "burnman/tools/averaging/averaging_base.hpp"
 
+namespace burnman {
 namespace averaging {
 
 /**
@@ -36,5 +37,6 @@ class VoigtReussHill : public AveragingScheme {
 };
 
 } // namespace averaging
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_AVERAGING_VRH_HPP_INCLUDED

@@ -12,8 +12,18 @@
 
 #include <Eigen/Dense>
 
-namespace averaging{
+namespace burnman {
+namespace averaging {
 
+// TODO: maybe rename - internal?
+/**
+ * @namespace burnman::averaging::utils
+ * @brief Internal averaging utilities
+ *
+ * This namespace collects some internal utilities used by the classes in
+ * `burnman::averaging'. The namespace includes basic averaging functions
+ * such as Voigt and Reuss functions.
+ */
 namespace utils {
 
   // Utility functions for V & R averages
@@ -89,7 +99,7 @@ namespace utils {
     const Eigen::ArrayXd& shear_moduli);
 
 } // namespace utils
-
 } // namespace averaging
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_AVERAGING_AVERAGING_UTILS_HPP_INCLUDED

@@ -12,6 +12,7 @@
 
 #include "burnman/tools/averaging/averaging_base.hpp"
 
+namespace burnman {
 namespace averaging {
 
 /**
@@ -37,5 +38,6 @@ class Reuss : public AveragingScheme {
 };
 
 } // namespace averaging
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_AVERAGING_REUSS_HPP_INCLUDED

@@ -14,6 +14,9 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/solution_models/asymmetric_regular_solution.hpp"
 
+namespace burnman {
+namespace solution_models {
+
 /**
  * @class SymmetricRegularSolution
  * @brief Convenience class for a symmetric regular solution model.
@@ -30,5 +33,8 @@ class SymmetricRegularSolution : public AsymmetricRegularSolution{
     std::vector<std::vector<double>> volume_interaction = {},
     std::vector<std::vector<double>> entropy_interaction = {});
 };
+
+} // namespace solution_models
+} // namespace burnman
 
 #endif // BURNMAN_CORE_SOLUTION_MODELS_SYMMETRIC_REGULAR_HPP_INCLUDED

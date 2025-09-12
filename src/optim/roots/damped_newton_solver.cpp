@@ -14,8 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace optim{
-namespace roots{
+namespace burnman::optim::roots {
 
 DampedNewtonResult DampedNewtonSolver::solve(
   const Eigen::VectorXd& x0,
@@ -372,5 +371,4 @@ void DampedNewtonSolver::make_termination_info(
   }
 }
 
-} // namespace roots
-} // namespace optim
+} // namespace burnman::optim::roots

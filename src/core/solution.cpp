@@ -16,6 +16,8 @@
 #include "burnman/utils/matrix_utils.hpp"
 #include "burnman/tools/averaging/averaging_schemes.hpp"
 
+namespace burnman {
+
 void Solution::reset() {
   // Reset cached Material & CompositeMaterial properties
   CompositeMaterial::reset();
@@ -427,3 +429,5 @@ void Solution::setup_endmember_names() const {
 void Solution::setup_endmember_formulae() const {
   set_endmember_formulae(map_endmembers_to_vector<FormulaMap>(&Mineral::get_formula));
 }
+
+} // namespace burnman

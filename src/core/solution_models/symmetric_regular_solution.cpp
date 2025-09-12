@@ -9,6 +9,8 @@
  */
 #include "burnman/core/solution_models/symmetric_regular_solution.hpp"
 
+namespace burnman::solution_models {
+
 // SymmetricRegularSolution Constructor
 SymmetricRegularSolution::SymmetricRegularSolution(
   const PairedEndmemberList& endmember_list,
@@ -21,3 +23,5 @@ SymmetricRegularSolution::SymmetricRegularSolution(
     energy_interaction,
     volume_interaction,
     entropy_interaction) {}
+
+} // namespace burnman::solution_models

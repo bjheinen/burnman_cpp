@@ -13,6 +13,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
+namespace burnman {
+namespace eos {
+
 // TODO: Maybe HP11 and HP11Mod instead of HP_TMT?
 /**
  * @class HP_TMT
@@ -201,5 +204,8 @@ class HP_TMT : public EquationOfState{
     const MineralParams& params) const;
 
 };
+
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_HP_HPP_INCLUDED

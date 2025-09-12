@@ -13,6 +13,8 @@
 #include "burnman/utils/types/gsl_params.hpp"
 #include "burnman/optim/roots/brent.hpp"
 
+namespace burnman::eos {
+
 bool Vinet::validate_parameters(MineralParams& params) {
 
   // TODO: check if we can just do if (!params.V_0)
@@ -223,3 +225,5 @@ double Vinet::compute_entropy(
 ) const {
   return 0.0;
 }
+
+} // namespace burnman::eos

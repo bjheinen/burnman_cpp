@@ -18,6 +18,8 @@
 #include "burnman/core/equation_of_state.hpp"
 #include "burnman/core/material.hpp"
 
+namespace burnman {
+
 /**
  * @class Mineral
  * @brief Base class for all materials.
@@ -111,5 +113,6 @@ class Mineral : public Material{
 
 };
 
+} // namespace burnman
 
 #endif // BURNMAN_CORE_MINERAL_HPP_INCLUDED

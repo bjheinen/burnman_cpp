@@ -14,6 +14,9 @@
 #include <string>
 #include "burnman/utils/types/simple_types.hpp"
 
+namespace burnman {
+namespace types {
+
 /**
  * Four Cp parameters used in HP and CORK
  */
@@ -108,5 +111,8 @@ struct MineralParams {
   std::optional<double> cork_P;
   std::optional<CorkParams> cork_params;
 };
+
+} // namespace types
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_TYPES_MINERAL_PARAMS_HPP_INCLUDED

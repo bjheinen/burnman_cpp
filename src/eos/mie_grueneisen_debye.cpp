@@ -16,6 +16,8 @@
 #include "burnman/eos/components/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
 
+namespace burnman::eos {
+
 bool MGD3::validate_parameters(MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
@@ -460,3 +462,5 @@ double MGD3::compute_thermal_bulk_modulus(
     return 0.0;
   }
 }
+
+} // namespace burnman::eos

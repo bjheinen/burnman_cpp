@@ -17,6 +17,8 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/material.hpp"
 
+namespace burnman {
+
 /**
  * @class CompositeMaterial
  * @brief Abtract base class for composite materials (solutions, assemblages).
@@ -205,5 +207,7 @@ class CompositeMaterial : public Material {
   // }
 
 };
+
+} // namespace burnman
 
 #endif // BURNMAN_CORE_COMPOSITE_MATERIAL_HPP_INCLUDED

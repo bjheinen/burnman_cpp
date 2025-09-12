@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <vector>
 
+namespace burnman {
 namespace utils {
 
   /**
@@ -73,5 +74,6 @@ namespace utils {
   }
 
 } // namespace utils
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_VECTOR_UTILS_INCLUDED

@@ -15,7 +15,7 @@
 #include "burnman/core/solution.hpp"
 #include "burnman/core/assemblage.hpp"
 
-// TODO: think about namespaces
+namespace burnman::equilibration {
 
 // Constraint constructors
 PressureConstraint::PressureConstraint(double value)
@@ -335,3 +335,5 @@ Eigen::VectorXd LinearXConstraint::derivative(
   row.head(this->A_.size()) = this->A_;
   return row;
 }
+
+} // namespace burnman::equilibration

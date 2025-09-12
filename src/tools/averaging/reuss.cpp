@@ -10,7 +10,7 @@
 #include "burnman/tools/averaging/reuss.hpp"
 #include "burnman/tools/averaging/averaging_utils.hpp"
 
-namespace averaging {
+namespace burnman::averaging {
 
 double Reuss::average_bulk_moduli(
   const Eigen::ArrayXd& volumes,
@@ -28,4 +28,4 @@ double Reuss::average_shear_moduli(
   return utils::reuss_fn(volumes, shear_moduli);
 }
 
-} // namespace averaging
+} // namespace burnman::averaging

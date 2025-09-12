@@ -10,7 +10,7 @@
 #include "burnman/tools/averaging/voigt.hpp"
 #include "burnman/tools/averaging/averaging_utils.hpp"
 
-namespace averaging {
+namespace burnman::averaging {
 
 double Voigt::average_bulk_moduli(
   const Eigen::ArrayXd& volumes,
@@ -28,4 +28,4 @@ double Voigt::average_shear_moduli(
   return utils::voigt_fn(volumes, shear_moduli);
 }
 
-} // namespace averaging
+} // namespace burnman::averaging

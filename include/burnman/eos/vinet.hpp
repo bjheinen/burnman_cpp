@@ -13,6 +13,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
  * @class Vinet
  * @brief Base class for the isothermal Vinet equation of state.
@@ -122,5 +125,8 @@ class Vinet : public EquationOfState{
    */
   static double vinet_gsl_wrapper(double x, void* p);
 };
+
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_VINET_HPP_INCLUDED

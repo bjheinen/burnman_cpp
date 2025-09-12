@@ -14,6 +14,9 @@
 #include <vector>
 #include <Eigen/Dense>
 
+namespace burnman {
+namespace equilibration {
+
 // Forward declaration
 class Assemblage;
 
@@ -73,5 +76,8 @@ using ConstraintGroup = std::vector<std::unique_ptr<EqualityConstraint>>;
  * @see `make_constraint_list'.
  */
 using ConstraintList = std::vector<ConstraintGroup>;
+
+} // namespace equilibration
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINT_BASE_HPP_INCLUDED

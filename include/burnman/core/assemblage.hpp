@@ -25,6 +25,8 @@
 #include "burnman/core/material.hpp"
 #include "burnman/core/composite_material.hpp"
 
+namespace burnman {
+
 /**
  * @class Assemblage
  * @brief Base class for a composite material (assemblage).
@@ -361,5 +363,7 @@ class Assemblage : public CompositeMaterial {
   Eigen::ArrayXd convert_mass_to_molar_fractions(const Eigen::ArrayXd& mass_fractions) const;
 
 };
+
+} // namespace burnman
 
 #endif // BURNMAN_CORE_COMPOSITE_HPP_INCLUDED

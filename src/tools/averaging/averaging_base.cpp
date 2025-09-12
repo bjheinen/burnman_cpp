@@ -9,7 +9,7 @@
  */
 #include "burnman/tools/averaging/averaging_base.hpp"
 
-namespace averaging {
+namespace burnman::averaging {
 
 double AveragingScheme::average_density(
   const Eigen::ArrayXd& volumes,
@@ -39,4 +39,4 @@ double AveragingScheme::average_heat_capacity_p(
   return (fractions * c_p).sum();
 }
 
-} // namespace averaging
+} // namespace burnman::averaging

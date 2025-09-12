@@ -18,6 +18,7 @@
 #include <Eigen/Dense>
 #include "burnman/utils/constants.hpp"
 
+namespace burnman {
 namespace optim{
 namespace roots{
 
@@ -128,5 +129,6 @@ struct DampedNewtonResult {
 
 } // namespace roots
 } // namespace optim
+} // namespace burnman
 
 #endif // BURNMAN_OPTIM_ROOTS_DAMPED_NEWTON_TYPES_HPP_INCLUDED

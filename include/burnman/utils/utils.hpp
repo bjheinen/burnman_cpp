@@ -17,14 +17,16 @@
 #include "burnman/utils/string_utils.hpp"
 #include "burnman/utils/vector_utils.hpp"
 
-/**
- * @namespace utils
- * @brief General-purpose utility functions.
- *
- * Helpers for strings, maths, file I/O, etc.
- */
-namespace utils {
-  // blank for documentation only
+namespace burnman {
+  /**
+  * @namespace utils
+  * @brief General-purpose utility functions.
+  *
+  * Helpers for strings, maths, file I/O, etc.
+  */
+  namespace utils {
+    // blank for documentation only
+  }
 }
 
 #endif // BURNMAN_UTILS_INCLUDED

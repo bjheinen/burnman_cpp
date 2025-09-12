@@ -13,6 +13,8 @@
 #include "burnman/eos/components/einstein.hpp"
 #include "burnman/eos/modified_tait.hpp"
 
+namespace burnman::eos {
+
 bool HP_TMT::validate_parameters(MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
@@ -404,3 +406,5 @@ double HP_TMT::compute_thermal_pressure(
     *params.T_0, *params.T_einstein, *params.napfu);
   return (*params.a_0) * (*params.K_0) / C_V0 * E_th;
 }
+
+} // namespace burnman::eos

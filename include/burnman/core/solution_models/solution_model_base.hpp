@@ -17,6 +17,9 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/mineral.hpp"
 
+namespace burnman {
+namespace solution_models {
+
 /**
  * @class SolutionModel
  * @brief Base class for solution models.
@@ -258,5 +261,8 @@ class SolutionModel {
  private:
   ;
 };
+
+} // namespace solution_models
+} // namespace burnman
 
 #endif // BURNMAN_CORE_SOLUTION_MODEL_BASE_HPP_INCLUDED

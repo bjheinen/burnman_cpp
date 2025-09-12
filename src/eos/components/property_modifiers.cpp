@@ -16,6 +16,8 @@
 #include "burnman/eos/components/einstein.hpp"
 #include "burnman/optim/roots/brent.hpp"
 
+namespace burnman::eos {
+
 // Anonymous namespace for BW helper functions
 namespace {
   // Eq. A2-2
@@ -555,4 +557,5 @@ namespace excesses {
     return einstein_ex;
   }
 
-} // End namespace excesses
+} // namespace excesses
+} // namespace burnman::eos

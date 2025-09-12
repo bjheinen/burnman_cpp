@@ -16,6 +16,7 @@
 #include <vector>
 #include <Eigen/Dense>
 
+namespace burnman {
 namespace utils {
 
   /**
@@ -261,6 +262,7 @@ namespace utils {
     return full_basis;
   }
 
-}
+} // namespace utils
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_MATRIX_UTILS_INCLUDED

@@ -19,6 +19,7 @@
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/types/simple_types.hpp"
 
+namespace burnman {
 namespace utils {
 
   /**
@@ -77,6 +78,7 @@ namespace utils {
     return sum_formulae(formulae, ones);
   }
 
-}
+} // namespace utils
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_CHEMISTRY_UTILS_INCLUDED

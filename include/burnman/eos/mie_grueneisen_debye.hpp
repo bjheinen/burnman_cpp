@@ -13,6 +13,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
  * @class MGD3
  * @brief Class for the Mie-Grueneisen-Debye equation of state.
@@ -251,5 +254,8 @@ class MGD2 : public MGD3{
     double volume,
     const MineralParams& params) const override;
 };
+
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_MIE_GRUENEISEN_DEBYE_HPP_INCLUDED

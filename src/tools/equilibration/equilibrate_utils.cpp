@@ -15,6 +15,8 @@
 #include <stdexcept>
 #include "burnman/core/solution.hpp"
 
+namespace burnman::equilibration {
+
 EquilibrationParameters get_equilibration_parameters(
   const Assemblage& assemblage,
   const FormulaMap& composition,
@@ -242,3 +244,5 @@ void set_composition_and_state_from_parameters(
   assemblage.set_n_moles(n_moles);
   assemblage.set_fractions(phase_amounts / n_moles);
 }
+
+} // namespace burnman::equilibration

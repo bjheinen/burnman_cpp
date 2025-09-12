@@ -22,6 +22,9 @@
 //       PhaseFractionConstraint, or PhaseCompositionConstraint.
 //       Can add extra template specialisation for these, but probably not needed ever.
 
+namespace burnman {
+namespace equilibration {
+
 /**
  * @brief Constructs a constraint object.
  *
@@ -138,5 +141,8 @@ ConstraintList make_constraint_list(Args&&... args) {
   (list.push_back(wrap_constraint(std::forward<Args>(args))), ...);
   return list;
 }
+
+} // namespace equilibration
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINT_HELPERS_HPP_INCLUDED

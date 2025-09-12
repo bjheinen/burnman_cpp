@@ -19,6 +19,9 @@
 #include "burnman/tools/equilibration/equality_constraint_base.hpp"
 #include "burnman/tools/equilibration/equilibrate_types.hpp"
 
+namespace burnman {
+namespace equilibration {
+
 // Forward declarations
 struct EquilibrationParameters;
 class Assemblage;
@@ -172,5 +175,8 @@ class PhaseCompositionConstraint : public LinearXConstraint {
     const Assemblage& assemblage,
     const EquilibrationParameters& prm);
 };
+
+} // namespace equilibration
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_VARIANTS_HPP_INCLUDED

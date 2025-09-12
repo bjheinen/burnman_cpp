@@ -12,9 +12,11 @@
 
 #include "burnman/utils/types/simple_types.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
- * TODO: Add to EOS module
- * @namespace debye
+ * @namespace burnman::eos::debye
  * @brief Functions for Debye model.
  *
  * Functions required for Debye model. Used with Mie-Grueneisen and
@@ -252,6 +254,8 @@ namespace debye {
     double debye_temperature,
     double napfu);
 
-}
+} // namespace debye
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_DEBYE_HPP_INCLUDED

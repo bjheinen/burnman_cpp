@@ -10,7 +10,7 @@
 #include "burnman/tools/averaging/vrh.hpp"
 #include "burnman/tools/averaging/averaging_utils.hpp"
 
-namespace averaging {
+namespace burnman::averaging {
 
 double VoigtReussHill::average_bulk_moduli(
   const Eigen::ArrayXd& volumes,
@@ -28,4 +28,4 @@ double VoigtReussHill::average_shear_moduli(
   return utils::voigt_reuss_hill_fn(volumes, shear_moduli);
 }
 
-} // namespace averaging
+} // namespace burnman::averaging

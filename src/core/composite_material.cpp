@@ -14,6 +14,8 @@
 #include "burnman/utils/chemistry_utils.hpp"
 #include "burnman/utils/matrix_utils.hpp"
 
+namespace burnman {
+
 void CompositeMaterial::reset() {
   // Reset caches Material properties
   Material::reset();
@@ -220,3 +222,5 @@ Eigen::MatrixXd CompositeMaterial::compute_reaction_basis() const {
     return nullspace;
   }
 }
+
+} // namespace burnman

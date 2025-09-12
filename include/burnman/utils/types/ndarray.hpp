@@ -15,6 +15,9 @@
 #include <vector>
 #include "burnman/utils/vector_utils.hpp"
 
+namespace burnman {
+namespace types {
+
 /**
  * @brief Flat vector storage with convenience mapping to grid indices.
  *
@@ -142,5 +145,8 @@ struct NDArray {
   }
 
 };
+
+} // namespace types
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_TYPES_NDARRAY_HPP_INCLUDED

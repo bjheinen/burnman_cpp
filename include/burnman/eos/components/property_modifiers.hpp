@@ -12,8 +12,11 @@
 
 #include "burnman/utils/types/excess_params.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
- * TODO: Add Docs to EOS module
+ * @namespace burnman::eos::excesses
  * @brief Modification functions for thermodynamic properties.
  *
  * Currently this includes modifications for:
@@ -255,6 +258,8 @@ namespace excesses {
     double temperature,
     EinsteinDeltaParams params);
 
-} // End namespace excesses
+} // namespace excesses
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_PROPERTY_MODIFIERS_HPP_INCLUDED

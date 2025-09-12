@@ -15,6 +15,9 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/solution_models/ideal_solution.hpp"
 
+namespace burnman {
+namespace solution_models {
+
 /**
  * @class AsymmetricRegularSolution
  * @brief Asymmetric regular solution model.
@@ -112,5 +115,8 @@ class AsymmetricRegularSolution : public IdealSolution{
     const Eigen::ArrayXd& molar_fractions) const;
 
 };
+
+} // namespace solution_models
+} // namespace burnman
 
 #endif // BURNMAN_CORE_SOLUTION_MODELS_ASYMMETRIC_REGULAR_INCLUDED

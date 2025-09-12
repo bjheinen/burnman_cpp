@@ -17,6 +17,8 @@
 #include "burnman/eos/components/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
 
+namespace burnman::eos {
+
 bool SLB3::validate_parameters(MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
@@ -700,3 +702,5 @@ bool SLB3Conductive::validate_parameters(MineralParams& params) {
   // Call base validate
   return SLB3::validate_parameters(params);
 }
+
+} // namespace burnman::eos

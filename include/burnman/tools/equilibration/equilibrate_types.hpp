@@ -17,6 +17,9 @@
 #include "burnman/utils/types/ndarray.hpp"
 #include "burnman/optim/roots/damped_newton_types.hpp"
 
+namespace burnman {
+namespace equilibration {
+
 /** Type alias for a map of elements and bulk compositional degrees of freedom */
 using FreeVectorMap = std::unordered_map<std::string, double>;
 
@@ -42,5 +45,8 @@ struct EquilibrateResult {
   NDArray<optim::roots::DampedNewtonResult> sol_array;  ///< NDArray of solver result iterates.
   EquilibrationParameters prm;            ///< Parameters used in equilibration.
 };
+
+} // namespace equilibration
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_TYPES_HPP_INCLUDED

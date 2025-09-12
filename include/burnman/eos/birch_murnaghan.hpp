@@ -13,6 +13,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
  * @class BM3
  * @brief Base class for the Birch Murnaghan equation of state.
@@ -189,5 +192,8 @@ class BM2 : public BM3{
     double volume,
     const MineralParams& params) const override;
 };
+
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_BIRCH_MURNAGHAN_HPP_INCLUDED

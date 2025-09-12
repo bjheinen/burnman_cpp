@@ -12,6 +12,8 @@
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/matrix_utils.hpp"
 
+namespace burnman::solution_models {
+
 // Constructor for AsymmetricRegularSolution
 AsymmetricRegularSolution::AsymmetricRegularSolution(
   const PairedEndmemberList& endmember_list,
@@ -182,3 +184,5 @@ Eigen::MatrixXd AsymmetricRegularSolution::compute_non_ideal_hessian(
   Eigen::MatrixXd hessian = weighted_product + weighted_product.transpose();
   return hessian;
 }
+
+} // namespace burnman::solution_models

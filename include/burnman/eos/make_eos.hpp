@@ -14,11 +14,15 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
-/**
- * @brief Makes a pointer to a predefined EOS class
- * @param eos_type EOSType enum specifying equation of state
- * @return std::shared_ptr to an instance of the specific EOS
- */
-std::shared_ptr<EquationOfState> make_eos(EOSType eos_type);
+namespace burnman {
+  namespace eos {
+    /**
+    * @brief Makes a pointer to a predefined EOS class
+    * @param eos_type EOSType enum specifying equation of state
+    * @return std::shared_ptr to an instance of the specific EOS
+    */
+    std::shared_ptr<EquationOfState> make_eos(EOSType eos_type);
+  } // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_MAKE_EOS_HPP_INCLUDED

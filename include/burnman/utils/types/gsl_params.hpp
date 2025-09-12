@@ -12,10 +12,15 @@
 
 #include "burnman/utils/types/mineral_params.hpp"
 
+// TODO: move to /eos/components - no need to expose as not user-facing
+namespace burnman {
+namespace eos {
+
 /**
- * Structs to hols parameters when making GSL function objects
+ * @namespace burnman::eos::gsl_params
+ * @brief Structs to hols parameters when making GSL function objects
  */
-namespace ParamsGSL {
+namespace gsl_params {
   /**
    * Struct for GSL Brent root finding
    * Used for volume finding in EOS where only pressure needed
@@ -62,6 +67,8 @@ namespace ParamsGSL {
     double f_0, f_1;
   };
 
-} // End namespace ParamGSL
+} // namespace gsl_params
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_TYPES_GSL_PARAMS_HPP_INCLUDED

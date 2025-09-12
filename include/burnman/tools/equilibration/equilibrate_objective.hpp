@@ -14,6 +14,9 @@
 #include "burnman/tools/equilibration/equality_constraint_base.hpp"
 #include "burnman/core/assemblage.hpp"
 
+namespace burnman {
+namespace equilibration {
+
 /**
  * @brief Objective function for equilibration.
  *
@@ -58,5 +61,8 @@ Eigen::MatrixXd J(
   Assemblage& assemblage, // TODO: could be const ref?
   const ConstraintGroup& equality_constraints,
   const Eigen::MatrixXd& reduced_free_composition_vectors);
+
+} // namespace equilibration
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_OBJ_HPP_INCLUDED

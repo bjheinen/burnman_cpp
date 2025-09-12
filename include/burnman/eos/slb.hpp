@@ -14,6 +14,9 @@
 #include "burnman/utils/types/mineral_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
  * @class SLB3
  * @brief Class for the Mie-Grueneisen-Debye equation of state detailed
@@ -302,5 +305,8 @@ class SLB3Conductive : public SLB3{
     const MineralParams& params) const override;
 
 };
+
+} // namespace eos
+} // namespace burnman
 
 #endif // #define BURNMAN_EOS_SLB_HPP_INCLUDED

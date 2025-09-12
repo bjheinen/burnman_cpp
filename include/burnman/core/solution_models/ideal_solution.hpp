@@ -14,6 +14,9 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/core/solution_models/solution_model_base.hpp"
 
+namespace burnman {
+namespace solution_models {
+
 /**
  * @class IdealSolution
  * @brief Ideal solution model.
@@ -108,5 +111,8 @@ class IdealSolution : public SolutionModel{
   // Not really used --> would make protected and create in setup
 
 };
+
+} // namespace solution_models
+} // namespace burnman
 
 #endif // BURNMAN_CORE_SOLUTION_MODELS_IDEAL_HPP_INCLUDED

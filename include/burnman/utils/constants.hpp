@@ -14,18 +14,23 @@
 #include <string>
 #include <vector>
 
+namespace burnman {
+
 /**
- * Constants used in burnman
+ * @namespace burnman::constants
+ * @brief Constants used in burnman
  */
 namespace constants {
 
   /**
-   * Physical constants
-   * Using CODATA 2022 values
-   * n.b. To match the python implementation / scipy > 1.15 we use
-   *      more digits for R and hbar than the CODATA2022 database.
-   *      R is defined as k_B * N_A, and hbar as h / (2pi), so we
-   *      can calculate them to full double precision.
+   * @namespace burnman::constants::physics
+   * @brief Physical constants
+   *
+   * @note Using CODATA 2022 values
+   * @note To match the python implementation / scipy > 1.15 we use
+   *       more digits for R and hbar than the CODATA2022 database.
+   *       R is defined as k_B * N_A, and hbar as h / (2pi), so we
+   *       can calculate them to full double precision.
    */
   namespace physics {
     /**
@@ -53,7 +58,8 @@ namespace constants {
   }
 
   /**
-   * Machine epsilon, etc.
+   * @namespace burnman::constants::precision
+   * @brief Machine epsilon and tolerances used in burnman.
    */
   namespace precision {
     constexpr double double_eps = std::numeric_limits<double>::epsilon();
@@ -64,7 +70,8 @@ namespace constants {
   }
 
   /**
-   * Elements etc.
+   * @namespace burnman::constants::chemistry
+   * @brief IUPAC element lists, etc.
    */
   namespace chemistry {
 
@@ -102,6 +109,7 @@ namespace constants {
 
   }
 
-}
+} // namespace constants
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_CONSTANTS_HPP_INCLUDED

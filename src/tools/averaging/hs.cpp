@@ -10,7 +10,7 @@
 #include "burnman/tools/averaging/hs.hpp"
 #include "burnman/tools/averaging/averaging_utils.hpp"
 
-namespace averaging {
+namespace burnman::averaging {
 
 double HashinShtrikman::average_bulk_moduli(
   const Eigen::ArrayXd& volumes,
@@ -34,4 +34,4 @@ double HashinShtrikman::average_shear_moduli(
     ) / 2.0;
 }
 
-} // namespace averaging
+} // namespace burnman::averaging

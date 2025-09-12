@@ -11,6 +11,8 @@
 #include <cmath>
 #include <algorithm>
 
+namespace burnman::equilibration {
+
 std::pair<double, double> lambda_bounds_func(
   const Eigen::VectorXd& dx,
   const Eigen::VectorXd& x,
@@ -38,3 +40,5 @@ std::pair<double, double> lambda_bounds_func(
   }
   return {1.0e-8, max_lambda};
 }
+
+} // namespace burnman::equilibration

@@ -10,7 +10,7 @@
 #include "burnman/tools/averaging/averaging_utils.hpp"
 #include "burnman/utils/constants.hpp"
 
-namespace averaging{
+namespace burnman::averaging{
 
 namespace utils{
 
@@ -126,4 +126,4 @@ namespace utils{
 
 } // namespace utils
 
-} // namespace averaging
+} // namespace burnman::averaging

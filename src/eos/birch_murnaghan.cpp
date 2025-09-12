@@ -13,6 +13,8 @@
 #include "burnman/utils/types/gsl_params.hpp"
 #include "burnman/optim/roots/brent.hpp"
 
+namespace burnman::eos {
+
 bool BM3::validate_parameters(MineralParams& params) {
 
   // Check for required keys
@@ -287,3 +289,5 @@ double BM3::compute_entropy(
 ) const {
   return 0.0;
 }
+
+} // namespace burnman::eos

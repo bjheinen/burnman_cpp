@@ -11,6 +11,8 @@
 #include <cmath>
 #include "burnman/utils/constants.hpp"
 
+namespace burnman::eos {
+
 double einstein::compute_thermal_energy_impl(
   double temperature,
   double einstein_temperature,
@@ -195,3 +197,5 @@ double einstein::compute_dmolar_heat_capacity_v_dT(
     f.value
   );
 }
+
+} // namespace burnman::eos

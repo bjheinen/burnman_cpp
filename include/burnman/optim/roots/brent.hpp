@@ -16,6 +16,7 @@
 #include <gsl/gsl_roots.h>
 #include "burnman/utils/constants.hpp"
 
+namespace burnman {
 namespace optim {
 namespace roots {
   /**
@@ -106,5 +107,6 @@ namespace roots {
 
 } // namespace roots
 } // namespace optim
+} // namespace burnman
 
 #endif // BURNMAN_OPTIM_ROOTS_BRENT_HPP_INCLUDED

@@ -23,6 +23,8 @@
 #include "burnman/core/solution_model.hpp"
 #include "burnman/core/composite_material.hpp"
 
+namespace burnman {
+
 /**
  * @class Solution
  * @brief Base class for solid solutions.
@@ -479,5 +481,7 @@ class Solution : public CompositeMaterial {
   // site_occupancies - Map?
 
 };
+
+} // namespace burnman
 
 #endif // BURNMAN_CORE_SOLUTION_HPP_INCLUDED

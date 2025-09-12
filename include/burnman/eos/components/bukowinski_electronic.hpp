@@ -12,9 +12,11 @@
 
 #include "burnman/utils/types/mineral_params.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
- * TODO: Add to EOS module
- * @namespace bukowinski
+ * @namespace burnman::eos::bukowinski
  * @brief Functions for the Bukowinski model for the electronic
  *        component of the Helmholtz free energy (as used by
  *        Stixrude & Lithgow-Bertelloni, 2024).
@@ -104,6 +106,9 @@ namespace bukowinski {
     double temperature,
     double volume,
     const MineralParams& params);
-}
+
+} // namespace bukowinski
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_BUKOWINSKI_ELECTRONIC_HPP_INCLUDED

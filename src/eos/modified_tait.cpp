@@ -11,6 +11,8 @@
 #include <cmath>
 #include <stdexcept>
 
+namespace burnman::eos {
+
 bool MT::validate_parameters(MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
@@ -222,3 +224,5 @@ double MT::compute_grueneisen_parameter(
 ) const {
   return 0.0;
 }
+
+} // namespace burnman::eos

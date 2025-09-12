@@ -14,6 +14,7 @@
 #include "burnman/eos/mie_grueneisen_debye.hpp"
 #include "burnman/eos/slb.hpp"
 
+namespace burnman::eos {
 // TODO: Add HP types here
 
 std::shared_ptr<EquationOfState> make_eos(EOSType eos_type) {
@@ -38,3 +39,5 @@ std::shared_ptr<EquationOfState> make_eos(EOSType eos_type) {
       throw std::invalid_argument("Unknown EOS type!");
   }
 }
+
+} // namespace burnman::eos

@@ -11,6 +11,8 @@
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/math_utils.hpp"
 
+namespace burnman::solution_models {
+
 // Constructor for IdealSolution
 IdealSolution::IdealSolution(const PairedEndmemberList& endmember_list)
   : SolutionModel(endmember_list) {
@@ -152,3 +154,5 @@ Eigen::MatrixXd IdealSolution::compute_ideal_entropy_hessian(
   return -(constants::physics::gas_constant
     * compute_log_ideal_activity_derivatives(molar_fractions));
 }
+
+} // namespace burnman::solution_models

@@ -15,6 +15,9 @@
 #include <utility>
 #include <vector>
 
+namespace burnman {
+namespace types {
+
 /**
   * Wrapper type to force explicit calls of functions with
   * double instead of int.
@@ -111,5 +114,8 @@ class Mineral;
  */
 using MineralFormulaPair = std::pair<Mineral, std::string>;
 using PairedEndmemberList = std::vector<MineralFormulaPair>;
+
+} // namespace types
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_TYPES_SIMPLE_TYPES_HPP_INCLUDED

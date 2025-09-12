@@ -13,6 +13,8 @@
 #include "burnman/tools/equilibration/equilibrate_utils.hpp"
 #include "burnman/core/solution.hpp"
 
+namespace burnman::equilibration {
+
 Eigen::VectorXd F(
   const Eigen::VectorXd& x,
   Assemblage& assemblage,
@@ -159,3 +161,5 @@ Eigen::MatrixXd J(
   }
   return jacobian;
 }
+
+} // namespace burnman::equilibration

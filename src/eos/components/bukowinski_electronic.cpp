@@ -10,6 +10,8 @@
 #include "burnman/eos/components/bukowinski_electronic.hpp"
 #include <cmath>
 
+namespace burnman::eos {
+
 double bukowinski::compute_helmholtz_el(
   double temperature,
   double volume,
@@ -66,3 +68,5 @@ double bukowinski::compute_alpha_KT(
     * std::pow(volume / *params.V_0, *params.gel)
     / volume;
 }
+
+} // namespace burnman::eos

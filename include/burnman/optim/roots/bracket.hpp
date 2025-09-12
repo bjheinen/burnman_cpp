@@ -13,6 +13,7 @@
 #include <cassert>
 #include <cmath>
 
+namespace burnman {
 namespace optim {
 namespace roots {
   /**
@@ -70,5 +71,6 @@ namespace roots {
   }
 } // namespace roots
 } // namespace optim
+} // namespace burnman
 
 #endif // BURNMAN_OPTIM_ROOTS_BRACKET_HPP_INCLUDED

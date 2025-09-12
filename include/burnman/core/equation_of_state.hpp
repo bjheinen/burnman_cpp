@@ -13,6 +13,8 @@
 #include <string>
 #include "burnman/utils/types/mineral_params.hpp"
 
+namespace burnman {
+
 /**
  * Base class for Equations of State.
 
@@ -365,5 +367,7 @@ class EquationOfState {
   std::string get_class_name() const;
 
 };
+
+} // namespace burnman
 
 #endif // BURNMAN_CORE_EQUATION_OF_STATE_HPP_INCLUDED

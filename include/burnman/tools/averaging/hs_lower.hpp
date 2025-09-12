@@ -12,6 +12,7 @@
 
 #include "burnman/tools/averaging/averaging_base.hpp"
 
+namespace burnman {
 namespace averaging {
 
 /**
@@ -43,5 +44,6 @@ class HashinShtrikmanLower : public AveragingScheme {
 };
 
 } // namespace averaging
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_AVERAGING_HS_LOWER_HPP_INCLUDED

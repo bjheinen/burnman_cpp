@@ -12,6 +12,7 @@
 
 #include <Eigen/Dense>
 
+namespace burnman {
 namespace averaging {
 
 /**
@@ -105,5 +106,6 @@ class AveragingScheme {
 };
 
 } // namespace averaging
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_AVERAGING_AVERAGING_BASE_HPP_INCLUDED

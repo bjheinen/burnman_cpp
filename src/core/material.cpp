@@ -11,6 +11,8 @@
 #include <typeinfo>
 #include "burnman/utils/exceptions.hpp"
 
+namespace burnman {
+
 [[noreturn]] void Material::throw_not_implemented_error(const std::string& method) const {
   throw NotImplementedError(get_class_name(), method);
 }
@@ -346,3 +348,5 @@ double Material::compute_isentropic_thermal_gradient() const {
 FormulaMap Material::compute_formula() const {
   throw_not_implemented_error(__func__);
 }
+
+} // namespace burnman

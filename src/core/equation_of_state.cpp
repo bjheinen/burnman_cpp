@@ -11,6 +11,8 @@
 #include <typeinfo>
 #include "burnman/utils/exceptions.hpp"
 
+namespace burnman {
+
 // Helper functions to throw errors
 [[noreturn]] void EquationOfState::throw_not_implemented_error(const std::string& method) const {
   throw NotImplementedError(get_class_name(), method);
@@ -157,3 +159,5 @@ double EquationOfState::compute_molar_internal_energy(
 ) const {
   throw_not_implemented_error(__func__);
 }
+
+} // namespace burnman

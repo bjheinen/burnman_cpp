@@ -13,10 +13,8 @@
 #include <variant>
 #include <vector>
 
-/**
- * @namespace excesses
- * Used for calculating thermodynamic property modifiers
- */
+// TODO: move to /eos/components, alias in types.hpp for user includes
+namespace burnman {
 namespace excesses {
   /**
   * Sruct to hold excesses data for EOS modifiers
@@ -136,6 +134,7 @@ namespace excesses {
 
   using ExcessParamVector = std::vector<ExcessParamVariant>;
 
-} // End namespace excesses
+} // namespace excesses
+} // namesapce burnman
 
 #endif // BURNMAN_UTILS_TYPES_EXCESS_PARAMS_HPP_INCLUDED

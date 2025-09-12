@@ -17,6 +17,9 @@
 #include "burnman/tools/equilibration/equilibrate_types.hpp"
 #include "burnman/core/assemblage.hpp"
 
+namespace burnman {
+namespace equilibration {
+
 /**
  * @brief Finds equilibrium state of assemblage subject to constraints.
  *
@@ -60,5 +63,8 @@ EquilibrateResult equilibrate(
   bool store_assemblage = true,
   int max_iterations = 100,
   bool verbose = false);
+
+} // namespace equilibration
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_IMPL_HPP_INCLUDED

@@ -19,6 +19,9 @@
 #include "burnman/tools/equilibration/equilibrate_types.hpp"
 #include "burnman/core/assemblage.hpp"
 
+namespace burnman {
+namespace equilibration {
+
 /**
  * @brief Builds the equilibration parameter object.
  *
@@ -84,5 +87,8 @@ Eigen::VectorXd get_endmember_amounts(
 void set_composition_and_state_from_parameters(
   Assemblage& assemblage,
   const Eigen::VectorXd& parameters);
+
+} // namespace equilibration
+} // namespace burnman
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUILIBRATE_UTILS_HPP_INCLUDED

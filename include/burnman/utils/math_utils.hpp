@@ -14,6 +14,7 @@
 #include <Eigen/Dense>
 #include "burnman/utils/constants.hpp"
 
+namespace burnman {
 namespace utils {
 
   /**
@@ -58,6 +59,7 @@ namespace utils {
     return log_x;
   }
 
-}
+} // namespace utils
+} // namespace burnman
 
 #endif // BURNMAN_UTILS_MATH_UTILS_INCLUDED

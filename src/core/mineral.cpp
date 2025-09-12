@@ -16,6 +16,8 @@
 #include "burnman/eos/components/property_modifiers.hpp"
 #include "burnman/eos/make_eos.hpp"
 
+namespace burnman {
+
 std::string Mineral::get_name() const {
   if (has_custom_name()) {
     return Material::get_name();
@@ -274,3 +276,5 @@ double Mineral::compute_isentropic_thermal_gradient() const {
     (get_molar_volume() * get_temperature() * get_thermal_expansivity())
     / get_molar_heat_capacity_p();
 }
+
+} // namespace burnman

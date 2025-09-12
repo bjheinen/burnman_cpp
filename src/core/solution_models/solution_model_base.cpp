@@ -15,6 +15,8 @@
 #include <stdexcept>
 #include "burnman/utils/string_utils.hpp"
 
+namespace burnman::solution_models {
+
 SolutionModel::SolutionModel(const PairedEndmemberList& endmember_list) {
   this->n_endmembers = static_cast<Eigen::Index>(endmember_list.size());
   this->endmembers.reserve(static_cast<std::size_t>(this->n_endmembers));
@@ -282,3 +284,5 @@ double SolutionModel::compute_alphaV_excess() const {
 double SolutionModel::compute_VoverKT_excess() const {
   return 0.0;
 }
+
+} // namespace burnman::solution_models

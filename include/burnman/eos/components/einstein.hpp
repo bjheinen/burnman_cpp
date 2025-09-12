@@ -12,9 +12,11 @@
 
 #include "burnman/utils/types/simple_types.hpp"
 
+namespace burnman {
+namespace eos {
+
 /**
- * TODO: Add to EOS module
- * @namespace einstein
+ * @namespace burnman::eos::einstein
  * @brief Functions for the Einstein model of a solid.
  *
  * @note All functions assume SI units for all properties.
@@ -231,6 +233,8 @@ namespace einstein {
     double einstein_temperature,
     double napfu);
 
-}
+} // namespace einstein
+} // namespace eos
+} // namespace burnman
 
 #endif // BURNMAN_EOS_EINSTEIN_HPP_INCLUDED

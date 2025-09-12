@@ -13,6 +13,8 @@
 #include <gsl/gsl_integration.h>
 #include "burnman/utils/constants.hpp"
 
+namespace burnman::eos {
+
 double debye::debye_fn_integrand(double xi, void*) {
   return (xi * xi * xi) / std::expm1(xi);
 }
@@ -234,3 +236,5 @@ double debye::compute_dmolar_heat_capacity_v_dT(
     f.value
   );
 }
+
+} // namespace burnman::eos

@@ -13,6 +13,5 @@
 #include "burnman/tools/equilibration/equality_constraint_base.hpp"
 #include "burnman/tools/equilibration/equality_constraint_variants.hpp"
 #include "burnman/tools/equilibration/equality_constraint_helpers.hpp"
-// namespace?
 
 #endif // BURNMAN_TOOLS_EQUILIBRATION_EQUALITY_CONSTRAINTS_HPP_INCLUDED

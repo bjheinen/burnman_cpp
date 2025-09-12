@@ -10,7 +10,7 @@
 #include "burnman/tools/averaging/hs_lower.hpp"
 #include "burnman/tools/averaging/averaging_utils.hpp"
 
-namespace averaging {
+namespace burnman::averaging {
 
 double HashinShtrikmanLower::average_bulk_moduli(
   const Eigen::ArrayXd& volumes,
@@ -28,4 +28,4 @@ double HashinShtrikmanLower::average_shear_moduli(
   return utils::lower_hs_shear_fn(volumes, bulk_moduli, shear_moduli);
 }
 
-} // namespace averaging
+} // namespace burnman::averaging

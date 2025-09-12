@@ -17,6 +17,7 @@
 #include "burnman/optim/roots/damped_newton_types.hpp"
 #include "burnman/optim/roots/damped_newton_state.hpp"
 
+namespace burnman {
 namespace optim{
 namespace roots{
 
@@ -214,5 +215,6 @@ class DampedNewtonSolver {
 
 } // namespace roots
 } // namespace optim
+} // namespace burnman
 
 #endif // BURNMAN_OPTIM_ROOTS_DAMPED_NEWTON_HPP_INCLUDED
