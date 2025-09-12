@@ -113,7 +113,7 @@ EquilibrateResult equilibrate(
   assemblage.set_state(initial_pressure, initial_temperature);
 
   // Get parameter vector (x)
-  Eigen::VectorXd parameter_vector = get_parameter_vector(assemblage, n_free_compositional_vectors);
+  Eigen::VectorXd parameter_vector = get_parameter_vector(assemblage, static_cast<int>(n_free_compositional_vectors));
 
   // Set up solves constraint indices from ConstraintList
   std::vector<std::size_t> grid_shape;
