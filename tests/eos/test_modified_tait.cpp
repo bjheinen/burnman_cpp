@@ -19,7 +19,7 @@
 using namespace Catch::Matchers;
 
 TEST_CASE("Test validate parameters", "[modified_tait][eos]") {
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 11.24e-6;
   params.K_0 = 161.0e9;
   params.Kprime_0 = 3.8;
@@ -28,7 +28,7 @@ TEST_CASE("Test validate parameters", "[modified_tait][eos]") {
   params.Gprime_0 = 1.8;
   params.E_0 = 0.0;
   params.P_0 = 1.0e5;
-  MT mt;
+  eos::MT mt;
   SECTION("Missing V_0") {
     params.V_0.reset();
     REQUIRE_THROWS(mt.validate_parameters(params));
@@ -64,19 +64,19 @@ TEST_CASE("Test validate parameters", "[modified_tait][eos]") {
 }
 
 TEST_CASE("Tait constant", "[modified_tait][eos]") {
-  MineralParams params;
+  types::MineralParams params;
   params.K_0 = 161.0e9;
   params.Kprime_0 = 4.0;
   params.Kdprime_0 = -4.0e-11;
   TaitConstants result;
   SECTION("Kdprime_0 zero behaviour") {
     params.Kdprime_0 = 0;
-    result = MT::compute_tait_constants(params);
+    result = eos::MT::compute_tait_constants(params);
     CHECK(result.a == 1.0);
   }
   SECTION("Kprime_0 zero behaviour") {
     params.Kprime_0 = 0;
-    result = MT::compute_tait_constants(params);
+    result = eos::MT::compute_tait_constants(params);
     CHECK_THAT(result.b,
       WithinRel(-*params.Kdprime_0, tol_rel) ||
       WithinAbs(-*params.Kdprime_0, tol_abs));
@@ -85,7 +85,7 @@ TEST_CASE("Tait constant", "[modified_tait][eos]") {
     double ref_a = -625.0/180.0;
     double ref_b = 3.284472049689441e-11;
     double ref_c = -0.05446293494704991;
-    result = MT::compute_tait_constants(params);
+    result = eos::MT::compute_tait_constants(params);
     CHECK_THAT(result.a,
       WithinRel(ref_a, tol_rel) ||
       WithinAbs(ref_a, tol_abs));
@@ -100,7 +100,7 @@ TEST_CASE("Tait constant", "[modified_tait][eos]") {
 
 TEST_CASE("Check reference conditions", "[modified_tait][eos]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 11.24e-6;
   params.K_0 = 161.0e9;
   params.Kprime_0 = 3.8;
@@ -109,7 +109,7 @@ TEST_CASE("Check reference conditions", "[modified_tait][eos]") {
   params.Gprime_0 = 1.8;
   params.E_0 = 0.0;
   params.P_0 = 1.0e5;
-  MT mt;
+  eos::MT mt;
   SECTION("Reference V") {
     auto T = GENERATE(300.0, 2000.0);
     double V = *params.V_0;
@@ -146,7 +146,7 @@ TEST_CASE("Check hard-coded returns", "[modified_tait][eos]") {
   auto T = GENERATE(300.0, 2000.0);
   auto V = GENERATE(5.0e-6, 10.0e-6);
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 11.24e-6;
   params.K_0 = 161.0e9;
   params.Kprime_0 = 3.8;
@@ -155,7 +155,7 @@ TEST_CASE("Check hard-coded returns", "[modified_tait][eos]") {
   params.Gprime_0 = 1.8;
   params.E_0 = 0.0;
   params.P_0 = 1.0e5;
-  MT mt;
+  eos::MT mt;
   CHECK(mt.compute_thermal_expansivity(P, T, V, params) == 0);
   CHECK(mt.compute_grueneisen_parameter(P, T, V, params) == 0);
   CHECK(mt.compute_molar_heat_capacity_v(P, T, V, params) == 1.0e99);
@@ -167,12 +167,12 @@ TEST_CASE("Check hard-coded returns", "[modified_tait][eos]") {
 
 TEST_CASE("MT python reference values", "[modified_tait][eos]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 2.445e-05;
   params.K_0 = 251.0e9;
   params.Kprime_0 = 4.14;
   params.Kdprime_0 = -1.6e-11;
-  MT mt;
+  eos::MT mt;
   mt.validate_parameters(params);
   SECTION("Test volume dependent functions") {
     struct TestData {

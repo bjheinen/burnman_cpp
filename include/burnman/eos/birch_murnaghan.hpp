@@ -30,73 +30,73 @@ class BM3 : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(MineralParams& params) override;
+  bool validate_parameters(types::MineralParams& params) override;
 
   // Static functions (for public access outside class)
   /**
    * @brief Evaluate the BM EOS pressure.
    *
    * @param inv_compression V_0/V.
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    *
    * @return Pressure in [Pa].
    */
   static double compute_birch_murnaghan(
     double inv_compression,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
    * @brief Evaluate the bulk modulus, K
    *
    * @param volume Volume to evaluate [cm^3].
-   * @param params MineralParams object.
+   * @param params types::MineralParams object.
    *
    * @return Bulk modulus in [Pa].
    */
   static double compute_bm_bulk_modulus(
     double volume,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
    * @brief Third order exapansion for shear modulus
    *
    * @param volume Volume to evaluate [cm^3].
-   * @param params MineralParams object.
+   * @param params types::MineralParams object.
    *
    * @return Shear modulus in [Pa].
    */
   static double compute_third_order_shear_modulus(
     double volume,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   // Specific EOS functions
   double compute_volume(
     double pressure,
     double temperature,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_pressure(
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_grueneisen_parameter(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_isothermal_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_isentropic_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   /**
    * @copydoc EquationOfState::compute_shear_modulus
@@ -107,43 +107,43 @@ class BM3 : public EquationOfState{
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_v(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_p(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_thermal_expansivity(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_gibbs_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_entropy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_internal_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
  private:
   /**
@@ -151,7 +151,7 @@ class BM3 : public EquationOfState{
    *
    * @param x Volume to test (passed by solver)
    * @param p Generic pointer for parameter object
-   * @see `ParamsGSL::SolverParams_P`
+   * @see `eos::gsl_params::SolverParams_P`
    */
   static double bm_gsl_wrapper(double x, void* p);
 
@@ -173,13 +173,13 @@ class BM2 : public BM3{
    * @brief Second order exapansion for shear modulus
    *
    * @param volume Volume to evaluate [cm^3].
-   * @param params MineralParams object.
+   * @param params types::MineralParams object.
    *
    * @return Shear modulus in [Pa].
    */
   static double compute_second_order_shear_modulus(
     double volume,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
    * @copydoc EquationOfState::compute_shear_modulus
@@ -190,7 +190,7 @@ class BM2 : public BM3{
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 };
 
 } // namespace eos

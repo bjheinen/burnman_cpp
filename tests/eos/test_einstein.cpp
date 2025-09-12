@@ -36,7 +36,7 @@ TEST_CASE("ExplicitDouble overloads", "[eos][einstein]") {
   double theta_0 = 773.0;
   double T = 1000.0;
   int int_napfu = 2;
-  ExplicitDouble dbl_napfu = ExplicitDouble(2.0);
+  types::ExplicitDouble dbl_napfu = types::ExplicitDouble(2.0);
   // Using int
   double int_E = compute_thermal_energy(T, theta_0, int_napfu);
   double int_C = compute_molar_heat_capacity_v(T, theta_0, int_napfu);

@@ -19,7 +19,7 @@
 using namespace Catch::Matchers;
 
 TEST_CASE("Test validate parameters", "[eos][slb]") {
-  MineralParams params;
+  types::MineralParams params;
   params.molar_mass = 0.0055;
   params.napfu = 1;
   params.V_0 = 7.0e-06;
@@ -34,7 +34,7 @@ TEST_CASE("Test validate parameters", "[eos][slb]") {
   params.eta_s_0 = 5.9;
   params.bel_0 = 0.004;
   params.gel = 1.5;
-  SLB3 slb;
+  eos::SLB3 slb;
   SECTION("Full params") {
     REQUIRE_NOTHROW(slb.validate_parameters(params));
   }
@@ -71,17 +71,17 @@ TEST_CASE("Test validate parameters", "[eos][slb]") {
     REQUIRE_THROWS(slb.validate_parameters(params));
   }
   SECTION("SLB3Conductive; Missing bel_0") {
-    SLB3Conductive slb_c;
+    eos::SLB3Conductive slb_c;
     params.bel_0.reset();
     REQUIRE_THROWS(slb_c.validate_parameters(params));
   }
   SECTION("SLB3Conductive; Missing gel") {
-    SLB3Conductive slb_c;
+    eos::SLB3Conductive slb_c;
     params.gel.reset();
     REQUIRE_THROWS(slb_c.validate_parameters(params));
   }
   SECTION("Optional Parameters") {
-    MineralParams params_no_opt;
+    types::MineralParams params_no_opt;
     params_no_opt.molar_mass = 0.0055;
     params_no_opt.napfu = 1;
     params_no_opt.V_0 = 7.0e-06;
@@ -110,7 +110,7 @@ TEST_CASE("Test validate parameters", "[eos][slb]") {
 
 TEST_CASE("Check reference conditions", "[eos][slb]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.E_0 = 0.0;
   params.F_0 = -2.05e6;
   params.T_0 = 300.0;
@@ -126,9 +126,9 @@ TEST_CASE("Check reference conditions", "[eos][slb]") {
   params.eta_s_0 = 4.5;
   params.molar_mass = 0.04;
   params.napfu = 2;
-  SLB2 slb2;
-  SLB3 slb3;
-  SLB3Conductive slb3_c;
+  eos::SLB2 slb2;
+  eos::SLB3 slb3;
+  eos::SLB3Conductive slb3_c;
   REQUIRE_NOTHROW(slb3.validate_parameters(params));
 
   SECTION("P-T-V dependent functions") {
@@ -181,7 +181,7 @@ TEST_CASE("Check reference conditions", "[eos][slb]") {
     CHECK_THAT(slb3.compute_isentropic_bulk_modulus_reuss(P, T, V, params),
       !WithinRel(*params.K_0, tol_rel) && !WithinAbs(*params.K_0, tol_abs));
     // Copy params to set T_0 = 0
-    MineralParams params_T0 = params;
+    types::MineralParams params_T0 = params;
     params_T0.T_0 = 0;
     CHECK_THAT(slb3.compute_isentropic_bulk_modulus_reuss(P, T, V, params_T0),
       WithinRel(*params.K_0, tol_rel) || WithinAbs(*params.K_0, tol_abs));
@@ -194,7 +194,7 @@ TEST_CASE("Shear modulus expansion", "[eos][slb]") {
   double T = 2000.0;
   double V = 10.0e-6;
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 11.24e-6;
   params.K_0 = 161.0e9;
   params.Kprime_0 = 3.8;
@@ -203,8 +203,8 @@ TEST_CASE("Shear modulus expansion", "[eos][slb]") {
   params.q_0 = 1.5;
   params.molar_mass = 0.0403;
   params.napfu = 2;
-  SLB2 slb2;
-  SLB3 slb3;
+  eos::SLB2 slb2;
+  eos::SLB3 slb3;
   // Validating should set G0/G' to nan
   slb3.validate_parameters(params);
   REQUIRE_NOTHROW(slb2.compute_shear_modulus(P, T, V, params));
@@ -226,7 +226,7 @@ TEST_CASE("Shear modulus expansion", "[eos][slb]") {
 
 TEST_CASE("Test volume", "[eos][slb]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.T_0 = 300.0;
   params.P_0 = 0.0;
   params.E_0 = 0.0;
@@ -241,7 +241,7 @@ TEST_CASE("Test volume", "[eos][slb]") {
   params.q_0 = 1.4;
   params.molar_mass = 0.0403;
   params.napfu = 2;
-  SLB3 slb;
+  eos::SLB3 slb;
   double T_a = 800.0;
   double T_b = 2000.0;
   double V_a = 0.9 * (*params.V_0);
@@ -262,7 +262,7 @@ TEST_CASE("Test volume", "[eos][slb]") {
 
 TEST_CASE("SLB python reference values", "[eos][slb]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.T_0 = 300.0;
   params.P_0 = 0.0;
   params.E_0 = 0.0;
@@ -286,7 +286,7 @@ TEST_CASE("SLB python reference values", "[eos][slb]") {
       double input;
       double expected_gamma;
     };
-    SLB3 slb3;
+    eos::SLB3 slb3;
     // P & T unused
     double P = 2.0e9;
     double T = 500.0;
@@ -306,9 +306,9 @@ TEST_CASE("SLB python reference values", "[eos][slb]") {
       WithinAbs(test_data.expected_gamma, tol_abs));
   }
   SECTION("T-V dependent functions") {
-    SLB3 slb3;
-    SLB2 slb2;
-    SLB3Conductive slb3_c;
+    eos::SLB3 slb3;
+    eos::SLB2 slb2;
+    eos::SLB3Conductive slb3_c;
     double P = 2.e9;
     double T1 = 300, T2 = 800, T3 = 2500;
     double x1 = 0.99, x2 = 0.80, x3 = 0.40;
@@ -613,7 +613,7 @@ TEST_CASE("SLB python reference values", "[eos][slb]") {
       WithinAbs(ref_gamma_c[key], tol_abs));
   }
   SECTION("P-T-V dependent functions") {
-    SLB3 slb3;
+    eos::SLB3 slb3;
     double P1 = 1.e9, P2 = 54.e9;
     double T1 = 800, T2 = 2500;
     double x1 = 0.99, x2 = 0.4;

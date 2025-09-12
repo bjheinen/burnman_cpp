@@ -19,7 +19,7 @@ namespace burnman::equilibration {
 
 EquilibrationParameters get_equilibration_parameters(
   const Assemblage& assemblage,
-  const FormulaMap& composition,
+  const types::FormulaMap& composition,
   const std::vector<std::unordered_map<std::string, double>>& free_compositional_vectors
 ) {
   // Make parameter object

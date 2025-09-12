@@ -107,7 +107,7 @@ const std::vector<std::string>& CompositeMaterial::get_endmember_names() const {
   return *endmember_names;
 }
 
-const std::vector<FormulaMap>& CompositeMaterial::get_endmember_formulae() const {
+const std::vector<types::FormulaMap>& CompositeMaterial::get_endmember_formulae() const {
   if (!endmember_formulae.has_value()) {
     setup_endmember_formulae();
   }
@@ -125,7 +125,7 @@ const Eigen::ArrayXd& CompositeMaterial::get_partial_gibbs() const {
 void CompositeMaterial::set_endmember_names(std::vector<std::string> names) const {
   endmember_names = std::move(names);
 }
-void CompositeMaterial::set_endmember_formulae(std::vector<FormulaMap> formulae) const {
+void CompositeMaterial::set_endmember_formulae(std::vector<types::FormulaMap> formulae) const {
   endmember_formulae = std::move(formulae);
 }
 
@@ -173,7 +173,7 @@ Eigen::MatrixXd CompositeMaterial::compute_stoichiometric_matrix() const {
   int n_elem = get_n_elements();
   int n_embr = get_n_endmembers();
   const std::vector<std::string> elems = get_elements();
-  const std::vector<FormulaMap>& embr_formulae = get_endmember_formulae();
+  const std::vector<types::FormulaMap>& embr_formulae = get_endmember_formulae();
   Eigen::MatrixXd stoich_mat;
   stoich_mat.resize(n_embr, n_elem);
   stoich_mat.setZero();

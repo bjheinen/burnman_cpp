@@ -14,7 +14,7 @@
 namespace burnman::solution_models {
 
 // Constructor for IdealSolution
-IdealSolution::IdealSolution(const PairedEndmemberList& endmember_list)
+IdealSolution::IdealSolution(const types::PairedEndmemberList& endmember_list)
   : SolutionModel(endmember_list) {
   // Calculate configurational entropies also
   this->endmember_configurational_entropies = compute_endmember_configurational_entropies();

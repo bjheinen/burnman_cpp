@@ -17,7 +17,7 @@ using namespace bukowinski;
 using namespace Catch::Matchers;
 
 TEST_CASE("Check zero returns", "[eos][bukowinski]") {
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 7.0e-6;
   params.T_0 = 300.0;
   params.bel_0 = 0.004;
@@ -33,7 +33,7 @@ TEST_CASE("Check zero returns", "[eos][bukowinski]") {
 
 // Reference values from Py burnman v2.1.1a0
 TEST_CASE("Bukowinski functions python reference values", "[eos][bukowinski]") {
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 7.0e-6;
   params.T_0 = 300.0;
   params.bel_0 = 0.004;

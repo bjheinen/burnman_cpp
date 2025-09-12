@@ -17,23 +17,23 @@
 namespace burnman::eos {
 // TODO: Add HP types here
 
-std::shared_ptr<EquationOfState> make_eos(EOSType eos_type) {
+std::shared_ptr<EquationOfState> make_eos(types::EOSType eos_type) {
   switch (eos_type) {
-    case EOSType::Vinet:
+    case types::EOSType::Vinet:
       return std::make_shared<Vinet>();
-    case EOSType::BM2:
+    case types::EOSType::BM2:
       return std::make_shared<BM2>();
-    case EOSType::BM3:
+    case types::EOSType::BM3:
       return std::make_shared<BM3>();
-    case EOSType::MGD2:
+    case types::EOSType::MGD2:
       return std::make_shared<MGD2>();
-    case EOSType::MGD3:
+    case types::EOSType::MGD3:
       return std::make_shared<MGD3>();
-    case EOSType::SLB2:
+    case types::EOSType::SLB2:
       return std::make_shared<SLB2>();
-    case EOSType::SLB3:
+    case types::EOSType::SLB3:
       return std::make_shared<SLB3>();
-    case EOSType::SLB3Conductive:
+    case types::EOSType::SLB3Conductive:
       return std::make_shared<SLB3Conductive>();
     default:
       throw std::invalid_argument("Unknown EOS type!");

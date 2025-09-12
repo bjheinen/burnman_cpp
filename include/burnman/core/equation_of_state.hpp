@@ -53,11 +53,11 @@ class EquationOfState {
    * @brief Computes the density of the mineral.
    *
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Density in [kg/m^3].
    */
-  double compute_density(double volume, const MineralParams& params) const;
+  double compute_density(double volume, const types::MineralParams& params) const;
 
   // Function to override in derived classes with EOS specific implementations
 
@@ -71,291 +71,291 @@ class EquationOfState {
    * @note Default implementation passes quietly
    *       Derived classes should override method.
    */
-  virtual bool validate_parameters(MineralParams& params);
+  virtual bool validate_parameters(types::MineralParams& params);
 
   // EOS relations
   /**
    * @brief Computes the molar volume of the mineral.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Molar volume in [m^3].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_volume(
     double pressure,
     double temperature,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the pressure (incl. cold and thermal).
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Pressure in [Pa].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_pressure(
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the Grueneisen parameter.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Grueneisen parameter [unitless].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_grueneisen_parameter(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes K_T.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Isothermal bulk modulus in [Pa].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_isothermal_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes K_S.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Isentropic bulk modulus in [Pa].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_isentropic_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the shear modulus, G.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Shear modulus in [Pa].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_shear_modulus(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes molar heat capacity at constant volume, C_v.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Heat capacity at constant volume in [J/K/mol].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_molar_heat_capacity_v(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes molar heat capacity at constant pressure, C_p.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Heat capacity at constant pressure in [J/K/mol].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_molar_heat_capacity_p(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the thermal expansivity.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Thermal expansivity in [1/K].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_thermal_expansivity(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the gibbs free energy.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Gibbs free energy in [J/mol].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_gibbs_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
 
   /**
    * @brief Computes the Helmholtz free energy.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Helmholtz free energy in [J/mol].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_helmholtz_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the entropy.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Entropy in [J/K/mol].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_entropy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the enthalpy.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Enthalpy in [J/mol].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_enthalpy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the molar internal energy of the mineral.
    *
-   * @note Default implementation throws NotImplementedError.
+   * @note Default implementation throws `exceptions::NotImplementedError'.
    *       Derived classes should override method.
    *
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Internal energy in [J/mol].
-   * @throws NotImplementedError if default implementation called.
+   * @throws `exceptions::NotImplementedError' if default implementation called.
    */
   virtual double compute_molar_internal_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
  private:
 
   // Private functions for throwing exceptions
   /**
-   * @brief Helper function to throw NotImplementedError
+   * @brief Helper function to throw `exceptions::NotImplementedError'
    *
    * Use __func__ for method name
    */

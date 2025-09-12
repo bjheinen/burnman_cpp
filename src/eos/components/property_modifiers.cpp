@@ -32,7 +32,7 @@ namespace {
 
   double reaction_bragg_williams_gsl_wrapper(double Q, void* p) {
     // Cast pointer back to struct
-    auto* params = static_cast<const ParamsGSL::BWReactParams*>(p);
+    auto* params = static_cast<const burnman::eos::gsl_params::BWReactParams*>(p);
     return params->delta_H
       + constants::physics::gas_constant * params->temperature
       * flnarxn(params->n, Q, params->f_0, params->f_1)
@@ -48,7 +48,7 @@ namespace {
     double H_disord = params.deltaH + pressure * params.deltaV;
 
     // Make params struct for brent solver
-    ParamsGSL::BWReactParams react_params{
+    burnman::eos::gsl_params::BWReactParams react_params{
       H_disord, temperature, W,
       params.n, f_0, f_1
     };
@@ -448,14 +448,14 @@ namespace excesses {
   ) {
     double d2GdT2;
     double f = params.Cv_inf / 3.0 / constants::physics::gas_constant;
-    double G = debye::compute_helmholtz_free_energy(
-      temperature, params.Theta_0, ExplicitDouble(f));
-    double dGdT = -debye::compute_entropy(
-      temperature, params.Theta_0, ExplicitDouble(f));
+    double G = burnman::eos::debye::compute_helmholtz_free_energy(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
+    double dGdT = -burnman::eos::debye::compute_entropy(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
     double dGdP = 0.0;
     if (temperature > constants::precision::double_eps) {
-      d2GdT2 = -debye::compute_molar_heat_capacity_v(
-        temperature, params.Theta_0, ExplicitDouble(f)) / temperature;
+      d2GdT2 = -burnman::eos::debye::compute_molar_heat_capacity_v(
+        temperature, params.Theta_0, types::ExplicitDouble(f)) / temperature;
     } else {
       d2GdT2 = 0.0;
     }
@@ -478,13 +478,13 @@ namespace excesses {
     DebyeDeltaParams params
   ) {
     double f = params.S_inf / 3.0 / constants::physics::gas_constant;
-    double G = -debye::compute_thermal_energy(
-      temperature, params.Theta_0, ExplicitDouble(f));
-    double dGdT = -debye::compute_molar_heat_capacity_v(
-      temperature, params.Theta_0, ExplicitDouble(f));
+    double G = -burnman::eos::debye::compute_thermal_energy(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
+    double dGdT = -burnman::eos::debye::compute_molar_heat_capacity_v(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
     double dGdP = 0.0;
-    double d2GdT2 = -debye::compute_dmolar_heat_capacity_v_dT(
-      temperature, params.Theta_0, ExplicitDouble(f));
+    double d2GdT2 = -burnman::eos::debye::compute_dmolar_heat_capacity_v_dT(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
     double d2GdP2 = 0.0;
     double d2GdPdT = 0.0;
     Excesses debye_ex{
@@ -505,15 +505,15 @@ namespace excesses {
   ) {
 
     double f = params.Cv_inf / 3.0 / constants::physics::gas_constant;
-    double G = einstein::compute_helmholtz_free_energy(
-      temperature, params.Theta_0, ExplicitDouble(f));
-    double dGdT = -einstein::compute_entropy(
-      temperature, params.Theta_0, ExplicitDouble(f));
+    double G = burnman::eos::einstein::compute_helmholtz_free_energy(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
+    double dGdT = -burnman::eos::einstein::compute_entropy(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
     double dGdP = 0.0;
     double d2GdT2;
     if (temperature > constants::precision::double_eps) {
-      d2GdT2 = -einstein::compute_molar_heat_capacity_v(
-        temperature, params.Theta_0, ExplicitDouble(f))
+      d2GdT2 = -burnman::eos::einstein::compute_molar_heat_capacity_v(
+        temperature, params.Theta_0, types::ExplicitDouble(f))
       / temperature;
     } else {
       d2GdT2 = 0.0;
@@ -537,13 +537,13 @@ namespace excesses {
     EinsteinDeltaParams params
   ) {
     double f = params.S_inf / 3.0 / constants::physics::gas_constant;
-    double G = -einstein::compute_thermal_energy(
-      temperature, params.Theta_0, ExplicitDouble(f));
-    double dGdT = -einstein::compute_molar_heat_capacity_v(
-      temperature, params.Theta_0, ExplicitDouble(f));
+    double G = -burnman::eos::einstein::compute_thermal_energy(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
+    double dGdT = -burnman::eos::einstein::compute_molar_heat_capacity_v(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
     double dGdP = 0.0;
-    double d2GdT2 = -einstein::compute_dmolar_heat_capacity_v_dT(
-      temperature, params.Theta_0, ExplicitDouble(f));
+    double d2GdT2 = -burnman::eos::einstein::compute_dmolar_heat_capacity_v_dT(
+      temperature, params.Theta_0, types::ExplicitDouble(f));
     double d2GdP2 = 0.0;
     double d2GdPdT = 0.0;
     Excesses einstein_ex{

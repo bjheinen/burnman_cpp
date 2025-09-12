@@ -15,7 +15,7 @@
 
 namespace burnman::eos {
 
-bool BM3::validate_parameters(MineralParams& params) {
+bool BM3::validate_parameters(types::MineralParams& params) {
 
   // Check for required keys
   if (!params.V_0.has_value()) {
@@ -72,14 +72,14 @@ bool BM3::validate_parameters(MineralParams& params) {
 
 // Compute P(V) - P as function to root find
 double BM3::bm_gsl_wrapper(double x, void* p) {
-  auto* bm_params = static_cast<const ParamsGSL::SolverParams_P*>(p);
+  auto* bm_params = static_cast<const gsl_params::SolverParams_P*>(p);
   return compute_birch_murnaghan(*bm_params->params.V_0/x, bm_params->params)
     - bm_params->pressure;
 }
 
 double BM3::compute_birch_murnaghan(
   double inv_compression,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double cbrt_x = std::cbrt(inv_compression);
   double x23 = cbrt_x * cbrt_x;
@@ -93,11 +93,11 @@ double BM3::compute_birch_murnaghan(
 double BM3::compute_volume(
   double pressure,
   double temperature [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // Find root in [P(V) - P] to find V that fits P
   // Set up GSL params struct - to pass to objective function
-  ParamsGSL::SolverParams_P bm_params{params, pressure};
+  gsl_params::SolverParams_P bm_params{params, pressure};
   // Set a, b limits
   double x_lo = 0.1 * (*params.V_0);
   double x_hi = 1.5 * (*params.V_0);
@@ -113,7 +113,7 @@ double BM3::compute_volume(
 double BM3::compute_pressure(
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // Prefer V_0/V (x^-1) for faster exp
   return compute_birch_murnaghan((*params.V_0)/volume, params);
@@ -121,7 +121,7 @@ double BM3::compute_pressure(
 
 double BM3::compute_bm_bulk_modulus(
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double x = (*params.V_0) / volume;
   double x_cbrt = std::cbrt(x);
@@ -140,7 +140,7 @@ double BM3::compute_isothermal_bulk_modulus_reuss(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_bm_bulk_modulus(volume, params);
 }
@@ -149,7 +149,7 @@ double BM3::compute_isentropic_bulk_modulus_reuss(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_bm_bulk_modulus(volume, params);
 }
@@ -158,7 +158,7 @@ double BM3::compute_gibbs_free_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return volume * pressure
     + compute_molar_internal_energy(
@@ -169,7 +169,7 @@ double BM3::compute_molar_internal_energy(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double x = std::cbrt(*params.V_0 / volume);
   x *= x; //(V_0/V)^(2/3)
@@ -182,7 +182,7 @@ double BM3::compute_molar_internal_energy(
 
 double BM2::compute_second_order_shear_modulus(
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double x = *params.V_0 / volume;
   double cbrt_x = std::cbrt(x);
@@ -201,7 +201,7 @@ double BM2::compute_second_order_shear_modulus(
 
 double BM3::compute_third_order_shear_modulus(
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double x = *params.V_0 / volume;
   double x_cbrt = std::cbrt(x);
@@ -228,7 +228,7 @@ double BM2::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_second_order_shear_modulus(volume, params);
 }
@@ -238,7 +238,7 @@ double BM3::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_third_order_shear_modulus(volume, params);
 }
@@ -249,7 +249,7 @@ double BM3::compute_grueneisen_parameter(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -258,7 +258,7 @@ double BM3::compute_molar_heat_capacity_v(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
@@ -267,7 +267,7 @@ double BM3::compute_molar_heat_capacity_p(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
@@ -276,7 +276,7 @@ double BM3::compute_thermal_expansivity(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -285,7 +285,7 @@ double BM3::compute_entropy(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }

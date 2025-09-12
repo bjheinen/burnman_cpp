@@ -15,7 +15,7 @@
 
 namespace burnman::eos {
 
-bool Vinet::validate_parameters(MineralParams& params) {
+bool Vinet::validate_parameters(types::MineralParams& params) {
 
   // TODO: check if we can just do if (!params.V_0)
   // Check for required keys
@@ -63,7 +63,7 @@ bool Vinet::validate_parameters(MineralParams& params) {
 // Compute P(V) - P as function to root find
 double Vinet::vinet_gsl_wrapper(double x, void* p) {
   // Prefer C++ cast over C-style
-  auto* vinet_params = static_cast<const ParamsGSL::SolverParams_P*>(p); // <const ParamsGSL::SolverParams_P*
+  auto* vinet_params = static_cast<const gsl_params::SolverParams_P*>(p); // <const gsl_params::SolverParams_P*
   return compute_vinet(x / *(vinet_params->params.V_0), vinet_params->params)
     - vinet_params->pressure;
 }
@@ -74,7 +74,7 @@ double Vinet::vinet_gsl_wrapper(double x, void* p) {
 
 double Vinet::compute_vinet(
   double compression,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   // Compute x^1/3 separately
   double eta = (3.0 / 2.0) * ((*params.Kprime_0) - 1.0);
@@ -91,11 +91,11 @@ double Vinet::compute_vinet(
 double Vinet::compute_volume(
   double pressure,
   double temperature [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // Find root in [P(V) - P] to find V that fits P
   // Set up GSL function params
-  ParamsGSL::SolverParams_P vinet_params{params, pressure};
+  gsl_params::SolverParams_P vinet_params{params, pressure};
   // Set a, b limits
   double x_lo = 0.1 * (*params.V_0);
   double x_hi = 1.5 * (*params.V_0);
@@ -111,7 +111,7 @@ double Vinet::compute_volume(
 double Vinet::compute_pressure(
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_vinet(volume/(*params.V_0), params);
 }
@@ -120,7 +120,7 @@ double Vinet::compute_isothermal_bulk_modulus_reuss(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double eta = (3.0/2.0) * ((*params.Kprime_0) - 1.0);
   double x_cbrt = std::cbrt(volume / (*params.V_0));
@@ -135,7 +135,7 @@ double Vinet::compute_isentropic_bulk_modulus_reuss(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // K_T, K_S the same here
   return compute_isothermal_bulk_modulus_reuss(
@@ -146,7 +146,7 @@ double Vinet::compute_gibbs_free_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // G = int VdP = [PV] - int PdV = E + PV
   return compute_molar_internal_energy(
@@ -158,7 +158,7 @@ double Vinet::compute_molar_internal_energy(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double eta = 1.5 * ((*params.Kprime_0) - 1.0);
   double x_cbrt = std::cbrt(volume / (*params.V_0));
@@ -176,7 +176,7 @@ double Vinet::compute_grueneisen_parameter(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -185,7 +185,7 @@ double Vinet::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -194,7 +194,7 @@ double Vinet::compute_molar_heat_capacity_v(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
@@ -203,7 +203,7 @@ double Vinet::compute_molar_heat_capacity_p(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
@@ -212,7 +212,7 @@ double Vinet::compute_thermal_expansivity(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -221,7 +221,7 @@ double Vinet::compute_entropy(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }

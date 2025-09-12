@@ -13,7 +13,7 @@
 
 namespace burnman::eos {
 
-bool MT::validate_parameters(MineralParams& params) {
+bool MT::validate_parameters(types::MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
     throw std::invalid_argument("params object missing parameter: V_0");
@@ -65,7 +65,7 @@ bool MT::validate_parameters(MineralParams& params) {
 }
 
 // Static member functions
-TaitConstants MT::compute_tait_constants(const MineralParams& params) {
+TaitConstants MT::compute_tait_constants(const types::MineralParams& params) {
   // TODO: Should probably cache in some way
   //       but at the moment no way to track changes in params and
   //       no init for the EOS... hashmap may have more overhead
@@ -83,7 +83,7 @@ TaitConstants MT::compute_tait_constants(const MineralParams& params) {
 
 double MT::compute_modified_tait_pressure(
   double compression,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   auto [a, b, c] = compute_tait_constants(params);
   double x_term = (compression + a - 1.0) / a;
@@ -92,7 +92,7 @@ double MT::compute_modified_tait_pressure(
 
 double MT::compute_modified_tait_bulk_modulus(
   double pressure,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   auto [a, b, c] = compute_tait_constants(params);
   double p_term = 1.0 + b * (pressure - (*params.P_0));
@@ -101,7 +101,7 @@ double MT::compute_modified_tait_bulk_modulus(
 
 double MT::compute_modified_tait_volume(
   double pressure,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   auto [a, b, c] = compute_tait_constants(params);
   double p_term = 1.0 + b * (pressure - *params.P_0);
@@ -112,7 +112,7 @@ double MT::compute_modified_tait_volume(
 double MT::compute_volume(
   double pressure,
   double temperature [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_modified_tait_volume(pressure, params);
 }
@@ -120,7 +120,7 @@ double MT::compute_volume(
 double MT::compute_pressure(
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_modified_tait_pressure(volume / *params.V_0, params);
 }
@@ -129,7 +129,7 @@ double MT::compute_isothermal_bulk_modulus_reuss(
   double pressure,
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_modified_tait_bulk_modulus(pressure, params);
 }
@@ -138,7 +138,7 @@ double MT::compute_isentropic_bulk_modulus_reuss(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   // TODO: maybe just return K_T??
   return 1.0e99;
@@ -148,7 +148,7 @@ double MT::compute_molar_internal_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_gibbs_free_energy(pressure, temperature, volume, params)
     - volume * pressure;
@@ -158,7 +158,7 @@ double MT::compute_gibbs_free_energy(
   double pressure,
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   auto [a, b, c] = compute_tait_constants(params);
   double P_diff = pressure - *params.P_0;
@@ -175,7 +175,7 @@ double MT::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -184,7 +184,7 @@ double MT::compute_molar_heat_capacity_v(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
@@ -193,7 +193,7 @@ double MT::compute_molar_heat_capacity_p(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 1.0e99;
 }
@@ -202,7 +202,7 @@ double MT::compute_thermal_expansivity(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -211,7 +211,7 @@ double MT::compute_entropy(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -220,7 +220,7 @@ double MT::compute_grueneisen_parameter(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }

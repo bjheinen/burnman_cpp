@@ -16,7 +16,7 @@ namespace burnman::solution_models {
 
 // Constructor for AsymmetricRegularSolution
 AsymmetricRegularSolution::AsymmetricRegularSolution(
-  const PairedEndmemberList& endmember_list,
+  const types::PairedEndmemberList& endmember_list,
   std::vector<double> alphas_vector,
   std::vector<std::vector<double>> energy_interaction,
   std::vector<std::vector<double>> volume_interaction,

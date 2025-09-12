@@ -19,7 +19,7 @@
 
 namespace burnman::eos {
 
-bool SLB3::validate_parameters(MineralParams& params) {
+bool SLB3::validate_parameters(types::MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
     throw std::invalid_argument("params object missing parameter: V_0");
@@ -112,7 +112,7 @@ bool SLB3::validate_parameters(MineralParams& params) {
 }
 
 double SLB3::slb_gsl_wrapper(double x, void* p) {
-  auto* slb_params = static_cast<const ParamsGSL::SolverParams_SLB*>(p);
+  auto* slb_params = static_cast<const gsl_params::SolverParams_SLB*>(p);
   double compr = *slb_params->params.V_0 / x;
   double x_cbrt = std::cbrt(compr);
   double x_23 = x_cbrt * x_cbrt;
@@ -151,13 +151,13 @@ double SLB3::slb_gsl_wrapper(double x, void* p) {
 }
 
 std::pair<double, double> SLB3::get_b_g_el(
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return {0.0, 1.0};
 }
 
 std::pair<double, double> SLB3Conductive::get_b_g_el(
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return {*params.bel_0, *params.gel};
 }
@@ -165,7 +165,7 @@ std::pair<double, double> SLB3Conductive::get_b_g_el(
 double SLB3::compute_volume(
   double pressure,
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
 
   double gamma_0 = *params.grueneisen_0;
@@ -181,7 +181,7 @@ double SLB3::compute_volume(
   // TODO Bracketing
 
   // Make params struct for solver
-  ParamsGSL::SolverParams_SLB slb_params{
+  gsl_params::SolverParams_SLB slb_params{
     params,
     pressure, temperature,
     a1_ii, a2_iikk,
@@ -227,7 +227,7 @@ double SLB3::compute_volume(
 double SLB3::compute_pressure(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double x = *params.V_0 / volume;
   double debye_temperature = compute_debye_temperature(x, params);
@@ -254,7 +254,7 @@ double SLB3::compute_grueneisen_parameter(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // Simple alias to slb_g so SLB3Conductive can easily override
   double x = *params.V_0 / volume;
@@ -263,7 +263,7 @@ double SLB3::compute_grueneisen_parameter(
 
 double SLB3::compute_slb_grueneisen_parameter(
   double x,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   // TODO:: Factor out Eq. 47 etc. to re-use (eta, q, etc.)
   double gamma_0 = *params.grueneisen_0;
@@ -285,7 +285,7 @@ double SLB3::compute_isothermal_bulk_modulus_reuss(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double x = *params.V_0 / volume;
   double debye_temperature = compute_debye_temperature(x, params);
@@ -309,7 +309,7 @@ double SLB3::compute_isentropic_bulk_modulus_reuss(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double K_T = compute_isothermal_bulk_modulus_reuss(
     pressure,
@@ -334,7 +334,7 @@ double SLB3::compute_isentropic_bulk_modulus_reuss(
 double SLB3::compute_shear_modulus_delta(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double x = *params.V_0 / volume;
   double debye_temperature = compute_debye_temperature(x, params);
@@ -351,7 +351,7 @@ double SLB2::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return BM2::compute_second_order_shear_modulus(volume, params)
     - compute_shear_modulus_delta(temperature, volume, params);
@@ -362,7 +362,7 @@ double SLB3::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return BM3::compute_third_order_shear_modulus(volume, params)
     - compute_shear_modulus_delta(temperature, volume, params);
@@ -372,7 +372,7 @@ double SLB3::compute_molar_heat_capacity_v(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double debye_temperature = compute_debye_temperature(
     *params.V_0 / volume,
@@ -388,7 +388,7 @@ double SLB3::compute_molar_heat_capacity_p(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double C_v = compute_molar_heat_capacity_v(
     pressure,
@@ -415,7 +415,7 @@ double SLB3::compute_thermal_expansivity(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double x = *params.V_0 / volume;
   double debye_temperature = compute_debye_temperature(x, params);
@@ -438,7 +438,7 @@ double SLB3::compute_gibbs_free_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_helmholtz_free_energy(
     pressure,
@@ -453,7 +453,7 @@ double SLB3::compute_entropy(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double debye_temperature = compute_debye_temperature(
     *params.V_0 / volume,
@@ -469,7 +469,7 @@ double SLB3::compute_molar_internal_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_helmholtz_free_energy(
     pressure,
@@ -488,7 +488,7 @@ double SLB3::compute_helmholtz_free_energy(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double x = *params.V_0 / volume;
   double x_cbrt = std::cbrt(x);
@@ -514,7 +514,7 @@ double SLB3::compute_enthalpy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_helmholtz_free_energy(
     pressure,
@@ -532,7 +532,7 @@ double SLB3::compute_enthalpy(
 
 double SLB3::compute_debye_temperature(
   double x,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double gamma_0 = *params.grueneisen_0;
   double x_cbrt = std::cbrt(x);
@@ -553,7 +553,7 @@ double SLB3::compute_debye_temperature(
 
 double SLB3::compute_volume_dependent_q(
   double x,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double gamma_0 = *params.grueneisen_0;
   double x_cbrt = std::cbrt(x);
@@ -588,7 +588,7 @@ double SLB3::compute_volume_dependent_q(
 
 double SLB3::compute_isotropic_eta_s(
   double x,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double gamma_0 = *params.grueneisen_0;
   double x_cbrt = std::cbrt(x);
@@ -613,7 +613,7 @@ double SLB3::compute_isotropic_eta_s(
 double SLB3Conductive::compute_pressure(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return SLB3::compute_pressure(temperature, volume, params)
     + bukowinski::compute_pressure_el(temperature, volume, params);
@@ -623,7 +623,7 @@ double SLB3Conductive::compute_isothermal_bulk_modulus_reuss(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return SLB3::compute_isothermal_bulk_modulus_reuss(
       pressure, temperature, volume, params)
@@ -634,7 +634,7 @@ double SLB3Conductive::compute_molar_heat_capacity_v(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return SLB3::compute_molar_heat_capacity_v(
       pressure, temperature, volume, params)
@@ -645,7 +645,7 @@ double SLB3Conductive::compute_thermal_expansivity(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double K_T = compute_isothermal_bulk_modulus_reuss(
     pressure, temperature, volume, params);
@@ -658,7 +658,7 @@ double SLB3Conductive::compute_entropy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return SLB3::compute_entropy(pressure, temperature, volume, params)
     + bukowinski::compute_entropy_el(temperature, volume, params);
@@ -668,7 +668,7 @@ double SLB3Conductive::compute_helmholtz_free_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return SLB3::compute_helmholtz_free_energy(
       pressure, temperature, volume, params)
@@ -679,7 +679,7 @@ double SLB3Conductive::compute_grueneisen_parameter(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   temperature = (temperature < 1.0e-6) ? 1.0e-6 : temperature;
   double K_T = compute_isothermal_bulk_modulus_reuss(
@@ -691,7 +691,7 @@ double SLB3Conductive::compute_grueneisen_parameter(
   return alpha * K_T * volume / C_v;
 }
 
-bool SLB3Conductive::validate_parameters(MineralParams& params) {
+bool SLB3Conductive::validate_parameters(types::MineralParams& params) {
   // Check for extrarequired keys
   if (!params.bel_0.has_value()) {
     throw std::invalid_argument("params object missing parameter: bel_0");

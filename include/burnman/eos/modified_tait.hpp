@@ -36,44 +36,44 @@ class MT : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(MineralParams& params) override;
+  bool validate_parameters(types::MineralParams& params) override;
 
   // Static functions (for public access outside class)
   /**
   * @brief Evaluate the MT EOS pressure.
   *
   * @param compression V/V_0.
-  * @param params Mineral parameters object of type MineralParams
+  * @param params Mineral parameters object of type types::MineralParams
   *
   * @return Pressure in [Pa].
   */
   static double compute_modified_tait_pressure(
     double compression,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
   * @brief Evaluate the isothermal bulk modulus, K_T.
   *
   * @param pressure Pressure to evaluate [Pa].
-  * @param params MineralParams object.
+  * @param params types::MineralParams object.
   *
   * @return Bulk modulus in [Pa].
   */
   static double compute_modified_tait_bulk_modulus(
     double pressure,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
   * @brief Calculates volume from pressure.
   *
   * @param pressure Pressure to evaluate [Pa].
-  * @param params MineralParams object.
+  * @param params types::MineralParams object.
   *
   * @return Volume in [m^3].
   */
   static double compute_modified_tait_volume(
     double volume,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
    * @brief Expands MT parameters a, b, c.
@@ -81,82 +81,82 @@ class MT : public EquationOfState{
    * a, b, c are derived from K_T and its two first pressure
    * derivatives. Eq. 4 in Holland & Powell, 2011.
    *
-   * @param params MineralParams object ref.
+   * @param params types::MineralParams object ref.
    *
    * @return Struct holding a, b, c
    */
-  static TaitConstants compute_tait_constants(const MineralParams& params);
+  static TaitConstants compute_tait_constants(const types::MineralParams& params);
 
   // Specific EOS functions
   double compute_volume(
     double pressure,
     double temperature,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_pressure(
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_isothermal_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_isentropic_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_internal_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_gibbs_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_shear_modulus(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_v(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_p(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_thermal_expansivity(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_entropy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_grueneisen_parameter(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
 };
 

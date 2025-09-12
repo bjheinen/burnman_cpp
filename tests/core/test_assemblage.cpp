@@ -36,7 +36,7 @@ TEST_CASE_METHOD(MultiMineralFixture, "Test assemblage creation", "[core][assemb
   REQUIRE(rock.get_name() == "Test assemblage");
 
   // Test set averaging scheme
-  REQUIRE_NOTHROW(rock.set_averaging_scheme(AveragingType::VRH));
+  REQUIRE_NOTHROW(rock.set_averaging_scheme(types::AveragingType::VRH));
 
   // Can't set fractions without phases
   REQUIRE_THROWS(rock.set_fractions((Eigen::ArrayXd(2) << 0.6, 0.4).finished()));
@@ -53,12 +53,12 @@ TEST_CASE_METHOD(MultiMineralFixture, "Test assemblage creation", "[core][assemb
   REQUIRE(rock.get_n_endmembers() == 2);
 
   // Check computed formula
-  FormulaMap expected_formula = {
+  types::FormulaMap expected_formula = {
     {"Si", 1.0},
     {"O", 2.6},
     {"Ca", 0.6}
   };
-  FormulaMap computed_formula = rock.get_formula();
+  types::FormulaMap computed_formula = rock.get_formula();
   REQUIRE(computed_formula.size() == computed_formula.size());
   for (const auto& [key, val] : computed_formula) {
     REQUIRE(expected_formula.find(key) != expected_formula.end());
@@ -80,7 +80,7 @@ TEST_CASE_METHOD(MultiMineralFixture, "Test assemblage creation", "[core][assemb
   REQUIRE(rock.get_endmember_names() == expected_names);
 
   // Check endmember_formulae
-  std::vector<FormulaMap> expected_formulae = {
+  std::vector<types::FormulaMap> expected_formulae = {
     {
       {"Ca", 1.0},
       {"Si", 1.0},
@@ -98,7 +98,7 @@ TEST_CASE_METHOD(MultiMineralFixture, "Test assemblage creation", "[core][assemb
   REQUIRE(rock.get_elements() == expected_elements);
 
   // Test setting method for all phases
-  REQUIRE_NOTHROW(rock.set_method(EOSType::Auto));
+  REQUIRE_NOTHROW(rock.set_method(types::EOSType::Auto));
 
 }
 
@@ -131,7 +131,7 @@ TEST_CASE_METHOD(PyroliteAssemblageFixture, "Test mixed phase type assemblage", 
   REQUIRE(assemblage.get_endmembers_per_phase() == std::vector<int>{3, 2, 1});
   REQUIRE(assemblage.get_n_elements() == 6);
   REQUIRE_NOTHROW(assemblage.set_state(50.e9, 2000.0));
-  std::vector<FormulaMap> expected_formulae = {
+  std::vector<types::FormulaMap> expected_formulae = {
     {
       {"Mg", 1.0},
       {"Si", 1.0},
@@ -161,7 +161,7 @@ TEST_CASE_METHOD(PyroliteAssemblageFixture, "Test mixed phase type assemblage", 
     }
   };
   REQUIRE(assemblage.get_endmember_formulae() == expected_formulae);
-  FormulaMap expected_formula = {
+  types::FormulaMap expected_formula = {
     {"Mg", 0.796},
     {"Fe", 0.069},
     {"Ca", 0.1},
@@ -169,7 +169,7 @@ TEST_CASE_METHOD(PyroliteAssemblageFixture, "Test mixed phase type assemblage", 
     {"Si", 0.765},
     {"O", 2.6}
   };
-  FormulaMap computed_formula = assemblage.get_formula();
+  types::FormulaMap computed_formula = assemblage.get_formula();
   REQUIRE(computed_formula.size() == computed_formula.size());
   for (const auto& [key, val] : computed_formula) {
     REQUIRE(expected_formula.find(key) != expected_formula.end());
@@ -192,7 +192,7 @@ TEST_CASE_METHOD(NestedAssemblageFixture, "Test nested assemblage", "[core][asse
 
 TEST_CASE_METHOD(PyroliteAssemblageFixture, "Assemblage reference values", "[core][assemblage]") {
   assemblage.set_state(50.e9, 2000.0);
-  assemblage.set_method(EOSType::Auto);
+  assemblage.set_method(types::EOSType::Auto);
   // Assemblage functions
   int ref_n_endmembers = 6;
   int ref_n_elements = 6;

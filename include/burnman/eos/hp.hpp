@@ -31,84 +31,84 @@ class HP_TMT : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(MineralParams& params) override;
+  bool validate_parameters(types::MineralParams& params) override;
 
   // Specific EOS functions
   double compute_volume(
     double pressure,
     double temperature,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_pressure(
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_grueneisen_parameter(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_isothermal_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_isentropic_bulk_modulus_reuss(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_shear_modulus(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_v(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_p(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_thermal_expansivity(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_gibbs_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_entropy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_helmholtz_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_enthalpy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   // Additional functions
   /**
@@ -122,7 +122,7 @@ class HP_TMT : public EquationOfState{
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    *
    * @return Heat capacity at constant pressure in [J/K/mol].
    */
@@ -130,7 +130,7 @@ class HP_TMT : public EquationOfState{
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
  protected:
 
@@ -143,13 +143,13 @@ class HP_TMT : public EquationOfState{
    *       the case. e.g. @see TODO `NAME'
    *
    * @param temperature The temperature to evaluate [K].
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    *
    * @return Heat capacity at reference pressure in [J/K/mol].
    */
   double compute_molar_heat_capacity_pref(
     double temperature,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Thermal addition to standard state enthalpy at ambient P.
@@ -161,7 +161,7 @@ class HP_TMT : public EquationOfState{
    */
   virtual double compute_intCpdT(
     double temperature,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Thermal addition to standard state entropy at ambient P.
@@ -173,7 +173,7 @@ class HP_TMT : public EquationOfState{
    */
   virtual double compute_intCpoverTdT(
     double temperature,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Relative thermal pressure as function of T - T_0.
@@ -187,7 +187,7 @@ class HP_TMT : public EquationOfState{
    */
   double compute_relative_thermal_pressure(
     double temperature,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
  private:
 
@@ -195,13 +195,13 @@ class HP_TMT : public EquationOfState{
    * @brief Computes thermal pressure as a function of T.
    *
    * @param temperature [K].
-   * @param params MineralParams object.
+   * @param params types::MineralParams object.
    *
    * @return Thermal pressure [Pa].
    */
   double compute_thermal_pressure(
     double temperature,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
 };
 

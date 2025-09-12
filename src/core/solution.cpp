@@ -71,7 +71,7 @@ void Solution::set_method(std::shared_ptr<EquationOfState> new_method) {
   reset();
 }
 
-void Solution::set_method(EOSType new_method) {
+void Solution::set_method(types::EOSType new_method) {
   for (Mineral& embr : solution_model->endmembers) {
     embr.set_method(new_method);
   }
@@ -412,7 +412,7 @@ double Solution::compute_isentropic_thermal_gradient() const {
     / get_molar_heat_capacity_p();
 }
 
-FormulaMap Solution::compute_formula() const {
+types::FormulaMap Solution::compute_formula() const {
   return utils::sum_formulae(get_endmember_formulae(), molar_fractions);
 }
 
@@ -427,7 +427,7 @@ void Solution::setup_endmember_names() const {
 }
 
 void Solution::setup_endmember_formulae() const {
-  set_endmember_formulae(map_endmembers_to_vector<FormulaMap>(&Mineral::get_formula));
+  set_endmember_formulae(map_endmembers_to_vector<types::FormulaMap>(&Mineral::get_formula));
 }
 
 } // namespace burnman

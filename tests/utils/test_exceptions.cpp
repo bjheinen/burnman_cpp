@@ -16,8 +16,8 @@ TEST_CASE("NotImplementedError message", "[utils][exceptions]") {
   const std::string func_name = "some_function";
   const std::string message = "Hello!";
   try {
-    throw NotImplementedError(class_name, func_name, message);
-  } catch (const NotImplementedError& e) {
+    throw exceptions::NotImplementedError(class_name, func_name, message);
+  } catch (const exceptions::NotImplementedError& e) {
     REQUIRE(std::string(e.what()) ==
             "[AClass::some_function] Hello!");
   } catch (...) {
@@ -27,7 +27,7 @@ TEST_CASE("NotImplementedError message", "[utils][exceptions]") {
 
 TEST_CASE("NotImplementedError default message", "[utils][exceptions]") {
   try {
-    throw NotImplementedError("Class", "func");
+    throw exceptions::NotImplementedError("Class", "func");
   } catch (const std::logic_error& e) {
     REQUIRE(std::string(e.what()) ==
             "[Class::func] Function not implemented!");
@@ -35,7 +35,7 @@ TEST_CASE("NotImplementedError default message", "[utils][exceptions]") {
 }
 
 TEST_CASE("NotImplementedError derived from std::logic_error", "[utils][exceptions]") {
-  NotImplementedError err("Class", "func", "msg");
+  exceptions::NotImplementedError err("Class", "func", "msg");
   std::logic_error* base_ptr = &err;
   REQUIRE(base_ptr != nullptr);
 }

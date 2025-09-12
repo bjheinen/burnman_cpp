@@ -14,7 +14,7 @@
 namespace burnman {
 
 [[noreturn]] void Material::throw_not_implemented_error(const std::string& method) const {
-  throw NotImplementedError(get_class_name(), method);
+  throw exceptions::NotImplementedError(get_class_name(), method);
 }
 
 std::string Material::get_class_name() const {
@@ -66,14 +66,14 @@ bool Material::has_state() const {
   return pressure.has_value() && temperature.has_value();
 }
 
-const FormulaMap& Material::get_formula() const {
+const types::FormulaMap& Material::get_formula() const {
   if (!formula.has_value()) {
     formula = compute_formula();
   }
   return *formula;
 }
 
-void Material::set_method(EOSType new_method [[maybe_unused]]) {
+void Material::set_method(types::EOSType new_method [[maybe_unused]]) {
   throw_not_implemented_error(__func__);
 }
 
@@ -345,7 +345,7 @@ double Material::compute_isentropic_thermal_gradient() const {
   throw_not_implemented_error(__func__);
 }
 
-FormulaMap Material::compute_formula() const {
+types::FormulaMap Material::compute_formula() const {
   throw_not_implemented_error(__func__);
 }
 

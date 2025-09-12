@@ -49,8 +49,8 @@ namespace utils {
    *
    * @return Summed formula as FormulaMap.
    */
-  inline FormulaMap sum_formulae(
-    const std::vector<FormulaMap>& formulae,
+  inline types::FormulaMap sum_formulae(
+    const std::vector<types::FormulaMap>& formulae,
     const Eigen::ArrayXd& weights
   ) {
     std::size_t n = formulae.size();
@@ -58,7 +58,7 @@ namespace utils {
       throw std::invalid_argument(
         "Weights length must be equal to number of formulae");
     }
-    FormulaMap summed_formula;
+    types::FormulaMap summed_formula;
     for (std::size_t i = 0; i < n; ++i) {
       summed_formula += formulae[i] * weights[i];
     }
@@ -71,8 +71,8 @@ namespace utils {
    *  const Eigen::ArrayXd& weights)
    * @overload
    */
-  inline FormulaMap sum_formulae(
-    const std::vector<FormulaMap>& formulae
+  inline types::FormulaMap sum_formulae(
+    const std::vector<types::FormulaMap>& formulae
   ) {
     Eigen::ArrayXd ones = Eigen::ArrayXd::Ones(static_cast<Eigen::Index>(formulae.size()));
     return sum_formulae(formulae, ones);

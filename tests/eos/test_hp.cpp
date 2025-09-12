@@ -19,7 +19,7 @@
 using namespace Catch::Matchers;
 
 TEST_CASE("Test validate parameters", "[eos][hp]") {
-  MineralParams params;
+  types::MineralParams params;
   params.molar_mass = 0.1003887;
   params.napfu = 5;
   params.V_0 = 2.445e-05;
@@ -30,7 +30,7 @@ TEST_CASE("Test validate parameters", "[eos][hp]") {
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
-  HP_TMT hp;
+  eos::HP_TMT hp;
   SECTION("Missing V_0") {
     params.V_0.reset();
     REQUIRE_THROWS(hp.validate_parameters(params));
@@ -95,7 +95,7 @@ TEST_CASE("Test validate parameters", "[eos][hp]") {
 
 TEST_CASE("Check reference conditions", "[eos][hp]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.molar_mass = 0.1003887;
   params.napfu = 5;
   params.V_0 = 2.445e-05;
@@ -106,7 +106,7 @@ TEST_CASE("Check reference conditions", "[eos][hp]") {
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
-  HP_TMT hp;
+  eos::HP_TMT hp;
   REQUIRE_NOTHROW(hp.validate_parameters(params));
   SECTION("V-T dependent functions") {
     double T = *params.T_0;
@@ -162,7 +162,7 @@ TEST_CASE("Check reference conditions", "[eos][hp]") {
 }
 
 TEST_CASE("Test volume", "[eos][hp]") {
-  MineralParams params;
+  types::MineralParams params;
   params.molar_mass = 0.1003887;
   params.napfu = 5;
   params.V_0 = 2.445e-05;
@@ -173,7 +173,7 @@ TEST_CASE("Test volume", "[eos][hp]") {
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
-  HP_TMT hp;
+  eos::HP_TMT hp;
   REQUIRE_NOTHROW(hp.validate_parameters(params));
   double T_a = 800.0;
   double T_b = 2000.0;
@@ -194,7 +194,7 @@ TEST_CASE("Test volume", "[eos][hp]") {
 }
 
 TEST_CASE("HP python reference values", "[eos][hp]") {
-  MineralParams params;
+  types::MineralParams params;
   params.molar_mass = 0.1003887;
   params.napfu = 5;
   params.V_0 = 2.445e-05;
@@ -205,7 +205,7 @@ TEST_CASE("HP python reference values", "[eos][hp]") {
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
-  HP_TMT hp;
+  eos::HP_TMT hp;
   REQUIRE_NOTHROW(hp.validate_parameters(params));
 
   SECTION("T-V dependent functions") {

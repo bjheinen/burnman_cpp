@@ -18,10 +18,10 @@ namespace burnman {
   namespace eos {
     /**
     * @brief Makes a pointer to a predefined EOS class
-    * @param eos_type EOSType enum specifying equation of state
+    * @param eos_type types::EOSType enum specifying equation of state
     * @return std::shared_ptr to an instance of the specific EOS
     */
-    std::shared_ptr<EquationOfState> make_eos(EOSType eos_type);
+    std::shared_ptr<EquationOfState> make_eos(types::EOSType eos_type);
   } // namespace eos
 } // namespace burnman
 

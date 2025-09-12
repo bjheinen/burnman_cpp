@@ -70,7 +70,7 @@ namespace debye {
   double compute_thermal_energy(
     double temperature,
     double debye_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_thermal_energy(
@@ -110,7 +110,7 @@ namespace debye {
   double compute_molar_heat_capacity_v(
     double temperature,
     double debye_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_molar_heat_capacity_v(
@@ -160,7 +160,7 @@ namespace debye {
   double compute_helmholtz_free_energy(
     double temperature,
     double debye_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_helmholtz_free_energy(
@@ -200,7 +200,7 @@ namespace debye {
   double compute_entropy(
     double temperature,
     double debye_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_entropy(
@@ -240,7 +240,7 @@ namespace debye {
   double compute_dmolar_heat_capacity_v_dT(
     double temperature,
     double debye_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_dmolar_heat_capacity_v_dT(

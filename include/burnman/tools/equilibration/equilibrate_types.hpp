@@ -42,7 +42,7 @@ struct EquilibrationParameters {
  * @brief Holds result of equilibration along with parameters
  */
 struct EquilibrateResult {
-  NDArray<optim::roots::DampedNewtonResult> sol_array;  ///< NDArray of solver result iterates.
+  types::NDArray<optim::roots::DampedNewtonResult> sol_array;  ///< NDArray of solver result iterates.
   EquilibrationParameters prm;            ///< Parameters used in equilibration.
 };
 

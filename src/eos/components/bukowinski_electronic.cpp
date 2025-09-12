@@ -15,7 +15,7 @@ namespace burnman::eos {
 double bukowinski::compute_helmholtz_el(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   return -0.5 * (*params.bel_0)
     * std::pow(volume / *params.V_0, *params.gel)
@@ -25,7 +25,7 @@ double bukowinski::compute_helmholtz_el(
 double bukowinski::compute_pressure_el(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   return 0.5 * (*params.gel) * (*params.bel_0)
     * std::pow(volume / *params.V_0, *params.gel)
@@ -36,7 +36,7 @@ double bukowinski::compute_pressure_el(
 double bukowinski::compute_entropy_el(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   return *params.bel_0 * temperature
     * std::pow(volume / *params.V_0, *params.gel);
@@ -45,7 +45,7 @@ double bukowinski::compute_entropy_el(
 double bukowinski::compute_KT_over_V(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   return -(*params.gel - 1.0)
     * compute_pressure_el(temperature, volume, params)
@@ -54,7 +54,7 @@ double bukowinski::compute_KT_over_V(
 
 double bukowinski::compute_CV_over_T(
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   return *params.bel_0 * std::pow(volume / *params.V_0, *params.gel);
 }
@@ -62,7 +62,7 @@ double bukowinski::compute_CV_over_T(
 double bukowinski::compute_alpha_KT(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   return *params.gel * (*params.bel_0) * temperature
     * std::pow(volume / *params.V_0, *params.gel)

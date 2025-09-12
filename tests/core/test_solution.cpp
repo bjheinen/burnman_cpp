@@ -40,7 +40,7 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test interface", "[core][solution]") {
     {"MgSiO3 perovskite", "FeSiO3 perovskite", "AlAlO3 perovskite"};
   REQUIRE(bdg.get_endmember_names() == expected_names);
   // Check endmember_formulae
-  std::vector<FormulaMap> expected_formulae = {
+  std::vector<types::FormulaMap> expected_formulae = {
     {
       {"Mg", 1.0},
       {"Si", 1.0},
@@ -62,7 +62,7 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test interface", "[core][solution]") {
   REQUIRE(bdg.get_elements() == expected_elements);
 
   // Test setting method for all endmembers
-  REQUIRE_NOTHROW(bdg.set_method(EOSType::Auto));
+  REQUIRE_NOTHROW(bdg.set_method(types::EOSType::Auto));
 
   // Test composition setting
   // Molar fractions of endmembers (Mg, Fe, Al)
@@ -72,7 +72,7 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test interface", "[core][solution]") {
   // Check set molar_fractions
   REQUIRE_NOTHROW(bdg.set_composition(molar_fractions));
   // Test formula
-  FormulaMap expected_solution_formula = {
+  types::FormulaMap expected_solution_formula = {
     {"Mg", 0.88},
     {"Fe", 0.07},
     {"Al", 0.1},
@@ -170,7 +170,7 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]"
   // Make solution
   Solution bdg;
   bdg.set_solution_model(bdg_solution_model);
-  bdg.set_method(EOSType::Auto);
+  bdg.set_method(types::EOSType::Auto);
   bdg.set_composition(molar_fractions);
   bdg.set_state(P, T);
 
@@ -251,7 +251,7 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]"
 
 TEST_CASE_METHOD(BridgmaniteFixture, "Test reactions", "[core][solution]") {
   // Make solution model & solution
-  PairedEndmemberList em = {
+  types::PairedEndmemberList em = {
     {mg_si_perovskite, "[Mg][Si]O3"},
     {fe_si_perovskite, "[Fe][Si]O3"},
     {mg_si_perovskite, "[Mg][Si]O3"},

@@ -53,24 +53,24 @@ void Assemblage::add_phases(
   );
 }
 
-void Assemblage::set_averaging_scheme(AveragingType scheme_type) {
+void Assemblage::set_averaging_scheme(types::AveragingType scheme_type) {
   switch (scheme_type) {
-    case AveragingType::Voigt:
+    case types::AveragingType::Voigt:
       this->averaging_scheme = std::make_shared<averaging::Voigt>();
       break;
-    case AveragingType::Reuss:
+    case types::AveragingType::Reuss:
       this->averaging_scheme = std::make_shared<averaging::Reuss>();
       break;
-    case AveragingType::VRH:
+    case types::AveragingType::VRH:
       this->averaging_scheme = std::make_shared<averaging::VoigtReussHill>();
       break;
-    case AveragingType::HashinShtrikmanLower:
+    case types::AveragingType::HashinShtrikmanLower:
       this->averaging_scheme = std::make_shared<averaging::HashinShtrikmanLower>();
       break;
-    case AveragingType::HashinShtrikmanUpper:
+    case types::AveragingType::HashinShtrikmanUpper:
       this->averaging_scheme = std::make_shared<averaging::HashinShtrikmanUpper>();
       break;
-    case AveragingType::HashinShtrikman:
+    case types::AveragingType::HashinShtrikman:
       this->averaging_scheme = std::make_shared<averaging::HashinShtrikman>();
       break;
     default:
@@ -85,7 +85,7 @@ void Assemblage::set_averaging_scheme(std::shared_ptr<averaging::AveragingScheme
 // Eigen::ArrayXd version (core implementation)
 void Assemblage::set_fractions(
   const Eigen::ArrayXd& fractions,
-  const FractionType fraction_type
+  const types::FractionType fraction_type
 ) {
   // Asserts for valid fraction array
   if (fractions.size() != static_cast<Eigen::Index>(this->phases.size())) {
@@ -108,10 +108,10 @@ void Assemblage::set_fractions(
     norm_fractions /= total;
   }
   switch (fraction_type) {
-    case FractionType::Molar :
+    case types::FractionType::Molar :
       this->molar_fractions = norm_fractions;
       break;
-    case FractionType::Mass :
+    case types::FractionType::Mass :
       this->molar_fractions = convert_mass_to_molar_fractions(norm_fractions);
       break;
     default :
@@ -125,7 +125,7 @@ void Assemblage::set_fractions(
 
 void Assemblage::set_fractions(
   std::initializer_list<double> fractions,
-  const FractionType fraction_type
+  const types::FractionType fraction_type
 ) {
   this->set_fractions(
     Eigen::Map<const Eigen::ArrayXd>(fractions.begin(), fractions.size()),
@@ -150,7 +150,7 @@ void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
   reset();
 }
 
-void Assemblage::set_method(EOSType new_method) {
+void Assemblage::set_method(types::EOSType new_method) {
   for (auto& ph : phases) {
     ph->set_method(new_method);
   }
@@ -332,9 +332,9 @@ double Assemblage::compute_molar_heat_capacity_p() const {
   return averaging_scheme->average_heat_capacity_p(molar_fractions, c_p);
 }
 
-FormulaMap Assemblage::compute_formula() const {
-  std::vector<FormulaMap> phase_formulae =
-    map_phases_to_vector<FormulaMap>(&Material::get_formula);
+types::FormulaMap Assemblage::compute_formula() const {
+  std::vector<types::FormulaMap> phase_formulae =
+    map_phases_to_vector<types::FormulaMap>(&Material::get_formula);
   return utils::sum_formulae(phase_formulae, molar_fractions);
 }
 
@@ -379,7 +379,7 @@ void Assemblage::setup_endmember_formulae() const {
 }
 
 void Assemblage::setup_endmember_properties() const {
-  std::vector<FormulaMap> temp_formulae;
+  std::vector<types::FormulaMap> temp_formulae;
   std::vector<std::string> temp_names;
   std::vector<int> temp_empp;
   // Loop through phases

@@ -35,7 +35,7 @@ class MGD3 : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(MineralParams& params) override;
+  bool validate_parameters(types::MineralParams& params) override;
 
   // Specific EOS functions
   /**
@@ -46,7 +46,7 @@ class MGD3 : public EquationOfState{
   double compute_volume(
     double pressure,
     double temperature,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   /**
    * @copydoc EquationOfState::compute_pressure
@@ -56,13 +56,13 @@ class MGD3 : public EquationOfState{
   double compute_pressure(
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_grueneisen_parameter(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   /**
    * @copydoc EquationOfState::compute_isothermal_bulk_modulus_reuss
@@ -73,7 +73,7 @@ class MGD3 : public EquationOfState{
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   /**
    * @copydoc EquationOfState::compute_isentropic_bulk_modulus_reuss
@@ -84,7 +84,7 @@ class MGD3 : public EquationOfState{
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   /**
    * @copydoc EquationOfState::compute_shear_modulus
@@ -95,55 +95,55 @@ class MGD3 : public EquationOfState{
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_v(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_heat_capacity_p(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_thermal_expansivity(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_gibbs_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_entropy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_molar_internal_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_helmholtz_free_energy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
   double compute_enthalpy(
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 
  protected:
 
@@ -152,14 +152,14 @@ class MGD3 : public EquationOfState{
    *
    * @param temperature Temperature to evaluate [K].
    * @param volume Volume to evaluate [m^3].
-   * @param params Mineral parameters object of type MineralParams.
+   * @param params Mineral parameters object of type types::MineralParams.
    *
    * @return G_thermal [Pa].
    */
   double compute_thermal_shear_modulus(
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
  private:
   /**
@@ -167,14 +167,14 @@ class MGD3 : public EquationOfState{
    *
    * @param temperature Temperature to evaluate [K].
    * @param volume Volume to evaluate [m^3].
-   * @param params Mineral parameters object of type MineralParams.
+   * @param params Mineral parameters object of type types::MineralParams.
    *
    * @return K_th in [Pa].
    */
   double compute_thermal_bulk_modulus(
     double temperature,
     double volume,
-    const MineralParams& params) const;
+    const types::MineralParams& params) const;
 
   /**
    * @brief Computes the Grueneisen parameter.
@@ -182,13 +182,13 @@ class MGD3 : public EquationOfState{
    * Matas et al. eq. B6.
    *
    * @param x V_0/V.
-   * @param params Mineral parameters object of type MineralParams
+   * @param params Mineral parameters object of type types::MineralParams
    * 
    * @return Grueneisen parameter [unitless].
    */
   static double compute_mgd_grueneisen_parameter(
     double x,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
    * @brief Compute the Debye temperature.
@@ -196,13 +196,13 @@ class MGD3 : public EquationOfState{
    * See Matas et al. eq. B6.
    *
    * @param x V_0/V (inverse compression).
-   * @param params Mineral parameters object of type MineralParams.
+   * @param params Mineral parameters object of type types::MineralParams.
    *
    * @return Debye temperature in [K].
    */
   static double compute_debye_temperature(
     double x,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
    * @brief Compute the isotropic thermal pressure.
@@ -211,21 +211,21 @@ class MGD3 : public EquationOfState{
    *
    * @param temperature Temperature to evaluate [K].
    * @param volume Volume to evaluate [m^3].
-   * @param params Mineral parameters object of type MineralParams.
+   * @param params Mineral parameters object of type types::MineralParams.
    *
    * @return Thermal pressure in [Pa].
    */
   static double compute_thermal_pressure(
     double temperature,
     double volume,
-    const MineralParams& params);
+    const types::MineralParams& params);
 
   /**
    * @brief GSL function wrapper to compute P(V) - P
    * 
    * @param x Volume to test (passed by solver)
    * @param p Generic pointer for parameter object
-   * @see `ParamsGSL::SolverParams_P`
+   * @see `eos::gsl_params::SolverParams_P`
    */
   static double mgd_gsl_wrapper(double x, void* p);
 
@@ -252,7 +252,7 @@ class MGD2 : public MGD3{
     double pressure,
     double temperature,
     double volume,
-    const MineralParams& params) const override;
+    const types::MineralParams& params) const override;
 };
 
 } // namespace eos

@@ -44,7 +44,7 @@ class AsymmetricRegularSolution : public IdealSolution{
  public:
 
   AsymmetricRegularSolution(
-    const PairedEndmemberList& endmember_list,
+    const types::PairedEndmemberList& endmember_list,
     std::vector<double> alphas,
     std::vector<std::vector<double>> energy_interaction,
     std::vector<std::vector<double>> volume_interaction = {},

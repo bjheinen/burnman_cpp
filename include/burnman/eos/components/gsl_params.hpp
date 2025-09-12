@@ -28,7 +28,7 @@ namespace gsl_params {
    *   bm, bm4, vinet, macaw, morse_potential, spock
    */
   struct SolverParams_P {
-    const MineralParams& params;
+    const types::MineralParams& params;
     double pressure;
   };
   /**
@@ -38,7 +38,7 @@ namespace gsl_params {
    *   mgd3
    */
   struct SolverParams_PT {
-    const MineralParams& params;
+    const types::MineralParams& params;
     double pressure;
     double temperature;
   };
@@ -49,7 +49,7 @@ namespace gsl_params {
    *  SLB2, SLB3, etc.
    */
   struct SolverParams_SLB {
-    const MineralParams& params;
+    const types::MineralParams& params;
     double pressure;
     double temperature;
     double a1_ii, a2_iikk;

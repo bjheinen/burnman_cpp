@@ -24,9 +24,9 @@ using namespace Catch::Matchers;
 
 TEST_CASE("Set method", "[core][mineral]") {
   Mineral test_mineral;
-  test_mineral.params.equation_of_state = EOSType::BM3;
+  test_mineral.params.equation_of_state = types::EOSType::BM3;
   // Set method should call validate parameters
-  REQUIRE_THROWS(test_mineral.set_method(EOSType::Auto));
+  REQUIRE_THROWS(test_mineral.set_method(types::EOSType::Auto));
   test_mineral.params.V_0 = 11.24e-6;
   test_mineral.params.K_0 = 161.0e9;
   test_mineral.params.Kprime_0 = 3.8;
@@ -36,35 +36,35 @@ TEST_CASE("Set method", "[core][mineral]") {
   test_mineral.params.grueneisen_0 = 1.5;
   test_mineral.params.q_0 = 1.5;
   // Test Auto
-  REQUIRE_NOTHROW(test_mineral.set_method(EOSType::Auto));
+  REQUIRE_NOTHROW(test_mineral.set_method(types::EOSType::Auto));
   // Check parameter has not been changed
-  REQUIRE(test_mineral.params.equation_of_state == EOSType::BM3);
+  REQUIRE(test_mineral.params.equation_of_state == types::EOSType::BM3);
   // Check eos_method created
-  REQUIRE(typeid(*test_mineral.eos_method) == typeid(BM3));
+  REQUIRE(typeid(*test_mineral.eos_method) == typeid(eos::BM3));
   // Test update EOS
-  REQUIRE_NOTHROW(test_mineral.set_method(EOSType::MGD3));
-  REQUIRE(test_mineral.params.equation_of_state == EOSType::MGD3);
-  REQUIRE(typeid(*test_mineral.eos_method) == typeid(MGD3));
+  REQUIRE_NOTHROW(test_mineral.set_method(types::EOSType::MGD3));
+  REQUIRE(test_mineral.params.equation_of_state == types::EOSType::MGD3);
+  REQUIRE(typeid(*test_mineral.eos_method) == typeid(eos::MGD3));
   // Test setting custom EOS (derived from EquationOfState)
   // Using non-derived class will not compile - so no test needed
   class CustomEOS : public EquationOfState{
    public:
     // Helper functions
     bool validate_parameters(
-      MineralParams& params [[maybe_unused]]) override {
+      types::MineralParams& params [[maybe_unused]]) override {
       return 1;
     }
   };
   CustomEOS custom_eos;
   REQUIRE_NOTHROW(test_mineral.set_method(std::make_shared<CustomEOS>()));
-  REQUIRE(test_mineral.params.equation_of_state == EOSType::Custom);
+  REQUIRE(test_mineral.params.equation_of_state == types::EOSType::Custom);
   REQUIRE(typeid(*test_mineral.eos_method) == typeid(CustomEOS));
 }
 
 TEST_CASE("Set state", "[core][mineral]") {
   // Set-up mineral
   Mineral test_mineral;
-  test_mineral.params.equation_of_state = EOSType::BM3;
+  test_mineral.params.equation_of_state = types::EOSType::BM3;
   test_mineral.params.V_0 = 11.24e-6;
   test_mineral.params.K_0 = 161.0e9;
   test_mineral.params.Kprime_0 = 3.8;
@@ -73,7 +73,7 @@ TEST_CASE("Set state", "[core][mineral]") {
   test_mineral.params.debye_0 = 773.0;
   test_mineral.params.grueneisen_0 = 1.5;
   test_mineral.params.q_0 = 1.5;
-  test_mineral.set_method(EOSType::Auto);
+  test_mineral.set_method(types::EOSType::Auto);
   double test_P = 24e9;
   double test_T = 2000.0;
   // Ensure P/T set correctly
@@ -81,8 +81,8 @@ TEST_CASE("Set state", "[core][mineral]") {
   REQUIRE(test_mineral.get_pressure() == test_P);
   REQUIRE(test_mineral.get_temperature() == test_T);
   // Check modifiers still 0
-  excesses::Excesses zero_excess;
-  excesses::Excesses test_excess = test_mineral.get_property_modifiers();
+  eos::excesses::Excesses zero_excess;
+  eos::excesses::Excesses test_excess = test_mineral.get_property_modifiers();
   CHECK(test_excess.G == zero_excess.G);
   CHECK(test_excess.dGdT == zero_excess.dGdT);
   CHECK(test_excess.dGdP == zero_excess.dGdP);
@@ -90,17 +90,17 @@ TEST_CASE("Set state", "[core][mineral]") {
   CHECK(test_excess.d2GdP2 == zero_excess.d2GdP2);
   CHECK(test_excess.d2GdPdT == zero_excess.d2GdPdT);
   // Define property modifiers and re-check to see if they are computed
-  excesses::ExcessParamVector excess_params = {
-    excesses::LandauParams{800.0, 1.0e-7, 5.0},
-    excesses::LandauSLB2022Params {800.0, 1.0e-8, 5.0},
-    excesses::LandauHPParams{298.15, 1.0e-5, 800.0, 1.0e-7, 5.0},
-    excesses::LinearParams{1.0e-7, 5.0, 1200.0},
-    excesses::BraggWilliamsParams{1, 0.8, 1000.0, 1.0e-7, 1000.0, 1.0e-7},
-    excesses::MagneticChsParams{0.4, 800.0, 1.0e-8, 2.2, 1.0e-10},
-    excesses::DebyeParams{1.0, 1200.0},
-    excesses::DebyeDeltaParams{1.0, 1200.0},
-    excesses::EinsteinParams{1.0, 1200.0},
-    excesses::EinsteinDeltaParams{1.0, 1200.0}
+  eos::excesses::ExcessParamVector excess_params = {
+    eos::excesses::LandauParams{800.0, 1.0e-7, 5.0},
+    eos::excesses::LandauSLB2022Params {800.0, 1.0e-8, 5.0},
+    eos::excesses::LandauHPParams{298.15, 1.0e-5, 800.0, 1.0e-7, 5.0},
+    eos::excesses::LinearParams{1.0e-7, 5.0, 1200.0},
+    eos::excesses::BraggWilliamsParams{1, 0.8, 1000.0, 1.0e-7, 1000.0, 1.0e-7},
+    eos::excesses::MagneticChsParams{0.4, 800.0, 1.0e-8, 2.2, 1.0e-10},
+    eos::excesses::DebyeParams{1.0, 1200.0},
+    eos::excesses::DebyeDeltaParams{1.0, 1200.0},
+    eos::excesses::EinsteinParams{1.0, 1200.0},
+    eos::excesses::EinsteinDeltaParams{1.0, 1200.0}
   };
   REQUIRE_NOTHROW(test_mineral.set_property_modifier_params(excess_params));
   test_mineral.set_state(test_P, test_T);
@@ -128,13 +128,13 @@ TEST_CASE("Set state", "[core][mineral]") {
 TEST_CASE("Check exceptions", "[core][mineral]") {
   Mineral test_mineral;
   REQUIRE_THROWS(test_mineral.get_molar_mass());
-  REQUIRE_THROWS(test_mineral.set_method(EOSType::Auto));
+  REQUIRE_THROWS(test_mineral.set_method(types::EOSType::Auto));
 }
 
 TEST_CASE("Check formula", "[core][mineral]") {
   Mineral test_mineral;
   REQUIRE_THROWS(test_mineral.get_formula());
-  FormulaMap fm = {
+  types::FormulaMap fm = {
     {"Al", 2.0},
     {"Si", 1.0},
     {"O", 5.0}
@@ -155,7 +155,7 @@ TEST_CASE("Check get/set name", "[core][mineral]") {
 TEST_CASE("Check py reference values", "[core][mineral]") {
   // Set-up mineral
   Mineral test_mineral;
-  test_mineral.params.equation_of_state = EOSType::MGD3;
+  test_mineral.params.equation_of_state = types::EOSType::MGD3;
   test_mineral.params.V_0 = 11.24e-6;
   test_mineral.params.K_0 = 161.0e9;
   test_mineral.params.Kprime_0 = 3.8;
@@ -171,7 +171,7 @@ TEST_CASE("Check py reference values", "[core][mineral]") {
   double T = 1000.0;
 
   SECTION("No excess") {
-    test_mineral.set_method(EOSType::Auto);
+    test_mineral.set_method(types::EOSType::Auto);
     test_mineral.set_state(P, T);
     // Define reference values
     double ref_Vo = 9.081760466382554e-06;
@@ -265,11 +265,11 @@ TEST_CASE("Check py reference values", "[core][mineral]") {
   }
 
   SECTION("With excess") {
-    excesses::ExcessParamVector excess_params = {
-      excesses::MagneticChsParams{0.4, 800.0, 1.0e-8, 2.2, 1.0e-10}
+    eos::excesses::ExcessParamVector excess_params = {
+      eos::excesses::MagneticChsParams{0.4, 800.0, 1.0e-8, 2.2, 1.0e-10}
     };
     test_mineral.set_property_modifier_params(excess_params);
-    test_mineral.set_method(EOSType::Auto);
+    test_mineral.set_method(types::EOSType::Auto);
     test_mineral.set_state(P, T);
     // Define reference values
     double ref_Vo = 9.081760466382554e-06;

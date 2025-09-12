@@ -24,8 +24,8 @@ TEST_CASE("Test Landau", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.0015112986893857335;
     double d2GdP2_ref = -1.35546123054467e-19;
     double d2GdPdT_ref = 1.4885723933047452e-11;
-    excesses::LandauParams params = {800.0, 1.0e-7, 5.0};
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::LandauParams params = {800.0, 1.0e-7, 5.0};
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -46,8 +46,8 @@ TEST_CASE("Test Landau", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.0012366676242447335;
     double d2GdP2_ref = -1.090365427626495e-19;
     double d2GdPdT_ref = 1.2587509746776752e-11;
-    excesses::LandauParams params = {1200.0, 1.0e-7, 5.0};
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::LandauParams params = {1200.0, 1.0e-7, 5.0};
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -73,10 +73,10 @@ TEST_CASE("Test Landau HP", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.0020833344907417047;
     double d2GdP2_ref = -8.333337962966819e-19;
     double d2GdPdT_ref = 4.1666689814834094e-11;
-    excesses::LandauHPParams params = {
+    eos::excesses::LandauHPParams params = {
       298.15, 1.0e5, 800.0, 1.0e-7, 5.0
     };
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -97,10 +97,10 @@ TEST_CASE("Test Landau HP", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.0015386443366256072;
     double d2GdP2_ref = -6.154577346502429e-19;
     double d2GdPdT_ref = 3.077288673251214e-11;
-    excesses::LandauHPParams params = {
+    eos::excesses::LandauHPParams params = {
       298.15, 1.0e5, 1200.0, 1.0e-7, 5.0
     };
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -127,8 +127,8 @@ TEST_CASE("Test Landau SLB", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.0005952380952380953;
     double d2GdP2_ref = -8.333333333333332e-19;
     double d2GdPdT_ref = 1.1904761904761904e-11;
-    excesses::LandauSLB2022Params params = {800.0, 1.0e-7, 5.0};
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::LandauSLB2022Params params = {800.0, 1.0e-7, 5.0};
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -149,8 +149,8 @@ TEST_CASE("Test Landau SLB", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.0005769913639656223;
     double d2GdP2_ref = -6.154574548966636e-19;
     double d2GdPdT_ref = 1.1539827279312444e-11;
-    excesses::LandauSLB2022Params params = {1200.0, 1.0e-7, 5.0};
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::LandauSLB2022Params params = {1200.0, 1.0e-7, 5.0};
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -175,8 +175,8 @@ TEST_CASE("Test Linear", "[prop_mod][eos]") {
   double d2GdT2_ref = 0.0;
   double d2GdP2_ref = 0.0;
   double d2GdPdT_ref = 0.0;
-  excesses::LinearParams params = {1.0e-7, 5.0, 1200.0};
-  excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+  eos::excesses::LinearParams params = {1.0e-7, 5.0, 1200.0};
+  eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
   CHECK_THAT(calc_excess.G,
     WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
   CHECK_THAT(calc_excess.dGdT,
@@ -192,7 +192,7 @@ TEST_CASE("Test Linear", "[prop_mod][eos]") {
 }
 
 TEST_CASE("Test Bragg-Williams", "[prop_mod][eos]") {
-  excesses::BraggWilliamsParams params = {
+  eos::excesses::BraggWilliamsParams params = {
     1, 0.8, 1000.0, 1.0e-7, 1000.0, 1.0e-7};
   SECTION("BW High P") {
     // Implementation differences build up here as the margins are tiny
@@ -209,7 +209,7 @@ TEST_CASE("Test Bragg-Williams", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.007757316802781132;
     double d2GdP2_ref = -1.3642420526593924e-18;
     double d2GdPdT_ref = 7.051539796520956e-11;
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     // Don't relax tolerance on G calculation
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
@@ -237,7 +237,7 @@ TEST_CASE("Test Bragg-Williams", "[prop_mod][eos]") {
     double d2GdT2_ref = 0.0;
     double d2GdP2_ref = 0.0;
     double d2GdPdT_ref = 0.0;
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -263,9 +263,9 @@ TEST_CASE("Test Magnetic Chs", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.0068214881170452;
     double d2GdP2_ref = -9.82760289180444e-19;
     double d2GdPdT_ref = 9.425343695892169e-11;
-    excesses::MagneticChsParams params = {
+    eos::excesses::MagneticChsParams params = {
       0.4, 800.0, 1.0e-8, 2.2, 1.0e-10};
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -286,9 +286,9 @@ TEST_CASE("Test Magnetic Chs", "[prop_mod][eos]") {
     double d2GdT2_ref = -0.003710226214794699;
     double d2GdP2_ref = -7.123458198725806e-19;
     double d2GdPdT_ref = 7.62289687062366e-11;
-    excesses::MagneticChsParams params = {
+    eos::excesses::MagneticChsParams params = {
       0.4, 1200.0, 1.0e-8, 2.2, 1.0e-10};
-    excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+    eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
     CHECK_THAT(calc_excess.G,
       WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
     CHECK_THAT(calc_excess.dGdT,
@@ -313,8 +313,8 @@ TEST_CASE("Test Debye", "[prop_mod][eos]") {
   double d2GdT2_ref = -0.0009315448135567599;
   double d2GdP2_ref = 0.0;
   double d2GdPdT_ref = 0.0;
-  excesses::DebyeParams params = {1.0, 1200.0};
-  excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+  eos::excesses::DebyeParams params = {1.0, 1200.0};
+  eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
   CHECK_THAT(calc_excess.G,
     WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
   CHECK_THAT(calc_excess.dGdT,
@@ -338,8 +338,8 @@ TEST_CASE("Test Debye Delta", "[prop_mod][eos]") {
   double d2GdT2_ref = -0.0001301242749913705;
   double d2GdP2_ref = 0.0;
   double d2GdPdT_ref = 0.0;
-  excesses::DebyeDeltaParams params = {1.0, 1200.0};
-  excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+  eos::excesses::DebyeDeltaParams params = {1.0, 1200.0};
+  eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
   CHECK_THAT(calc_excess.G,
     WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
   CHECK_THAT(calc_excess.dGdT,
@@ -363,8 +363,8 @@ TEST_CASE("Test Einstein", "[prop_mod][eos]") {
   double d2GdT2_ref = -0.0008881700552263031;
   double d2GdP2_ref = 0.0;
   double d2GdPdT_ref = 0.0;
-  excesses::EinsteinParams params = {1.0, 1200.0};
-  excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+  eos::excesses::EinsteinParams params = {1.0, 1200.0};
+  eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
   CHECK_THAT(calc_excess.G,
     WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
   CHECK_THAT(calc_excess.dGdT,
@@ -388,8 +388,8 @@ TEST_CASE("Test Einstein Delta", "[prop_mod][eos]") {
   double d2GdT2_ref = -0.00020821426174273138;
   double d2GdP2_ref = 0.0;
   double d2GdPdT_ref = 0.0;
-  excesses::EinsteinDeltaParams params = {1.0, 1200.0};
-  excesses::Excesses calc_excess = excesses::compute_excesses(P, T, params);
+  eos::excesses::EinsteinDeltaParams params = {1.0, 1200.0};
+  eos::excesses::Excesses calc_excess = eos::excesses::compute_excesses(P, T, params);
   CHECK_THAT(calc_excess.G,
     WithinRel(G_ref, tol_rel) || WithinAbs(G_ref, tol_abs));
   CHECK_THAT(calc_excess.dGdT,

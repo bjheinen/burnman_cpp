@@ -18,7 +18,7 @@
 
 namespace burnman::eos {
 
-bool MGD3::validate_parameters(MineralParams& params) {
+bool MGD3::validate_parameters(types::MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
     throw std::invalid_argument("params object missing parameter: V_0");
@@ -108,7 +108,7 @@ bool MGD3::validate_parameters(MineralParams& params) {
 
 // Compute P(V) - P as function to root find
 double MGD3::mgd_gsl_wrapper(double x, void* p) {
-  auto* mgd_params = static_cast<const ParamsGSL::SolverParams_PT*>(p);
+  auto* mgd_params = static_cast<const gsl_params::SolverParams_PT*>(p);
   return
     BM3::compute_birch_murnaghan(
       *mgd_params->params.V_0 / x,
@@ -127,11 +127,11 @@ double MGD3::mgd_gsl_wrapper(double x, void* p) {
 double MGD3::compute_volume(
   double pressure,
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // Find root in [P(V) - P] to find V that fits P
   // Set up GSL params struct - to pass to objective function
-  ParamsGSL::SolverParams_PT mgd_params{
+  gsl_params::SolverParams_PT mgd_params{
     params,
     pressure,
     temperature};
@@ -150,7 +150,7 @@ double MGD3::compute_volume(
 double MGD3::compute_pressure(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return BM3::compute_birch_murnaghan(
     *params.V_0 / volume,
@@ -163,7 +163,7 @@ double MGD3::compute_grueneisen_parameter(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_mgd_grueneisen_parameter(
     *params.V_0 / volume,
@@ -172,7 +172,7 @@ double MGD3::compute_grueneisen_parameter(
 
 double MGD3::compute_mgd_grueneisen_parameter(
   double x,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   return *params.grueneisen_0 * std::pow(x, -*params.q_0);
 }
@@ -181,7 +181,7 @@ double MGD3::compute_isothermal_bulk_modulus_reuss(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return BM3::compute_bm_bulk_modulus(volume, params)
     + compute_thermal_bulk_modulus(temperature, volume, params)
@@ -192,7 +192,7 @@ double MGD3::compute_isentropic_bulk_modulus_reuss(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double K_T = compute_isothermal_bulk_modulus_reuss(
     pressure,
@@ -218,7 +218,7 @@ double MGD2::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return BM2::compute_second_order_shear_modulus(volume, params)
     + compute_thermal_shear_modulus(temperature, volume, params)
@@ -230,7 +230,7 @@ double MGD3::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return BM3::compute_third_order_shear_modulus(volume, params)
     + compute_thermal_shear_modulus(temperature, volume, params)
@@ -241,7 +241,7 @@ double MGD3::compute_molar_heat_capacity_v(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double debye_temperature = compute_debye_temperature(
     *params.V_0/volume,
@@ -257,7 +257,7 @@ double MGD3::compute_molar_heat_capacity_p(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double C_v = compute_molar_heat_capacity_v(
     pressure,
@@ -282,7 +282,7 @@ double MGD3::compute_thermal_expansivity(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double C_v = compute_molar_heat_capacity_v(
     pressure,
@@ -307,7 +307,7 @@ double MGD3::compute_gibbs_free_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_helmholtz_free_energy(
     pressure,
@@ -322,7 +322,7 @@ double MGD3::compute_entropy(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   double debye_temperature = compute_debye_temperature(
     *params.V_0 / volume,
@@ -338,7 +338,7 @@ double MGD3::compute_molar_internal_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_helmholtz_free_energy(
     pressure,
@@ -357,7 +357,7 @@ double MGD3::compute_helmholtz_free_energy(
   double pressure [[maybe_unused]],
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double x = *params.V_0 / volume;
   double x_cbrt = std::cbrt(x);
@@ -382,7 +382,7 @@ double MGD3::compute_enthalpy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_helmholtz_free_energy(
     pressure,
@@ -401,7 +401,7 @@ double MGD3::compute_enthalpy(
 double MGD3::compute_thermal_shear_modulus(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   if (temperature > 1.0e-10) {
     double x = *params.V_0 / volume;
@@ -421,7 +421,7 @@ double MGD3::compute_thermal_shear_modulus(
 
 double MGD3::compute_debye_temperature(
   double x,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double gamma_diff = *params.grueneisen_0
     - compute_mgd_grueneisen_parameter(x,params);
@@ -431,7 +431,7 @@ double MGD3::compute_debye_temperature(
 double MGD3::compute_thermal_pressure(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) {
   double x = *params.V_0 / volume;
   double debye_temperature = compute_debye_temperature(x, params);
@@ -446,7 +446,7 @@ double MGD3::compute_thermal_pressure(
 double MGD3::compute_thermal_bulk_modulus(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   if (temperature > 1.0e-10) {
     double x = *params.V_0 / volume;

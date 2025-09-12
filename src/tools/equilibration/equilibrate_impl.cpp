@@ -26,7 +26,7 @@
 namespace burnman::equilibration {
 
 EquilibrateResult equilibrate(
-  const FormulaMap& composition,
+  const types::FormulaMap& composition,
   Assemblage& assemblage,
   const ConstraintList& equality_constraints,
   const std::vector<FreeVectorMap>& free_compositional_vectors,
@@ -126,7 +126,7 @@ EquilibrateResult equilibrate(
   // Store strides for mapping back to grid_index
   std::vector<std::size_t> strides = utils::compute_strides(grid_shape);
   // Set up grid of solver results
-  NDArray<optim::roots::DampedNewtonResult> sol_array(grid_shape);
+  types::NDArray<optim::roots::DampedNewtonResult> sol_array(grid_shape);
 
   // Make solver settings
   optim::roots::DampedNewtonSettings solver_settings;

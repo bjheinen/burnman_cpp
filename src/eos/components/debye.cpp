@@ -141,7 +141,7 @@ double debye::compute_thermal_energy(
 double debye::compute_thermal_energy(
   double temperature,
   double debye_temperature,
-  ExplicitDouble f) {
+  types::ExplicitDouble f) {
   return compute_thermal_energy_impl(
     temperature,
     debye_temperature,
@@ -163,7 +163,7 @@ double debye::compute_molar_heat_capacity_v(
 double debye::compute_molar_heat_capacity_v(
   double temperature,
   double debye_temperature,
-  ExplicitDouble f) {
+  types::ExplicitDouble f) {
   return compute_molar_heat_capacity_v_impl(
     temperature,
     debye_temperature,
@@ -185,7 +185,7 @@ double debye::compute_helmholtz_free_energy(
 double debye::compute_helmholtz_free_energy(
   double temperature,
   double debye_temperature,
-  ExplicitDouble f) {
+  types::ExplicitDouble f) {
   return compute_helmholtz_free_energy_impl(
     temperature,
     debye_temperature,
@@ -207,7 +207,7 @@ double debye::compute_entropy(
 double debye::compute_entropy(
   double temperature,
   double debye_temperature,
-  ExplicitDouble f) {
+  types::ExplicitDouble f) {
   return compute_entropy_impl(
     temperature,
     debye_temperature,
@@ -229,7 +229,7 @@ double debye::compute_dmolar_heat_capacity_v_dT(
 double debye::compute_dmolar_heat_capacity_v_dT(
   double temperature,
   double debye_temperature,
-  ExplicitDouble f) {
+  types::ExplicitDouble f) {
   return compute_dmolar_heat_capacity_v_dT_impl(
     temperature,
     debye_temperature,

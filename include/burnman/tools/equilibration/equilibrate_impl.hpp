@@ -54,7 +54,7 @@ namespace equilibration {
  * @return EquilibrateResult with solution and parameters.
  */
 EquilibrateResult equilibrate(
-  const FormulaMap& composition,
+  const types::FormulaMap& composition,
   Assemblage& assemblage,
   const ConstraintList& equality_constraints,
   const std::vector<FreeVectorMap>& free_compositional_vectors = {},

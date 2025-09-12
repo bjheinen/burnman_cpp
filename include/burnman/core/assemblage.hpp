@@ -172,30 +172,30 @@ class Assemblage : public CompositeMaterial {
   /**
    * @brief Sets the fraction of each phase in the assemblage.
    *
-   * Fractions can be FractionType::Molar or FractionType::Mass.
+   * Fractions can be types::FractionType::Molar or types::FractionType::Mass.
    * Mass fractions will be converted to molar fractions automatically.
    */
   void set_fractions(
     const Eigen::ArrayXd& fractions,
-    const FractionType fraction_type = FractionType::Molar);
+    const types::FractionType fraction_type = types::FractionType::Molar);
 
 
   /**
    * @brief Sets the fraction of each phase in the assemblage.
    *
-   * Fractions can be FractionType::Molar or FractionType::Mass.
+   * Fractions can be types::FractionType::Molar or types::FractionType::Mass.
    * Mass fractions will be converted to molar fractions automatically.
    *
    * Overload to pass an initialiser list: set_fractions({0.5, 0.5});
    */
   void set_fractions(
     std::initializer_list<double> fractions,
-    const FractionType fraction_type = FractionType::Molar);
+    const types::FractionType fraction_type = types::FractionType::Molar);
 
   /**
    * @brief Sets the averaging scheme to use for computing properties.
    *
-   * Sets the averaging scheme as an AveragingType, can be one of:
+   * Sets the averaging scheme as an types::AveragingType, can be one of:
    *  Voigt
    *  Reuss
    *  VRH
@@ -204,7 +204,7 @@ class Assemblage : public CompositeMaterial {
    *  HashinShtrikman
    *
    */
-  void set_averaging_scheme(AveragingType scheme_type);
+  void set_averaging_scheme(types::AveragingType scheme_type);
 
   /**
    * @brief Sets the averaging scheme to use for computing properties.
@@ -216,7 +216,7 @@ class Assemblage : public CompositeMaterial {
 
   // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
-  void set_method(EOSType new_method) override;
+  void set_method(types::EOSType new_method) override;
   void set_method(std::shared_ptr<EquationOfState> new_method) override;
 
   /**
@@ -318,7 +318,7 @@ class Assemblage : public CompositeMaterial {
   double compute_thermal_expansivity() const override;
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
-  FormulaMap compute_formula() const override;
+  types::FormulaMap compute_formula() const override;
 
   // Overrides of pure virtual functions from CompositeMaterial
   int compute_n_endmembers() const override;

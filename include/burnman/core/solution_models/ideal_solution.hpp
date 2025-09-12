@@ -35,7 +35,7 @@ class IdealSolution : public SolutionModel{
  public:
 
   // Extend constructor
-  IdealSolution(const PairedEndmemberList& endmember_list);
+  IdealSolution(const types::PairedEndmemberList& endmember_list);
 
   // Public functions overriden from base class
   Eigen::ArrayXd compute_excess_partial_gibbs_free_energies(

@@ -25,8 +25,8 @@ struct BridgmaniteFixture {
   Mineral mg_si_perovskite;
   Mineral fe_si_perovskite;
   Mineral al_al_perovskite;
-  PairedEndmemberList bdg_endmembers;
-  std::shared_ptr<IdealSolution> bdg_solution_model;
+  types::PairedEndmemberList bdg_endmembers;
+  std::shared_ptr<solution_models::IdealSolution> bdg_solution_model;
   Eigen::ArrayXd molar_fractions;
   double P;
   double T;
@@ -34,7 +34,7 @@ struct BridgmaniteFixture {
   BridgmaniteFixture() {
     // Set MgPv params
     mg_si_perovskite.params.name = "MgSiO3 perovskite";
-    mg_si_perovskite.params.formula = FormulaMap{
+    mg_si_perovskite.params.formula = types::FormulaMap{
       {"Mg", 1.0},
       {"Si", 1.0},
       {"O", 3.0}
@@ -51,12 +51,12 @@ struct BridgmaniteFixture {
     mg_si_perovskite.params.grueneisen_0 = 1.57;
     mg_si_perovskite.params.q_0 = 1.1;
     mg_si_perovskite.params.eta_s_0 = 2.3;
-    mg_si_perovskite.params.equation_of_state = EOSType::SLB3;
+    mg_si_perovskite.params.equation_of_state = types::EOSType::SLB3;
     // Need to set method/name etc.
 
     // Set FePv params
     fe_si_perovskite.params.name = "FeSiO3 perovskite";
-    fe_si_perovskite.params.formula = FormulaMap{
+    fe_si_perovskite.params.formula = types::FormulaMap{
       {"Fe", 1.0},
       {"Si", 1.0},
       {"O", 3.0}
@@ -73,11 +73,11 @@ struct BridgmaniteFixture {
     fe_si_perovskite.params.grueneisen_0 = 1.57;
     fe_si_perovskite.params.q_0 = 1.1;
     fe_si_perovskite.params.eta_s_0 = 2.3;
-    fe_si_perovskite.params.equation_of_state = EOSType::SLB3;
+    fe_si_perovskite.params.equation_of_state = types::EOSType::SLB3;
 
     // Set AlPv params
     al_al_perovskite.params.name = "AlAlO3 perovskite";
-    al_al_perovskite.params.formula = FormulaMap{
+    al_al_perovskite.params.formula = types::FormulaMap{
       {"Al", 2.0},
       {"O", 3.0}
     };
@@ -93,7 +93,7 @@ struct BridgmaniteFixture {
     al_al_perovskite.params.grueneisen_0 = 1.57;
     al_al_perovskite.params.q_0 = 1.1;
     al_al_perovskite.params.eta_s_0 = 2.5;
-    al_al_perovskite.params.equation_of_state = EOSType::SLB3;
+    al_al_perovskite.params.equation_of_state = types::EOSType::SLB3;
 
     // Paired list for solution model setup
     bdg_endmembers = {
@@ -102,7 +102,7 @@ struct BridgmaniteFixture {
       {al_al_perovskite, "[Al][Al]O3"},
     };
     // Make solution model
-    bdg_solution_model = std::make_shared<IdealSolution>(bdg_endmembers);
+    bdg_solution_model = std::make_shared<solution_models::IdealSolution>(bdg_endmembers);
 
     // Store molar fractions here
     molar_fractions.resize(3);
@@ -118,15 +118,15 @@ struct FerropericlaseFixture {
   // Declare variables to use
   Mineral periclase;
   Mineral wuestite;
-  excesses::ExcessParamVector excess_params_wuestite;
-  PairedEndmemberList fp_endmembers;
-  std::shared_ptr<SymmetricRegularSolution> fp_solution_model;
+  eos::excesses::ExcessParamVector excess_params_wuestite;
+  types::PairedEndmemberList fp_endmembers;
+  std::shared_ptr<solution_models::SymmetricRegularSolution> fp_solution_model;
   Eigen::ArrayXd molar_fractions;
 
   FerropericlaseFixture() {
     // Periclase
     periclase.params.name = "Periclase";
-    periclase.params.formula = FormulaMap{
+    periclase.params.formula = types::FormulaMap{
           {"Mg", 1.0},
           {"O", 1.0}
         };
@@ -142,10 +142,10 @@ struct FerropericlaseFixture {
     periclase.params.grueneisen_0 = 1.36127;
     periclase.params.q_0 = 1.7217;
     periclase.params.eta_s_0 = 2.81765;
-    periclase.params.equation_of_state = EOSType::SLB3;
+    periclase.params.equation_of_state = types::EOSType::SLB3;
     // Wuestite
     wuestite.params.name = "Wuestite";
-    wuestite.params.formula = FormulaMap{
+    wuestite.params.formula = types::FormulaMap{
           {"Fe", 1.0},
           {"O", 1.0}
         };
@@ -161,8 +161,8 @@ struct FerropericlaseFixture {
     wuestite.params.grueneisen_0 = 1.53047;
     wuestite.params.q_0 = 1.7217;
     wuestite.params.eta_s_0 = -0.05731;
-    wuestite.params.equation_of_state = EOSType::SLB3;
-    excess_params_wuestite = { excesses::LinearParams{1.0, 2.0, 3.0} };
+    wuestite.params.equation_of_state = types::EOSType::SLB3;
+    excess_params_wuestite = { eos::excesses::LinearParams{1.0, 2.0, 3.0} };
     wuestite.set_property_modifier_params(excess_params_wuestite);
 
     // Paired list for solution model setup
@@ -171,7 +171,7 @@ struct FerropericlaseFixture {
       {wuestite, "[Fe]O"}
     };
     // Make solution model
-    fp_solution_model = std::make_shared<SymmetricRegularSolution>(
+    fp_solution_model = std::make_shared<solution_models::SymmetricRegularSolution>(
       fp_endmembers,
       std::vector<std::vector<double>>{{13.0e3}}
     );
@@ -186,7 +186,7 @@ struct CaPerovskiteFixture {
   Mineral ca_perovskite;
   CaPerovskiteFixture() {
     ca_perovskite.params.name = "Ca-perovskite";
-    ca_perovskite.params.formula = FormulaMap{
+    ca_perovskite.params.formula = types::FormulaMap{
           {"Ca", 1.0},
           {"Si", 1.0},
           {"O", 3.0}
@@ -203,16 +203,16 @@ struct CaPerovskiteFixture {
     ca_perovskite.params.grueneisen_0 = 1.88839;
     ca_perovskite.params.q_0 = 0.89769;
     ca_perovskite.params.eta_s_0 = 1.28818;
-    ca_perovskite.params.equation_of_state = EOSType::SLB3;
+    ca_perovskite.params.equation_of_state = types::EOSType::SLB3;
   }
 };
 
 struct StishoviteFixture {
   Mineral stishovite;
-  excesses::ExcessParamVector excess_params_stish;
+  eos::excesses::ExcessParamVector excess_params_stish;
   StishoviteFixture() {
     stishovite.params.name = "Stishovite";
-    stishovite.params.formula = FormulaMap{
+    stishovite.params.formula = types::FormulaMap{
           {"Si", 1.0},
           {"O", 2.0}
         };
@@ -228,8 +228,8 @@ struct StishoviteFixture {
     stishovite.params.grueneisen_0 = 1.37466;
     stishovite.params.q_0 = 2.83517;
     stishovite.params.eta_s_0 = 4.60904;
-    stishovite.params.equation_of_state = EOSType::SLB3;
-    excess_params_stish = { excesses::LandauParams{-4250.0, 1.0e-9, 0.012} };
+    stishovite.params.equation_of_state = types::EOSType::SLB3;
+    excess_params_stish = { eos::excesses::LandauParams{-4250.0, 1.0e-9, 0.012} };
     stishovite.set_property_modifier_params(excess_params_stish);
   }
 };
@@ -261,7 +261,7 @@ struct BdgFperAssemblageFixture {
   Assemblage assemblage;
   BdgFperAssemblageFixture() {
     assemblage.set_name("Bdg + Fper assemblage");
-    assemblage.set_averaging_scheme(AveragingType::VRH);
+    assemblage.set_averaging_scheme(types::AveragingType::VRH);
     assemblage.add_phase(bdg_fix.bdg);
     assemblage.add_phase(fp_fix.fp);
     assemblage.set_fractions({0.7, 0.3});
@@ -276,7 +276,7 @@ struct CaPvStishAssemblageFixture {
 
   CaPvStishAssemblageFixture() {
     assemblage.set_name("CaPv + Stish assemblage");
-    assemblage.set_averaging_scheme(AveragingType::VRH);
+    assemblage.set_averaging_scheme(types::AveragingType::VRH);
     assemblage.add_phase(capv_fix.ca_perovskite);
     assemblage.add_phase(stish_fix.stishovite);
     assemblage.set_fractions({0.6, 0.4});
@@ -292,7 +292,7 @@ struct PyroliteAssemblageFixture {
 
   PyroliteAssemblageFixture() {
     assemblage.set_name("Bdg + Fper + CaPv assemblage");
-    assemblage.set_averaging_scheme(AveragingType::VRH);
+    assemblage.set_averaging_scheme(types::AveragingType::VRH);
     assemblage.add_phase(bdg_fix.bdg);
     assemblage.add_phase(fp_fix.fp);
     assemblage.add_phase(capv_fix.ca_perovskite);
@@ -308,7 +308,7 @@ struct NestedAssemblageFixture {
 
   NestedAssemblageFixture() {
     assemblage.set_name("Nested assemblage");
-    assemblage.set_averaging_scheme(AveragingType::VRH);
+    assemblage.set_averaging_scheme(types::AveragingType::VRH);
     assemblage.add_phase(py_fix.assemblage);
     assemblage.add_phase(stish_fix.stishovite);
     assemblage.set_fractions({0.85, 0.15});

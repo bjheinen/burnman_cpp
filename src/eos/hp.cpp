@@ -15,7 +15,7 @@
 
 namespace burnman::eos {
 
-bool HP_TMT::validate_parameters(MineralParams& params) {
+bool HP_TMT::validate_parameters(types::MineralParams& params) {
   // Check for required keys
   if (!params.V_0.has_value()) {
     throw std::invalid_argument("params object missing parameter: V_0");
@@ -112,7 +112,7 @@ bool HP_TMT::validate_parameters(MineralParams& params) {
 double HP_TMT::compute_volume(
   double pressure,
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double Pth = compute_relative_thermal_pressure(temperature, params);
   return MT::compute_modified_tait_volume(pressure - Pth, params);
@@ -121,7 +121,7 @@ double HP_TMT::compute_volume(
 double HP_TMT::compute_pressure(
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // TODO: Check requires V/V0
   double Pth = compute_relative_thermal_pressure(temperature, params);
@@ -133,7 +133,7 @@ double HP_TMT::compute_grueneisen_parameter(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double alpha = compute_thermal_expansivity(
     pressure, temperature, volume, params);
@@ -148,7 +148,7 @@ double HP_TMT::compute_isothermal_bulk_modulus_reuss(
   double pressure,
   double temperature,
   double volume [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double Pth = compute_relative_thermal_pressure(temperature, params);
   return MT::compute_modified_tait_bulk_modulus(pressure - Pth, params);
@@ -158,7 +158,7 @@ double HP_TMT::compute_isentropic_bulk_modulus_reuss(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double K_T = compute_isothermal_bulk_modulus_reuss(
     pressure, temperature, volume, params);
@@ -173,7 +173,7 @@ double HP_TMT::compute_shear_modulus(
   double pressure [[maybe_unused]],
   double temperature [[maybe_unused]],
   double volume [[maybe_unused]],
-  const MineralParams& params [[maybe_unused]]
+  const types::MineralParams& params [[maybe_unused]]
 ) const {
   return 0.0;
 }
@@ -182,7 +182,7 @@ double HP_TMT::compute_molar_heat_capacity_v(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double C_p = compute_molar_heat_capacity_p(
     pressure, temperature, volume, params);
@@ -197,7 +197,7 @@ double HP_TMT::compute_molar_heat_capacity_p(
   double pressure,
   double temperature,
   double volume [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   auto [a, b, c] = MT::compute_tait_constants(params);
   double Pth = compute_relative_thermal_pressure(temperature, params);
@@ -229,7 +229,7 @@ double HP_TMT::compute_thermal_expansivity(
   double pressure,
   double temperature,
   double volume [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   auto [a, b, c] = MT::compute_tait_constants(params);
   double Pth = compute_relative_thermal_pressure(temperature, params);
@@ -247,7 +247,7 @@ double HP_TMT::compute_gibbs_free_energy(
   double pressure,
   double temperature,
   double volume [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   auto [a, b, c] = MT::compute_tait_constants(params);
   double Pth = compute_relative_thermal_pressure(temperature, params);
@@ -274,7 +274,7 @@ double HP_TMT::compute_entropy(
   double pressure,
   double temperature,
   double volume [[maybe_unused]],
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // S(P_0, T) = S_0 + int Cp/T dT
   // S(P, T) = S(P_0, T) + dintVdP/dT
@@ -299,7 +299,7 @@ double HP_TMT::compute_helmholtz_free_energy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   // TODO: check if call to compute_volume needed instead
   // TODO: these are unused, dead code?
@@ -315,7 +315,7 @@ double HP_TMT::compute_enthalpy(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double G = compute_gibbs_free_energy(
     pressure, temperature, volume, params);
@@ -328,7 +328,7 @@ double HP_TMT::compute_molar_heat_capacity_p_einstein(
   double pressure,
   double temperature,
   double volume,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double alpha = compute_thermal_expansivity(
     pressure, temperature, volume, params);
@@ -341,9 +341,9 @@ double HP_TMT::compute_molar_heat_capacity_p_einstein(
 
 double HP_TMT::compute_molar_heat_capacity_pref(
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
-  CpParams cp_params = *params.Cp;
+  types::CpParams cp_params = *params.Cp;
   return cp_params.a
     + cp_params.b * temperature
     + cp_params.c / (temperature * temperature)
@@ -352,10 +352,10 @@ double HP_TMT::compute_molar_heat_capacity_pref(
 
 double HP_TMT::compute_intCpdT(
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double T_0 = *params.T_0;
-  CpParams cp_params = *params.Cp;
+  types::CpParams cp_params = *params.Cp;
   return
     (
       cp_params.a * temperature
@@ -371,9 +371,9 @@ double HP_TMT::compute_intCpdT(
 
 double HP_TMT::compute_intCpoverTdT(
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
-  CpParams cp_params = *params.Cp;
+  types::CpParams cp_params = *params.Cp;
   double T_0 = *params.T_0;
   return
     (
@@ -390,7 +390,7 @@ double HP_TMT::compute_intCpoverTdT(
 
 double HP_TMT::compute_relative_thermal_pressure(
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   return compute_thermal_pressure(temperature, params)
     - compute_thermal_pressure(*params.T_0, params);
@@ -398,7 +398,7 @@ double HP_TMT::compute_relative_thermal_pressure(
 
 double HP_TMT::compute_thermal_pressure(
   double temperature,
-  const MineralParams& params
+  const types::MineralParams& params
 ) const {
   double E_th = einstein::compute_thermal_energy(
     temperature, *params.T_einstein, *params.napfu);

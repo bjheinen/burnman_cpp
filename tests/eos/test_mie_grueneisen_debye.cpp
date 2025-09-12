@@ -19,9 +19,9 @@
 using namespace Catch::Matchers;
 
 TEST_CASE("Test validate parameters", "[mgd][eos]") {
-  MGD3 mgd;
+  eos::MGD3 mgd;
   SECTION("Missing V_0") {
-    MineralParams params;
+    types::MineralParams params;
     params.K_0 = 161.0e9;
     params.Kprime_0 = 3.8;
     params.molar_mass = 0.0403;
@@ -32,7 +32,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_THROWS(mgd.validate_parameters(params));
   }
   SECTION("Missing K_0") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.Kprime_0 = 3.8;
     params.molar_mass = 0.0403;
@@ -43,7 +43,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_THROWS(mgd.validate_parameters(params));
   }
   SECTION("Missing Kprime_0") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.K_0 = 161.0e9;
     params.molar_mass = 0.0403;
@@ -54,7 +54,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_THROWS(mgd.validate_parameters(params));
   }
   SECTION("Missing molar mass") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.K_0 = 161.0e9;
     params.Kprime_0 = 3.8;
@@ -65,7 +65,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_THROWS(mgd.validate_parameters(params));
   }
   SECTION("Missing napfu") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.K_0 = 161.0e9;
     params.Kprime_0 = 3.8;
@@ -76,7 +76,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_THROWS(mgd.validate_parameters(params));
   }
   SECTION("Missing debye_0") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.K_0 = 161.0e9;
     params.Kprime_0 = 3.8;
@@ -87,7 +87,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_THROWS(mgd.validate_parameters(params));
   }
   SECTION("Missing grueneisen_0") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.K_0 = 161.0e9;
     params.Kprime_0 = 3.8;
@@ -98,7 +98,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
     REQUIRE_THROWS(mgd.validate_parameters(params));
   }
   SECTION("Missing q_0") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.K_0 = 161.0e9;
     params.Kprime_0 = 3.8;
@@ -110,7 +110,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
   }
 
   SECTION("Optional Parameters") {
-    MineralParams params;
+    types::MineralParams params;
     params.V_0 = 11.24e-6;
     params.K_0 = 161.0e9;
     params.Kprime_0 = 3.8;
@@ -138,7 +138,7 @@ TEST_CASE("Test validate parameters", "[mgd][eos]") {
 
 TEST_CASE("Check reference conditions", "[mgd][eos]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.E_0 = 0.0;
   params.T_0 = 300.0;
   params.P_0 = 0.0;
@@ -153,8 +153,8 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
   params.molar_mass = 0.0403;
   params.napfu = 2;
 
-  MGD2 mgd2;
-  MGD3 mgd3;
+  eos::MGD2 mgd2;
+  eos::MGD3 mgd3;
   REQUIRE_NOTHROW(mgd3.validate_parameters(params));
 
   SECTION("Independent functions") {
@@ -188,7 +188,7 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
       WithinRel(0.0, tol_rel) || WithinAbs(0.0, tol_abs));
   }
   SECTION("P-T-V dependent functions") {
-    MineralParams params_b = params;
+    types::MineralParams params_b = params;
     params_b.T_0 = 500;
     params_b.P_0 = 1.e6;
     double P = *params.P_0;
@@ -215,7 +215,7 @@ TEST_CASE("Check reference conditions", "[mgd][eos]") {
     CHECK_THAT(mgd3.compute_isentropic_bulk_modulus_reuss(P, T, V, params),
       !WithinRel(*params.K_0, tol_rel) && !WithinAbs(*params.K_0, tol_abs));
     // Copy params to set T_0 = 0
-    MineralParams params_T0 = params;
+    types::MineralParams params_T0 = params;
     params_T0.T_0 = 0;
     CHECK_THAT(mgd3.compute_isentropic_bulk_modulus_reuss(P, T, V, params_T0),
       WithinRel(*params.K_0, tol_rel) || WithinAbs(*params.K_0, tol_abs));
@@ -228,7 +228,7 @@ TEST_CASE("Shear modulus expansion", "[mgd][eos]") {
   double T = 2000.0;
   double V = 10.0e-6;
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.V_0 = 11.24e-6;
   params.K_0 = 161.0e9;
   params.Kprime_0 = 3.8;
@@ -237,8 +237,8 @@ TEST_CASE("Shear modulus expansion", "[mgd][eos]") {
   params.q_0 = 1.5;
   params.molar_mass = 0.0403;
   params.napfu = 2;
-  MGD2 mgd2;
-  MGD3 mgd3;
+  eos::MGD2 mgd2;
+  eos::MGD3 mgd3;
   // Validating should set G0/G' to nan
   mgd3.validate_parameters(params);
   REQUIRE_NOTHROW(mgd2.compute_shear_modulus(P, T, V, params));
@@ -258,7 +258,7 @@ TEST_CASE("Shear modulus expansion", "[mgd][eos]") {
 
 TEST_CASE("Test MGD volume", "[mgd][eos]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.T_0 = 300.0;
   params.P_0 = 0.0;
   params.E_0 = 0.0;
@@ -273,7 +273,7 @@ TEST_CASE("Test MGD volume", "[mgd][eos]") {
   params.q_0 = 1.4;
   params.molar_mass = 0.0403;
   params.napfu = 2;
-  MGD3 mgd;
+  eos::MGD3 mgd;
   double T_a = 800.0;
   double T_b = 2000.0;
   double V_a = 0.9 * (*params.V_0);
@@ -294,7 +294,7 @@ TEST_CASE("Test MGD volume", "[mgd][eos]") {
 
 TEST_CASE("MGD python reference values", "[mgd][eos]") {
   // Set up test params
-  MineralParams params;
+  types::MineralParams params;
   params.T_0 = 300.0;
   params.P_0 = 0.0;
   params.E_0 = 0.0;
@@ -315,7 +315,7 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
       double input;
       double expected_gamma;
     };
-    MGD3 mgd3;
+    eos::MGD3 mgd3;
     // P & T unused
     double P = 2.0e9;
     double T = 500.0;
@@ -335,8 +335,8 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
       WithinAbs(test_data.expected_gamma, tol_abs));
   }
   SECTION("T-V dependent functions") {
-    MGD3 mgd3;
-    MGD2 mgd2;
+    eos::MGD3 mgd3;
+    eos::MGD2 mgd2;
     double P = 2.e9;
     double T1 = 300, T2 = 800, T3 = 2500;
     double x1 = 0.99, x2 = 0.80, x3 = 0.40;
@@ -528,7 +528,7 @@ TEST_CASE("MGD python reference values", "[mgd][eos]") {
       WithinAbs(ref_alpha[key], tol_abs));
   }
   SECTION("P-T-V dependent functions") {
-    MGD3 mgd3;
+    eos::MGD3 mgd3;
     double P1 = 1.e9, P2 = 54.e9;
     double T1 = 800, T2 = 2500;
     double x1 = 0.99, x2 = 0.4;

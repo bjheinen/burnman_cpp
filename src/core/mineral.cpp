@@ -30,12 +30,12 @@ std::string Mineral::get_name() const {
 }
 
 void Mineral::set_property_modifier_params(
-  excesses::ExcessParamVector excess_params
+  eos::excesses::ExcessParamVector excess_params
 ) {
   property_modifier_params = excess_params;
 }
 
-excesses::Excesses Mineral::get_property_modifiers() const {
+eos::excesses::Excesses Mineral::get_property_modifiers() const {
   return property_modifier_excesses;
 }
 
@@ -43,16 +43,16 @@ void Mineral::set_method(std::shared_ptr<EquationOfState> new_method) {
   // Here new_method is a shared pointer to an EOS class
   eos_method = std::move(new_method);
   // Set the params.equation_of_state to Custom
-  params.equation_of_state = EOSType::Custom;
+  params.equation_of_state = types::EOSType::Custom;
   // Clear material properties cache
   reset();
   // Validate parameters
   eos_method->validate_parameters(params);
 }
 
-void Mineral::set_method(EOSType new_method) {
+void Mineral::set_method(types::EOSType new_method) {
   // Check if EOSType is Auto and update from params
-  if (new_method == EOSType::Auto) {
+  if (new_method == types::EOSType::Auto) {
     if (params.equation_of_state.has_value()) {
       new_method = *params.equation_of_state;
     } else {
@@ -81,11 +81,11 @@ void Mineral::set_state(
 
 void Mineral::compute_property_modifiers() {
   // Reset modifiers to zero
-  property_modifier_excesses = excesses::Excesses();
+  property_modifier_excesses = eos::excesses::Excesses();
   // Loop through param vector and call overloaded excess func
   for (const auto& excess_param : property_modifier_params) {
     std::visit([&](auto&& p) {
-        property_modifier_excesses += excesses::compute_excesses(
+        property_modifier_excesses += eos::excesses::compute_excesses(
           get_pressure(),
           get_temperature(),
           p);
@@ -165,7 +165,7 @@ double Mineral::compute_shear_modulus() const {
 }
 
 // Mineral properties (non EOS)
-FormulaMap Mineral::compute_formula() const {
+types::FormulaMap Mineral::compute_formula() const {
   if (params.formula.has_value()) {
     return *params.formula;
   } else {

@@ -17,7 +17,7 @@
 
 namespace burnman::solution_models {
 
-SolutionModel::SolutionModel(const PairedEndmemberList& endmember_list) {
+SolutionModel::SolutionModel(const types::PairedEndmemberList& endmember_list) {
   this->n_endmembers = static_cast<Eigen::Index>(endmember_list.size());
   this->endmembers.reserve(static_cast<std::size_t>(this->n_endmembers));
   this->formulas.reserve(static_cast<std::size_t>(this->n_endmembers));

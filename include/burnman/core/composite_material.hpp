@@ -75,7 +75,7 @@ class CompositeMaterial : public Material {
    * Each formula is a FormulaMap, where
    * FormulaMap = std::unordered_map<std::string, double>>;
    */
-  const std::vector<FormulaMap>& get_endmember_formulae() const;
+  const std::vector<types::FormulaMap>& get_endmember_formulae() const;
 
   /**
    * @brief The independent set of element indices.
@@ -155,7 +155,7 @@ class CompositeMaterial : public Material {
 
   // Protected setters
   void set_endmember_names(std::vector<std::string> names) const;
-  void set_endmember_formulae(std::vector<FormulaMap> formulae) const; 
+  void set_endmember_formulae(std::vector<types::FormulaMap> formulae) const; 
 
  private:
 
@@ -169,7 +169,7 @@ class CompositeMaterial : public Material {
   mutable std::optional<std::vector<Eigen::Index>> dependent_element_indices;
   mutable std::optional<std::vector<std::string>> endmember_names;
   mutable std::optional<std::vector<std::string>> elements;
-  mutable std::optional<std::vector<FormulaMap>> endmember_formulae;
+  mutable std::optional<std::vector<types::FormulaMap>> endmember_formulae;
   mutable std::optional<Eigen::MatrixXd> stoichiometric_matrix;
   mutable std::optional<Eigen::MatrixXd> reduced_stoichiometric_matrix;
   mutable std::optional<Eigen::MatrixXd> compositional_basis;

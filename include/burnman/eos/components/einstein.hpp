@@ -49,7 +49,7 @@ namespace einstein {
   double compute_thermal_energy(
     double temperature,
     double einstein_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_thermal_energy(
@@ -89,7 +89,7 @@ namespace einstein {
   double compute_molar_heat_capacity_v(
     double temperature,
     double einstein_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_molar_heat_capacity_v(
@@ -139,7 +139,7 @@ namespace einstein {
   double compute_helmholtz_free_energy(
     double temperature,
     double einstein_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_helmholtz_free_energy(
@@ -179,7 +179,7 @@ namespace einstein {
   double compute_entropy(
     double temperature,
     double einstein_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_entropy(
@@ -219,7 +219,7 @@ namespace einstein {
   double compute_dmolar_heat_capacity_v_dT(
     double temperature,
     double einstein_temperature,
-    ExplicitDouble f);
+    types::ExplicitDouble f);
 
   // Deleted overload to prevent implicit conversion
   double compute_dmolar_heat_capacity_v_dT(

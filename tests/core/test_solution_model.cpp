@@ -22,12 +22,12 @@ using namespace Catch::Matchers;
 struct OlivineFixture {
   Mineral forsterite;
   Mineral fayalite;
-  PairedEndmemberList olivine_endmembers;
+  types::PairedEndmemberList olivine_endmembers;
 
   OlivineFixture() {
     // Set fo parameters
     forsterite.params.name = "Forsterite";
-    forsterite.params.formula = FormulaMap{
+    forsterite.params.formula = types::FormulaMap{
       {"Mg", 2.0},
       {"Si", 1.0},
       {"O", 4.0}
@@ -40,14 +40,14 @@ struct OlivineFixture {
     forsterite.params.Kdprime_0 = -3e-11;
     forsterite.params.H_0 = -2172590.0;
     forsterite.params.S_0 = 95.1;
-    forsterite.params.Cp = CpParams{233.3, 0.001494, -603800.0, -1869.7};
+    forsterite.params.Cp = types::CpParams{233.3, 0.001494, -603800.0, -1869.7};
     forsterite.params.a_0 = 2.85e-05;
-    forsterite.params.equation_of_state = EOSType::SLB3; // TODO! Change!
+    forsterite.params.equation_of_state = types::EOSType::SLB3; // TODO! Change!
     // Params not needed here... use for Solution test
 
     // Fayalite
     fayalite.params.name = "Fayalite";
-    fayalite.params.formula = FormulaMap{
+    fayalite.params.formula = types::FormulaMap{
       {"Fe", 2.0},
       {"Si", 1.0},
       {"O", 4.0}
@@ -60,9 +60,9 @@ struct OlivineFixture {
     fayalite.params.Kdprime_0 = -3.7e-11;
     fayalite.params.H_0 = -1477720.0;
     fayalite.params.S_0 = 151.0;
-    fayalite.params.Cp = CpParams{201.1, 0.01733, -1960600.0, -900.9};
+    fayalite.params.Cp = types::CpParams{201.1, 0.01733, -1960600.0, -900.9};
     fayalite.params.a_0 = 2.82e-05;
-    fayalite.params.equation_of_state = EOSType::SLB3; // TODO!
+    fayalite.params.equation_of_state = types::EOSType::SLB3; // TODO!
 
     // Paired list for solution model setup
     olivine_endmembers = {
@@ -74,7 +74,7 @@ struct OlivineFixture {
 
 struct MultiSiteFixture {
   Mineral min;
-  PairedEndmemberList em;
+  types::PairedEndmemberList em;
   MultiSiteFixture() {
     em = {
       {min, "[Mg]3[Al]2Si3O12"},
@@ -86,7 +86,7 @@ struct MultiSiteFixture {
 
 TEST_CASE_METHOD(OlivineFixture, "IdealSolution", "[core][solution_model]") {
   // Create IdealSolution model
-  IdealSolution ol_ss(olivine_endmembers);
+  solution_models::IdealSolution ol_ss(olivine_endmembers);
   SECTION("Derived parameters") {
     // Check endmembers (Mineral objects) can be accessed in order
     REQUIRE(ol_ss.endmembers[0].get_name() == "Forsterite");
@@ -129,11 +129,11 @@ TEST_CASE_METHOD(OlivineFixture, "IdealSolution", "[core][solution_model]") {
 }
 
 TEST_CASE_METHOD(OlivineFixture, "Single ss", "[core][solution_model]") {
-  PairedEndmemberList fo_repeat = {
+  types::PairedEndmemberList fo_repeat = {
     {forsterite, "[Mg]2SiO4"},
     {forsterite, "[Mg]2SiO4"}
   };
-  IdealSolution fo_ss(fo_repeat);
+  solution_models::IdealSolution fo_ss(fo_repeat);
   // Ensure different objects
   REQUIRE(&fo_ss.endmembers[0] != &fo_ss.endmembers[1]);
   // ints
@@ -160,7 +160,7 @@ TEST_CASE_METHOD(OlivineFixture, "Single ss", "[core][solution_model]") {
 }
 
 TEST_CASE_METHOD(MultiSiteFixture, "Check multi-site solutions", "[core][solution_model]") {
-  IdealSolution sol(em);
+  solution_models::IdealSolution sol(em);
   // ints
   CHECK(sol.n_endmembers == 3);
   CHECK(sol.n_occupancies == 5);
@@ -205,15 +205,15 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
             0,               0,          -5000,
             0,               0,              0;
   SECTION("Symmetric Solution - alphas") {
-    SymmetricRegularSolution sym_sol(em, interactions);
-    AsymmetricRegularSolution asym_sol(em, a_ones, interactions);
+    solution_models::SymmetricRegularSolution sym_sol(em, interactions);
+    solution_models::AsymmetricRegularSolution asym_sol(em, a_ones, interactions);
     REQUIRE(sym_sol.alphas.size() == 3);
     REQUIRE((sym_sol.alphas == asym_sol.alphas).all());
     REQUIRE(sym_sol.alphas.isOnes());
   }
   SECTION("Symmetric Solution - interactions") {
-    SymmetricRegularSolution e_sol(em, interactions);
-    SymmetricRegularSolution evs_sol(em, interactions, interactions, interactions);
+    solution_models::SymmetricRegularSolution e_sol(em, interactions);
+    solution_models::SymmetricRegularSolution evs_sol(em, interactions, interactions, interactions);
     REQUIRE(e_sol.W_e.rows() == e_sol.W_e.cols());
     REQUIRE(e_sol.W_v.rows() == e_sol.W_v.cols());
     REQUIRE(e_sol.W_s.rows() == e_sol.W_s.cols());
@@ -225,7 +225,7 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
     CHECK(evs_sol.W_e.isApprox(evs_sol.W_s, tol_rel));
   }
   SECTION("Asymmetric Solution - interactions") {
-    AsymmetricRegularSolution sol(em, alphas, interactions);
+    solution_models::AsymmetricRegularSolution sol(em, alphas, interactions);
     REQUIRE(sol.alphas.size() == 3);
     REQUIRE((sol.alphas == (Eigen::ArrayXd(3) << 1, 2, 2).finished()).all());
     CHECK(sol.W_e.isApprox(ref_Wa, tol_rel));
@@ -234,7 +234,7 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
 
 TEST_CASE("Reference value tests", "[core][solution_model]") {
   Mineral min;
-  PairedEndmemberList gr;
+  types::PairedEndmemberList gr;
   gr = {
     {min, "[Mg]3[Al]2Si3O12"},
     {min, "[Fe]3[Al]2Si3O12"},
@@ -267,7 +267,7 @@ TEST_CASE("Reference value tests", "[core][solution_model]") {
   x << 0.23, 0.17, 0.08, 0.34, 0.18;
 
   SECTION("IdealSolution Model") {
-    IdealSolution ideal_sol(gr);
+    solution_models::IdealSolution ideal_sol(gr);
     double ref_ideal_excess_gibbs_free_energy = -34248.55396907213;
     double ref_ideal_excess_entropy = 42.81069246134016;
     Eigen::ArrayXd ref_ideal_excess_partial_gibbs_free_energies(5);
@@ -320,7 +320,7 @@ TEST_CASE("Reference value tests", "[core][solution_model]") {
     CHECK(ideal_sol.compute_volume_hessian(P, T, x).isZero());
   }
   SECTION("SymmetricRegularSolution Model") {
-    SymmetricRegularSolution sym_sol(gr, energy_interaction, volume_interaction, entropy_interaction);
+    solution_models::SymmetricRegularSolution sym_sol(gr, energy_interaction, volume_interaction, entropy_interaction);
     double ref_sym_excess_gibbs_free_energy = -16920.505969072132;
     double ref_sym_excess_volume = 2.4314000000000005e-07;
     double ref_sym_excess_entropy = 45.030732461340165;
@@ -374,7 +374,7 @@ TEST_CASE("Reference value tests", "[core][solution_model]") {
     CHECK(sym_sol.compute_volume_hessian(P, T, x).isApprox(ref_sym_volume_hessian, tol_rel));
   }
   SECTION("AsymmetricRegularSolution Model") {
-    AsymmetricRegularSolution asym_sol(gr, alphas, energy_interaction, volume_interaction, entropy_interaction);
+    solution_models::AsymmetricRegularSolution asym_sol(gr, alphas, energy_interaction, volume_interaction, entropy_interaction);
     double ref_asym_excess_gibbs_free_energy = -22525.964050283328;
     double ref_asym_excess_volume = 2.304419999477851e-07;
     double ref_asym_excess_entropy = 44.72732646370144;

@@ -13,7 +13,7 @@ namespace burnman::solution_models {
 
 // SymmetricRegularSolution Constructor
 SymmetricRegularSolution::SymmetricRegularSolution(
-  const PairedEndmemberList& endmember_list,
+  const types::PairedEndmemberList& endmember_list,
   std::vector<std::vector<double>> energy_interaction,
   std::vector<std::vector<double>> volume_interaction,
   std::vector<std::vector<double>> entropy_interaction)

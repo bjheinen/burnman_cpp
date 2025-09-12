@@ -58,7 +58,7 @@ class SolutionModel {
   //  Consider size_t for n_endmembers etc.
 
   // Constructor
-  SolutionModel(const PairedEndmemberList& endmember_list);
+  SolutionModel(const types::PairedEndmemberList& endmember_list);
 
   virtual ~SolutionModel() = default;
   void process_solution_chemistry();

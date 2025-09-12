@@ -109,7 +109,7 @@ class Solution : public CompositeMaterial {
 
   // Override public methods
   void set_state(double new_pressure, double new_temperature) override;
-  void set_method(EOSType new_method) override;
+  void set_method(types::EOSType new_method) override;
   void set_method(std::shared_ptr<EquationOfState> new_method) override;
 
   // Public setters for Solution
@@ -345,7 +345,7 @@ class Solution : public CompositeMaterial {
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
   double compute_isentropic_thermal_gradient() const override;
-  FormulaMap compute_formula() const override;
+  types::FormulaMap compute_formula() const override;
 
   // Overrides of pure virtual functions from CompositeMaterial
   int compute_n_endmembers() const override;

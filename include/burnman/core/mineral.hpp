@@ -27,7 +27,7 @@ namespace burnman {
  * States and properties of the mineral can only be queried after
  * setting the P, T or V, T condition with set_state.
  * Use `set_method` to set the EOS for computing properties.
- * @see EOSType for predefined equations of state, or pass a pointer to a
+ * @see types::EOSType for predefined equations of state, or pass a pointer to a
  * class derived from EquationOfState.
  *
  * All material parameters expected in SI units.
@@ -42,19 +42,19 @@ class Mineral : public Material{
  public:
 
   // Parameter object
-  MineralParams params;
+  types::MineralParams params;
 
   // Pointer to EOS Class to use
   std::shared_ptr<EquationOfState> eos_method;
 
   // TODO: Doc
-  void set_property_modifier_params(excesses::ExcessParamVector excess_params);
-  excesses::Excesses get_property_modifiers() const;
+  void set_property_modifier_params(eos::excesses::ExcessParamVector excess_params);
+  eos::excesses::Excesses get_property_modifiers() const;
 
   // Override public methods
   std::string get_name() const override;
   void set_state(double new_pressure, double new_temperature) override;
-  void set_method(EOSType new_method) override;
+  void set_method(types::EOSType new_method) override;
   void set_method(std::shared_ptr<EquationOfState> new_method) override;
 
  protected:
@@ -103,13 +103,13 @@ class Mineral : public Material{
   double compute_molar_heat_capacity_v() const override;
   double compute_molar_heat_capacity_p() const override;
   double compute_isentropic_thermal_gradient() const override;
-  FormulaMap compute_formula() const override;
+  types::FormulaMap compute_formula() const override;
 
  private:
   // Excesses struct for property modifiers
   // Values initialise to 0
-  excesses::Excesses property_modifier_excesses;
-  excesses::ExcessParamVector property_modifier_params;
+  eos::excesses::Excesses property_modifier_excesses;
+  eos::excesses::ExcessParamVector property_modifier_params;
 
 };
 
