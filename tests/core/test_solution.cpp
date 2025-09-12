@@ -258,8 +258,8 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reactions", "[core][solution]") {
     {mg_si_perovskite, "[Mg][Si]O3"},
     {fe_si_perovskite, "[Fe][Si]O3"}
   };
-  std::shared_ptr<IdealSolution> sol_model;
-  sol_model = std::make_shared<IdealSolution>(em);
+  std::shared_ptr<solution_models::IdealSolution> sol_model;
+  sol_model = std::make_shared<solution_models::IdealSolution>(em);
   Solution sol;
   sol.set_solution_model(sol_model);
   REQUIRE(sol.get_n_endmembers() == 4);
