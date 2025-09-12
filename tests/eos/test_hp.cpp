@@ -28,7 +28,7 @@ TEST_CASE("Test validate parameters", "[eos][hp]") {
   params.K_0 = 251000e6;
   params.Kprime_0 = 4.14;
   params.Kdprime_0 = -1.6e-11;
-  params.Cp = CpParams{149.3, 0.002918, -2983000.0, -799.1};
+  params.Cp = types::CpParams{149.3, 0.002918, -2983000.0, -799.1};
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
@@ -104,7 +104,7 @@ TEST_CASE("Check reference conditions", "[eos][hp]") {
   params.K_0 = 251000e6;
   params.Kprime_0 = 4.14;
   params.Kdprime_0 = -1.6e-11;
-  params.Cp = CpParams{149.3, 0.002918, -2983000.0, -799.1};
+  params.Cp = types::CpParams{149.3, 0.002918, -2983000.0, -799.1};
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
@@ -171,7 +171,7 @@ TEST_CASE("Test volume", "[eos][hp]") {
   params.K_0 = 251000e6;
   params.Kprime_0 = 4.14;
   params.Kdprime_0 = -1.6e-11;
-  params.Cp = CpParams{149.3, 0.002918, -2983000.0, -799.1};
+  params.Cp = types::CpParams{149.3, 0.002918, -2983000.0, -799.1};
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
@@ -203,7 +203,7 @@ TEST_CASE("HP python reference values", "[eos][hp]") {
   params.K_0 = 251000e6;
   params.Kprime_0 = 4.14;
   params.Kdprime_0 = -1.6e-11;
-  params.Cp = CpParams{149.3, 0.002918, -2983000.0, -799.1};
+  params.Cp = types::CpParams{149.3, 0.002918, -2983000.0, -799.1};
   params.a_0 = 1.87e-05;
   params.H_0 = -1443030.0;
   params.S_0 = 62.6;
