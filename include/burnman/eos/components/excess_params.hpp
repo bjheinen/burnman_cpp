@@ -13,8 +13,8 @@
 #include <variant>
 #include <vector>
 
-// TODO: move to /eos/components, alias in types.hpp for user includes
 namespace burnman {
+namespace eos {
 namespace excesses {
   /**
   * Sruct to hold excesses data for EOS modifiers
@@ -135,6 +135,7 @@ namespace excesses {
   using ExcessParamVector = std::vector<ExcessParamVariant>;
 
 } // namespace excesses
+} // namespace eos
 } // namesapce burnman
 
 #endif // BURNMAN_EOS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
