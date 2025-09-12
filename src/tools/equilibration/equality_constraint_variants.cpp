@@ -208,14 +208,14 @@ double TemperatureConstraint::evaluate(
 }
 
 double EntropyConstraint::evaluate(
-  const Eigen::VectorXd& [[maybe_unused]],
+  const Eigen::VectorXd& x [[maybe_unused]],
   const Assemblage& assemblage
 ) const {
   return assemblage.get_molar_entropy() * assemblage.get_n_moles() - this->value_;
 }
 
 double VolumeConstraint::evaluate(
-  const Eigen::VectorXd& [[maybe_unused]],
+  const Eigen::VectorXd& x [[maybe_unused]],
   const Assemblage& assemblage
 ) const {
   return assemblage.get_molar_volume() * assemblage.get_n_moles() - this->value_;
