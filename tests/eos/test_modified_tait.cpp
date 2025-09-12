@@ -70,7 +70,7 @@ TEST_CASE("Tait constant", "[modified_tait][eos]") {
   params.K_0 = 161.0e9;
   params.Kprime_0 = 4.0;
   params.Kdprime_0 = -4.0e-11;
-  TaitConstants result;
+  eos::TaitConstants result;
   SECTION("Kdprime_0 zero behaviour") {
     params.Kdprime_0 = 0;
     result = eos::MT::compute_tait_constants(params);
