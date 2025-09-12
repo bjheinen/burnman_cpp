@@ -28,7 +28,7 @@ DampedNewtonResult DampedNewtonSolver::solve(
   DampedNewtonResult sol;
   DampedNewtonSolverState state{x0, F_func, linear_constraints};
 
-  if (settings.store_iterates) {
+  if (this->settings.store_iterates) {
     // Initialise Iterates in-place
     sol.iteration_history.emplace();
     sol.iteration_history->x.push_back(state.x);
@@ -47,7 +47,7 @@ DampedNewtonResult DampedNewtonSolver::solve(
     state.dx = state.luJ.solve(-state.F);
     state.dx_norm = state.dx.norm();
     // Get lambda_bounds from function
-    state.lambda_bounds = settings.lambda_bounds_func(state.dx, state.x);
+    state.lambda_bounds = this->settings.lambda_bounds_func(state.dx, state.x);
     state.h = state.lambda
       * (state.dxbar - state.dx).norm()
       * state.dx_norm

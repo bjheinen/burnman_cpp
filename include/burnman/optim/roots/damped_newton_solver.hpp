@@ -31,10 +31,10 @@ class DampedNewtonSolver {
 
   /**
    * @brief Construct solver with optional settings
-   * @param settings Solve parameters (default-intialised)
+   * @param solver_settings Solve parameters (default-intialised)
    */
-  explicit DampedNewtonSolver(DampedNewtonSettings settings = {})
-    : settings(std::move(settings)) {}
+  explicit DampedNewtonSolver(DampedNewtonSettings solver_settings = {})
+    : settings(std::move(solver_settings)) {}
 
   /**
    * @brief Solve F(x) = 0 with optional linear constraints
@@ -60,7 +60,6 @@ class DampedNewtonSolver {
  private:
 
   DampedNewtonSettings settings;
-  LinearConstraints linear_constraints;
 
   /**
    * @brief Evaluates the linear constraints (A·x + b)
