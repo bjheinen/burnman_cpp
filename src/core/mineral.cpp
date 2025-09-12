@@ -60,7 +60,7 @@ void Mineral::set_method(types::EOSType new_method) {
     }
   }
   // Here the new_method is a predefined enum
-  eos_method = make_eos(new_method);
+  eos_method = eos::make_eos(new_method);
   // Set the params.equation_of_state to new type
   params.equation_of_state = new_method;
   // Clear materials properties cache
