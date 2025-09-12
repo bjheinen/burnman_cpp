@@ -16,6 +16,12 @@
 #include <vector>
 
 namespace burnman {
+
+  /**
+  * Forward declarations
+  */
+  class Mineral;
+
   namespace types {
 
     /**
@@ -68,11 +74,6 @@ namespace burnman {
       Mass,
       Volume
     };
-
-    /**
-    * Forward declarations
-    */
-    class Mineral;
 
     /**
     * Type aliases for constructing solid solution models.
