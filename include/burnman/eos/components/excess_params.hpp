@@ -7,8 +7,8 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#ifndef BURNMAN_UTILS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
-#define BURNMAN_UTILS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
+#ifndef BURNMAN_EOS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
+#define BURNMAN_EOS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
 
 #include <variant>
 #include <vector>
@@ -137,4 +137,4 @@ namespace excesses {
 } // namespace excesses
 } // namesapce burnman
 
-#endif // BURNMAN_UTILS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
+#endif // BURNMAN_EOS_TYPES_EXCESS_PARAMS_HPP_INCLUDED
