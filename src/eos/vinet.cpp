@@ -10,7 +10,7 @@
 #include "burnman/eos/vinet.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/eos/components/gsl_params.hpp"
 #include "burnman/optim/roots/brent.hpp"
 
 namespace burnman::eos {

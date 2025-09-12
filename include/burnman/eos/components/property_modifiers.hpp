@@ -10,7 +10,7 @@
 #ifndef BURNMAN_EOS_PROPERTY_MODIFIERS_HPP_INCLUDED
 #define BURNMAN_EOS_PROPERTY_MODIFIERS_HPP_INCLUDED
 
-#include "burnman/utils/types/excess_params.hpp"
+#include "burnman/eos/components/excess_params.hpp"
 
 namespace burnman {
 namespace eos {

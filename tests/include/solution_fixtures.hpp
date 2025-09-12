@@ -14,7 +14,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "burnman/utils/types/simple_types.hpp"
-#include "burnman/utils/types/excess_params.hpp"
+#include "burnman/eos/components/excess_params.hpp"
 #include "burnman/core/mineral.hpp"
 #include "burnman/core/solution_model.hpp"
 #include "burnman/core/solution.hpp"

@@ -10,7 +10,7 @@
 #include "burnman/eos/slb.hpp"
 #include <cmath>
 #include <stdexcept>
-#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/eos/components/gsl_params.hpp"
 #include "burnman/optim/roots/bracket.hpp"
 #include "burnman/optim/roots/brent.hpp"
 #include "burnman/eos/components/bukowinski_electronic.hpp"

@@ -14,7 +14,7 @@
 #include <string>
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/utils/types/mineral_params.hpp"
-#include "burnman/utils/types/excess_params.hpp"
+#include "burnman/eos/components/excess_params.hpp"
 #include "burnman/core/equation_of_state.hpp"
 #include "burnman/core/material.hpp"
 

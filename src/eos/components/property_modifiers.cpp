@@ -11,7 +11,7 @@
 #include <cmath>
 #include "burnman/utils/constants.hpp"
 #include "burnman/utils/types/simple_types.hpp"
-#include "burnman/utils/types/gsl_params.hpp"
+#include "burnman/eos/components/gsl_params.hpp"
 #include "burnman/eos/components/debye.hpp"
 #include "burnman/eos/components/einstein.hpp"
 #include "burnman/optim/roots/brent.hpp"
