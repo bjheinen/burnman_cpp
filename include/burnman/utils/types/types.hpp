@@ -13,7 +13,7 @@
 #include "burnman/utils/types/simple_types.hpp"
 #include "burnman/utils/types/ndarray.hpp"
 #include "burnman/utils/types/mineral_params.hpp"
-#include "burnma/eos/components/excess_params.hpp"
+#include "burnman/eos/components/excess_params.hpp"
 
 namespace burnman {
   /**
@@ -26,16 +26,16 @@ namespace burnman {
   namespace types {
     // Aliases to expose excess_params types to user via burnman::types
     using LandauParams = burnman::eos::excesses::LandauParams;
-    using LandauSLB2022Params = burnman::eos::excesses::LandauSLB2022Params
-    using LandauHPParams = burnman::eos::excesses::LandauHPParams
-    using LinearParams = burnman::eos::excesses::LinearParams
-    using BraggWilliamsParams = burnman::eos::excesses::BraggWilliamsParams
-    using MagneticChsParams = burnman::eos::excesses::MagneticChsParams
-    using DebyeParams = burnman::eos::excesses::DebyeParams
-    using DebyeDeltaParams = burnman::eos::excesses::DebyeDeltaParams
-    using EinsteinParams = burnman::eos::excesses::EinsteinParams
-    using EinsteinDeltaParams = burnman::eos::excesses::EinsteinDeltaParams
-    using ExcessParamVector = burnman::eos::excesses::ExcessParamVector
+    using LandauSLB2022Params = burnman::eos::excesses::LandauSLB2022Params;
+    using LandauHPParams = burnman::eos::excesses::LandauHPParams;
+    using LinearParams = burnman::eos::excesses::LinearParams;
+    using BraggWilliamsParams = burnman::eos::excesses::BraggWilliamsParams;
+    using MagneticChsParams = burnman::eos::excesses::MagneticChsParams;
+    using DebyeParams = burnman::eos::excesses::DebyeParams;
+    using DebyeDeltaParams = burnman::eos::excesses::DebyeDeltaParams;
+    using EinsteinParams = burnman::eos::excesses::EinsteinParams;
+    using EinsteinDeltaParams = burnman::eos::excesses::EinsteinDeltaParams;
+    using ExcessParamVector = burnman::eos::excesses::ExcessParamVector;
   } // namespace types
 } // namespace burnman
 
