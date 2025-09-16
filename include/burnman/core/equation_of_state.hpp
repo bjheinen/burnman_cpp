@@ -16,32 +16,22 @@
 namespace burnman {
 
 /**
- * Base class for Equations of State.
-
-  TODO
-  Python doc:
-
-    This class defines the interface for an equation of state
-    that a mineral uses to determine its properties at a
-    given :math:`P, T`.  In order define a new equation of state, you
-    should define these functions.
-
-    All functions should accept and return values in SI units.
-
-    In general these functions are functions of pressure,
-    temperature, and volume, as well as a "params" object,
-    which is a Python dictionary that stores the material
-    parameters of the mineral, such as reference volume,
-    Debye temperature, reference moduli, etc.
-
-    The functions for volume and density are just functions
-    of temperature, pressure, and "params"; after all, it
-    does not make sense for them to be functions of volume or density.
-
-  TODO
-  Funcs:
-
- */ 
+ * @class EquationOfState
+ * @brief Base class for Equations of State.
+ *
+ * Provides the interface for an equation of state that a Mineral object
+ * uses to determine its properties at a given \f$ P, T \f$.
+ *
+ * New equations of state should override the virtual functions
+ * defined here. If called, the default implementations will
+ * throw `exceptions::NotImplementedError`.
+ *
+ * All functions should accept and return values in SI units.
+ *
+ * In general, EquationOfState methods are functions of pressure,
+ * temperature, and/or volume, as well as a `types::MineralParams' object.
+ *
+ */
 class EquationOfState {
 
  public:
@@ -54,7 +44,7 @@ class EquationOfState {
    *
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Density in [kg/m^3].
    */
   double compute_density(double volume, const types::MineralParams& params) const;
@@ -83,7 +73,7 @@ class EquationOfState {
    * @param pressure The pressure to evaluate [Pa].
    * @param temperature The temperature to evaluate [K].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Molar volume in [m^3].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -101,7 +91,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Pressure in [Pa].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -120,7 +110,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Grueneisen parameter [unitless].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -140,7 +130,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Isothermal bulk modulus in [Pa].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -160,7 +150,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Isentropic bulk modulus in [Pa].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -180,7 +170,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Shear modulus in [Pa].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -200,7 +190,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Heat capacity at constant volume in [J/K/mol].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -220,7 +210,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Heat capacity at constant pressure in [J/K/mol].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -240,7 +230,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Thermal expansivity in [1/K].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -260,7 +250,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Gibbs free energy in [J/mol].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -281,7 +271,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Helmholtz free energy in [J/mol].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -301,7 +291,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Entropy in [J/K/mol].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -321,7 +311,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Enthalpy in [J/mol].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -341,7 +331,7 @@ class EquationOfState {
    * @param temperature The temperature to evaluate [K].
    * @param volume Molar volume of the mineral [m^3].
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Internal energy in [J/mol].
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -360,7 +350,7 @@ class EquationOfState {
    * Use __func__ for method name
    */
   [[noreturn]] void throw_not_implemented_error(const std::string& method) const;
-  
+
   /**
    * @brief Helper function to get name of class (incl. derived)
    */
