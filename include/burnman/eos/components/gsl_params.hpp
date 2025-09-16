@@ -12,7 +12,6 @@
 
 #include "burnman/utils/types/mineral_params.hpp"
 
-// TODO: move to /eos/components - no need to expose as not user-facing
 namespace burnman {
 namespace eos {
 
