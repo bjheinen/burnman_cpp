@@ -54,10 +54,13 @@ class EquationOfState {
   // Helper functions
   /**
    * @brief Validates the MineralParams object for EOS
-   * TODO: documentation after implementation done
-   *       function is not const
-   *       MineralParams reference is not const (sometime need to set defaults)
-   *       return type bool/void? depends on throwing error inside/outside func
+   *
+   * Checks for required parameters, sets defaults for missing optional ones,
+   * and verifies that parameters are within reasonable ranges.
+   *
+   * @param params Mineral parameters object of type `types::MineralParams'.
+   *               May be modified to set defaults.
+   * TODO: throw error if not - no return?
    * @note Default implementation passes quietly
    *       Derived classes should override method.
    */
