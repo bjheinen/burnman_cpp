@@ -64,8 +64,8 @@ ConstraintGroup make_constraints_from_array(
 ) {
   ConstraintGroup constraints;
   if constexpr (std::is_same_v<std::decay_t<ConstraintT>, PTEllipseConstraint>) {
-    const Eigen::ArrayXXd& centres = args.first;
-    const Eigen::ArrayXXd& scales = args.second;
+    const Eigen::Array<double, 2, Eigen::Dynamic>& centres = args.first;
+    const Eigen::Array<double, 2, Eigen::Dynamic>& scales = args.second;
     if (centres.cols() != scales.cols()) {
       throw std::runtime_error("Mismatch in number of constraints");
     }
@@ -129,7 +129,7 @@ inline ConstraintGroup wrap_constraint(ConstraintGroup g) {
 template <typename... Args>
 ConstraintList make_constraint_list(Args&&... args) {
   ConstraintList list;
-  (list.push_back(wrap_constraint(std::forward<Args>(args))), ...);
+  (list.push_back(wrap_constraint(std::move(args))), ...);
   return list;
 }
 
