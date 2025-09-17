@@ -20,7 +20,7 @@
 
 // TODO: Currently cant make a constraint group for LinearXConstraint,
 //       PhaseFractionConstraint, or PhaseCompositionConstraint.
-//       Can add extra template specialisation for these, but probably not needed ever.
+//       Can add extra branches for these, but probably not needed ever.
 
 namespace burnman {
 namespace equilibration {
@@ -53,44 +53,32 @@ std::unique_ptr<EqualityConstraint> make_constraint(Args&&... args) {
  * in the input vector.
  *
  * @tparam ConstraintT Type of constraint to create (derived from EqualityConstraint).
- * @param values Vector of scalar values used to construct individual constraints.
+ * @tparam ArgT Type of arguments used to create constraint
+ * @param args Vector valued arguments used to construct individual constraints.
  * @return ConstraintGroup containing one constraint per value.
  */
-template <typename ConstraintT>
+template <typename ConstraintT, typename ArgT>
 ConstraintGroup make_constraints_from_array(
-  const Eigen::ArrayXd& values
+  const ArgT& args
 ) {
   ConstraintGroup constraints;
-  constraints.reserve(static_cast<std::size_t>(values.size()));
-  for (double v : values) {
-    constraints.push_back(make_constraint<ConstraintT>(v));
-  }
-  return constraints;
-}
-
-/**
- * @brief Specialisation for creating PTEllipseConstraint objects from centre/scale arrays.
- *
- * Constructs a ConstraintGroup of PTEllipseConstraint objects from a pair of
- * Eigen::ArrayXXd representing centres and scales of ellipses. Centres and scales
- * must have two rows, with n columns for n constraints.
- *
- * @param values Pair of arrays: first = centres, second = scales
- * @return ConstraintGroup of PTEllipseConstraint objects
- */
-template <>
-ConstraintGroup make_constraints_from_array<PTEllipseConstraint>(
-  const std::pair<
-    Eigen::Array<double, 2, Eigen::Dynamic>
-    Eigen::Array<double, 2, Eigen::Dynamic>>& values
-) {
-  const Eigen::ArrayXXd& centres = values.first;
-  const Eigen::ArrayXXd& scales = values.second;
-  // TODO: could check centres.cols() == scales.cols()
-  ConstraintGroup constraints;
-  constraints.reserve(static_cast<std::size_t>(centres.cols()));
-  for (Eigen::Index i = 0; i < centres.cols(); ++i) {
-    constraints.push_back(make_constraint<PTEllipseConstraint>(centres.col(i), scales.col(i)));
+  if constexpr (std::is_same_v<std::decay_t<ConstraintT>, PTEllipseConstraint>) {
+    const Eigen::ArrayXXd& centres = args.first;
+    const Eigen::ArrayXXd& scales = args.second;
+    if (centres.cols() != scales.cols()) {
+      throw std::runtime_error("Mismatch in number of constraints");
+    }
+    constraints.reserve(static_cast<std::size_t>(centres.cols()));
+    for (Eigen::Index i = 0; i < centres.cols(); ++i) {
+      constraints.push_back(make_constraint<PTEllipseConstraint>(centres.col(i), scales.col(i)));
+    }
+  } else if constexpr (std::is_same_v<std::decay_t<ArgT>, Eigen::ArrayXd>) {
+    constraints.reserve(static_cast<std::size_t>(args.size()));
+    for (double v : args) {
+      constraints.push_back(make_constraint<ConstraintT>(v));
+    }
+  } else {
+    static_assert(std::is_same_v<ConstraintT, void>, "Error! Unsupported constraint type or argument format.");
   }
   return constraints;
 }
@@ -106,7 +94,9 @@ ConstraintGroup make_constraints_from_array<PTEllipseConstraint>(
  * @return ConstraintGroup containing the single constraint.
  */
 inline ConstraintGroup wrap_constraint(std::unique_ptr<EqualityConstraint> c) {
-  return {std::move(c)};
+  ConstraintGroup g;
+  g.push_back(std::move(c));
+  return g;
 }
 
 /**
