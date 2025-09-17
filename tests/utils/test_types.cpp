@@ -71,8 +71,8 @@ TEST_CASE("NDArray indexing", "[utils][types]") {
   types::NDArray<int> arr({2, 4});
   REQUIRE(arr.size() == 8);
   SECTION("Flat indexing - [] & ()") {
-    REQUIRE_NOTHROW(arr[1] == 10);
-    REQUIRE_NOTHROW(arr(2) == 20);
+    REQUIRE_NOTHROW(arr[1] = 10);
+    REQUIRE_NOTHROW(arr(2) = 20);
     REQUIRE(arr(1) == 10);
     REQUIRE(arr[2] == 20);
     const types::NDArray<int>& const_arr = arr;
