@@ -185,7 +185,7 @@ Eigen::VectorXd get_parameter_vector(
   params(1) = assemblage.get_temperature();
   std::vector<int> embr_per_phase = assemblage.get_endmembers_per_phase();
   Eigen::Index j = 2;
-  for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(assemblage.get_n_phases()); ++i) {
+  for (Eigen::Index i = 0; i < assemblage.get_n_phases(); ++i) {
     params(j) = n_moles_per_phase(i);
     if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(i))) {
       Eigen::Index n_embr = static_cast<Eigen::Index>(embr_per_phase[i] - 1); // skip first embr
@@ -203,7 +203,7 @@ Eigen::VectorXd get_endmember_amounts(
   Eigen::VectorXd abs_amounts(assemblage.get_n_endmembers());
   std::vector<int> embr_per_phase = assemblage.get_endmembers_per_phase();
   Eigen::Index j = 0;
-  for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(assemblage.get_n_phases()); ++i) {
+  for (Eigen::Index i = 0; i < assemblage.get_n_phases(); ++i) {
     if (auto ph = assemblage.get_phase<Solution>(static_cast<std::size_t>(i))) {
       abs_amounts.segment(j, j + static_cast<Eigen::Index>(embr_per_phase[i])) =
         phase_amounts(i) * ph->get_molar_fractions();
@@ -221,7 +221,7 @@ void set_composition_and_state_from_parameters(
 ) {
   // Set P & T (first two parameters)
   assemblage.set_state(parameters(0), parameters(1));
-  Eigen::Index n_phases = static_cast<Eigen::Index>(assemblage.get_n_phases());
+  Eigen::Index n_phases = assemblage.get_n_phases();
   Eigen::ArrayXd phase_amounts = Eigen::ArrayXd::Zero(n_phases);
   Eigen::Index i = 2;
   for (Eigen::Index phase_idx = 0; phase_idx < n_phases; ++phase_idx) {

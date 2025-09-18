@@ -172,8 +172,8 @@ void Assemblage::set_state(
 }
 
 // Public convenience getters
-int Assemblage::get_n_phases() const {
-  return static_cast<int>(this->phases.size());
+Eigen::Index Assemblage::get_n_phases() const {
+  return static_cast<Eigen::Index>(this->phases.size());
 }
 
 std::shared_ptr<Material> Assemblage::get_phase(std::size_t index) const {
