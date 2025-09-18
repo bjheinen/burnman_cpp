@@ -45,14 +45,53 @@ namespace burnman {
 class Mineral : public Material{
  public:
 
-  // Parameter object
+  /**
+   * @brief Parameters for the mineral.
+   */
   types::MineralParams params;
 
-  // Pointer to EOS Class to use
+  /**
+   * @brief Shared pointer to the EquationOfState used to compute properties.
+   */
   std::shared_ptr<EquationOfState> eos_method;
 
-  // TODO: Doc
+  /**
+   * @brief Sets the parameters for thermodynamic property modifiers.
+   *
+   * The property modifiers are used to calculate excess thermodynamic properties based
+   * on a model, and summed to give total modification excesses.
+   *
+   * Possible models are:
+   *   - second order transitions (landau, landau_slb_2022, landau_hp)
+   *   - order-disorder (bragg_williams)
+   *   - magnetism (magnetic_chs)
+   *   - linear
+   * @see burnman::eos::excesses
+   *
+   * Usage:
+   * @code{.cpp}
+   * using namespace burnman::eos::excesses;
+   * ExcessParamVector p = {
+   *   LinearParams{delta_V, delta_S, delta_E},
+   *   LandauParams{Tc_0, V_D, S_D},
+   *   DebyeParams{Cv_inf, Theta_0}
+   * };
+   * mineral.set_property_modifier_params(p);
+   * @endcode
+   *
+   * @param excess_params List of excess parameter structs.
+   * @note Calling this function will reset any previously set property modifiers and recompute where possible.
+   */
   void set_property_modifier_params(eos::excesses::ExcessParamVector excess_params);
+
+  /**
+   * @brief Retrieves the current property modifiers.
+   *
+   * Returns the summed excesses from all property modifiers currently set.
+   * @see `compute_property_modifiers()` for details on how these are calculated.
+   *
+   * @return Excesses struct containing the summed excess properties.
+   */
   eos::excesses::Excesses get_property_modifiers() const;
 
   // Override public methods
