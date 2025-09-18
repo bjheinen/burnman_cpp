@@ -70,6 +70,10 @@ class Material {
   /**
    * @brief Sets the EOS method for the material.
    *
+   * For endmember materials like Mineral, this replaces the EOS used internally.
+   * For composite materials (Solution, Assemblage), this functions dispatches the EOS
+   * setting to the contained materials.
+   *
    * @param new_method types::EOSType enum corresponding to EOS.
    * @throws `exceptions::NotImplementedError' if default implementation called.
    */
@@ -80,6 +84,10 @@ class Material {
    *
    * Overloaded function to allow custom EOS classes derived
    * from EquationOfState to be set by the user.
+   *
+   * For endmember materials like Mineral, this replaces the EOS used internally.
+   * For composite materials (Solution, Assemblage), this functions dispatches the EOS
+   * setting to the contained materials.
    *
    * @param new_method std::shared_ptr to the EOS class.
    * @throws `exceptions::NotImplementedError' if default implementation called.
