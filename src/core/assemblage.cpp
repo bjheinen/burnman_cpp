@@ -399,7 +399,7 @@ void Assemblage::setup_endmember_properties() const {
         temp_names.push_back(name_i + " in " + phase_name);
       }
       // Add number of endmembers to list
-      temp_empp.push_back(sol->get_n_endmembers());
+      temp_empp.push_back(static_cast<int>(sol->get_n_endmembers()));
     // If phase is a Mineral
     } else if (auto min = std::dynamic_pointer_cast<Mineral>(ph)) {
       // Store mineral properties
