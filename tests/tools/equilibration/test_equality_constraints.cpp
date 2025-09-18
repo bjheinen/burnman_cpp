@@ -168,5 +168,3 @@ TEST_CASE("Test ConstraintGroup and List", "[tools][equilibration][equality_cons
   );
   REQUIRE(cl.size() == 4);
 }
-
-// TODO Tests for Phase Constraints
