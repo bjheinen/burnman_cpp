@@ -22,7 +22,11 @@ namespace burnman {
 
 /**
  * @class Mineral
- * @brief Base class for all materials.
+ * @brief Base class for minerals (endmembers).
+ *
+ * This class provides an interface for computing mineral properties.
+ * Mineral objects define the endmembers in Solutions, or act as stand-alone
+ * phases. Solid solutions should use `Solution' not `Mineral'.
  *
  * States and properties of the mineral can only be queried after
  * setting the P, T or V, T condition with set_state.
