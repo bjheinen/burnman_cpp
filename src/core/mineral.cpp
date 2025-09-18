@@ -33,10 +33,19 @@ void Mineral::set_property_modifier_params(
   eos::excesses::ExcessParamVector excess_params
 ) {
   property_modifier_params = excess_params;
+  // Reset cache (new property modifiers invalidate)
+  reset_cache();
+  // If state is set, recompute property modifiers
+  if (has_state()) {
+    compute_property_modifiers();
+  } else {
+    // If no state is set, we still want to reset excesses
+    this->property_modifier_excesses = eos::excesses::Excesses();
+  }
 }
 
 eos::excesses::Excesses Mineral::get_property_modifiers() const {
-  return property_modifier_excesses;
+  return this->property_modifier_excesses;
 }
 
 void Mineral::set_method(std::shared_ptr<EquationOfState> new_method) {
@@ -81,11 +90,11 @@ void Mineral::set_state(
 
 void Mineral::compute_property_modifiers() {
   // Reset modifiers to zero
-  property_modifier_excesses = eos::excesses::Excesses();
+  this->property_modifier_excesses = eos::excesses::Excesses();
   // Loop through param vector and call overloaded excess func
   for (const auto& excess_param : property_modifier_params) {
     std::visit([&](auto&& p) {
-        property_modifier_excesses += eos::excesses::compute_excesses(
+        this->property_modifier_excesses += eos::excesses::compute_excesses(
           get_pressure(),
           get_temperature(),
           p);
@@ -100,7 +109,7 @@ double Mineral::compute_molar_gibbs() const {
     get_temperature(),
     get_molar_volume_unmodified(),
     params)
-    + property_modifier_excesses.G;
+    + get_property_modifiers().G;
 }
 
 double Mineral::compute_molar_volume_unmodified() const {
@@ -109,7 +118,7 @@ double Mineral::compute_molar_volume_unmodified() const {
 }
 
 double Mineral::compute_molar_volume() const {
-  return get_molar_volume_unmodified() + property_modifier_excesses.dGdP;
+  return get_molar_volume_unmodified() + get_property_modifiers().dGdP;
 }
 
 double Mineral::compute_molar_entropy() const {
@@ -118,7 +127,7 @@ double Mineral::compute_molar_entropy() const {
     get_temperature(),
     get_molar_volume_unmodified(),
     params)
-    - property_modifier_excesses.dGdT;
+    - get_property_modifiers().dGdT;
 }
 
 double Mineral::compute_isothermal_bulk_modulus_reuss() const {
@@ -130,7 +139,7 @@ double Mineral::compute_isothermal_bulk_modulus_reuss() const {
 
   return get_molar_volume()
     / ((get_molar_volume_unmodified() / K_T_orig)
-      - property_modifier_excesses.d2GdP2);
+      - get_property_modifiers().d2GdP2);
 }
 
 double Mineral::compute_molar_heat_capacity_p() const {
@@ -139,7 +148,7 @@ double Mineral::compute_molar_heat_capacity_p() const {
     get_temperature(),
     get_molar_volume_unmodified(),
     params)
-    - get_temperature() * property_modifier_excesses.d2GdT2;
+    - get_temperature() * get_property_modifiers().d2GdT2;
 }
 
 double Mineral::compute_thermal_expansivity() const {
@@ -150,7 +159,7 @@ double Mineral::compute_thermal_expansivity() const {
       get_molar_volume_unmodified(),
       params
     ) * get_molar_volume_unmodified()
-    + property_modifier_excesses.d2GdPdT
+    + get_property_modifiers().d2GdPdT
   ) / get_molar_volume();
 }
 
@@ -243,10 +252,10 @@ double Mineral::compute_grueneisen_parameter() const {
       * get_molar_volume()
       / get_molar_heat_capacity_v();
   } else if (
-    std::fabs(property_modifier_excesses.d2GdPdT) < eps &&
-    std::fabs(property_modifier_excesses.d2GdP2) < eps &&
-    std::fabs(property_modifier_excesses.dGdP) < eps &&
-    std::fabs(property_modifier_excesses.d2GdT2) < eps
+    std::fabs(get_property_modifiers().d2GdPdT) < eps &&
+    std::fabs(get_property_modifiers().d2GdP2) < eps &&
+    std::fabs(get_property_modifiers().dGdP) < eps &&
+    std::fabs(get_property_modifiers().d2GdT2) < eps
     ) {
       return eos_method->compute_grueneisen_parameter(
         get_pressure(),
