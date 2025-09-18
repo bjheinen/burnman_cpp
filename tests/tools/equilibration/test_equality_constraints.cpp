@@ -13,6 +13,7 @@
 #include "burnman/tools/equilibration/equality_constraints.hpp"
 #include <utility>
 #include <Eigen/Dense>
+#include "burnman/tools/equilibration/equilibrate_types.hpp"
 #include "tolerances.hpp"
 #include "solution_fixtures.hpp"
 
@@ -91,6 +92,49 @@ TEST_CASE_METHOD(PyroliteAssemblageFixture, "Assemblage based constraints", "[to
     deriv_ref << -1.01238991e-16, 2.00192406e-01, 2.14204549e-05, 6.72869416e-06, 3.44588368e-06, 1.00009341e-01, 2.00000226e+00, 2.37812313e-05;
     // Relax tolerance, can make strict by using tol_rel instead
     REQUIRE(c->derivative(x, assemblage, x_size).isApprox(deriv_ref, 1.0e-9));
+  }
+}
+
+TEST_CASE_METHOD(PyroliteAssemblageFixture, "PhaseFractionConstraint", "[tools][equilibration][equality_constraints]") {
+  assemblage.set_state(50.e9, 1000.0);
+  assemblage.set_n_moles(10);
+  assemblage.set_method(types::EOSType::Auto);
+  types::FormulaMap composition = {{"Fe", 0.2}, {"Mg", 2.0}, {"Si", 1.9}, {"Ca", 0.2}, {"Al", 0.4}, {"O", 6.8}};
+  // Quick check that fixture hasn't changed
+  REQUIRE(assemblage.get_n_endmembers() == 6);
+  Eigen::VectorXd x = Eigen::VectorXd::Ones(8);
+  Eigen::Index x_size = 8;
+  Eigen::VectorXd deriv_ref(8);
+  equilibration::EquilibrationParameters prm; // = equilibration::get_equilibration_parameters(assemblage, composition, {});
+  prm.n_parameters = 8;
+  prm.phase_amount_indices = Eigen::ArrayXi(3);
+  prm.phase_amount_indices << 2, 5, 7;
+  SECTION("PhaseFractionConstraint") {
+    // {bdg, fper, capv} == {0.7, 0.2, 0.1}
+    Eigen::Index phase_index = 1;
+    double phase_fraction = 0.2;
+    auto c = equilibration::make_constraint<equilibration::PhaseFractionConstraint>(phase_index, phase_fraction, prm);
+    double eval_ref = 0.4;
+    REQUIRE_THAT(c->evaluate(x, assemblage),
+      WithinRel(eval_ref, tol_rel) || WithinAbs(eval_ref, tol_abs));
+    deriv_ref << 0, 0, -0.2, 0, 0, 0.8, 0, -0.2;
+    REQUIRE(c->derivative(x, assemblage, x_size).isApprox(deriv_ref, tol_rel));
+  }
+  SECTION("PhaseCompositionConstraint") {
+    Eigen::Index phase_index = 1;
+    std::vector<std::string> site_names = {"Mg_A", "Fe_A"};
+    Eigen::VectorXd numerator(2);
+    Eigen::VectorXd denominator(2);
+    numerator << 0, 1;
+    denominator << 1, 1;
+    double value = 0.1;
+    auto c = equilibration::make_constraint<equilibration::PhaseCompositionConstraint>(
+      phase_index, site_names, numerator, denominator, value, assemblage, prm);
+    double eval_ref = 0.9;
+    REQUIRE_THAT(c->evaluate(x, assemblage),
+      WithinRel(eval_ref, tol_rel) || WithinAbs(eval_ref, tol_abs));
+    deriv_ref << 0, 0, 0, 0, 0, 0, 1, 0;
+    REQUIRE(c->derivative(x, assemblage, x_size).isApprox(deriv_ref, tol_rel));
   }
 }
 
