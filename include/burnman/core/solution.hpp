@@ -29,12 +29,12 @@ namespace burnman {
  * @class Solution
  * @brief Base class for solid solutions.
  *
- * Base class for all solutions. 
+ * Base class for all solutions.
  *
  * Site occupancies, endmember activities and the constant
  * pressure and temperature dependencies of the excess properties
  * require set_composition().
- * Solution states equire set_state().
+ * Solution states require set_state().
  *
  * Uses an instance of `solution_models::SolutionModel' (or derived class) to calculate
  * interaction terms between endmembers.
