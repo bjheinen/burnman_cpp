@@ -51,7 +51,7 @@ void Solution::set_composition(const Eigen::ArrayXd& composition_vector) {
     throw std::runtime_error("Cannot set molar fractions: solution model not set!");
   }
   // Throw error if length not correct
-  if (static_cast<int>(composition_vector.size()) != get_n_endmembers()) {
+  if (composition_vector.size() != get_n_endmembers()) {
     throw std::runtime_error(
       "Composition vector length (" + std::to_string(composition_vector.size()) +
       ") does not match number of endmembers (" + std::to_string(get_n_endmembers()) + ").");
@@ -418,8 +418,8 @@ types::FormulaMap Solution::compute_formula() const {
 
 // Setup functions for CompositeMaterial properties
 
-int Solution::compute_n_endmembers() const {
-  return static_cast<int>(solution_model->n_endmembers);
+Eigen::Index Solution::compute_n_endmembers() const {
+  return solution_model->n_endmembers;
 }
 
 void Solution::setup_endmember_names() const {

@@ -321,7 +321,7 @@ class Assemblage : public CompositeMaterial {
   types::FormulaMap compute_formula() const override;
 
   // Overrides of pure virtual functions from CompositeMaterial
-  int compute_n_endmembers() const override;
+  Eigen::Index compute_n_endmembers() const override;
   void setup_endmember_names() const override;
   void setup_endmember_formulae() const override;
   Eigen::ArrayXd compute_partial_gibbs() const override;

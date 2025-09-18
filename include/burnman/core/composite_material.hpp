@@ -47,17 +47,17 @@ class CompositeMaterial : public Material {
   /**
    * @brief Number of endmembers in the material.
    */
-  int get_n_endmembers() const;
+  Eigen::Index get_n_endmembers() const;
 
   /**
    * @brief Number of different chemical elements in the material.
    */
-  int get_n_elements() const;
+  Eigen::Index get_n_elements() const;
 
   /**
    * @brief Number of possible reactions from reaction basis.
    */
-  int get_n_reactions() const;
+  Eigen::Index get_n_reactions() const;
 
   /**
    * @brief Vector of chemical elements in the material in IUPAC order.
@@ -141,7 +141,7 @@ class CompositeMaterial : public Material {
 
   // Pure virtual funtions that must be implemented in derived classes
 
-  virtual int compute_n_endmembers() const = 0;
+  virtual Eigen::Index compute_n_endmembers() const = 0;
   // Void functions should use protected setters!
   virtual void setup_endmember_formulae() const = 0;
   virtual void setup_endmember_names() const = 0;
@@ -161,10 +161,9 @@ class CompositeMaterial : public Material {
 
   // Cached CompositeMaterial properties
   // Note: Not cleared by reset_cache()!
-  mutable std::optional<int> n_endmembers;
-  mutable std::optional<int> n_elements;
-  mutable std::optional<int> n_reactions;
-  // TODO: Consider Eigen::ArrayXi for indices?
+  mutable std::optional<Eigen::Index> n_endmembers;
+  mutable std::optional<Eigen::Index> n_elements;
+  mutable std::optional<Eigen::Index> n_reactions;
   mutable std::optional<std::vector<Eigen::Index>> independent_element_indices;
   mutable std::optional<std::vector<Eigen::Index>> dependent_element_indices;
   mutable std::optional<std::vector<std::string>> endmember_names;
@@ -180,8 +179,8 @@ class CompositeMaterial : public Material {
   mutable std::optional<Eigen::ArrayXd> partial_gibbs;
 
   // Compute functions common to all composite materials.
-  int compute_n_elements() const;
-  int compute_n_reactions() const;
+  Eigen::Index compute_n_elements() const;
+  Eigen::Index compute_n_reactions() const;
   std::vector<std::string> compute_elements() const;
   std::vector<Eigen::Index> compute_independent_element_indices() const;
   std::vector<Eigen::Index> compute_dependent_element_indices() const;

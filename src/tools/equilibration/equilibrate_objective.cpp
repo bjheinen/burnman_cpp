@@ -28,8 +28,7 @@ Eigen::VectorXd F(
   Eigen::VectorXd new_endmember_amounts = get_endmember_amounts(assemblage);
   // Allocate F
   Eigen::Index n_eqc = static_cast<Eigen::Index>(equality_constraints.size());
-  Eigen::VectorXd eqns = Eigen::VectorXd::Zero(
-    static_cast<Eigen::Index>(assemblage.get_n_endmembers()) + n_eqc);
+  Eigen::VectorXd eqns = Eigen::VectorXd::Zero(assemblage.get_n_endmembers() + n_eqc);
   // Fill equality constraint portion of F
   for (Eigen::Index i = 0; i < n_eqc; ++i) {
     eqns(i) = equality_constraints[static_cast<std::size_t>(i)]->evaluate(x, assemblage);
@@ -41,7 +40,7 @@ Eigen::VectorXd F(
       x.tail(n_eqc - 2).transpose() * reduced_free_composition_vectors;
   }
   // TODO:: Assemblage::get_reaction_affinities
-  Eigen::Index n_reac = static_cast<Eigen::Index>(assemblage.get_n_reactions());
+  Eigen::Index n_reac = assemblage.get_n_reactions();
   eqns.segment(n_eqc, n_reac) = assemblage.get_reaction_affinities();
   // TODO:: Assemblage::get_reduced_stoichiometric_matrix
   eqns.tail(eqns.size() - (n_eqc + n_reac)) = (
@@ -58,7 +57,7 @@ Eigen::MatrixXd J(
   const Eigen::MatrixXd& reduced_free_composition_vectors
 ) {
   Eigen::Index n_eqc = static_cast<Eigen::Index>(equality_constraints.size());
-  Eigen::Index n_end = static_cast<Eigen::Index>(assemblage.get_n_endmembers());
+  Eigen::Index n_end = assemblage.get_n_endmembers();
   Eigen::Index jacobian_size = n_end + n_eqc;
   Eigen::MatrixXd jacobian = Eigen::MatrixXd::Zero(jacobian_size, jacobian_size);
   // Build constraints part of Jacobian

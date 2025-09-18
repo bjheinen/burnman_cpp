@@ -349,7 +349,7 @@ Eigen::ArrayXd Assemblage::compute_partial_gibbs() const {
   // Loop over phases
   Eigen::Index j = 0;
   for (const auto& ph : this->phases) {
-    int n = 1;
+    Eigen::Index n = 1;
     // If phase is a Solution or Assemblage
     if (auto sol = std::dynamic_pointer_cast<CompositeMaterial>(ph)) {
       n = sol->get_n_endmembers();
@@ -366,8 +366,8 @@ Eigen::VectorXd Assemblage::compute_reaction_affinities() const {
   return get_reaction_basis() * get_partial_gibbs().matrix();
 }
 
-int Assemblage::compute_n_endmembers() const {
-  return static_cast<int>(get_endmember_names().size());
+Eigen::Index Assemblage::compute_n_endmembers() const {
+  return static_cast<Eigen::Index>(get_endmember_names().size());
 }
 
 void Assemblage::setup_endmember_names() const {

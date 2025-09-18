@@ -8,6 +8,7 @@
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
 #include "burnman/core/composite_material.hpp"
+#include <cstddef>
 #include <algorithm>
 #include <utility>
 #include <unordered_set>
@@ -23,21 +24,21 @@ void CompositeMaterial::reset_cache() {
   partial_gibbs.reset();
 }
 
-int CompositeMaterial::get_n_endmembers() const {
+Eigen::Index CompositeMaterial::get_n_endmembers() const {
   if (!n_endmembers.has_value()) {
     n_endmembers = compute_n_endmembers();
   }
   return *n_endmembers;
 }
 
-int CompositeMaterial::get_n_elements() const {
+Eigen::Index CompositeMaterial::get_n_elements() const {
   if (!n_elements.has_value()) {
     n_elements = compute_n_elements();
   }
   return *n_elements;
 }
 
-int CompositeMaterial::get_n_reactions() const {
+Eigen::Index CompositeMaterial::get_n_reactions() const {
   if (!n_reactions.has_value()) {
     n_reactions = compute_n_reactions();
   }
@@ -131,12 +132,12 @@ void CompositeMaterial::set_endmember_formulae(std::vector<types::FormulaMap> fo
 
 // Compute functions common to all composite materials.
 
-int CompositeMaterial::compute_n_elements() const {
-  return static_cast<int>(get_elements().size());
+Eigen::Index CompositeMaterial::compute_n_elements() const {
+  return static_cast<Eigen::Index>(get_elements().size());
 }
 
-int CompositeMaterial::compute_n_reactions() const {
-  return static_cast<int>(get_reaction_basis().rows());
+Eigen::Index CompositeMaterial::compute_n_reactions() const {
+  return get_reaction_basis().rows();
 }
 
 std::vector<std::string> CompositeMaterial::compute_elements() const {
@@ -170,17 +171,17 @@ std::vector<Eigen::Index> CompositeMaterial::compute_dependent_element_indices()
 }
 
 Eigen::MatrixXd CompositeMaterial::compute_stoichiometric_matrix() const {
-  int n_elem = get_n_elements();
-  int n_embr = get_n_endmembers();
+  Eigen::Index n_elem = get_n_elements();
+  Eigen::Index n_embr = get_n_endmembers();
   const std::vector<std::string> elems = get_elements();
   const std::vector<types::FormulaMap>& embr_formulae = get_endmember_formulae();
   Eigen::MatrixXd stoich_mat;
   stoich_mat.resize(n_embr, n_elem);
   stoich_mat.setZero();
-  for (int i = 0; i < n_embr; ++i) {
-    const auto& formula_i = embr_formulae[i];
-    for (int j = 0; j < n_elem; ++j) {
-      const std::string& element = elems[j];
+  for (Eigen::Index i = 0; i < n_embr; ++i) {
+    const auto& formula_i = embr_formulae[static_cast<std::size_t>(i)];
+    for (Eigen::Index j = 0; j < n_elem; ++j) {
+      const std::string& element = elems[static_cast<std::size_t>(j)];
       auto it = formula_i.find(element);
       if (it != formula_i.end()) {
         stoich_mat(i, j) = it->second;

@@ -124,9 +124,9 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]"
     16.62892523630648,   16.62892523630648, -315.9495794898231;
   Eigen::MatrixXd ref_volume_hessian = Eigen::MatrixXd::Zero(3, 3); // DO ISZERO INSTEAD
   // Composite Material functions
-  int ref_n_endmembers = 3;
-  int ref_n_elements = 5;
-  int ref_n_reactions = 0;
+  Eigen::Index ref_n_endmembers = 3;
+  Eigen::Index ref_n_elements = 5;
+  Eigen::Index ref_n_reactions = 0;
   std::vector<Eigen::Index> ref_independent_element_indices = {0, 1, 2};
   std::vector<Eigen::Index> ref_dependent_element_indices = {3, 4};
   Eigen::MatrixXd ref_stoichiometric_matrix(3,5);

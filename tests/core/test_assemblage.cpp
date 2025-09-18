@@ -195,9 +195,9 @@ TEST_CASE_METHOD(PyroliteAssemblageFixture, "Assemblage reference values", "[cor
   assemblage.set_state(50.e9, 2000.0);
   assemblage.set_method(types::EOSType::Auto);
   // Assemblage functions
-  int ref_n_endmembers = 6;
-  int ref_n_elements = 6;
-  int ref_n_reactions = 1;
+  Eigen::Index ref_n_endmembers = 6;
+  Eigen::Index ref_n_elements = 6;
+  Eigen::Index ref_n_reactions = 1;
   std::vector<std::string> ref_elements = {"Ca", "Mg", "Fe", "Al", "Si", "O"};
   std::vector<Eigen::Index> ref_independent_element_indices = {0,1,2,3,4};
   std::vector<Eigen::Index> ref_dependent_element_indices = {5};
