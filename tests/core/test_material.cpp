@@ -25,7 +25,7 @@ TEST_CASE("Get/Set state", "[core][material]") {
   CHECK(test_material.get_pressure() == test_P);
   CHECK(test_material.get_temperature() == test_T);
   // Ensure reset doesn't wipe P & T
-  test_material.reset();
+  test_material.reset_cache();
   CHECK(test_material.get_pressure() == test_P);
   CHECK(test_material.get_temperature() == test_T);
 }
@@ -43,8 +43,8 @@ TEST_CASE("Get/Set name", "[core][material]") {
   // Make sure it updates
   test_material.set_name(new_test_name);
   CHECK(test_material.get_name() == new_test_name);
-  // Ensure reset() does not remove name
-  test_material.reset();
+  // Ensure reset_cache() does not remove name
+  test_material.reset_cache();
   CHECK(test_material.get_name() == new_test_name);
 }
 

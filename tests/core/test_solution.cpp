@@ -88,7 +88,7 @@ TEST_CASE_METHOD(BridgmaniteFixture, "Test interface", "[core][solution]") {
   REQUIRE_THAT(bdg.get_temperature(),
     WithinRel(T, tol_rel) || WithinAbs(T, tol_abs));
   // Test reset runs
-  REQUIRE_NOTHROW(bdg.reset());
+  REQUIRE_NOTHROW(bdg.reset_cache());
 }
 
 TEST_CASE_METHOD(BridgmaniteFixture, "Test reference values", "[core][solution]") {

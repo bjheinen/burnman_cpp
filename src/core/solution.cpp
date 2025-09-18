@@ -18,9 +18,9 @@
 
 namespace burnman {
 
-void Solution::reset() {
+void Solution::reset_cache() {
   // Reset cached Material & CompositeMaterial properties
-  CompositeMaterial::reset();
+  CompositeMaterial::reset_cache();
   // Reset cached Solution properties
   excess_gibbs.reset();
   excess_volume.reset();
@@ -31,7 +31,7 @@ void Solution::reset() {
   excess_partial_gibbs.reset();
   excess_partial_volumes.reset();
   excess_partial_entropies.reset();
-  // partial_gibbs reset by CompositeMaterial::reset()
+  // partial_gibbs reset by CompositeMaterial::reset_cache()
   partial_volumes.reset();
   partial_entropies.reset();
   gibbs_hessian.reset();
@@ -68,7 +68,7 @@ void Solution::set_method(std::shared_ptr<EquationOfState> new_method) {
     embr.set_method(new_method);
   }
   // Clear properties cache
-  reset();
+  reset_cache();
 }
 
 void Solution::set_method(types::EOSType new_method) {
@@ -76,14 +76,14 @@ void Solution::set_method(types::EOSType new_method) {
     embr.set_method(new_method);
   }
   // Clear properties cache
-  reset();
+  reset_cache();
 }
 
 void Solution::set_state(
   double new_pressure,
   double new_temperature
 ) {
-  reset(); // TODO: check if reset needed here???
+  reset_cache(); // TODO: check if reset needed here???
   // Set P,T using Material
   Material::set_state(new_pressure, new_temperature);
   // Set state of each endmember

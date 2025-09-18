@@ -30,7 +30,7 @@ class EquationOfState;
  * P-T-V conditions can be set with `Material::set_state` or
  * `Material::set_state_with_volume`.
  *
- * Properties are cached by getter functions. Use `Material::reset` to
+ * Properties are cached by getter functions. Use `Material::reset_cache()` to
  * manually reset the property cache.
  *
  * Computation of properties should be implemented in derived classes.
@@ -57,7 +57,7 @@ class Material {
    * Resets cached material properties to empty `std::optional` so that
    * they are freshly computed on next query.
    */
-  virtual void reset();
+  virtual void reset_cache();
 
   // Public setter functions
   /**
@@ -148,7 +148,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_internal_energy()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Internal energy in [J/mol].
    */
@@ -160,7 +160,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_gibbs()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Gibbs free energy in [J/mol].
    */
@@ -172,7 +172,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_helmholtz()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Helmholtz free energy in [J/mol].
    */
@@ -184,7 +184,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_mass()` and caches the result.
    *
-   * @note `Use Material::reset()` to clear cached values.
+   * @note `Use Material::reset_cache()` to clear cached values.
    *
    * @return Molar mass in [kg/mol].
    */
@@ -196,7 +196,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_volume()` and caches the result.
    *
-   * @note `Use Material::reset()` to clear cached values.
+   * @note `Use Material::reset_cache()` to clear cached values.
    *
    * @return Molar volume in [m^3/mol].
    */
@@ -208,7 +208,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_volume_unmodified()` and caches the result.
    *
-   * @note `Use Material::reset()` to clear cached values.
+   * @note `Use Material::reset_cache()` to clear cached values.
    *
    * @return Molar volume in [m^3/mol].
    */
@@ -220,7 +220,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_density()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Density in [kg/m^3].
    */
@@ -232,7 +232,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_entropy()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Entropy in [J/K/mol].
    */
@@ -244,7 +244,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_enthalpy()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Enthalpy in [J/mol].
    */
@@ -256,7 +256,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_isothermal_bulk_modulus_reuss()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Isothermal bulk modulus in [Pa].
    */
@@ -269,7 +269,7 @@ class Material {
    * `Material::compute_isentropic_bulk_modulus_reuss()`
    * and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Isentropic bulk modulus in [Pa].
    */
@@ -282,7 +282,7 @@ class Material {
    * `Material::compute_isothermal_compressibility_reuss()`
    * and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Isothermal compressibility in [1/Pa].
    */
@@ -295,7 +295,7 @@ class Material {
    * `Material::compute_isentropic_compressibility_reuss()`
    * and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Adiabatic compressibility in [1/Pa].
    */
@@ -307,7 +307,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_shear_modulus()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Shear modulus in [Pa].
    */
@@ -319,7 +319,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_p_wave_velocity()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return P wave velocity in [m/s].
    */
@@ -331,7 +331,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_bulk_sound_velocity()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Bulk sound velocity in [m/s].
    */
@@ -343,7 +343,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_shear_wave_velocity()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Shear wave velocity in [m/s].
    */
@@ -355,7 +355,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_grueneisen_parameter()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Grueneisen parameter [unitless].
    */
@@ -367,7 +367,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_thermal_expansivity()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Thermal expansivity in [1/K].
    */
@@ -379,7 +379,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_heat_capacity_v()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Isochoric heat capacity in [J/K/mol].
    */
@@ -391,7 +391,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_molar_heat_capacity_p()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return Isobaric heat capacity in [J/K/mol].
    */
@@ -403,7 +403,7 @@ class Material {
    * Uses a cached value if available, or calls
    * `Material::compute_isentropic_thermal_gradient()` and caches the result.
    *
-   * @note Use `Material::reset()` to clear cached values.
+   * @note Use `Material::reset_cache()` to clear cached values.
    *
    * @return dTdP at constant entropy in [Pa/K].
    */
@@ -699,7 +699,7 @@ class Material {
   mutable std::optional<double> molar_heat_capacity_p;
   mutable std::optional<double> isentropic_thermal_gradient;
   mutable std::optional<types::FormulaMap> formula; // reset?
-  // name not cached and and not deleted by reset()
+  // name not cached and and not deleted by reset_cache()
   std::optional<std::string> name;
 
   // Private functions for throwing exceptions

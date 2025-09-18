@@ -298,7 +298,7 @@ TEST_CASE_METHOD(PyroliteAssemblageFixture, "Assemblage reference values", "[cor
 
 
 // TODO:
-// reset() (check over)
+// reset_cache() (check over)
 
 // add_phase (value)
 // add_phases (value - variadic template)

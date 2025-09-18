@@ -21,7 +21,7 @@ std::string Material::get_class_name() const {
   return typeid(*this).name();
 }
 
-void Material::reset() {
+void Material::reset_cache() {
   molar_internal_energy.reset();
   molar_gibbs.reset();
   molar_helmholtz.reset();
@@ -84,7 +84,7 @@ void Material::set_method(
 }
 
 void Material::set_state(double new_pressure, double new_temperature) {
-  reset();
+  reset_cache();
   pressure = new_pressure;
   temperature = new_temperature;
 }

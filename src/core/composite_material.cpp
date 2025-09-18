@@ -16,9 +16,9 @@
 
 namespace burnman {
 
-void CompositeMaterial::reset() {
+void CompositeMaterial::reset_cache() {
   // Reset caches Material properties
-  Material::reset();
+  Material::reset_cache();
   // Reset cached CompositeMaterial properties
   partial_gibbs.reset();
 }

@@ -16,9 +16,9 @@
 
 namespace burnman {
 
-void Assemblage::reset() {
+void Assemblage::reset_cache() {
   // Reset cached Material & CompositeMaterial properties
-  CompositeMaterial::reset();
+  CompositeMaterial::reset_cache();
   // Reset cached Assemblage properties
   volume_fractions.reset();
   reaction_affinities.reset();
@@ -99,7 +99,7 @@ void Assemblage::set_fractions(
     );
   }
   double total = fractions.sum();
-  reset();
+  reset_cache();
   Eigen::ArrayXd norm_fractions = fractions;
   if (std::abs(total - 1.0) > 1e-12) {
     // Todo: Warnings"
@@ -147,7 +147,7 @@ void Assemblage::set_method(std::shared_ptr<EquationOfState> new_method) {
     ph->set_method(new_method);
   }
   // Clear properties cache
-  reset();
+  reset_cache();
 }
 
 void Assemblage::set_method(types::EOSType new_method) {
@@ -155,14 +155,14 @@ void Assemblage::set_method(types::EOSType new_method) {
     ph->set_method(new_method);
   }
   // Clear properties cache
-  reset();
+  reset_cache();
 }
 
 void Assemblage::set_state(
   double new_pressure,
   double new_temperature
 ) {
-  reset(); // TODO: check if reset needed here???
+  reset_cache(); // TODO: check if reset needed here???
   // Set P,T using Material
   Material::set_state(new_pressure, new_temperature);
   // Set state of each endmember

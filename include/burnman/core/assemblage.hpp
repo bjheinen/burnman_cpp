@@ -49,8 +49,8 @@ class Assemblage : public CompositeMaterial {
 
   virtual ~Assemblage() = default;
 
-  // Override of reset to include additional solution properties
-  void reset() override;
+  // Override of reset_cache to include additional solution properties
+  void reset_cache() override;
 
   // Utility functions
   /**
@@ -242,7 +242,7 @@ class Assemblage : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Assemblage::compute_volume_fractions()` and caches the result.
    *
-   * @note Use `Assemblage::reset()` to clear cached values.
+   * @note Use `Assemblage::reset_cache()` to clear cached values.
    *
    * @return Molar fractions * volumes of phases in assemblage.
    */
@@ -286,7 +286,7 @@ class Assemblage : public CompositeMaterial {
    * @brief Returns the equilibrium tolerance (J/reaction).
    *
    * @note Use `Assemblage::set_equilibtrium_tolerance' to change.
-   * The default value of 1.0e-3 is rest on calls to `Assemblage::reset()'.
+   * The default value of 1.0e-3 is rest on calls to `Assemblage::reset_cache()'.
    */
   double get_equilibrium_tolerance() const;
 

@@ -45,7 +45,7 @@ void Mineral::set_method(std::shared_ptr<EquationOfState> new_method) {
   // Set the params.equation_of_state to Custom
   params.equation_of_state = types::EOSType::Custom;
   // Clear material properties cache
-  reset();
+  reset_cache();
   // Validate parameters
   eos_method->validate_parameters(params);
 }
@@ -64,7 +64,7 @@ void Mineral::set_method(types::EOSType new_method) {
   // Set the params.equation_of_state to new type
   params.equation_of_state = new_method;
   // Clear materials properties cache
-  reset();
+  reset_cache();
   // Validate parameters
   eos_method->validate_parameters(params);
 }

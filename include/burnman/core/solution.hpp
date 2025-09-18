@@ -53,8 +53,8 @@ class Solution : public CompositeMaterial {
 
   virtual ~Solution() = default;
 
-  // Override of reset to include additional solution properties
-  void reset() override;
+  // Override of reset_cache to include additional solution properties
+  void reset_cache() override;
 
   // Utility functions
   // TODO: std::invoke to deal with lambda functions?
@@ -157,7 +157,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_excess_gibbs()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Excess gibbs free energy in [J/mol].
    */
@@ -169,7 +169,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_excess_volume()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Excess volume in [m^3/mol].
    */
@@ -181,7 +181,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_excess_entropy()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Excess entropy in [J/K/mol].
    */
@@ -193,7 +193,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_excess_enthalpy()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Excess enthalpy in [J/mol].
    */
@@ -205,7 +205,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_activities()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Endmember activities [unitless].
    */
@@ -217,7 +217,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_activity_coefficients()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return (gamma = activity / ideal activity) [unitless].
    */
@@ -229,7 +229,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_excess_partial_gibbs()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Excess partial gibbs in [J/mol].
    */
@@ -241,7 +241,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_excess_partial_volumes()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Excess partial volumes in [m^3/mol].
    */
@@ -253,7 +253,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_excess_partial_entropies()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Excess partial entropies in [J/K].
    */
@@ -267,7 +267,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_partial_volumes()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Partial volumes in [m^3].
    */
@@ -279,7 +279,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_partial_entropies()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Partial entropies in [J/K].
    */
@@ -291,7 +291,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_gibbs_hessian()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Second derivative of Gibbs in [J].
    */
@@ -303,7 +303,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_entropy_hessian()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Second derivative of entropy [J/K].
    */
@@ -315,7 +315,7 @@ class Solution : public CompositeMaterial {
    * Uses a cached value if available, or calls
    * `Solution::compute_volume_hessian()` and caches the result.
    *
-   * @note Use `Solution::reset()` to clear cached values.
+   * @note Use `Solution::reset_cache()` to clear cached values.
    *
    * @return Second derivatives of volume in [m^3].
    */
@@ -454,7 +454,7 @@ class Solution : public CompositeMaterial {
 
  private:
 
-  // Molar fractions - not cached so not deleted by reset()
+  // Molar fractions - not cached so not deleted by reset_cache()
   Eigen::ArrayXd molar_fractions;
 
   // Shared pointer to solution model class
