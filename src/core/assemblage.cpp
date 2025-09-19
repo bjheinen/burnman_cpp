@@ -428,9 +428,4 @@ Eigen::ArrayXd Assemblage::convert_mass_to_molar_fractions(
   return moles / moles.sum();
 }
 
-/*
-stoichiometric_array
-reaction_basis_as_strings (skip for now)
-*/
-
 } // namespace burnman
