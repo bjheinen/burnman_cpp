@@ -72,7 +72,7 @@ EquilibrateResult equilibrate(
   // Set default assemblage molar_fractions if none
   if (!assemblage.get_molar_fractions().size()) {
     Eigen::Index n_phases = assemblage.get_n_phases();
-    Eigen::ArrayXd f = Eigen::ArrayXd::Constant(n_phases, 1.0 / n_phases);
+    Eigen::ArrayXd f = Eigen::ArrayXd::Constant(n_phases, 1.0 / static_cast<double>(n_phases));
     assemblage.set_fractions(f);
   }
   // Set n_moles
