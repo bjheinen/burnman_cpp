@@ -77,7 +77,7 @@ class Solution : public CompositeMaterial {
   template <typename Func>
   Eigen::ArrayXd map_endmembers_to_array(Func&& func) const {
     const auto& em_ref = solution_model->endmembers;
-    Eigen::ArrayXd mapped_properties(solution_model->n_endmembers);
+    Eigen::ArrayXd mapped_properties(solution_model->get_n_endmembers()); // TODO: could use Solution::get_n_endmembers here
     std::transform(
       em_ref.begin(), em_ref.end(), mapped_properties.data(),
       [&func](const auto& em) {
@@ -98,7 +98,7 @@ class Solution : public CompositeMaterial {
   std::vector<T> map_endmembers_to_vector(Func&& func) const {
     const auto& em_ref = solution_model->endmembers;
     std::vector<T> mapped_properties;
-    mapped_properties.reserve(static_cast<std::size_t>(solution_model->n_endmembers));
+    mapped_properties.reserve(static_cast<std::size_t>(solution_model->get_n_endmembers()));
     std::transform(
       em_ref.begin(), em_ref.end(), std::back_inserter(mapped_properties),
       [&func](const auto& em) {

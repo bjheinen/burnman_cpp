@@ -97,15 +97,15 @@ Eigen::ArrayXd Solution::get_molar_fractions() const {
 }
 
 Eigen::ArrayXXd Solution::get_endmember_occupancies() const {
-  return this->solution_model->endmember_occupancies;
+  return this->solution_model->get_endmember_occupancies();
 }
 
 Eigen::ArrayXXd Solution::get_endmember_n_occupancies() const {
-  return this->solution_model->endmember_n_occupancies;
+  return this->solution_model->get_endmember_n_occupancies();
 }
 
 std::vector<std::string> Solution::get_site_names() const {
-  return this->solution_model->site_names;
+  return this->solution_model->get_site_names();
 }
 
 // Public getter functions with caching
@@ -419,7 +419,7 @@ types::FormulaMap Solution::compute_formula() const {
 // Setup functions for CompositeMaterial properties
 
 Eigen::Index Solution::compute_n_endmembers() const {
-  return solution_model->n_endmembers;
+  return solution_model->get_n_endmembers();
 }
 
 void Solution::setup_endmember_names() const {

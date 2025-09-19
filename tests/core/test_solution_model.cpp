@@ -93,25 +93,25 @@ TEST_CASE_METHOD(OlivineFixture, "IdealSolution", "[core][solution_model]") {
     REQUIRE(ol_ss.endmembers[0].get_name() == "Forsterite");
     REQUIRE(ol_ss.endmembers[1].get_name() == "Fayalite");
     // ints
-    CHECK(ol_ss.n_endmembers == 2);
-    CHECK(ol_ss.n_occupancies == 2);
-    CHECK(ol_ss.n_sites == 1);
+    CHECK(ol_ss.get_n_endmembers() == 2);
+    CHECK(ol_ss.get_n_occupancies() == 2);
+    CHECK(ol_ss.get_n_sites() == 1);
     // strings
-    CHECK(ol_ss.empty_formula == "[]2SiO4");
-    CHECK(ol_ss.general_formula == "[Mg,Fe]2SiO4");
-    CHECK(ol_ss.formulas == std::vector<std::string>{"[Mg]2SiO4", "[Fe]2SiO4"});
-    CHECK(ol_ss.site_names == std::vector<std::string>{"Mg_A", "Fe_A"});
-    CHECK(ol_ss.sites == std::vector<std::vector<std::string>>{{"Mg", "Fe"}});
-    CHECK(ol_ss.solution_formulae ==
+    CHECK(ol_ss.get_empty_formula() == "[]2SiO4");
+    CHECK(ol_ss.get_general_formula() == "[Mg,Fe]2SiO4");
+    CHECK(ol_ss.get_formulas() == std::vector<std::string>{"[Mg]2SiO4", "[Fe]2SiO4"});
+    CHECK(ol_ss.get_site_names() == std::vector<std::string>{"Mg_A", "Fe_A"});
+    CHECK(ol_ss.get_sites() == std::vector<std::vector<std::string>>{{"Mg", "Fe"}});
+    CHECK(ol_ss.get_solution_formulae() ==
       std::vector<std::map<std::string, double>>{ {{"Mg", 2.0}}, {{"Fe", 2.0}} });
     // Eigen - can do CHECK(m1.isApprox(m2, rel_tolerance));
-    CHECK(ol_ss.site_multiplicities.isApprox(
+    CHECK(ol_ss.get_site_multiplicities().isApprox(
       (Eigen::ArrayXXd(2, 2) << 2.0, 2.0,
                                 2.0, 2.0).finished(), tol_rel));
-    CHECK(ol_ss.endmember_occupancies.isApprox(
+    CHECK(ol_ss.get_endmember_occupancies().isApprox(
       (Eigen::ArrayXXd(2, 2) << 1, 0,
                                 0, 1).finished(), tol_rel));
-    CHECK(ol_ss.endmember_n_occupancies.isApprox(
+    CHECK(ol_ss.get_endmember_n_occupancies().isApprox(
       (Eigen::ArrayXXd(2, 2) << 2, 0,
                                 0, 2).finished(), tol_rel));
   }
@@ -138,24 +138,24 @@ TEST_CASE_METHOD(OlivineFixture, "Single ss", "[core][solution_model]") {
   // Ensure different objects
   REQUIRE(&fo_ss.endmembers[0] != &fo_ss.endmembers[1]);
   // ints
-  CHECK(fo_ss.n_endmembers == 2);
-  CHECK(fo_ss.n_occupancies == 1);
-  CHECK(fo_ss.n_sites == 1);
+  CHECK(fo_ss.get_n_endmembers() == 2);
+  CHECK(fo_ss.get_n_occupancies() == 1);
+  CHECK(fo_ss.get_n_sites() == 1);
   // strings
-  CHECK(fo_ss.empty_formula == "[]2SiO4");
-  CHECK(fo_ss.general_formula == "[Mg]2SiO4");
-  CHECK(fo_ss.formulas == std::vector<std::string>{"[Mg]2SiO4", "[Mg]2SiO4"});
-  CHECK(fo_ss.site_names == std::vector<std::string>{"Mg_A"});
-  CHECK(fo_ss.sites == std::vector<std::vector<std::string>>{{"Mg"}});
-  CHECK(fo_ss.solution_formulae ==
+  CHECK(fo_ss.get_empty_formula() == "[]2SiO4");
+  CHECK(fo_ss.get_general_formula() == "[Mg]2SiO4");
+  CHECK(fo_ss.get_formulas() == std::vector<std::string>{"[Mg]2SiO4", "[Mg]2SiO4"});
+  CHECK(fo_ss.get_site_names() == std::vector<std::string>{"Mg_A"});
+  CHECK(fo_ss.get_sites() == std::vector<std::vector<std::string>>{{"Mg"}});
+  CHECK(fo_ss.get_solution_formulae() ==
     std::vector<std::map<std::string, double>>{ {{"Mg", 2.0}}, {{"Mg", 2.0}} });
-  CHECK(fo_ss.site_multiplicities.isApprox(
+  CHECK(fo_ss.get_site_multiplicities().isApprox(
     (Eigen::ArrayXXd(2, 1) << 2.0,
                               2.0).finished(), tol_rel));
-  CHECK(fo_ss.endmember_occupancies.isApprox(
+  CHECK(fo_ss.get_endmember_occupancies().isApprox(
     (Eigen::ArrayXXd(2, 1) << 1,
                               1).finished(), tol_rel));
-  CHECK(fo_ss.endmember_n_occupancies.isApprox(
+  CHECK(fo_ss.get_endmember_n_occupancies().isApprox(
     (Eigen::ArrayXXd(2, 1) << 2,
                               2).finished(), tol_rel));
 }
@@ -163,28 +163,28 @@ TEST_CASE_METHOD(OlivineFixture, "Single ss", "[core][solution_model]") {
 TEST_CASE_METHOD(MultiSiteFixture, "Check multi-site solutions", "[core][solution_model]") {
   solution_models::IdealSolution sol(em);
   // ints
-  CHECK(sol.n_endmembers == 3);
-  CHECK(sol.n_occupancies == 5);
-  CHECK(sol.n_sites == 2);
+  CHECK(sol.get_n_endmembers() == 3);
+  CHECK(sol.get_n_occupancies() == 5);
+  CHECK(sol.get_n_sites() == 2);
   // strings
-  CHECK(sol.empty_formula == "[]3[]2Si3O12");
-  CHECK(sol.general_formula == "[Mg,Fe]3[Al,Mg,Si]2Si3O12");
-  CHECK(sol.formulas == std::vector<std::string>{"[Mg]3[Al]2Si3O12", "[Fe]3[Al]2Si3O12", "[Mg]3[Mg1/2Si1/2]2Si3O12"});
-  CHECK(sol.site_names == std::vector<std::string>{"Mg_A", "Fe_A", "Al_B", "Mg_B", "Si_B"});
-  CHECK(sol.sites == std::vector<std::vector<std::string>>{{"Mg", "Fe"}, {"Al", "Mg", "Si"}});
-  CHECK(sol.solution_formulae ==
+  CHECK(sol.get_empty_formula() == "[]3[]2Si3O12");
+  CHECK(sol.get_general_formula() == "[Mg,Fe]3[Al,Mg,Si]2Si3O12");
+  CHECK(sol.get_formulas() == std::vector<std::string>{"[Mg]3[Al]2Si3O12", "[Fe]3[Al]2Si3O12", "[Mg]3[Mg1/2Si1/2]2Si3O12"});
+  CHECK(sol.get_site_names() == std::vector<std::string>{"Mg_A", "Fe_A", "Al_B", "Mg_B", "Si_B"});
+  CHECK(sol.get_sites() == std::vector<std::vector<std::string>>{{"Mg", "Fe"}, {"Al", "Mg", "Si"}});
+  CHECK(sol.get_solution_formulae() ==
     std::vector<std::map<std::string, double>>{ {{"Mg", 3.0}, {"Al", 2.0}},
                                                 {{"Fe", 3.0}, {"Al", 2.0}},
                                                 {{"Mg", 4.0}, {"Si", 1.0}} });
-  CHECK(sol.site_multiplicities.isApprox(
+  CHECK(sol.get_site_multiplicities().isApprox(
     (Eigen::ArrayXXd(3, 5) << 3, 3, 2, 2, 2,
                               3, 3, 2, 2, 2,
                               3, 3, 2, 2, 2).finished(), tol_rel));
-  CHECK(sol.endmember_occupancies.isApprox(
+  CHECK(sol.get_endmember_occupancies().isApprox(
     (Eigen::ArrayXXd(3, 5) << 1, 0, 1, 0, 0,
                               0, 1, 1, 0, 0,
                               1, 0, 0, 0.5, 0.5).finished(), tol_rel));
-  CHECK(sol.endmember_n_occupancies.isApprox(
+  CHECK(sol.get_endmember_n_occupancies().isApprox(
     (Eigen::ArrayXXd(3, 5) << 3, 0, 2, 0, 0,
                               0, 3, 2, 0, 0,
                               3, 0, 0, 1, 1).finished(), tol_rel));

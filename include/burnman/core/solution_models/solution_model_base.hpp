@@ -36,32 +36,72 @@ class SolutionModel {
   std::vector<Mineral> endmembers;
   /// use endmembers.emplace_back( ) to add
 
-  // Counts
-  // Using Eigen::Index (usually std::ptrdiff_t) - cast to size_t for STL containers
-  Eigen::Index n_endmembers;
-  Eigen::Index n_sites;
-  Eigen::Index n_occupancies;
-  // Site multiplicity and occupancy matrices
-  Eigen::ArrayXXd site_multiplicities;
-  Eigen::ArrayXXd endmember_occupancies;
-  Eigen::ArrayXXd endmember_n_occupancies;
-  // Chemical formula/site information and strings
-  std::vector<std::string> formulas; // Endmember formulas
-  std::string empty_formula; // Formula stripped of site info
-  std::string general_formula; // Combined solution formula
-  std::vector<std::map<std::string, double>> solution_formulae; // Map of site chem for each em.
-  std::vector<std::string> site_names; // Generic site names
-  std::vector<std::vector<std::string>> sites; // Species on equivalent sites
-  // TODO:
-  //  Check members and move to protected/private if possible...
-  // const std::vector<Mineral>& minerals() const { return minerals; } ...etc.
-  //  Consider size_t for n_endmembers etc.
-
   // Constructor
   SolutionModel(const types::PairedEndmemberList& endmember_list);
 
   virtual ~SolutionModel() = default;
   void process_solution_chemistry();
+
+  // Public getters for solution properties
+  /**
+   * @brief Retrieve number of endmembers in the solution model.
+   */
+  Eigen::Index get_n_endmembers() const;
+
+  /**
+   * @brief Retrieve number of sites in solution model.
+   */
+  Eigen::Index get_n_sites() const;
+
+  /**
+   * @brief Retrieve total site occupancy count.
+   */
+  Eigen::Index get_n_occupancies() const;
+
+  /**
+   * @brief Retrieve site occupancy matrix.
+   */
+  Eigen::ArrayXXd get_site_multiplicities() const;
+
+  /**
+   * @brief Retrieve solution model occupancy matrix.
+   */
+  Eigen::ArrayXXd get_endmember_occupancies() const;
+
+  /**
+   * @brief Retrieve solution model total occupancy matrix.
+   */
+  Eigen::ArrayXXd get_endmember_n_occupancies() const;
+
+  /**
+   * @brief Retrieve solution model site names.
+   */
+  std::vector<std::string> get_site_names() const;
+
+  /**
+   * @brief Retrieve soluton formula with blank sites.
+   */
+  std::string get_empty_formula() const;
+
+  /**
+   * @brief Retrieve generalised solution formula.
+   */
+  std::string get_general_formula() const;
+
+  /**
+   * @brief Retrieve endmember formulas.
+   */
+  std::vector<std::string> get_formulas() const;
+
+  /**
+   * @brief Retrieve solution model sites list.
+   */
+  std::vector<std::vector<std::string>> get_sites() const;
+
+  /**
+   * @brief Retrieve solution site formulae
+   */
+  std::vector<std::map<std::string, double>> get_solution_formulae() const;
 
   // Public functions always using base class implementation
   /**
@@ -257,9 +297,27 @@ class SolutionModel {
     const Eigen::ArrayXd& molar_fractions) const = 0;
 
  protected:
-  ;
+  // Counts
+  // Using Eigen::Index (usually std::ptrdiff_t) - cast to size_t for STL containers
+  Eigen::Index n_endmembers;
+  // Site multiplicity and occupancy matrices
+  Eigen::ArrayXXd site_multiplicities;
+  Eigen::ArrayXXd endmember_n_occupancies;
+
  private:
-  ;
+  // Counts
+  Eigen::Index n_sites;
+  Eigen::Index n_occupancies;
+  // Site multiplicity and occupancy matrices
+  Eigen::ArrayXXd endmember_occupancies;
+  // Chemical formula/site information and strings
+  std::vector<std::string> formulas; // Endmember formulas
+  std::string empty_formula; // Formula stripped of site info
+  std::string general_formula; // Combined solution formula
+  std::vector<std::map<std::string, double>> solution_formulae; // Map of site chem for each em.
+  std::vector<std::string> site_names; // Generic site names
+  std::vector<std::vector<std::string>> sites; // Species on equivalent sites
+
 };
 
 } // namespace solution_models
