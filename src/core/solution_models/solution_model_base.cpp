@@ -241,39 +241,39 @@ Eigen::Index SolutionModel::get_n_occupancies() const {
   return this->n_occupancies;
 }
 
-Eigen::ArrayXXd SolutionModel::get_site_multiplicities() const {
+const Eigen::ArrayXXd& SolutionModel::get_site_multiplicities() const {
   return this->site_multiplicities;
 }
 
-Eigen::ArrayXXd SolutionModel::get_endmember_occupancies() const {
+const Eigen::ArrayXXd& SolutionModel::get_endmember_occupancies() const {
   return this->endmember_occupancies;
 }
 
-Eigen::ArrayXXd SolutionModel::get_endmember_n_occupancies() const {
+const Eigen::ArrayXXd& SolutionModel::get_endmember_n_occupancies() const {
   return this->endmember_n_occupancies;
 }
 
-std::vector<std::string> SolutionModel::get_site_names() const {
+const std::vector<std::string>& SolutionModel::get_site_names() const {
   return this->site_names;
 }
 
-std::string SolutionModel::get_empty_formula() const {
+const std::string& SolutionModel::get_empty_formula() const {
   return this->empty_formula;
 }
 
-std::string SolutionModel::get_general_formula() const {
+const std::string& SolutionModel::get_general_formula() const {
   return this->general_formula;
 }
 
-std::vector<std::string> SolutionModel::get_formulas() const {
+const std::vector<std::string>& SolutionModel::get_formulas() const {
   return this->formulas;
 }
 
-std::vector<std::vector<std::string>> SolutionModel::get_sites() const {
+const std::vector<std::vector<std::string>>& SolutionModel::get_sites() const {
   return this->sites;
 }
 
-std::vector<std::map<std::string, double>> SolutionModel::get_solution_formulae() const {
+const std::vector<std::map<std::string, double>>& SolutionModel::get_solution_formulae() const {
   return this->solution_formulae;
 }
 

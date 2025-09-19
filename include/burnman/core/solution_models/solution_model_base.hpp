@@ -60,47 +60,47 @@ class SolutionModel {
   /**
    * @brief Retrieve site occupancy matrix.
    */
-  Eigen::ArrayXXd get_site_multiplicities() const;
+  const Eigen::ArrayXXd& get_site_multiplicities() const;
 
   /**
    * @brief Retrieve solution model occupancy matrix.
    */
-  Eigen::ArrayXXd get_endmember_occupancies() const;
+  const Eigen::ArrayXXd& get_endmember_occupancies() const;
 
   /**
    * @brief Retrieve solution model total occupancy matrix.
    */
-  Eigen::ArrayXXd get_endmember_n_occupancies() const;
+  const Eigen::ArrayXXd& get_endmember_n_occupancies() const;
 
   /**
    * @brief Retrieve solution model site names.
    */
-  std::vector<std::string> get_site_names() const;
+  const std::vector<std::string>& get_site_names() const;
 
   /**
    * @brief Retrieve soluton formula with blank sites.
    */
-  std::string get_empty_formula() const;
+  const std::string& get_empty_formula() const;
 
   /**
    * @brief Retrieve generalised solution formula.
    */
-  std::string get_general_formula() const;
+  const std::string& get_general_formula() const;
 
   /**
    * @brief Retrieve endmember formulas.
    */
-  std::vector<std::string> get_formulas() const;
+  const std::vector<std::string>& get_formulas() const;
 
   /**
    * @brief Retrieve solution model sites list.
    */
-  std::vector<std::vector<std::string>> get_sites() const;
+  const std::vector<std::vector<std::string>>& get_sites() const;
 
   /**
    * @brief Retrieve solution site formulae
    */
-  std::vector<std::map<std::string, double>> get_solution_formulae() const;
+  const std::vector<std::map<std::string, double>>& get_solution_formulae() const;
 
   // Public functions always using base class implementation
   /**
