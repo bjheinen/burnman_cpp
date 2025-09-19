@@ -37,7 +37,7 @@ struct AveragingSchemeMulti : AveragingSchemeFixture {
   T scheme;
 };
 
-TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Voigt", "[core][averaging_schemes]") {
+TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Voigt", "[tools][averaging_schemes]") {
   // Quick check of Voigt average
   REQUIRE(utils::voigt_fn(v_a, X_a) == 1.75);
   // Check voigt_fn normalises if needed
@@ -52,7 +52,7 @@ TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Voigt", "[core][averaging_s
   REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == utils::voigt_fn(v_b, X_b));
 }
 
-TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Reuss", "[core][averaging_schemes]") {
+TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Reuss", "[tools][averaging_schemes]") {
   // Quick check of Reuss average
   REQUIRE(utils::reuss_fn(v_a, X_a) == 1.6);
   // Check reuss_fn normalises if needed
@@ -67,7 +67,7 @@ TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::Reuss", "[core][averaging_s
   REQUIRE(scheme.average_bulk_moduli(v_b, X_b, X_c) == utils::reuss_fn(v_b, X_b));
 }
 
-TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::VoigtReussHill", "[core][averaging_schemes]") {
+TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::VoigtReussHill", "[tools][averaging_schemes]") {
   // Quick check of VRH average
   REQUIRE(utils::voigt_reuss_hill_fn(v_a, X_a) == 1.675);
   CHECK_THAT(utils::voigt_reuss_hill_fn(v_b, X_b),
@@ -96,7 +96,7 @@ TEMPLATE_TEST_CASE_METHOD(AveragingSchemeMulti, "Averaging (common fns)",
   CHECK(sch.average_heat_capacity_p(va, Xa) == 1.75);
 }
 
-TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikmanLower", "[core][averaging_schemes]") {
+TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikmanLower", "[tools][averaging_schemes]") {
   HashinShtrikmanLower scheme;
   CHECK_THAT(scheme.average_bulk_moduli(v_b, X_b, X_c),
     WithinRel(ref_hsl_K, tol_rel) ||
@@ -106,7 +106,7 @@ TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikmanLower", "[co
     WithinAbs(ref_hsl_G, tol_abs));
 }
 
-TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikmanUpper", "[core][averaging_schemes]") {
+TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikmanUpper", "[tools][averaging_schemes]") {
   HashinShtrikmanUpper scheme;
   CHECK_THAT(scheme.average_bulk_moduli(v_b, X_b, X_c),
     WithinRel(ref_hsu_K, tol_rel) ||
@@ -116,7 +116,7 @@ TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikmanUpper", "[co
     WithinAbs(ref_hsu_G, tol_abs));
 }
 
-TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikman", "[core][averaging_schemes]") {
+TEST_CASE_METHOD(AveragingSchemeFixture, "Averaging::HashinShtrikman", "[tools][averaging_schemes]") {
   HashinShtrikman scheme;
   double ref_hs_K = (ref_hsl_K + ref_hsu_K) / 2.0;
   double ref_hs_G = (ref_hsl_G + ref_hsu_G) / 2.0;
