@@ -20,6 +20,34 @@
 using namespace Catch::Matchers;
 using namespace burnman;
 
+namespace burnman::solution_models{
+  struct RegularSolutionTestHelper {
+    static const Eigen::ArrayXd& get_alphas(
+      const solution_models::AsymmetricRegularSolution& sol
+    ) {
+      return sol.alphas;
+    }
+
+    static const Eigen::MatrixXd& get_W_e(
+      const solution_models::AsymmetricRegularSolution& sol
+    ) {
+      return sol.W_e;
+    }
+
+    static const Eigen::MatrixXd& get_W_s(
+      const solution_models::AsymmetricRegularSolution& sol
+    ) {
+      return sol.W_s;
+    }
+
+    static const Eigen::MatrixXd& get_W_v(
+      const solution_models::AsymmetricRegularSolution& sol
+    ) {
+      return sol.W_v;
+    }
+  };
+} // namespace burnman::solution_models
+
 struct OlivineFixture {
   Mineral forsterite;
   Mineral fayalite;
@@ -208,28 +236,28 @@ TEST_CASE_METHOD(MultiSiteFixture, "Regular Solutions", "[core][solution_model]"
   SECTION("Symmetric Solution - alphas") {
     solution_models::SymmetricRegularSolution sym_sol(em, interactions);
     solution_models::AsymmetricRegularSolution asym_sol(em, a_ones, interactions);
-    REQUIRE(sym_sol.alphas.size() == 3);
-    REQUIRE((sym_sol.alphas == asym_sol.alphas).all());
-    REQUIRE(sym_sol.alphas.isOnes());
+    REQUIRE(solution_models::RegularSolutionTestHelper::get_alphas(sym_sol).size() == 3);
+    REQUIRE((solution_models::RegularSolutionTestHelper::get_alphas(sym_sol) == solution_models::RegularSolutionTestHelper::get_alphas(asym_sol)).all());
+    REQUIRE(solution_models::RegularSolutionTestHelper::get_alphas(sym_sol).isOnes());
   }
   SECTION("Symmetric Solution - interactions") {
     solution_models::SymmetricRegularSolution e_sol(em, interactions);
     solution_models::SymmetricRegularSolution evs_sol(em, interactions, interactions, interactions);
-    REQUIRE(e_sol.W_e.rows() == e_sol.W_e.cols());
-    REQUIRE(e_sol.W_v.rows() == e_sol.W_v.cols());
-    REQUIRE(e_sol.W_s.rows() == e_sol.W_s.cols());
-    CHECK(e_sol.W_v.isZero());
-    CHECK(e_sol.W_s.isZero());
-    CHECK(e_sol.W_e.isApprox(ref_W, tol_rel));
-    CHECK(evs_sol.W_e.isApprox(ref_W, tol_rel));
-    CHECK(evs_sol.W_e.isApprox(evs_sol.W_v, tol_rel));
-    CHECK(evs_sol.W_e.isApprox(evs_sol.W_s, tol_rel));
+    REQUIRE(solution_models::RegularSolutionTestHelper::get_W_e(e_sol).rows() == solution_models::RegularSolutionTestHelper::get_W_e(e_sol).cols());
+    REQUIRE(solution_models::RegularSolutionTestHelper::get_W_v(e_sol).rows() == solution_models::RegularSolutionTestHelper::get_W_v(e_sol).cols());
+    REQUIRE(solution_models::RegularSolutionTestHelper::get_W_s(e_sol).rows() == solution_models::RegularSolutionTestHelper::get_W_s(e_sol).cols());
+    CHECK(solution_models::RegularSolutionTestHelper::get_W_v(e_sol).isZero());
+    CHECK(solution_models::RegularSolutionTestHelper::get_W_s(e_sol).isZero());
+    CHECK(solution_models::RegularSolutionTestHelper::get_W_e(e_sol).isApprox(ref_W, tol_rel));
+    CHECK(solution_models::RegularSolutionTestHelper::get_W_e(evs_sol).isApprox(ref_W, tol_rel));
+    CHECK(solution_models::RegularSolutionTestHelper::get_W_e(evs_sol).isApprox(solution_models::RegularSolutionTestHelper::get_W_v(evs_sol), tol_rel));
+    CHECK(solution_models::RegularSolutionTestHelper::get_W_e(evs_sol).isApprox(solution_models::RegularSolutionTestHelper::get_W_s(evs_sol), tol_rel));
   }
   SECTION("Asymmetric Solution - interactions") {
     solution_models::AsymmetricRegularSolution sol(em, alphas, interactions);
-    REQUIRE(sol.alphas.size() == 3);
-    REQUIRE((sol.alphas == (Eigen::ArrayXd(3) << 1, 2, 2).finished()).all());
-    CHECK(sol.W_e.isApprox(ref_Wa, tol_rel));
+    REQUIRE(solution_models::RegularSolutionTestHelper::get_alphas(sol).size() == 3);
+    REQUIRE((solution_models::RegularSolutionTestHelper::get_alphas(sol) == (Eigen::ArrayXd(3) << 1, 2, 2).finished()).all());
+    CHECK(solution_models::RegularSolutionTestHelper::get_W_e(sol).isApprox(ref_Wa, tol_rel));
   }
 }
 

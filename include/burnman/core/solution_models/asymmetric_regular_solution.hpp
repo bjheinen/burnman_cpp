@@ -50,12 +50,6 @@ class AsymmetricRegularSolution : public IdealSolution{
     std::vector<std::vector<double>> volume_interaction = {},
     std::vector<std::vector<double>> entropy_interaction = {});
 
-  // Alphas (van Laar) and interaction parameters
-  Eigen::ArrayXd alphas;
-  Eigen::MatrixXd W_e; // energy interactions
-  Eigen::MatrixXd W_s; // entropy interactions
-  Eigen::MatrixXd W_v; // volume interactions
-
   Eigen::ArrayXd compute_excess_partial_gibbs_free_energies(
     double pressure,
     double temperature,
@@ -98,6 +92,12 @@ class AsymmetricRegularSolution : public IdealSolution{
 
  private:
 
+  // Alphas (van Laar) and interaction parameters
+  Eigen::ArrayXd alphas;
+  Eigen::MatrixXd W_e; // energy interactions
+  Eigen::MatrixXd W_s; // entropy interactions
+  Eigen::MatrixXd W_v; // volume interactions
+
   Eigen::ArrayXd compute_phi(
     const Eigen::ArrayXd& molar_fractions) const;
 
@@ -113,6 +113,9 @@ class AsymmetricRegularSolution : public IdealSolution{
   Eigen::MatrixXd compute_non_ideal_hessian(
     const Eigen::MatrixXd& interactions,
     const Eigen::ArrayXd& molar_fractions) const;
+
+  // Forward declare helper struct to access private members for tests
+  friend struct RegularSolutionTestHelper;
 
 };
 
