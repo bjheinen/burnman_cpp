@@ -40,7 +40,6 @@ class SolutionModel {
   SolutionModel(const types::PairedEndmemberList& endmember_list);
 
   virtual ~SolutionModel() = default;
-  void process_solution_chemistry();
 
   // Public getters for solution properties
   /**
@@ -317,6 +316,29 @@ class SolutionModel {
   std::vector<std::map<std::string, double>> solution_formulae; // Map of site chem for each em.
   std::vector<std::string> site_names; // Generic site names
   std::vector<std::vector<std::string>> sites; // Species on equivalent sites
+
+  /**
+   * @brief Parses solution composition to set up site and occupancy data.
+   *
+   * This function parses the list of endmember formulas provided in the constructor
+   * and constructs the site lists, occupancy, and multiplicity data required for
+   * the solution model. It also constructs generalised solution formulae for convenience.
+   *
+   * @throws std::runtime_error if the number of sites is inconsistent between formulae.
+   *
+   * @note Several class members are set by this function:
+   * - `n_occupancies` — total number of distinct species across sites.
+   * - `n_sites` — number of sites (in the solution model) per endmember.
+   * - `solution_formulae` — amount of each species per site for each endmember.
+   * - `sites` — species present on each site.
+   * - `endmember_occupancies` — fractional occupancies for each endmember.
+   * - `site_multiplicities` — site multiplicities for each endmember.
+   * - `endmember_n_occupancies` — total site occupancies for each endmember (occupancies * multiplicities).
+   * - `site_names` — Species specific site names (e.g. {"Mg_A", "Fe_A", "Al_B", "Mg_B", "Si_B"})
+   * - `empty_formula` — generalised formula with empty sites [].
+   * - `general_formula` — generalised formula with all possible site species listed
+   */
+  void process_solution_chemistry();
 
 };
 
