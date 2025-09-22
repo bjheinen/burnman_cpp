@@ -168,6 +168,19 @@ TEST_CASE("get_independent_row_indices; values", "[utils][matrix_utils]") {
     std::vector<Eigen::Index> result = utils::get_independent_row_indices(m);
     REQUIRE(result.empty());
   }
+  SECTION("Reference example matrix") {
+    Eigen::MatrixXd m(6, 6);
+    m <<
+      0, 1, 0, 0, 1, 3,
+      0, 0, 1, 0, 1, 3,
+      0, 0, 0, 2, 0, 3,
+      0, 1, 0, 0, 0, 1,
+      0, 0, 1, 0, 0, 1,
+      1, 0, 0, 0, 1, 3;
+    std::vector<Eigen::Index> expected = {0, 1, 2, 3, 4};
+    std::vector<Eigen::Index> result = utils::get_independent_row_indices(m);
+    REQUIRE(result == expected);
+  }
 }
 
 TEST_CASE("complete_basis", "[utils][matrix_utils]") {
@@ -219,6 +232,22 @@ TEST_CASE("complete_basis", "[utils][matrix_utils]") {
     REQUIRE(result.isIdentity());
   }
   // Only used from reaction_basis? What about square but not full rank.
+  SECTION("Reference example reaction basis") {
+    Eigen::MatrixXd basis(1, 6);
+    basis << 1, -1, 0, -1, 1, 0;
+    Eigen::MatrixXd expected(6, 6);
+    expected <<
+      1, -1,  0, -1, 1, 0,
+      1,  0,  0,  0, 0, 0,
+      0,  1,  0,  0, 0, 0,
+      0,  0,  1,  0, 0, 0,
+      0,  0,  0,  1, 0, 0,
+      0,  0,  0,  0, 0, 1;
+    Eigen::MatrixXd result = utils::complete_basis(basis);
+    REQUIRE(result.rows() == 6);
+    REQUIRE(result.cols() == 6);
+    REQUIRE((result.array() == expected.array()).all());
+  }
 }
 
 TEST_CASE("Test compute_rref for identity matrix", "[utils][matrix_utils]") {
