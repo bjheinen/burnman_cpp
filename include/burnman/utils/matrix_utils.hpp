@@ -16,6 +16,8 @@
 #include <vector>
 #include <Eigen/Dense>
 
+#include <iostream>
+
 namespace burnman {
 namespace utils {
 
@@ -128,7 +130,7 @@ namespace utils {
 
   /**
    * @brief Convert jagged upper triangle to Eigen::Matrix
-   * 
+   *
    * e.g.:
    *   std::vector<std::vector<double>> v = {
    *     {0.0, 24.74e3, 26.0e3, 24.3e3},
@@ -143,7 +145,7 @@ namespace utils {
    *     0, 0, 0, 60531.36, 0,
    *     0, 0, 0, 0, 10000,
    *     0, 0, 0, 0, 0;
-   * 
+   *
    * @param v jagged array to convert.
    * @param n size of square matrix.
    * @return Square matrix.
@@ -223,35 +225,19 @@ namespace utils {
     }
     // Flip basis
     Eigen::MatrixXd basis_flipped = basis.rowwise().reverse();
-    // FullPivLU decomposition to get RREF
-    // TODO: use new RREF manual function
-    Eigen::FullPivLU<Eigen::MatrixXd> lu_basis(basis_flipped);
-    // Get the rank of the matrix
-    Eigen::Index rank = lu_basis.rank();
-    Eigen::MatrixXd U = lu_basis.matrixLU().triangularView<Eigen::Upper>();
-    // Get the indices of the pivot columns for each row -
-    // first non-zero element in each row.
-    std::vector<Eigen::Index> pivot_columns;
-    for (Eigen::Index i = 0; i < rank; ++i) {
-      for (Eigen::Index j = i; j < m; ++j) {
-        if (U(i, j) != 0) {
-          pivot_columns.push_back(m - 1 - j);
-          break;
-        }
-      }
-    }
+    // Get pivot columns from manual RREF
+    RREFResult rref = compute_rref(basis_flipped);
+    const Eigen::VectorXi& pivots_flipped = rref.pivot_columns;
+    // Flip pivot column indices back
+    Eigen::VectorXi pivots = (static_cast<int>(m) - 1) - pivots_flipped.array();
     // Get excluded indices
-    std::vector<bool> excluded(static_cast<std::size_t>(m), false);
-    for (Eigen::Index val : pivot_columns) {
-      if (val >= 0 && val < m)
-        excluded[static_cast<std::size_t>(val)] = true;
-    }
-    // Get indices of identity matrix to use
+    Eigen::Array<bool, Eigen::Dynamic, 1> excluded = Eigen::Array<bool, Eigen::Dynamic, 1>::Constant(m, false);
+    excluded(pivots) = true;
     std::vector<Eigen::Index> basis_indices;
-    basis_indices.reserve(static_cast<std::size_t>(m - static_cast<Eigen::Index>(pivot_columns.size())));
     for (Eigen::Index i = 0; i < m; ++i) {
-      if (!excluded[static_cast<std::size_t>(i)])
+      if (!excluded(i)) {
         basis_indices.push_back(i);
+      }
     }
     // Get identity matrix and concatenate with basis
     Eigen::MatrixXd I = Eigen::MatrixXd::Identity(m, m);
