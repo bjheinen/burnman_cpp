@@ -180,29 +180,27 @@ namespace utils {
   }
 
   /**
-   * @brief Retrieves indices of linearly independent rows
+   * @brief Retrieves indices of linearly independent columns
    *
-   * Uses QR decomposition to get independent columns. A transpose
-   * is applied at the start so that independent rows are retrieved.
+   * Helper function to return the list of linearly indepedent columns
+   * of a matrix (i.e. the pivot column indices). This functions is
+   * left here for convenience. It currently maps the Eigen::VectorXi
+   * to a std::vector.
    *
    * @param mat Matrix
-   * @returns Sorted list of indices of linearly independent rows
+   * @returns Sorted list of indices of linearly independent cols
    */
-  inline std::vector<Eigen::Index> get_independent_row_indices(
+  inline std::vector<Eigen::Index> get_independent_col_indices(
     const Eigen::MatrixXd& mat
   ) {
     // TODO: Use Eigen::ArrayXi for indices?
-    // Transpose to get rows instead of cols
-    Eigen::MatrixXd A = mat.transpose();
-    // QR decomp with column pivoting
-    Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(A);
-    // Use rank as num independent cols
-    Eigen::Index rank = qr.rank();
-    // colsPermutation() retrieves P
-    // head(rank) takes needed block
-    Eigen::VectorXi indices_vector = qr.colsPermutation().indices().head(rank);
-    std::vector<Eigen::Index> indices(indices_vector.begin(), indices_vector.begin() + rank);
-    std::sort(indices.begin(), indices.end());
+    // Use manual RREF for pivots
+    // RREF currently guarantees increasing index order. If
+    // the implementation is changed we should sort here for safety.
+    RREFResult rref = compute_rref(mat);
+    const Eigen::VectorXi& pivots = rref.pivot_columns;
+    std::vector<Eigen::Index> indices(pivots.begin(), pivots.end());
+    //std::sort(indices.begin(), indices.end());
     return indices;
   }
 

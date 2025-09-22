@@ -153,7 +153,7 @@ std::vector<std::string> CompositeMaterial::compute_elements() const {
 }
 
 std::vector<Eigen::Index> CompositeMaterial::compute_independent_element_indices() const {
-  return utils::get_independent_row_indices(get_stoichiometric_matrix());
+  return utils::get_independent_col_indices(get_stoichiometric_matrix());
 }
 
 std::vector<Eigen::Index> CompositeMaterial::compute_dependent_element_indices() const {
