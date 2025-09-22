@@ -334,7 +334,7 @@ TEST_CASE("Reference value tests", "[core][solution_model]") {
     REQUIRE(ideal_sol.compute_entropy_hessian(P, T, x).cols() == 5);
     REQUIRE(ideal_sol.compute_volume_hessian(P, T, x).cols() == 5);
     CHECK(ideal_sol.compute_excess_volume(P, T, x) == 0);
-    CHECK(ideal_sol.compute_excess_enthalpy(P, T, x) == 0);
+    CHECK(ideal_sol.compute_excess_enthalpy(P, T, x) == 0); // Sometimes fails - as both G and S tests pass this is just floating point error, WithinRel fails too, Calculated enthalpy = 7.27596e-12
     CHECK_THAT(ideal_sol.compute_excess_gibbs_free_energy(P, T, x),
       WithinRel(ref_ideal_excess_gibbs_free_energy, tol_rel) || WithinAbs(ref_ideal_excess_gibbs_free_energy, tol_abs));
     CHECK_THAT(ideal_sol.compute_excess_entropy(P, T, x),
