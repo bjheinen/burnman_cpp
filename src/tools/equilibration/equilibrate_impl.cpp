@@ -178,9 +178,7 @@ EquilibrateResult equilibrate(
 
     double maxres = 0.0;
     if (sol.success && assemblage.get_reaction_affinities().size() > 0) {
-      // TODO: assemblage.get_reaction_affinities()
       maxres = assemblage.get_reaction_affinities().cwiseAbs().maxCoeff() + 1.0e-5;
-      // TODO: assemblage.set_equilibrium_tolerance()
       assemblage.set_equilibrium_tolerance(maxres);
     }
     // TODO: can't store assemblage as not separate object for each problem in loop
