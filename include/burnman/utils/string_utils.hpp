@@ -63,6 +63,22 @@ namespace utils {
   }
 
   /**
+   * @brief Convert value to string using ostringstream.
+   *
+   * Works for types that implement << operator.
+   * Safe for use on strings/char* (unlike std::to_string).
+   *
+   * @param val The value to convert.
+   * @return The string representation of the value.
+   */
+  template <typename T>
+  inline std::string to_string(const T& val) {
+    std::ostringstream oss;
+    oss << val;
+    return oss.str();
+  }
+
+  /**
    * @brief Join vector of strings (a la Python .join())
    *
    * @param string_list std::vector of string elements
