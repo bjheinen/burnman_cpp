@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <string>
+#include "burnman/utils/warnings.hpp"
 #include "tolerances.hpp"
 
 using namespace Catch::Matchers;
@@ -56,15 +57,11 @@ TEST_CASE("fallback_to_default", "[utils][validate_optionals]") {
 }
 
 TEST_CASE("check_in_range", "[utils][validate_optionals]") {
-  // Redirect cerr to silence warnings
-  std::streambuf* orig_cerr = std::cerr.rdbuf();
-  std::ostringstream oss;
-  std::cerr.rdbuf(oss.rdbuf());
+  // Supress warnings for test
+  utils::supress_warnings = true;
   std::optional<double> opt;
   opt = 5.0;
   REQUIRE(utils::check_in_range(opt, 0.0, 10.0));
   REQUIRE_FALSE(utils::check_in_range(opt, 6.0, 10.0));
   REQUIRE_THROWS_AS(utils::check_in_range(opt, 6.0, 10.0, "Test parameter", true), std::runtime_error);
-  // Restore cerr buffer
-  std::cerr.rdbuf(orig_cerr);
 }
