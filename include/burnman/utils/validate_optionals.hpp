@@ -36,7 +36,7 @@ void require_set(
 ) {
   if (!opt.has_value()) {
     throw std::invalid_argument(
-      "Missing required parameter: " + name
+      msg + name
     );
   }
 }
