@@ -18,7 +18,7 @@ namespace burnman {
     /**
      * @brief Flag to suppress warnings across burnman.
      */
-    inline bool supress_warnings = false;
+    inline bool suppress_warnings = false;
 
     /**
      * @brief Prints a warning message.
@@ -28,7 +28,7 @@ namespace burnman {
     inline void warn(const std::string& message) {
       // Simple implementation: print to std::cerr
       // Could switch to a logging framework if needed
-      if (!supress_warnings) {
+      if (!suppress_warnings) {
         std::cerr << "Warning: " << message << std::endl;
       }
     }
