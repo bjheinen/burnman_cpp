@@ -58,7 +58,6 @@ TEST_CASE("fallback_to_default", "[utils][validate_optionals]") {
 
 TEST_CASE("check_in_range", "[utils][validate_optionals]") {
   // Supress warnings for test
-  utils::supress_warnings = true;
   std::optional<double> opt;
   opt = 5.0;
   REQUIRE(utils::check_in_range(opt, 0.0, 10.0));
