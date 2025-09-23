@@ -31,7 +31,7 @@ class Vinet : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(types::MineralParams& params) override;
+  void validate_parameters(types::MineralParams& params) override;
 
   // Specific EOS functions
   double compute_volume(
@@ -118,7 +118,7 @@ class Vinet : public EquationOfState{
 
   /**
    * @brief GSL function wrapper to compute P(V) - P
-   * 
+   *
    * @param x Volume to test (passed by solver)
    * @param p Generic pointer for parameter object
    * @see `eos::gsl_params::SolverParams_P`

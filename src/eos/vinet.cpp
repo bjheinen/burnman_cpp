@@ -11,53 +11,25 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/eos/components/gsl_params.hpp"
+#include "burnman/utils/validate_optionals.hpp"
 #include "burnman/optim/roots/brent.hpp"
 
 namespace burnman::eos {
 
-bool Vinet::validate_parameters(types::MineralParams& params) {
-
-  // TODO: check if we can just do if (!params.V_0)
-  // Check for required keys
-  if (!params.V_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: V_0");
-  }
-  if (!params.K_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: K_0");
-  }
-  if (!params.Kprime_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: Kprime_0");
-  }
-
-  if (!params.E_0.has_value()) {
-    params.E_0 = 0.0;
-  }
-  if (!params.P_0.has_value()) {
-    params.P_0 = 0.0;
-  }
-
-  // Set G to NaN unless user has set
-  if (!params.G_0.has_value()) {
-    params.G_0 = std::nan("");
-  }
-  if (!params.Gprime_0.has_value()) {
-    params.Gprime_0 = std::nan("");
-  }
-
+void Vinet::validate_parameters(types::MineralParams& params) {
+  // Check for required parameters
+  utils::require_set(params.V_0, "V_0");
+  utils::require_set(params.K_0, "K_0");
+  utils::require_set(params.Kprime_0, "Kprime_0");
+  // Set defaults for missing values
+  utils::fallback_to_default(params.E_0, 0.0);
+  utils::fallback_to_default(params.P_0, 0.0);
+  utils::fallback_to_default(params.G_0, std::nan(""));
+  utils::fallback_to_default(params.Gprime_0, std::nan(""));
   // Check values are reasonable
-  // TODO: warnings?
-  if (*params.V_0 < 1.0e-7 || *params.V_0 > 1.0e-3) {
-    ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
-  }
-  if (*params.K_0 < 1.0e9 || *params.K_0 > 1.0e13) {
-    ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
-  }
-  if (*params.Kprime_0 < -5.0 || *params.Kprime_0 > 10.0) {
-    ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
-  }
-
-  return 1; // maybe make this void
-
+  utils::check_in_range(params.V_0, 1.0e-7, 1.0e-3, "V_0");
+  utils::check_in_range(params.K_0, 1.0e9, 1.0e13, "K_0");
+  utils::check_in_range(params.Kprime_0, -5.0, 10.0, "Kprime_0");
 }
 
 // Compute P(V) - P as function to root find

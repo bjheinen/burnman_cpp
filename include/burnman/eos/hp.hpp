@@ -31,7 +31,7 @@ class HP_TMT : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(types::MineralParams& params) override;
+  void validate_parameters(types::MineralParams& params) override;
 
   // Specific EOS functions
   double compute_volume(

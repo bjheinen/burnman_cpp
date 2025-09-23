@@ -10,6 +10,7 @@
 #include "burnman/core/equation_of_state.hpp"
 #include <typeinfo>
 #include "burnman/utils/exceptions.hpp"
+#include "burnman/utils/warnings.hpp"
 
 namespace burnman {
 
@@ -32,8 +33,9 @@ double EquationOfState::compute_density(
 
 // Default compute function implementations (override in derived classes)
 
-bool EquationOfState::validate_parameters(types::MineralParams& params [[maybe_unused]]){
-  return 1; // Pass quietly as default
+void EquationOfState::validate_parameters(types::MineralParams& params [[maybe_unused]]){
+  // Pass with warning as default
+  utils::warn("No parameter validation implemented for EOS: " + get_class_name());
 }
 
 double EquationOfState::compute_volume(

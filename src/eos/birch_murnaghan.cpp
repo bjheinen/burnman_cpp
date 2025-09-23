@@ -11,63 +11,28 @@
 #include <cmath>
 #include <stdexcept>
 #include "burnman/eos/components/gsl_params.hpp"
+#include "burnman/utils/validate_optionals.hpp"
 #include "burnman/optim/roots/brent.hpp"
 
 namespace burnman::eos {
 
-bool BM3::validate_parameters(types::MineralParams& params) {
-
+void BM3::validate_parameters(types::MineralParams& params) {
   // Check for required keys
-  if (!params.V_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: V_0");
-  }
-  if (!params.K_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: K_0");
-  }
-  if (!params.Kprime_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: Kprime_0");
-  }
-
+  utils::require_set(params.V_0, "V_0");
+  utils::require_set(params.K_0, "K_0");
+  utils::require_set(params.Kprime_0, "Kprime_0");
   // Set defaults for missing values
-  if (!params.E_0.has_value()) {
-    params.E_0 = 0.0;
-  }
-  if (!params.P_0.has_value()) {
-    params.P_0 = 0.0;
-  }
-
-  // Set G to NaN unless user has set
-  if (!params.G_0.has_value()) {
-    params.G_0 = std::nan("");
-  }
-  if (!params.Gprime_0.has_value()) {
-    params.Gprime_0 = std::nan("");
-  }
-
+  utils::fallback_to_default(params.E_0, 0.0);
+  utils::fallback_to_default(params.P_0, 0.0);
+  utils::fallback_to_default(params.G_0, std::nan(""));
+  utils::fallback_to_default(params.Gprime_0, std::nan(""));
   // Check values are reasonable
-  // TODO: warnings?
-
-  if (*params.P_0 < 0.0) {
-    ; // warnings.warn("Unusual value for P_0", stacklevel=2)
-  }
-  if (*params.V_0 < 1.0e-7 || *params.V_0 > 1.0e-3) {
-    ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
-  }
-  if (*params.K_0 < 1.0e9 || *params.K_0 > 1.0e13) {
-    ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
-  }
-  if (*params.Kprime_0 < 0.0 || *params.Kprime_0 > 20.0) {
-    ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
-  }
-  if (*params.G_0 < 0.0 || *params.G_0 > 1.0e13) {
-    ; // warnings.warn("Unusual value for G_0", stacklevel=2)
-  }
-  if (*params.Gprime_0 < -5.0 || *params.Gprime_0 > 10.0) {
-    ; // warnings.warn("Unusual value for Gprime_0", stacklevel=2)
-  }
-
-  return 1;
-
+  utils::check_in_range(params.P_0, 0.0, 1.0e100, "P_0");
+  utils::check_in_range(params.V_0, 1.0e-7, 1.0e-3, "V_0");
+  utils::check_in_range(params.K_0, 1.0e9, 1.0e13, "K_0");
+  utils::check_in_range(params.Kprime_0, 0.0, 20.0, "Kprime_0");
+  utils::check_in_range(params.G_0, 0.0, 1.0e13, "G_0");
+  utils::check_in_range(params.Gprime_0, -5.0, 10.0, "Gprime_0");
 }
 
 // Compute P(V) - P as function to root find

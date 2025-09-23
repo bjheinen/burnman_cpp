@@ -12,98 +12,43 @@
 #include <stdexcept>
 #include "burnman/utils/constants.hpp"
 #include "burnman/eos/components/gsl_params.hpp"
+#include "burnman/utils/validate_optionals.hpp"
 #include "burnman/optim/roots/brent.hpp"
 #include "burnman/eos/components/debye.hpp"
 #include "burnman/eos/birch_murnaghan.hpp"
 
 namespace burnman::eos {
 
-bool MGD3::validate_parameters(types::MineralParams& params) {
-  // Check for required keys
-  if (!params.V_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: V_0");
-  }
-  if (!params.K_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: K_0");
-  }
-  if (!params.Kprime_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: Kprime_0");
-  }
-  if (!params.molar_mass.has_value()) {
-    throw std::invalid_argument("params object missing parameter: molar_mass");
-  }
-  if (!params.napfu.has_value()) {
-    throw std::invalid_argument("params object missing parameter: napfu");
-  }
-  if (!params.debye_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: debye_0");
-  }
-  if (!params.grueneisen_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: grueneisen_0");
-  }
-  if (!params.q_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: q_0");
-  }
-  // Set defaults for missing values
-  if (!params.T_0.has_value()) {
-    params.T_0 = 300.0;
-  }
-  if (!params.P_0.has_value()) {
-    params.P_0 = 0.0;
-  }
-  if (!params.E_0.has_value()) {
-    params.E_0 = 0.0;
-  }
-  if (!params.F_0.has_value()) {
-    params.F_0 = 0.0;
-  }
-  // Set G to NaN unless user has set
-  if (!params.G_0.has_value()) {
-    params.G_0 = std::nan("");
-  }
-  if (!params.Gprime_0.has_value()) {
-    params.Gprime_0 = std::nan("");
-  }
-
+void MGD3::validate_parameters(types::MineralParams& params) {
+  // Check for required parameters
+  utils::require_set(params.V_0, "V_0");
+  utils::require_set(params.K_0, "K_0");
+  utils::require_set(params.Kprime_0, "Kprime_0");
+  utils::require_set(params.molar_mass, "molar_mass");
+  utils::require_set(params.napfu, "napfu");
+  utils::require_set(params.debye_0, "debye_0");
+  utils::require_set(params.grueneisen_0, "grueneisen_0");
+  utils::require_set(params.q_0, "q_0");
+  // Check for optional parameters and set defaults if missing
+  utils::fallback_to_default(params.T_0, 300.0);
+  utils::fallback_to_default(params.P_0, 0.0);
+  utils::fallback_to_default(params.E_0, 0.0);
+  utils::fallback_to_default(params.F_0, 0.0);
+  utils::fallback_to_default(params.G_0, std::nan(""));
+  utils::fallback_to_default(params.Gprime_0, std::nan(""));
   // Check values are reasonable
-  // TODO: warnings?
-  if (*params.P_0 < 0.0) {
-    ; // warnings.warn("Unusual value for P_0", stacklevel=2)
-  }
-  if (*params.V_0 < 1.0e-7 || *params.V_0 > 1.0e-3) {
-    ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
-  }
-  if (*params.K_0 < 1.0e9 || *params.K_0 > 1.0e13) {
-    ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
-  }
-  if (*params.Kprime_0 < 0.0 || *params.Kprime_0 > 20.0) {
-    ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
-  }
-  if (*params.G_0 < 0.0 || *params.G_0 > 1.0e13) {
-    ; // warnings.warn("Unusual value for G_0", stacklevel=2)
-  }
-  if (*params.Gprime_0 < -5.0 || *params.Gprime_0 > 10.0) {
-    ; // warnings.warn("Unusual value for Gprime_0", stacklevel=2)
-  }
-  if (*params.T_0 < 0.0) {
-    ; // warnings.warn("Unusual value for T_0", stacklevel=2)
-  }
-  if (*params.molar_mass < 0.001 || *params.molar_mass > 1.0) {
-    ; //warning warnings.warn("Unusual value for molar_mass", stacklevel=2)
-  }
-  if (*params.napfu < 1 || *params.napfu > 1000) {
-    ; // warning warnings.warn("Unusual value for napfu", stacklevel=2)
-  }
-  if (*params.debye_0 < 1.0 || *params.debye_0 > 10000.0) {
-    ; // warning warnings.warn("Unusual value for debye_0", stacklevel=2)
-  }
-  if (*params.grueneisen_0 < 0.0 || *params.G_0 > 10.0) {
-    ; // warnings.warn("Unusual value for grueneisen_0", stacklevel=2)
-  }
-  if (*params.q_0 < -10.0 || *params.q_0 > 10.0) {
-    ; // warnings.warn("Unusual value for q_0", stacklevel=2)
-  }
-  return 1;
+  utils::check_in_range(params.P_0, 0.0, 1.0e100, "P_0");
+  utils::check_in_range(params.V_0, 1.0e-7, 1.0e-3, "V_0");
+  utils::check_in_range(params.K_0, 1.0e9, 1.0e13, "K_0");
+  utils::check_in_range(params.Kprime_0, 0.0, 20.0, "Kprime_0");
+  utils::check_in_range(params.G_0, 0.0, 1.0e13, "G_0");
+  utils::check_in_range(params.Gprime_0, -5.0, 10.0, "Gprime_0");
+  utils::check_in_range(params.T_0, 0.0, 1.0e5, "T_0");
+  utils::check_in_range(params.molar_mass, 0.001, 1.0, "molar_mass");
+  utils::check_in_range(params.napfu, 1, 1000, "napfu");
+  utils::check_in_range(params.debye_0, 1.0, 10000.0, "debye_0");
+  utils::check_in_range(params.grueneisen_0, 0.0, 10.0, "grueneisen_0");
+  utils::check_in_range(params.q_0, -10.0, 10.0, "q_0");
 }
 
 // Compute P(V) - P as function to root find

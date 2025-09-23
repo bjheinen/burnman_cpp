@@ -36,7 +36,7 @@ class MT : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(types::MineralParams& params) override;
+  void validate_parameters(types::MineralParams& params) override;
 
   // Static functions (for public access outside class)
   /**

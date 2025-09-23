@@ -31,7 +31,7 @@ class SLB3 : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(types::MineralParams& params) override;
+  void validate_parameters(types::MineralParams& params) override;
 
   // Specific EOS functions
   double compute_volume(
@@ -250,7 +250,7 @@ class SLB2 : public SLB3{
 class SLB3Conductive : public SLB3{
  public:
 
-  bool validate_parameters(types::MineralParams& params) override;
+  void validate_parameters(types::MineralParams& params) override;
 
   double compute_pressure(
     double temperature,

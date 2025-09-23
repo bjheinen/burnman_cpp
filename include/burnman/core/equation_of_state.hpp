@@ -60,11 +60,11 @@ class EquationOfState {
    *
    * @param params Mineral parameters object of type `types::MineralParams'.
    *               May be modified to set defaults.
-   * TODO: throw error if not - no return?
-   * @note Default implementation passes quietly
+   * @throws `std::invalid_argument' if required parameters are missing.
+   * @note Default implementation passes with warning.
    *       Derived classes should override method.
    */
-  virtual bool validate_parameters(types::MineralParams& params);
+  virtual void validate_parameters(types::MineralParams& params);
 
   // EOS relations
   /**

@@ -28,14 +28,14 @@ namespace eos {
  * The thermal correction to the shear modulus is from Hama and Suito (1998).
  * Uses third order expansion also for shear modulus. To fit shear modulus
  * to second order expansion @see MGD2
- * 
+ *
  * @note All functions assume SI units for all properties.
  */
 class MGD3 : public EquationOfState{
  public:
 
   // Helper functions
-  bool validate_parameters(types::MineralParams& params) override;
+  void validate_parameters(types::MineralParams& params) override;
 
   // Specific EOS functions
   /**
@@ -183,7 +183,7 @@ class MGD3 : public EquationOfState{
    *
    * @param x V_0/V.
    * @param params Mineral parameters object of type types::MineralParams
-   * 
+   *
    * @return Grueneisen parameter [unitless].
    */
   static double compute_mgd_grueneisen_parameter(
@@ -222,7 +222,7 @@ class MGD3 : public EquationOfState{
 
   /**
    * @brief GSL function wrapper to compute P(V) - P
-   * 
+   *
    * @param x Volume to test (passed by solver)
    * @param p Generic pointer for parameter object
    * @see `eos::gsl_params::SolverParams_P`

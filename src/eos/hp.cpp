@@ -10,60 +10,30 @@
 #include "burnman/eos/hp.hpp"
 #include <cmath>
 #include <stdexcept>
+#include "burnman/utils/validate_optionals.hpp"
 #include "burnman/eos/components/einstein.hpp"
 #include "burnman/eos/modified_tait.hpp"
 
 namespace burnman::eos {
 
-bool HP_TMT::validate_parameters(types::MineralParams& params) {
+void HP_TMT::validate_parameters(types::MineralParams& params) {
   // Check for required keys
-  if (!params.V_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: V_0");
-  }
-  if (!params.K_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: K_0");
-  }
-  if (!params.Kprime_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: Kprime_0");
-  }
-  if (!params.Kdprime_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: Kdprime_0");
-  }
-  if (!params.napfu.has_value()) {
-    throw std::invalid_argument("params object missing parameter: napfu");
-  }
-  if (!params.molar_mass.has_value()) {
-    throw std::invalid_argument("params object missing parameter: molar_mass");
-  }
-  if (!params.Cp.has_value()) {
-    throw std::invalid_argument("params object missing parameter: Cp params");
-  }
-  if (!params.a_0.has_value()) {
-    throw std::invalid_argument("params object missing parameter: a_0");
-  }
+  utils::require_set(params.V_0, "V_0");
+  utils::require_set(params.K_0, "K_0");
+  utils::require_set(params.Kprime_0, "Kprime_0");
+  utils::require_set(params.Kdprime_0, "Kdprime_0");
+  utils::require_set(params.napfu, "napfu");
+  utils::require_set(params.molar_mass, "molar_mass");
+  utils::require_set(params.Cp, "Cp params");
+  utils::require_set(params.a_0, "a_0");
   // Set defaults for missing values
-  if (!params.E_0.has_value()) {
-    params.E_0 = 0.0;
-  }
-  if (!params.P_0.has_value()) {
-    params.P_0 = 1.0e5;
-  }
-  if (!params.T_0.has_value()) {
-    params.T_0 = 298.15;
-  }
-  if (!params.H_0.has_value()) {
-    params.H_0 = std::nan("");
-  }
-  if (!params.S_0.has_value()) {
-    params.S_0 = std::nan("");
-  }
-  // Set G to NaN unless user has set
-  if (!params.G_0.has_value()) {
-    params.G_0 = std::nan("");
-  }
-  if (!params.Gprime_0.has_value()) {
-    params.Gprime_0 = std::nan("");
-  }
+  utils::fallback_to_default(params.E_0, 0.0);
+  utils::fallback_to_default(params.P_0, 1.0e5);
+  utils::fallback_to_default(params.T_0, 298.15);
+  utils::fallback_to_default(params.H_0, std::nan(""));
+  utils::fallback_to_default(params.S_0, std::nan(""));
+  utils::fallback_to_default(params.G_0, std::nan(""));
+  utils::fallback_to_default(params.Gprime_0, std::nan(""));
   // Approx T_e from HP2011, p.346, par.1
   if (!params.T_einstein.has_value()) {
     // TODO: watch for potential bug
@@ -71,42 +41,18 @@ bool HP_TMT::validate_parameters(types::MineralParams& params) {
     params.T_einstein = 10636.0 / (*params.S_0 / *params.napfu + 6.44);
   }
   // Check values are reasonable
-  // TODO: warnings?
-  if (*params.T_0 < 0.0) {
-    ; // warnings.warn("Unusual value for T_0", stacklevel=2)
-  }
-  if (*params.P_0 < 0.0) {
-    ; // warnings.warn("Unusual value for P_0", stacklevel=2)
-  }
-  if (*params.V_0 < 1.0e-7 || *params.V_0 > 1.0e-2) {
-    ; //warning warnings.warn("Unusual value for V_0", stacklevel=2)
-  }
-  if (*params.K_0 < 1.0e9 || *params.K_0 > 1.0e13) {
-    ; // warning warnings.warn("Unusual value for K_0", stacklevel=2)
-  }
-  if (*params.Kprime_0 < 0.0 || *params.Kprime_0 > 40.0) {
-    ; // warning warnings.warn("Unusual value for Kprime_0", stacklevel=2)
-  }
-  if (*params.G_0 < 0.0 || *params.G_0 > 1.0e13) {
-    ; // warnings.warn("Unusual value for G_0", stacklevel=2)
-  }
-  if (*params.Gprime_0 < -5.0 || *params.Gprime_0 > 10.0) {
-    ; // warnings.warn("Unusual value for Gprime_0", stacklevel=2)
-  }
-  if (*params.S_0 < 0.0) {
-    ; // warnings.warn("Unusual value for S_0", stacklevel=2)
-  }
-  if (*params.a_0 < 0.0 || *params.a_0 > 1.0e-3) {
-    ; // warnings.warn("Unusual value for a_0", stacklevel=2)
-  }
-  if (*params.napfu < 1 || *params.napfu > 1000) {
-    ; // warnings.warn("Unusual value for napfu", stacklevel=2)
-  }
-  if (*params.molar_mass < 0.001 || *params.molar_mass > 10.0) {
-    ; // warnings.warn("Unusual value for molar_mass", stacklevel=2)
-  }
+  utils::check_in_range(params.T_0, 0.0, 1.0e5, "T_0");
+  utils::check_in_range(params.P_0, 0.0, 1.0e100, "P_0");
+  utils::check_in_range(params.V_0, 1.0e-7, 1.0e-2, "V_0");
+  utils::check_in_range(params.K_0, 1.0e9, 1.0e13, "K_0");
+  utils::check_in_range(params.Kprime_0, 0.0, 40.0, "Kprime_0");
+  utils::check_in_range(params.G_0, 0.0, 1.0e13, "G_0");
+  utils::check_in_range(params.Gprime_0, -5.0, 10.0, "Gprime_0");
+  utils::check_in_range(params.S_0, 0.0, 1.0e3, "S_0");
+  utils::check_in_range(params.a_0, 0.0, 1.0e-3, "a_0");
+  utils::check_in_range(params.napfu, 1, 1000, "napfu");
+  utils::check_in_range(params.molar_mass, 0.001, 10.0, "molar_mass");
   // TODO: checks for negative Cp_0 and Cp_2000
-  return 1;
 }
 
 double HP_TMT::compute_volume(
