@@ -16,6 +16,8 @@
 using namespace burnman;
 
 TEST_CASE("Validate warnings", "[utils][warnings]") {
+  // Temporarily allow warnings
+  utils::suppress_warnings = false;
   // Redirect cerr to grab output
   std::streambuf* orig_cerr = std::cerr.rdbuf();
   std::ostringstream oss;
@@ -25,4 +27,6 @@ TEST_CASE("Validate warnings", "[utils][warnings]") {
   REQUIRE(oss.str() == "Warning: This is a test warning!\n");
   // Restore cerr buffer
   std::cerr.rdbuf(orig_cerr);
+  // Block warnings again
+  utils::suppress_warnings = true;
 }
