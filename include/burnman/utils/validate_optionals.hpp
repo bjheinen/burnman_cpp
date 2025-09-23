@@ -84,7 +84,7 @@ bool check_in_range(
   bool strict = false
 ) {
   const T& val = *opt;
-  if (val < min_value || val > max_value) {
+  if (!(val >= min_value && val <= max_value)) {
     std::string message =
       "Unusual value for " + name + ": "
       + std::to_string(val) + " is out of range "
