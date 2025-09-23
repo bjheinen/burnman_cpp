@@ -64,6 +64,17 @@ void fallback_to_default(
   }
 }
 
+/**
+ * @brief Checks if the value in an std::optional is within a specified range.
+ *
+ * @param opt The std::optional to check (must be set).
+ * @param min_value Minimum acceptable value (inclusive).
+ * @param max_value Maximum acceptable value (inclusive).
+ * @param name Name of the parameter (for warning/error message).
+ * @param strict If true, throws an error if out of range; if false, prints a warning (default: false).
+ * @return true if value is within range, false otherwise.
+ * @throw std::runtime_error if strict is true and value is out of range.
+ */
 template <typename T>
 bool check_in_range(
   const std::optional<T>& opt,
