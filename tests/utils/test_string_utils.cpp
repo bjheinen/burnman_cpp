@@ -34,6 +34,12 @@ TEST_CASE("Extended stod", "[utils][string_utils]") {
   REQUIRE(utils::stod("1e2") == 100);
 }
 
+TEST_CASE("safe to_string", "[utils][string_utils]") {
+  REQUIRE(utils::to_string(3.14) == "3.14");
+  REQUIRE(utils::to_string(42) == "42");
+  REQUIRE(utils::to_string("Test") == "Test");
+}
+
 TEST_CASE("Utils string join", "[utils][string_utils]") {
   std::vector<std::string> s1 = {"A", "B"};
   std::vector<std::string> s2 = {"A", "B", "C"};
