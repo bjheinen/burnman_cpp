@@ -52,9 +52,10 @@ TEST_CASE("Set method", "[core][mineral]") {
   class CustomEOS : public EquationOfState{
    public:
     // Helper functions
-    bool validate_parameters(
-      types::MineralParams& params [[maybe_unused]]) override {
-      return 1;
+    void validate_parameters(
+      types::MineralParams& params [[maybe_unused]]
+    ) override {
+      // no-op
     }
   };
   CustomEOS custom_eos;
