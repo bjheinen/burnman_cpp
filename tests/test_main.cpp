@@ -10,3 +10,14 @@
 #define CATCH_CONFIG_MAIN // Don't need if linking against libCatch2Main?
 // #define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include <catch2/catch_all.hpp>
+#include "burnman/utils/warnings.hpp"
+
+namespace {
+  // Helper struct to suppress warnings across tests
+  struct SuppressAllWarnings {
+    SuppressAllWarnings() {
+      burnman::utils::suppress_warnings = true;
+    }
+  };
+  SuppressAllWarnings suppress_warnings;
+}
