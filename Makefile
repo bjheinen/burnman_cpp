@@ -49,14 +49,29 @@ TEST_FLAGS = -g -O1 -fno-omit-frame-pointer -fsanitize=address,undefined
 BUILD_MODE ?= release
 ifeq ($(BUILD_MODE), debug)
   CXXFLAGS += $(DEBUG_FLAGS)
-  BUILD_SUFFIX = _debug
+  BIN_SUFFIX = _debug
 else ifeq ($(BUILD_MODE), test)
   CXXFLAGS += $(TEST_FLAGS)
   LDFLAGS_COMMON += -fsanitize=address,undefined
-  BUILD_SUFFIX = _test
+  BIN_SUFFIX = _test
 else
   CXXFLAGS += $(RELEASE_FLAGS)
   BIN_SUFFIX =
+endif
+# Optional profiling (default: false)
+PROFILE ?= 0
+ifeq ($(PROFILE), 1)
+  CXXFLAGS += -pg
+  LDFLAGS_COMMON += -pg
+	BIN_SUFFIX := $(BIN_SUFFIX)_profile
+endif
+
+# Store base build dir for clean
+BASE_BUILD_DIR := $(BUILD_DIR)
+BUILD_DIR := $(BUILD_DIR)/$(BUILD_MODE)
+# Append -profile for profiling builds
+ifeq ($(PROFILE), 1)
+	BUILD_DIR := $(BUILD_DIR)-profile
 endif
 
 # Find source files
@@ -71,8 +86,8 @@ TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(TEST_SOURCES))
 DEPENDS := $(OBJECTS:.o=.d) $(TEST_OBJECTS:.o=.d)
 
 # Output target
-TARGET := $(BIN_DIR)/$(TARGET_EXEC)$(BUILD_SUFFIX)
-TEST_TARGET := $(BIN_DIR)/$(TEST_EXEC)$(BUILD_SUFFIX)
+TARGET := $(BIN_DIR)/$(TARGET_EXEC)$(BIN_SUFFIX)
+TEST_TARGET := $(BIN_DIR)/$(TEST_EXEC)$(BIN_SUFFIX)
 
 # Default rule
 all: $(TARGET)
@@ -108,18 +123,14 @@ $(BIN_DIR):
 test: $(TEST_TARGET)
 	@echo "Build complete. Run tests with: $(TEST_TARGET)"
 
-# Clean up
+# Clean up only a specific build-mode/profile dir/exec
+clean-mode:
+	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_TARGET)
+
+# Clean up everything
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	rm -rf $(BASE_BUILD_DIR) $(BIN_DIR)
 
-# Maybe debug/release with opt flags?
-# Debug and Release builds
-#debug: CXXFLAGS += -g -O0
-#debug: $(TARGET)
-
-#release: CXXFLAGS += -O2
-#release: $(TARGET)
-
-.PHONY: all clean test
+.PHONY: all clean clean-mode test
 
 #NOTE: careful to test/checkout eigen opt flags, e.g. -DEIGEN_USE_THREADS -DEIGEN_DONT_ALIGN
