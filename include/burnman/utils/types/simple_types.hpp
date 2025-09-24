@@ -45,10 +45,12 @@ namespace burnman {
       Auto, // Used to set EOS from params
       Custom, // Used when user passes custom EOSType
       Vinet,
+      MT,
       BM3,
       BM2,
       MGD2,
       MGD3,
+      HPTMT,
       SLB2,
       SLB3,
       SLB3Conductive
