@@ -9,6 +9,7 @@
  */
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
+#include <catch2/benchmark/catch_benchmark.hpp>
 #include "burnman/core/assemblage.hpp"
 #include <memory>
 #include <string>
@@ -296,71 +297,13 @@ TEST_CASE_METHOD(PyroliteAssemblageFixture, "Assemblage reference values", "[cor
     WithinRel(ref_molar_heat_capacity_p, tol_rel) || WithinAbs(ref_molar_heat_capacity_p, tol_abs));
 }
 
-
 // TODO:
 // reset_cache() (check over)
-
 // add_phase (value)
 // add_phases (value - variadic template)
-
 // add_phase (pointer)
 // add_phases (vector of ptrs)
 // add_phases(init list of ptrs)
-
-// set_fractions
 // set_fractions using volume fractions
-// set_averaging_scheme
 // set_averaging_scheme(custom scheme with unique ptr)
-
-// set_state
-// set_method
-
-// get_phase --> with the cast
-// get_phase (as Material)
-
-// get_endmembers_per_phase --> check set correctly
-
-// // From Material
-// set_name
-// get_name
-// get_formula
-// get_pressure
-// get_temperature
-
-// // From composite material
-// get_n_endmembers
-// get_n_elements
-// get_n_reactions
-// get_elements
-// get_endmember_names
-// get_endmember_formulae
-// get_independent_element_indices
-// get_dependent_element_indices
-// get_stoichiometric_matrix
-// get_compositional_basis
-// get_compositional_null_basis
-// get_reaction_basis
-
-// // From assemblage
-// get_molar_internal_energy
-// get_molar_gibbs
-// get_molar_helmholtz
-// get_molar_mass
-// get_molar_volume
-// get_density
-// get_molar_entropy
-// get_molar_enthalpy
-// get_isothermal_bulk_modulus_reuss
-// get_isentropic_bulk_modulus_reuss
-// get_isothermal_compressibility_reuss
-// get_isentropic_compressibility_reuss
-// get_shear_modulus
-// get_p_wave_velocity
-// get_shear_wave_velocity
-// get_bulk_sound_velocity
-// get_grueneisen_parameter
-// get_thermal_expansivity
-// get_molar_heat_capacity_v
-// get_molar_heat_capacity_p
-
-// get_isentropic_therma_gradient
+// get_isentropic_thermal_gradient
