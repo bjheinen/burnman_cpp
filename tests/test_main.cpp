@@ -7,8 +7,7 @@
  *
  * burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
  */
-#define CATCH_CONFIG_MAIN // Don't need if linking against libCatch2Main?
-// #define CATCH_CONFIG_ENABLE_BENCHMARKING
+#define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
 #include "burnman/utils/warnings.hpp"
 
