@@ -40,13 +40,15 @@ def bar_plot(df, show=0, save_path=None, xlabel='Time (ns)'):
     if show:
         plt.show(block=False)
 
-def format_line(label, value, box_width=56, label_width=18, val_width=4):
+def format_line(label, value, note='', box_width=56, label_width=18, val_width=4):
     # | + label + " : " + value + fill + |
     value_str = str(value)
     label_width = max(len(label), label_width)
     val_width = max(len(value_str), val_width)
-    spaces = box_width - label_width - val_width - 7
-    return f"| {label:<{label_width}} : {value_str:>{val_width}}{' ' * spaces} |\n"
+    note = (" " + note) if note else note
+    note_width = len(note)
+    spaces = box_width - label_width - val_width - note_width - 7
+    return f"| {label:<{label_width}} : {value_str:>{val_width}}{note}{' ' * spaces} |\n"
 
 def format_title_line(label=None, box_width=56):
     if not label:
@@ -59,11 +61,13 @@ def format_title_line(label=None, box_width=56):
 
 def parse_mineral_benchmarks(case, verbose=0):
     data = []
+    high_std_count = 0
     benchmarks = case.findall("BenchmarkResults")
+    n_benchmarks = len(benchmarks)
     print(
         format_title_line("Processing Test Case"),
         format_line("Benchmark Suite", case.get('name')),
-        format_line("Benchmarks", len(benchmarks)),
+        format_line("Benchmarks", n_benchmarks),
         format_title_line()
     )
     # Loop through each benchmark
@@ -89,6 +93,15 @@ def parse_mineral_benchmarks(case, verbose=0):
         # Extract times (ns)
         mean_ns = float(mean_elem.get("value")) if mean_elem is not None else None
         std_ns = float(std_elem.get("value")) if std_elem is not None else None
+
+        std_pct = std_ns / mean_ns * 100.0
+        threshold = 5.0
+        if std_pct > threshold:
+            high_std_count += 1
+            print(
+                f"    Warning: High variability in benchmark '{bench_name} [{eos_tag}]'\n"
+                f"             (std_dev = {std_pct:.1f}%)"
+            )
         data.append(
             {
             "Benchmark" : bench_name,
@@ -104,11 +117,14 @@ def parse_mineral_benchmarks(case, verbose=0):
     # Pivot: Benchmarks as rows, EOS as columns
     df_mean = df_grouped.pivot(index="Benchmark", columns="EOS", values="Mean").reset_index()
     df_std = df_grouped.pivot(index="Benchmark", columns="EOS", values="Std_dev").reset_index()
+    uncertain_pct = high_std_count / n_benchmarks * 100.0
     print(
         format_title_line("Finished Processing Suite"),
         format_line("Benchmark Suite", case.get('name')),
         format_line("Benchmarks", df_mean.shape[0]),
         format_line("EOS Variants", df_mean.shape[1]-1),
+        format_line("Total benchmarks", len(benchmarks)),
+        format_line("Uncertain", high_std_count, note=f'({uncertain_pct:.1f}%)'),
         format_title_line()
     )
     # Merge mean and std_dev data frames
@@ -188,9 +204,9 @@ def compare_mineral_benchmarks(data, baseline_fn='mineral_benchmarks_baseline.cs
     print(
         format_title_line("Baseline Comparison"),
         format_line("Baseline data", baseline_fn),
-        format_line("Max change", (str(max_change)+'%')),
-        format_line("Min change", (str(min_change)+'%')),
-        format_line("Avg change", (str(avg_change)+'%')),
+        format_line("Max change", f"{max_change:.1f}%", val_width=6),
+        format_line("Min change", f"{min_change:.1f}%", val_width=6),
+        format_line("Avg change", f"{avg_change:.1f}%", val_width=6),
         format_title_line()
     )
     return df_pct
