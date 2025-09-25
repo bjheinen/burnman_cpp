@@ -57,7 +57,7 @@ def format_title_line(label=None, box_width=56):
         right = fill - left
         return f"\n +{'-' * left} {label} {'-' * right}+\n"
 
-def parse_mineral_benchmarks(case, verbose=1):
+def parse_mineral_benchmarks(case, verbose=0):
     data = []
     benchmarks = case.findall("BenchmarkResults")
     print(
@@ -155,6 +155,14 @@ def plot_mineral_baseline_comparison(data, show_plots=1, save_plots=0, out_file_
     bar_plot(col_avg, show=show_plots, save_path=fn_d, xlabel='Average % Change')
 
 def compare_mineral_benchmarks(data, baseline_fn='mineral_benchmarks_baseline.csv'):
+    if not os.path.exists(baseline_fn):
+        print(
+            format_title_line("Baseline Comparison"),
+            format_line("Error!", "File not found"),
+            format_line("Baseline file", baseline_fn),
+            format_title_line() + "\n"
+        )
+        return
     # Load baseline benchmark
     baseline = pd.read_csv(baseline_fn)
     # Get eos cols
@@ -214,11 +222,19 @@ def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1,
                 min_fname = unique_filename("mineral_benchmarks_" + out_file_ext + ".csv")
                 comp_fname = unique_filename('mineral_benchmarks_compare' + out_file_ext + '.csv')
                 eos_data.to_csv(min_fname, index=False)
-                compare_data.to_csv(comp_fname, index=False)
-                print(f"Data saved: {min_fname} | {comp_fname}")
+                msg = (
+                    format_title_line("Data Saved!")
+                    + ' ' + format_line("Data file", min_fname)
+                )
+                if compare_data:
+                    compare_data.to_csv(comp_fname, index=False)
+                    msg += ' ' + format_line("Comparison", comp_fname)
+                msg += ' ' + format_title_line()
+                print(msg)
             if plot_data:
                 plot_mineral_benchmarks(eos_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
-                plot_mineral_baseline_comparison(compare_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
+                if compare_data:
+                    plot_mineral_baseline_comparison(compare_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
         else:
             print("Parsing for benchmark suite type not implemented!")
 
