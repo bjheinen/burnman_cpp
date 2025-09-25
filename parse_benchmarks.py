@@ -220,7 +220,7 @@ def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1,
             compare_data = compare_mineral_benchmarks(eos_data)
             if save_data:
                 min_fname = unique_filename("mineral_benchmarks_" + out_file_ext + ".csv")
-                comp_fname = unique_filename('mineral_benchmarks_compare' + out_file_ext + '.csv')
+                comp_fname = unique_filename('mineral_benchmarks_compare_' + out_file_ext + '.csv')
                 eos_data.to_csv(min_fname, index=False)
                 msg = (
                     format_title_line("Data Saved!")
