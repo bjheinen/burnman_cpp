@@ -226,14 +226,14 @@ def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1,
                     format_title_line("Data Saved!")
                     + ' ' + format_line("Data file", min_fname)
                 )
-                if compare_data:
+                if compare_data is not None:
                     compare_data.to_csv(comp_fname, index=False)
                     msg += ' ' + format_line("Comparison", comp_fname)
                 msg += ' ' + format_title_line()
                 print(msg)
             if plot_data:
                 plot_mineral_benchmarks(eos_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
-                if compare_data:
+                if compare_data is not None:
                     plot_mineral_baseline_comparison(compare_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
         else:
             print("Parsing for benchmark suite type not implemented!")
