@@ -16,8 +16,6 @@
 #include <vector>
 #include <Eigen/Dense>
 
-#include <iostream>
-
 namespace burnman {
 namespace utils {
 
