@@ -59,6 +59,18 @@ class Material {
    */
   virtual void reset_cache();
 
+  /**
+   * @brief Clears all computed properties.
+   *
+   * Convenience function to clear all computed properties,
+   * including ones not cleared by `reset_cache'.
+   *
+   * @note Base `Material::clear_computed_properties()' only
+   * calls `reset_cache()'. Derived classes should override and
+   * extend to clear any additional stored properties.
+   */
+  virtual void clear_computed_properties();
+
   // Public setter functions
   /**
    * @brief Sets the human readable material name

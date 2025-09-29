@@ -52,6 +52,9 @@ class Assemblage : public CompositeMaterial {
   // Override of reset_cache to include additional solution properties
   void reset_cache() override;
 
+  // Override of clear_computed_properties() to include additional assemblage properties
+  void clear_computed_properties() override;
+
   // Utility functions
   /**
    * @brief Utility function to map phase properties to Eigen::Array.

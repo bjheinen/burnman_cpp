@@ -46,6 +46,10 @@ void Material::reset_cache() {
   isentropic_thermal_gradient.reset();
 }
 
+void Material::clear_computed_properties() {
+  reset_cache();
+}
+
 void Material::set_name(std::string new_name) {
   name = new_name;
 }

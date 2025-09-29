@@ -35,15 +35,38 @@ class CompositeMaterial : public Material {
 
   virtual ~CompositeMaterial() = default;
 
-  // Utility functions?
-  // map_to_array etc.
-  // get_partial_volumes
-
   // Override of reset_cache to include additional solution properties
   void reset_cache() override;
 
-  // Public getter functions for stored composite material properties
+  /**
+   * @brief Computes and stores composite material properties.
+   *
+   * Convenience function to call getters/setup functions for
+   * all stored material properties. This is useful to call
+   * before cloning a material so computations only have to be
+   * run once. Properties only need to be recomputed if changing
+   * the endmember phases or chemistry.
+   */
+  void setup_composite_material_properties() const;
 
+  /**
+   * @brief Clears all stored composite material properties.
+   *
+   * Convenience function to clear all computed properties.
+   * This includes material properties based on endmember
+   * phases/chemistry (element list, stoichiometric matrix etc.)
+   * as well as cached properties for the material P-T state.
+   *
+   * This function should only be required if changing phases
+   * in the composite material. Cached properties can be cleared
+   * with `reset_cache()'.
+   *
+   * @note Derived classes which store other computed properties
+   * should extend this function.
+   */
+  void clear_computed_properties() override;
+
+  // Public getter functions for stored composite material properties
   /**
    * @brief Number of endmembers in the material.
    */
@@ -140,7 +163,6 @@ class CompositeMaterial : public Material {
  protected:
 
   // Pure virtual funtions that must be implemented in derived classes
-
   virtual Eigen::Index compute_n_endmembers() const = 0;
   // Void functions should use protected setters!
   virtual void setup_endmember_formulae() const = 0;
@@ -160,7 +182,8 @@ class CompositeMaterial : public Material {
  private:
 
   // Cached CompositeMaterial properties
-  // Note: Not cleared by reset_cache()!
+  // Note: Not cleared by reset_cache()! Use clear_computed_properties() instead.
+  // Use setup_composite_material_properties() to initialise all values.
   mutable std::optional<Eigen::Index> n_endmembers;
   mutable std::optional<Eigen::Index> n_elements;
   mutable std::optional<Eigen::Index> n_reactions;
@@ -189,21 +212,6 @@ class CompositeMaterial : public Material {
   Eigen::MatrixXd compute_compositional_basis() const;
   Eigen::MatrixXd compute_compositional_null_basis() const;
   Eigen::MatrixXd compute_reaction_basis() const;
-
-  // TODO: combined helpers to set all properties
-  // e.g. (from old Solution form)
-  // void Solution::setup_solution_properties() {
-  //   setup_endmember_names();
-  //   setup_endmember_formulae();
-  //   setup_elements();
-  //   setup_stoichiometric_matrix();
-  //   setup_independent_element_indices();
-  //   setup_dependent_element_indices();
-  //   setup_reaction_basis();
-  //   setup_n_reactions();
-  //   setup_compositional_basis();
-  //   setup_compositional_null_basis();
-  // }
 
 };
 

@@ -21,7 +21,42 @@ void CompositeMaterial::reset_cache() {
   // Reset caches Material properties
   Material::reset_cache();
   // Reset cached CompositeMaterial properties
-  partial_gibbs.reset();
+  this->partial_gibbs.reset();
+}
+
+void CompositeMaterial::clear_computed_properties() {
+  // Clear cached (P-T dependent) properties
+  Material::clear_computed_properties();
+  // Clear stored composite material properties
+  this->n_endmembers.reset();
+  this->n_elements.reset();
+  this->n_reactions.reset();
+  this->independent_element_indices.reset();
+  this->dependent_element_indices.reset();
+  this->endmember_names.reset();
+  this->elements.reset();
+  this->endmember_formulae.reset();
+  this->stoichiometric_matrix.reset();
+  this->reduced_stoichiometric_matrix.reset();
+  this->compositional_basis.reset();
+  this->compositional_null_basis.reset();
+  this->reaction_basis.reset();
+}
+
+void CompositeMaterial::setup_composite_material_properties() const {
+  get_endmember_names();
+  get_endmember_formulae();
+  get_elements();
+  get_n_endmembers();
+  get_n_elements();
+  get_stoichiometric_matrix();
+  get_independent_element_indices();
+  get_dependent_element_indices();
+  get_reduced_stoichiometric_matrix();
+  get_reaction_basis();
+  get_n_reactions();
+  get_compositional_basis();
+  get_compositional_null_basis();
 }
 
 Eigen::Index CompositeMaterial::get_n_endmembers() const {

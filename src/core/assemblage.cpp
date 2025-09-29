@@ -25,6 +25,20 @@ void Assemblage::reset_cache() {
   equilibrium_tolerance = 1.0e-3;
 }
 
+void Assemblage::clear_computed_properties() {
+  // Reset CompositeMaterial properties
+  // CompositeMaterial::clear_computed_properties calls
+  // Material::clear_computed_properties, which calls
+  // reset_cache - virtual dispatch should result in
+  // Assemblage::reset_cache being called.
+  CompositeMaterial::clear_computed_properties();
+  this->endmembers_per_phase.reset();
+  // Clear properties stored by phases
+  for (auto& ph : phases) {
+    ph->clear_computed_properties();
+  }
+}
+
 // Public setters for assemblage properties
 
 // Single phase by ptr
