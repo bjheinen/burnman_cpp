@@ -25,14 +25,17 @@ def unique_filename(path: str) -> str:
         counter += 1
     return new_path
 
-def bar_plot(df, show=0, save_path=None, xlabel='Time (ns)', title='Mineral Property Benchmarks'):
+def bar_plot(df, show=0, save_path=None, xlabel='Time (ns)', title='Mineral Property Benchmarks', plot_legend=1):
     fig, ax = plt.subplots(figsize=(16, 8))
     colors = plt.cm.tab20(np.linspace(0, 1, df.shape[0]))
     df.plot(kind='barh', ax=ax, color=colors)
     ax.yaxis.label.set_visible(False)
     ax.set_xlabel(xlabel)
     ax.set_title(title)
-    ax.legend(title="Property", bbox_to_anchor=(1.05, 1), loc='upper left')
+    if plot_legend:
+        ax.legend(title="Property", bbox_to_anchor=(1.05, 1), loc='upper left')
+    else:
+        ax.get_legend().remove()
     plt.tight_layout()
     if save_path:
         save_path = unique_filename(save_path)
@@ -248,8 +251,8 @@ def plot_mineral_baseline_comparison(data, show_plots=1, save_plots=0, out_file_
     raw_data = raw_data[eos_cols]
     bar_plot(raw_data, show=show_plots, save_path=fn_a, xlabel='% Change')
     bar_plot(raw_data.T, show=show_plots, save_path=fn_b, xlabel='% Change')
-    bar_plot(row_avg, show=show_plots, save_path=fn_c, xlabel='Average % Change')
-    bar_plot(col_avg, show=show_plots, save_path=fn_d, xlabel='Average % Change')
+    bar_plot(row_avg, show=show_plots, save_path=fn_c, xlabel='Average % Change', plot_legend=0)
+    bar_plot(col_avg, show=show_plots, save_path=fn_d, xlabel='Average % Change', plot_legend=0)
 
 def plot_prop_mod_benchmarks(data, show_plots=1, save_plots=0, out_file_ext=''):
     df = data[["Benchmark", "Mean"]].copy()
@@ -257,7 +260,7 @@ def plot_prop_mod_benchmarks(data, show_plots=1, save_plots=0, out_file_ext=''):
     fn = None
     if save_plots:
         fn = 'property_modifier_benchmarks_' + out_file_ext + '.pdf'
-    bar_plot(df, show=show_plots, save_path=fn, title='Property Modifier Benchmarks')
+    bar_plot(df, show=show_plots, save_path=fn, title='Property Modifier Benchmarks', plot_legend=0)
 
 def plot_prop_mod_baseline_comparison(data, show_plots=1, save_plots=0, out_file_ext=''):
     fn = None
@@ -266,7 +269,7 @@ def plot_prop_mod_baseline_comparison(data, show_plots=1, save_plots=0, out_file
     mask = data["Benchmark"] != "Average"
     plot_data = data[mask].copy()
     plot_data.set_index("Benchmark", inplace=True)
-    bar_plot(plot_data, show=show_plots, save_path=fn, xlabel='% Change', title='Property Modifier Benchmarks')
+    bar_plot(plot_data, show=show_plots, save_path=fn, xlabel='% Change', title='Property Modifier Benchmarks', plot_legend=0)
 
 def compare_mineral_benchmarks(data, baseline_fn='mineral_benchmarks_baseline.csv'):
     if not os.path.exists(baseline_fn):
