@@ -423,7 +423,7 @@ def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1,
                 plot_prop_mod_benchmarks(prop_mod_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
                 if prop_mod_compare_data is not None:
                     plot_prop_mod_baseline_comparison(prop_mod_compare_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
-        elif case.get("name") == "Assemblage benchmarks":
+        elif case.get("name") == "Assemblage benchmarks - soft reset":
             assemblage_data = parse_general_benchmarks(case)
             assemblage_compare_data = compare_general_benchmarks(assemblage_data, baseline_fn='benchmarks/assemblage_benchmarks_baseline.csv')
             if save_data:
