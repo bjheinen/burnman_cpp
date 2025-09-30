@@ -14,15 +14,28 @@ import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import pandas as pd
 import re
+import textwrap
 import os
 
 def unique_filename(path: str) -> str:
+    path = os.path.normpath(path)
+    path = ensure_in_benchmarks(path)
     base, ext = os.path.splitext(path)
     counter = 2
     new_path = path
     while os.path.exists(new_path):
         new_path = f"{base}_{counter}{ext}"
         counter += 1
+    return new_path
+
+def ensure_in_benchmarks(path: str) -> str:
+    dirname = os.path.dirname(path)
+    basename = os.path.basename(path)
+    if os.path.basename(dirname) == "benchmarks":
+        new_path = path
+    else:
+        new_path = os.path.join(dirname, "benchmarks", basename)
+    os.makedirs(os.path.dirname(new_path), exist_ok=True)
     return new_path
 
 def bar_plot(df, show=0, save_path=None, xlabel='Time (ns)', title='Mineral Property Benchmarks', plot_legend=1):
@@ -46,12 +59,28 @@ def bar_plot(df, show=0, save_path=None, xlabel='Time (ns)', title='Mineral Prop
 def format_line(label, value, note='', box_width=56, label_width=18, val_width=4):
     # | + label + " : " + value + fill + |
     value_str = str(value)
-    label_width = max(len(label), label_width)
     val_width = max(len(value_str), val_width)
+    label_width = max(len(label), label_width)
     note = (" " + note) if note else note
     note_width = len(note)
-    spaces = box_width - label_width - val_width - note_width - 7
-    return f"| {label:<{label_width}} : {value_str:>{val_width}}{note}{' ' * spaces} |\n"
+    available_width = box_width - label_width - 7
+    lines = []
+    if val_width + note_width <= available_width:
+        spaces = available_width - val_width - note_width
+        lines.append(f"| {label:<{label_width}} : {value_str:<{val_width}}{note}{' ' * spaces} |")
+    else:
+        note = note.strip()
+        wrapped_val = textwrap.wrap(value_str, width=available_width) or ['']
+        wrapped_note = textwrap.wrap(note, width=available_width)
+        for i, line in enumerate(wrapped_val):
+            if i == 0:
+                lines.append(f"| {label:<{label_width}} : {line:<{available_width}} |")
+            else:
+                lines.append(f" | {'':<{label_width}}   {line:<{available_width}} |")
+        for i, line in enumerate(wrapped_note):
+                lines.append(f" | {'':<{label_width}}   {line:<{available_width}} |")
+
+    return '\n'.join(lines) + '\n'
 
 def format_title_line(label=None, box_width=56):
     if not label:
@@ -134,6 +163,47 @@ def parse_mineral_benchmarks(case, verbose=0):
     df_flat = pd.concat([df_mean, df_std.iloc[:, 1:].add_suffix('_std')], axis=1)
     return df_flat
 
+def compare_mineral_benchmarks(data, baseline_fn='benchmarks/mineral_benchmarks_baseline.csv'):
+    if not os.path.exists(baseline_fn):
+        print(
+            format_title_line("Baseline Comparison"),
+            format_line("Error!", "File not found"),
+            format_line("Baseline file", baseline_fn),
+            format_title_line() + "\n"
+        )
+        return
+    # Load baseline benchmark
+    baseline = pd.read_csv(baseline_fn)
+    # Get eos cols
+    eos_cols = [c for c in baseline.columns if c != "Benchmark" and not c.endswith("_std")]
+    # Merge on Benchmark name, ignore std_dev
+    merged = baseline[["Benchmark"] + eos_cols].merge(
+        data[["Benchmark"] + eos_cols],
+        on="Benchmark",
+        suffixes=("_baseline", "_new")
+    )
+    # Calculate percentage change
+    pct_changes = {"Benchmark": merged["Benchmark"]}
+    for col in eos_cols:
+        pct_changes[col] = 100 * (merged[col + "_new"] - merged[col + "_baseline"]) / merged[col + "_baseline"]
+    # Convert back to data frame
+    df_pct = pd.DataFrame(pct_changes)
+    df_pct["average_pct_change_property"] = df_pct[eos_cols].mean(axis=1)
+    avg_row = ["average_pct_change_EOS"] + list(df_pct[eos_cols].mean(axis=0)) + [df_pct["average_pct_change_property"].mean()]
+    df_pct.loc[len(df_pct)] = avg_row
+    max_change = df_pct[eos_cols].values.max()
+    min_change = df_pct[eos_cols].values.min()
+    avg_change = df_pct.loc[df_pct["Benchmark"] == "average_pct_change_EOS", "average_pct_change_property"].values[0]
+    print(
+        format_title_line("Baseline Comparison"),
+        format_line("Baseline data", baseline_fn),
+        format_line("Max change", f"{max_change:.1f}%", val_width=6),
+        format_line("Min change", f"{min_change:.1f}%", val_width=6),
+        format_line("Avg change", f"{avg_change:.1f}%", val_width=6),
+        format_title_line()
+    )
+    return df_pct
+
 def parse_prop_mod_benchmarks(case, verbose=0):
     data = []
     high_std_count = 0
@@ -185,7 +255,7 @@ def parse_prop_mod_benchmarks(case, verbose=0):
     )
     return df
 
-def compare_prop_mod_benchmarks(data, baseline_fn='property_modifier_benchmarks_baseline.csv'):
+def compare_prop_mod_benchmarks(data, baseline_fn='benchmarks/property_modifier_benchmarks_baseline.csv'):
     if not os.path.exists(baseline_fn):
         print(
             format_title_line("Baseline Comparison"),
@@ -271,49 +341,12 @@ def plot_prop_mod_baseline_comparison(data, show_plots=1, save_plots=0, out_file
     plot_data.set_index("Benchmark", inplace=True)
     bar_plot(plot_data, show=show_plots, save_path=fn, xlabel='% Change', title='Property Modifier Benchmarks', plot_legend=0)
 
-def compare_mineral_benchmarks(data, baseline_fn='mineral_benchmarks_baseline.csv'):
-    if not os.path.exists(baseline_fn):
-        print(
-            format_title_line("Baseline Comparison"),
-            format_line("Error!", "File not found"),
-            format_line("Baseline file", baseline_fn),
-            format_title_line() + "\n"
-        )
-        return
-    # Load baseline benchmark
-    baseline = pd.read_csv(baseline_fn)
-    # Get eos cols
-    eos_cols = [c for c in baseline.columns if c != "Benchmark" and not c.endswith("_std")]
-    # Merge on Benchmark name, ignore std_dev
-    merged = baseline[["Benchmark"] + eos_cols].merge(
-        data[["Benchmark"] + eos_cols],
-        on="Benchmark",
-        suffixes=("_baseline", "_new")
-    )
-    # Calculate percentage change
-    pct_changes = {"Benchmark": merged["Benchmark"]}
-    for col in eos_cols:
-        pct_changes[col] = 100 * (merged[col + "_new"] - merged[col + "_baseline"]) / merged[col + "_baseline"]
-    # Convert back to data frame
-    df_pct = pd.DataFrame(pct_changes)
-    df_pct["average_pct_change_property"] = df_pct[eos_cols].mean(axis=1)
-    avg_row = ["average_pct_change_EOS"] + list(df_pct[eos_cols].mean(axis=0)) + [df_pct["average_pct_change_property"].mean()]
-    df_pct.loc[len(df_pct)] = avg_row
-    max_change = df_pct[eos_cols].values.max()
-    min_change = df_pct[eos_cols].values.min()
-    avg_change = df_pct.loc[df_pct["Benchmark"] == "average_pct_change_EOS", "average_pct_change_property"].values[0]
-    print(
-        format_title_line("Baseline Comparison"),
-        format_line("Baseline data", baseline_fn),
-        format_line("Max change", f"{max_change:.1f}%", val_width=6),
-        format_line("Min change", f"{min_change:.1f}%", val_width=6),
-        format_line("Avg change", f"{avg_change:.1f}%", val_width=6),
-        format_title_line()
-    )
-    return df_pct
-
 def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1, show_plots=1, save_plots=1):
-    tree = ET.parse(filename)
+    try:
+        tree = ET.parse(filename)
+    except ET.ParseError:
+        print("Error: Bad XML File!")
+        sys.exit(1)
     root = tree.getroot()
     # Get Test Cases
     test_cases = root.findall("TestCase")
@@ -385,7 +418,38 @@ if __name__ == "__main__":
     import sys
     # Get XML file and output fname to append to pass as args
     n_args = len(sys.argv)
-    xml_file = sys.argv[1]
+    if n_args < 2:
+        print(
+            format_title_line("Error!"),
+            "\t\tPlease provide an xml file!\n",
+            format_title_line()
+        )
+        sys.exit(1)
+    arg = sys.argv[1]
+    benchmarks_dir = "benchmarks"
+    if arg in ("clear", "clear_all"):
+        if n_args >= 3:
+            benchmarks_dir = sys.argv[2]
+        if not os.path.isdir(benchmarks_dir):
+            print(f"Error: Benchmark directory ({benchmarks_dir}) not found!")
+            sys.exit(1)
+        del_msg = (
+            format_title_line('Clearing Benchmarks')
+            + ' ' + format_line('Dir', benchmarks_dir+os.sep)
+        )
+        for fname in os.listdir(benchmarks_dir):
+            if fname.endswith(".pdf") or fname.endswith(".csv"):
+                full_path = os.path.join(benchmarks_dir, fname)
+                if arg == "clear":
+                    root, ext = os.path.splitext(fname)
+                    if root.endswith("_baseline"):
+                        continue
+                os.remove(full_path)
+                del_msg += ' ' + format_line('Deleted', fname)
+        del_msg += ' ' + format_title_line()
+        print(del_msg)
+        sys.exit(0)
+    xml_file = arg
     if n_args < 3:
         save = 0
         out_ext = None
