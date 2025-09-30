@@ -204,7 +204,7 @@ def compare_mineral_benchmarks(data, baseline_fn='benchmarks/mineral_benchmarks_
     )
     return df_pct
 
-def parse_prop_mod_benchmarks(case, verbose=0):
+def parse_general_benchmarks(case, verbose=0):
     data = []
     high_std_count = 0
     benchmarks = case.findall("BenchmarkResults")
@@ -255,7 +255,7 @@ def parse_prop_mod_benchmarks(case, verbose=0):
     )
     return df
 
-def compare_prop_mod_benchmarks(data, baseline_fn='benchmarks/property_modifier_benchmarks_baseline.csv'):
+def compare_general_benchmarks(data, baseline_fn='benchmarks/benchmarks_baseline.csv'):
     if not os.path.exists(baseline_fn):
         print(
             format_title_line("Baseline Comparison"),
@@ -341,6 +341,23 @@ def plot_prop_mod_baseline_comparison(data, show_plots=1, save_plots=0, out_file
     plot_data.set_index("Benchmark", inplace=True)
     bar_plot(plot_data, show=show_plots, save_path=fn, xlabel='% Change', title='Property Modifier Benchmarks', plot_legend=0)
 
+def plot_assemblage_benchmarks(data, show_plots=1, save_plots=0, out_file_ext=''):
+    df = data[["Benchmark", "Mean"]].copy()
+    df.set_index("Benchmark", inplace=True)
+    fn = None
+    if save_plots:
+        fn = 'assemblage_benchmarks_' + out_file_ext + '.pdf'
+    bar_plot(df, show=show_plots, save_path=fn, title='Assemblage Benchmarks', plot_legend=0)
+
+def plot_assemblage_baseline_comparison(data, show_plots=1, save_plots=0, out_file_ext=''):
+    fn = None
+    if save_plots:
+        fn = 'assemblage_benchmarks_pct_change' + out_file_ext + '.pdf'
+    mask = data["Benchmark"] != "Average"
+    plot_data = data[mask].copy()
+    plot_data.set_index("Benchmark", inplace=True)
+    bar_plot(plot_data, show=show_plots, save_path=fn, xlabel='% Change', title='Assemblage Benchmarks', plot_legend=0)
+
 def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1, show_plots=1, save_plots=1):
     try:
         tree = ET.parse(filename)
@@ -386,8 +403,8 @@ def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1,
                 if compare_data is not None:
                     plot_mineral_baseline_comparison(compare_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
         elif case.get("name") == "Property modifier benchmarks":
-            prop_mod_data = parse_prop_mod_benchmarks(case)
-            prop_mod_compare_data = compare_prop_mod_benchmarks(prop_mod_data)
+            prop_mod_data = parse_general_benchmarks(case)
+            prop_mod_compare_data = compare_general_benchmarks(prop_mod_data, baseline_fn='benchmarks/property_modifier_benchmarks_baseline.csv')
             # save check and save
             if save_data:
                 prop_mod_fname = unique_filename("property_modifier_benchmarks_" + out_file_ext + ".csv")
@@ -406,7 +423,26 @@ def parse_catch2_benchmark_xml(filename, out_file_ext, save_data=1, plot_data=1,
                 plot_prop_mod_benchmarks(prop_mod_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
                 if prop_mod_compare_data is not None:
                     plot_prop_mod_baseline_comparison(prop_mod_compare_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
-
+        elif case.get("name") == "Assemblage benchmarks":
+            assemblage_data = parse_general_benchmarks(case)
+            assemblage_compare_data = compare_general_benchmarks(assemblage_data, baseline_fn='benchmarks/assemblage_benchmarks_baseline.csv')
+            if save_data:
+                assemblage_fname = unique_filename("assemblage_benchmarks_" + out_file_ext + ".csv")
+                comp_fname = unique_filename("assemblage_benchmarks_compare_" + out_file_ext + ".csv")
+                assemblage_data.to_csv(assemblage_fname, index=False)
+                msg = (
+                    format_title_line('Data Saved!')
+                    + ' ' + format_line("Data file", assemblage_fname)
+                )
+                if assemblage_compare_data is not None:
+                    assemblage_compare_data.to_csv(comp_fname, index=False)
+                    msg += ' ' + format_line("Comparison", comp_fname)
+                msg += ' ' + format_title_line()
+                print(msg)
+            if plot_data:
+                plot_assemblage_benchmarks(assemblage_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
+                if assemblage_compare_data is not None:
+                    plot_assemblage_baseline_comparison(assemblage_compare_data, show_plots=show_plots, save_plots=save_plots, out_file_ext=out_file_ext)
         else:
             print(
                 format_title_line("Warning!"),
