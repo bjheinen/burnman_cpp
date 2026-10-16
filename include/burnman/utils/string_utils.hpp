@@ -13,6 +13,7 @@
 #include <cstddef>
 #include <string>
 #include <regex>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 
