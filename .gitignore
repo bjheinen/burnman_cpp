@@ -4,6 +4,7 @@
 # Build files
 build/
 bin/
+lib/
 
 # Dev testing
 dev-testing/

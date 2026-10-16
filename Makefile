@@ -7,12 +7,13 @@
 # burnman_cpp is based on BurnMan: <https://geodynamics.github.io/burnman/>
 #
 # ------------------- END OF LICENSE SECTION -----------------
-# Target Executable (to make)
-TARGET_EXEC := burnman
+# Default target: static library (lib/libburnman.a)
+LIB_NAME := burnman
 TEST_EXEC := run_tests
 
-# Compiler
+# Compiler / archiver
 CXX := g++
+AR := ar
 
 # Directories
 CWD := $(shell pwd)
@@ -20,6 +21,7 @@ SRC_DIR := $(CWD)/src
 INCLUDE_DIR := $(CWD)/include
 BUILD_DIR := $(CWD)/build
 BIN_DIR := $(CWD)/bin
+LIB_DIR := $(CWD)/lib
 TEST_DIR := $(CWD)/tests
 INCLUDE_DIR_TEST := $(TEST_DIR)/include
 
@@ -86,15 +88,16 @@ TEST_OBJECTS := $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(TEST_SOURCES))
 DEPENDS := $(OBJECTS:.o=.d) $(TEST_OBJECTS:.o=.d)
 
 # Output target
-TARGET := $(BIN_DIR)/$(TARGET_EXEC)$(BIN_SUFFIX)
+TARGET := $(LIB_DIR)/lib$(LIB_NAME)$(BIN_SUFFIX).a
 TEST_TARGET := $(BIN_DIR)/$(TEST_EXEC)$(BIN_SUFFIX)
 
 # Default rule
 all: $(TARGET)
 
-# Link and build
-$(TARGET) : $(OBJECTS) | $(BIN_DIR)
-	$(CXX) $(LIB_PATHS) $^ -o $@ $(LDFLAGS_COMMON)
+# Archive objects into static library
+$(TARGET) : $(OBJECTS) | $(LIB_DIR)
+	rm -f $@
+	$(AR) rcs $@ $^
 
 # Link and build test executable
 $(TEST_TARGET): $(OBJECTS) $(TEST_OBJECTS) | $(BIN_DIR)
@@ -117,6 +120,9 @@ $(BUILD_DIR):
 $(BIN_DIR):
 	mkdir -p $@
 
+$(LIB_DIR):
+	mkdir -p $@
+
 -include $(DEPENDS)
 
 # Run tests
@@ -129,8 +135,6 @@ clean-mode:
 
 # Clean up everything
 clean:
-	rm -rf $(BASE_BUILD_DIR) $(BIN_DIR)
+	rm -rf $(BASE_BUILD_DIR) $(BIN_DIR) $(LIB_DIR)
 
 .PHONY: all clean clean-mode test
-
-#NOTE: careful to test/checkout eigen opt flags, e.g. -DEIGEN_USE_THREADS -DEIGEN_DONT_ALIGN
